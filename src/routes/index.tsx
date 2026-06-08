@@ -132,9 +132,8 @@ function ConsumoRing({ line }: { line: Line }) {
           {segments.map((s, i) => {
             const isFirst = i === 0;
             const isLast = i === segments.length - 1;
-            // Add a hair of overlap so adjacent butt caps blend with no gap.
-            const overlap = isLast ? 0 : (0.6 / circ) * 100;
-            const segLen = (((s.to + (isLast ? 0 : ((s.to - s.from) * 0))) - s.from) / 100) * circ + (isLast ? 0 : 0.6);
+            const segLen = ((s.to - s.from) / 100) * circ + (isLast ? 0 : 0.6);
+
             const segOffset = (s.from / 100) * circ;
             return (
               <circle
