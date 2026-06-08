@@ -92,17 +92,16 @@ function ConsumoRing({ line }: { line: Line }) {
   const p = Math.max(0.0001, pct);
   const tip = tipColor(pct);
 
-  // Conic gradient walks green → yellow → orange → red across the FULL 100%
-  // (not stretched to the filled portion), so the tip color reflects the
-  // actual consumption level — only fully red when reaching 100%.
+  // Build conic-gradient stops: render colors only up to p% so the rest of the
+  // ring stays as the purple "disponível" track. Tip color reflects absolute %.
   const ringMask =
     "radial-gradient(circle, transparent 0 84px, #000 85px 95px, transparent 96px)";
-  const progressBg = `conic-gradient(from 0deg,
-    #7ec832 0%,
-    #f4c20d 50%,
-    #ff7a18 80%,
-    #ff2a2a 100%,
-    transparent ${p}% 100%)`;
+  const stops: string[] = ["#7ec832 0%"];
+  if (p > 50) stops.push("#f4c20d 50%");
+  if (p > 80) stops.push("#ff7a18 80%");
+  stops.push(`${tip} ${p}%`);
+  stops.push(`transparent ${p}% 100%`);
+  const progressBg = `conic-gradient(from 0deg, ${stops.join(", ")})`;
   const baseBg =
     "radial-gradient(circle, transparent 0 84px, #660099 85px 95px, transparent 96px)";
 
