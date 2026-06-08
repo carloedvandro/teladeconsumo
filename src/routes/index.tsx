@@ -99,14 +99,14 @@ function ConsumoRing({ line }: { line: Line }) {
           stroke="#660099"
           strokeWidth="4"
         />
-        {/* Progress arc on top - thicker, colored by usage */}
+        {/* Progress arc on top - always uses green→yellow→orange→red gradient */}
         {pct > 0 && (
           <circle
             cx="110"
             cy="110"
             r={r}
             fill="none"
-            stroke={isFull ? `url(#${gradId})` : color}
+            stroke={`url(#${gradId})`}
             strokeWidth="10"
             strokeLinecap="round"
             strokeDasharray={`${dash} ${c}`}
