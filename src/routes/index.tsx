@@ -138,16 +138,16 @@ function ConsumoRing({ line }: { line: Line }) {
           </>
         ) : (
           <>
-            <div className="text-[40px] font-light leading-none text-[#222]">
+            <div className="text-[40px] font-bold leading-none text-[#1a1a1a]">
               {line.used < 1
                 ? line.used.toFixed(2)
                 : line.used % 1 === 0
                   ? line.used
                   : line.used.toFixed(line.used < 10 ? 2 : 1)}
-              <span className="ml-1 text-lg text-[#666]">GB</span>
+              <span className="ml-1 text-lg font-bold text-[#1a1a1a]">GB</span>
             </div>
-            <div className="mt-2 text-xs text-[#666]">
-              consumidos de {line.total} GB
+            <div className="mt-2 text-xs text-[#9a9a9a]">
+              consumidos de <span className="font-semibold text-[#7a7a7a]">{line.total} GB</span>
             </div>
             <div className="mt-1 text-[11px] font-semibold" style={{ color }}>
               {usedPct}%
@@ -261,33 +261,33 @@ function ResumoConsumo() {
               <ConsumoRing line={line} />
 
               <div className="flex-1">
-                <h2 className="text-[15px] font-semibold tracking-wide text-[#333]">
+                <h2 className="text-[15px] font-bold tracking-wide text-[#1a1a1a]">
                   {line.plan}
                 </h2>
-                <p className="mt-1 text-sm text-[#666]">
+                <p className="mt-1 text-sm text-[#9a9a9a]">
                   Fim do ciclo em{" "}
-                  <span className="font-semibold text-[#333]">{line.cycleDays} dias</span>
+                  <span className="font-bold text-[#1a1a1a]">{line.cycleDays} dias</span>
                 </p>
 
                 <ul className="mt-5 space-y-3 text-sm">
                   <li className="flex items-center justify-between gap-4">
-                    <span className="flex items-center gap-2 text-[#333]">
+                    <span className="flex items-center gap-2 text-[#9a9a9a]">
                       <span
                         className="inline-block h-3 w-3 rounded-full border-2"
                         style={{ borderColor: color }}
                       />
                       Meu Consumo
                     </span>
-                    <span className="text-[#333]">
+                    <span className="font-bold text-[#1a1a1a]">
                       {usedPct}% - {formatGB(line.used)}
                     </span>
                   </li>
                   <li className="flex items-center justify-between gap-4 border-b border-t border-[#eee] py-3">
-                    <span className="flex items-center gap-2 text-[#333]">
+                    <span className="flex items-center gap-2 text-[#9a9a9a]">
                       <span className="inline-block h-3 w-3 rounded-full border-2 border-[#660099]" />
                       Disponíveis
                     </span>
-                    <span className="text-[#333]">
+                    <span className="font-bold text-[#1a1a1a]">
                       {availPct}% - {formatGB(available)}
                     </span>
                   </li>
