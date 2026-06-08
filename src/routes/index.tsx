@@ -404,7 +404,7 @@ function ResumoConsumo() {
           {/* Upgrade card - overlaid on hero, below consumption panel */}
           <button
             onClick={() => setUpgradeOpen(true)}
-            className="relative mt-4 flex w-full items-center justify-between rounded-md bg-white px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:right-8 md:bottom-6 md:mt-0 md:w-[520px]"
+            className="relative mt-4 flex w-full items-center justify-between rounded-md bg-white px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:right-8 md:bottom-16 md:mt-0 md:w-[520px]"
           >
             <div className="flex items-center gap-4">
               <FileText className="h-7 w-7 text-[#660099]" />
