@@ -130,10 +130,12 @@ function ConsumoRing({ line }: { line: Line }) {
         {/* Colored consumed arc — rotate -90° so 0% sits at top */}
         <g transform={`rotate(-90 ${cx} ${cy})`}>
           {segments.map((s, i) => {
-            const segLen = ((s.to - s.from) / 100) * circ;
-            const segOffset = (s.from / 100) * circ;
             const isFirst = i === 0;
             const isLast = i === segments.length - 1;
+            // Add a hair of overlap so adjacent butt caps blend with no gap.
+            const overlap = isLast ? 0 : (0.6 / circ) * 100;
+            const segLen = (((s.to + (isLast ? 0 : ((s.to - s.from) * 0))) - s.from) / 100) * circ + (isLast ? 0 : 0.6);
+            const segOffset = (s.from / 100) * circ;
             return (
               <circle
                 key={i}
@@ -146,10 +148,10 @@ function ConsumoRing({ line }: { line: Line }) {
                 strokeLinecap={isFirst || isLast ? "round" : "butt"}
                 strokeDasharray={`${segLen} ${circ}`}
                 strokeDashoffset={-segOffset}
-                style={{ transition: "stroke-dasharray 700ms ease-out" }}
               />
             );
           })}
+
         </g>
 
         {/* Tip marker — colored cap matching bar tone with soft shadow + tiny white dot */}
