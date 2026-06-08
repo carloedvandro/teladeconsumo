@@ -142,3 +142,8 @@
     color: var(--color-foreground);
   }
 }
+
+/* Hide scrollbars but keep scroll functionality */
+html { scrollbar-width: none; -ms-overflow-style: none; }
+html::-webkit-scrollbar { width: 0; height: 0; display: none; }
+body::-webkit-scrollbar { width: 0; height: 0; display: none; }
