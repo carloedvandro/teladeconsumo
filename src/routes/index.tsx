@@ -534,23 +534,23 @@ function ResumoConsumo() {
           <div className="w-full space-y-2 text-sm">
             <div className="flex justify-between border-b border-[#eee] pb-2">
               <span className="text-[#666]">Plano</span>
-              <span className="font-semibold text-[#333]">{line.plan}</span>
+              <span className="font-semibold text-[#660099]">{line.plan}</span>
             </div>
             <div className="flex justify-between border-b border-[#eee] pb-2">
               <span className="text-[#666]">Linha</span>
-              <span className="font-semibold text-[#333]">{line.number}</span>
+              <span className="font-semibold text-[#660099]">{line.number}</span>
             </div>
             <div className="flex justify-between border-b border-[#eee] pb-2">
               <span className="text-[#666]">Consumido</span>
-              <span className="font-semibold text-[#333]">{formatGB(line.used)}</span>
+              <span className="font-semibold text-[#660099]">{formatGB(line.used)}</span>
             </div>
             <div className="flex justify-between border-b border-[#eee] pb-2">
               <span className="text-[#666]">Disponível</span>
-              <span className="font-semibold text-[#333]">{formatGB(available)}</span>
+              <span className="font-semibold text-[#660099]">{formatGB(available)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-[#666]">Fim do ciclo</span>
-              <span className="font-semibold text-[#333]">em {line.cycleDays} dias</span>
+              <span className="font-semibold text-[#660099]">em {line.cycleDays} dias</span>
             </div>
           </div>
         </div>
