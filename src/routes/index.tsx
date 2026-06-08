@@ -336,24 +336,68 @@ function ResumoConsumo() {
           </div>
 
           <div className="grid grid-cols-3 gap-3">
-            <div className="rounded-md border border-[#eee] p-3 text-center">
+            <button
+              type="button"
+              onClick={() => setActiveCard(activeCard === "dados" ? null : "dados")}
+              className={`rounded-md border p-3 text-center transition ${
+                activeCard === "dados" ? "border-[#660099] bg-[#f9f5fc]" : "border-[#eee] hover:border-[#cda8e0]"
+              }`}
+            >
               <Wifi className="mx-auto h-5 w-5 text-[#660099]" />
               <div className="mt-1 text-xs text-[#666]">Dados</div>
               <div className="text-sm font-semibold text-[#333]">
                 {formatGB(line.used)}
               </div>
-            </div>
-            <div className="rounded-md border border-[#eee] p-3 text-center">
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveCard(activeCard === "minutos" ? null : "minutos")}
+              className={`rounded-md border p-3 text-center transition ${
+                activeCard === "minutos" ? "border-[#660099] bg-[#f9f5fc]" : "border-[#eee] hover:border-[#cda8e0]"
+              }`}
+            >
               <Phone className="mx-auto h-5 w-5 text-[#660099]" />
               <div className="mt-1 text-xs text-[#666]">Minutos</div>
               <div className="text-sm font-semibold text-[#333]">Ilimitado</div>
-            </div>
-            <div className="rounded-md border border-[#eee] p-3 text-center">
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveCard(activeCard === "sms" ? null : "sms")}
+              className={`rounded-md border p-3 text-center transition ${
+                activeCard === "sms" ? "border-[#660099] bg-[#f9f5fc]" : "border-[#eee] hover:border-[#cda8e0]"
+              }`}
+            >
               <MessageSquare className="mx-auto h-5 w-5 text-[#660099]" />
               <div className="mt-1 text-xs text-[#666]">SMS</div>
               <div className="text-sm font-semibold text-[#333]">Ilimitado</div>
-            </div>
+            </button>
           </div>
+
+          {activeCard === "dados" && (
+            <div className="rounded-md border border-[#eee] bg-[#fafafa] p-4 text-sm text-[#444]">
+              <div className="mb-1 font-semibold text-[#660099]">Dados móveis</div>
+              <div>Consumido: <span className="font-semibold text-[#333]">{formatGB(line.used)}</span></div>
+              <div>Disponível: <span className="font-semibold text-[#333]">{formatGB(available)}</span></div>
+              <div>Franquia total: <span className="font-semibold text-[#333]">{line.total} GB</span></div>
+              <div className="mt-1 text-xs text-[#888]">Uso de internet 4G/5G no ciclo atual.</div>
+            </div>
+          )}
+          {activeCard === "minutos" && (
+            <div className="rounded-md border border-[#eee] bg-[#fafafa] p-4 text-sm text-[#444]">
+              <div className="mb-1 font-semibold text-[#660099]">Minutos</div>
+              <div>Ligações: <span className="font-semibold text-[#333]">Ilimitadas</span></div>
+              <div>Destinos: <span className="font-semibold text-[#333]">Brasil — fixo e móvel</span></div>
+              <div className="mt-1 text-xs text-[#888]">Sem cobrança adicional para chamadas locais e DDD.</div>
+            </div>
+          )}
+          {activeCard === "sms" && (
+            <div className="rounded-md border border-[#eee] bg-[#fafafa] p-4 text-sm text-[#444]">
+              <div className="mb-1 font-semibold text-[#660099]">SMS</div>
+              <div>Envios: <span className="font-semibold text-[#333]">Ilimitados</span></div>
+              <div>Destinos: <span className="font-semibold text-[#333]">Qualquer operadora nacional</span></div>
+              <div className="mt-1 text-xs text-[#888]">Mensagens de texto sem limite no ciclo.</div>
+            </div>
+          )}
 
           <div>
             <div className="mb-2 text-sm font-semibold text-[#333]">
