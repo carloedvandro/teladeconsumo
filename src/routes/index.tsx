@@ -115,16 +115,16 @@ function ConsumoRing({ line }: { line: Line }) {
           </>
         ) : (
           <>
-            <div className="text-[40px] font-bold leading-none text-[#1a1a1a]">
+            <div className="text-[40px] font-semibold leading-none text-[#1a1a1a]">
               {line.used < 1
                 ? line.used.toFixed(2)
                 : line.used % 1 === 0
                   ? line.used
                   : line.used.toFixed(line.used < 10 ? 2 : 1)}
-              <span className="ml-1 text-lg font-bold text-[#1a1a1a]">GB</span>
+              <span className="ml-1 text-lg font-semibold text-[#1a1a1a]">GB</span>
             </div>
             <div className="mt-2 text-xs text-[#9a9a9a]">
-              consumidos de <span className="font-bold text-[#7a7a7a]">{line.total} GB</span>
+              consumidos de <span className="font-semibold text-[#7a7a7a]">{line.total} GB</span>
             </div>
           </>
         )}
@@ -222,8 +222,8 @@ function ResumoConsumo() {
         </h1>
         <p className="mt-1 text-sm text-[#666]">
           Informação atualizada em{" "}
-          <span className="font-bold text-[#333]">17/01/2023</span> às{" "}
-          <span className="font-bold text-[#333]">12:34</span>
+          <span className="font-semibold text-[#333]">17/01/2023</span> às{" "}
+          <span className="font-semibold text-[#333]">12:34</span>
         </p>
 
         {/* Hero card */}
@@ -255,12 +255,12 @@ function ResumoConsumo() {
               <ConsumoRing line={line} />
 
               <div className="flex-1">
-                <h2 className="text-[15px] font-bold tracking-wide text-[#1a1a1a]">
+                <h2 className="text-[15px] font-semibold tracking-wide text-[#1a1a1a]">
                   {line.plan}
                 </h2>
                 <p className="mt-1 text-sm text-[#9a9a9a]">
                   Fim do ciclo em{" "}
-                  <span className="font-bold text-[#1a1a1a]">{line.cycleDays} dias</span>
+                  <span className="font-semibold text-[#1a1a1a]">{line.cycleDays} dias</span>
                 </p>
 
                 <ul className="mt-5 space-y-3 text-sm">
@@ -272,7 +272,7 @@ function ResumoConsumo() {
                       />
                       Meu Consumo
                     </span>
-                    <span className="font-bold text-[#1a1a1a]">
+                    <span className="font-semibold text-[#1a1a1a]">
                       {usedPct}% - {formatGB(line.used)}
                     </span>
                   </li>
@@ -281,7 +281,7 @@ function ResumoConsumo() {
                       <span className="inline-block h-3 w-3 rounded-full border-2 border-[#660099]" />
                       Disponíveis
                     </span>
-                    <span className="font-bold text-[#1a1a1a]">
+                    <span className="font-semibold text-[#1a1a1a]">
                       {availPct}% - {formatGB(available)}
                     </span>
                   </li>
@@ -289,7 +289,7 @@ function ResumoConsumo() {
 
                 <button
                   onClick={() => setDetailsOpen(true)}
-                  className="mt-4 text-sm font-bold text-[#660099] hover:underline"
+                  className="mt-4 text-sm font-semibold text-[#660099] hover:underline"
                 >
                   Ver detalhes do seu consumo &gt;
                 </button>
@@ -306,7 +306,7 @@ function ResumoConsumo() {
           <div className="flex items-center gap-4">
             <FileText className="h-7 w-7 text-[#660099]" />
             <div className="text-left">
-              <div className="text-[15px] font-bold text-[#333]">
+              <div className="text-[15px] font-semibold text-[#333]">
                 Quer falar e navegar ainda mais?
               </div>
               <div className="text-sm text-[#666]">
@@ -329,33 +329,33 @@ function ResumoConsumo() {
         <div className="space-y-4">
           <div className="rounded-md bg-[#f9f5fc] p-4">
             <div className="text-xs text-[#660099]">Linha</div>
-            <div className="text-sm font-bold text-[#333]">{line.number}</div>
+            <div className="text-sm font-semibold text-[#333]">{line.number}</div>
             <div className="mt-2 text-xs text-[#660099]">Plano</div>
-            <div className="text-sm font-bold text-[#333]">{line.plan}</div>
+            <div className="text-sm font-semibold text-[#333]">{line.plan}</div>
           </div>
 
           <div className="grid grid-cols-3 gap-3">
             <div className="rounded-md border border-[#eee] p-3 text-center">
               <Wifi className="mx-auto h-5 w-5 text-[#660099]" />
               <div className="mt-1 text-xs text-[#666]">Dados</div>
-              <div className="text-sm font-bold text-[#333]">
+              <div className="text-sm font-semibold text-[#333]">
                 {formatGB(line.used)}
               </div>
             </div>
             <div className="rounded-md border border-[#eee] p-3 text-center">
               <Phone className="mx-auto h-5 w-5 text-[#660099]" />
               <div className="mt-1 text-xs text-[#666]">Minutos</div>
-              <div className="text-sm font-bold text-[#333]">Ilimitado</div>
+              <div className="text-sm font-semibold text-[#333]">Ilimitado</div>
             </div>
             <div className="rounded-md border border-[#eee] p-3 text-center">
               <MessageSquare className="mx-auto h-5 w-5 text-[#660099]" />
               <div className="mt-1 text-xs text-[#666]">SMS</div>
-              <div className="text-sm font-bold text-[#333]">Ilimitado</div>
+              <div className="text-sm font-semibold text-[#333]">Ilimitado</div>
             </div>
           </div>
 
           <div>
-            <div className="mb-2 text-sm font-bold text-[#333]">
+            <div className="mb-2 text-sm font-semibold text-[#333]">
               Histórico mensal
             </div>
             <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
@@ -368,7 +368,7 @@ function ResumoConsumo() {
                     <div className="text-[#333]">{m.mes}</div>
                     <div className="text-xs text-[#888]">{m.status}</div>
                   </div>
-                  <div className="font-bold text-[#660099]">
+                  <div className="font-semibold text-[#660099]">
                     {formatGB(m.consumo)}
                   </div>
                 </li>
@@ -395,7 +395,7 @@ function ResumoConsumo() {
               setSelectedPlan(null);
               showToast(`Upgrade solicitado: ${p?.nome}. Você receberá um SMS de confirmação.`);
             }}
-            className="w-full rounded-md bg-[#660099] py-3 text-sm font-bold text-white transition hover:bg-[#520077] disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-md bg-[#660099] py-3 text-sm font-semibold text-white transition hover:bg-[#520077] disabled:cursor-not-allowed disabled:opacity-50"
           >
             Confirmar upgrade
           </button>
@@ -418,16 +418,16 @@ function ResumoConsumo() {
                 }`}
               >
                 <div>
-                  <div className="font-bold text-[#333]">{p.nome}</div>
+                  <div className="font-semibold text-[#333]">{p.nome}</div>
                   <div className="text-xs text-[#888]">{p.bonus}</div>
-                  <div className="mt-1 text-sm font-bold text-[#660099]">
+                  <div className="mt-1 text-sm font-semibold text-[#660099]">
                     {p.preco}
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="text-right">
                     <div className="text-xs text-[#888]">Internet</div>
-                    <div className="text-sm font-bold text-[#333]">{p.giga}</div>
+                    <div className="text-sm font-semibold text-[#333]">{p.giga}</div>
                   </div>
                   <div
                     className={`flex h-6 w-6 items-center justify-center rounded-full border-2 ${
@@ -454,23 +454,23 @@ function ResumoConsumo() {
           <div className="w-full space-y-2 text-sm">
             <div className="flex justify-between border-b border-[#eee] pb-2">
               <span className="text-[#666]">Plano</span>
-              <span className="font-bold text-[#333]">{line.plan}</span>
+              <span className="font-semibold text-[#333]">{line.plan}</span>
             </div>
             <div className="flex justify-between border-b border-[#eee] pb-2">
               <span className="text-[#666]">Linha</span>
-              <span className="font-bold text-[#333]">{line.number}</span>
+              <span className="font-semibold text-[#333]">{line.number}</span>
             </div>
             <div className="flex justify-between border-b border-[#eee] pb-2">
               <span className="text-[#666]">Consumido</span>
-              <span className="font-bold text-[#333]">{formatGB(line.used)}</span>
+              <span className="font-semibold text-[#333]">{formatGB(line.used)}</span>
             </div>
             <div className="flex justify-between border-b border-[#eee] pb-2">
               <span className="text-[#666]">Disponível</span>
-              <span className="font-bold text-[#333]">{formatGB(available)}</span>
+              <span className="font-semibold text-[#333]">{formatGB(available)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-[#666]">Fim do ciclo</span>
-              <span className="font-bold text-[#333]">em {line.cycleDays} dias</span>
+              <span className="font-semibold text-[#333]">em {line.cycleDays} dias</span>
             </div>
           </div>
         </div>
