@@ -496,6 +496,31 @@ function ResumoConsumo() {
             );
           })}
         </div>
+
+        <div className="mt-5 rounded-md border border-[#eee] bg-[#fafafa] p-4">
+          <div className="mb-2 text-sm font-semibold text-[#333]">Receber confirmação por</div>
+          <p className="mb-3 text-xs text-[#888]">Escolha os canais para receber a confirmação do upgrade.</p>
+          <div className="space-y-2">
+            {[
+              { key: "email", label: "E-mail", checked: notifyEmail, set: setNotifyEmail },
+              { key: "whats", label: "WhatsApp", checked: notifyWhats, set: setNotifyWhats },
+              { key: "sms", label: "SMS", checked: notifySms, set: setNotifySms },
+            ].map((c) => (
+              <label key={c.key} className="flex cursor-pointer items-center justify-between rounded-md border border-[#eee] bg-white px-3 py-2 text-sm">
+                <span className="text-[#333]">{c.label}</span>
+                <button
+                  type="button"
+                  onClick={() => c.set(!c.checked)}
+                  className={`relative h-6 w-11 rounded-full transition ${c.checked ? "bg-[#660099]" : "bg-[#ccc]"}`}
+                  aria-pressed={c.checked}
+                  aria-label={`Notificar por ${c.label}`}
+                >
+                  <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition ${c.checked ? "left-[22px]" : "left-0.5"}`} />
+                </button>
+              </label>
+            ))}
+          </div>
+        </div>
       </Modal>
 
       {/* Expanded view modal */}
