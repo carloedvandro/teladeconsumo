@@ -41,14 +41,14 @@ const LINES: Line[] = [
     number: "(31) 97115-7584",
     used: 32.4,
     total: 50,
-    plan: "SMARTVOZ 50GB",
+    plan: "SmartVoz 50GB",
     cycleDays: 3,
   },
   {
     number: "(32) 99963-0109",
     used: 0.64,
     total: 50,
-    plan: "SMARTVOZ 50GB",
+    plan: "SmartVoz 50GB",
     cycleDays: 3,
   },
 ];
