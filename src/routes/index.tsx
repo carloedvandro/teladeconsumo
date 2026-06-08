@@ -40,15 +40,15 @@ const LINES: Line[] = [
   {
     number: "(31) 97115-7584",
     used: 0.74,
-    total: 8,
-    plan: "VIVO CONTROLE 5GB II PLN",
+    total: 50,
+    plan: "VIVO CONTROLE 50GB PLN",
     cycleDays: 3,
   },
   {
     number: "(32) 99963-0109",
-    used: 1.1,
-    total: 8,
-    plan: "VIVO CONTROLE 5GB II PLN",
+    used: 0.64,
+    total: 50,
+    plan: "VIVO CONTROLE 50GB PLN",
     cycleDays: 3,
   },
 ];
