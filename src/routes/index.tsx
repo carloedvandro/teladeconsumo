@@ -151,10 +151,10 @@ function Modal({
       onClick={onClose}
     >
       <div
-        className="no-scrollbar relative max-h-[85vh] w-full max-w-[560px] overflow-y-auto rounded-lg bg-white shadow-2xl"
+        className="relative flex max-h-[85vh] w-full max-w-[560px] flex-col overflow-hidden rounded-lg bg-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b border-[#eee] px-6 py-4">
+        <div className="flex shrink-0 items-center justify-between border-b border-[#eee] bg-white px-6 py-4">
           <h3 className="text-lg font-semibold text-[#660099]">{title}</h3>
           <button
             onClick={onClose}
@@ -164,7 +164,7 @@ function Modal({
             <X className="h-5 w-5" />
           </button>
         </div>
-        <div className="px-6 py-5">{children}</div>
+        <div className="no-scrollbar flex-1 overflow-y-auto px-6 py-5">{children}</div>
       </div>
     </div>
   );
