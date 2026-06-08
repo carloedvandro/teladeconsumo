@@ -155,7 +155,7 @@ function ConsumoRing({ line }: { line: Line }) {
         {/* White tip marker */}
         {pct > 0 && (
           <>
-            <circle cx={tipX} cy={tipY} r={6} fill="white" stroke={tip} strokeWidth={2.5} />
+            <circle cx={tipX} cy={tipY} r={4} fill="white" stroke={tip} strokeWidth={2} />
           </>
         )}
       </svg>
