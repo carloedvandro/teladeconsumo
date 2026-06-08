@@ -436,12 +436,19 @@ function ResumoConsumo() {
         title="Faça upgrade do seu plano"
         footer={
           <button
-            disabled={!selectedPlan}
+            disabled={!selectedPlan || (!notifyEmail && !notifyWhats && !notifySms)}
             onClick={() => {
               const p = plans.find((x) => x.id === selectedPlan);
+              const canais = [
+                notifyEmail && "e-mail",
+                notifyWhats && "WhatsApp",
+                notifySms && "SMS",
+              ].filter(Boolean).join(", ");
+              // TODO: integrar APIs reais (SendGrid/Resend, Twilio/WhatsApp Business, Twilio SMS)
+              console.log("Upgrade notification channels:", { email: notifyEmail, whatsapp: notifyWhats, sms: notifySms, plan: p?.nome });
               setUpgradeOpen(false);
               setSelectedPlan(null);
-              showToast(`Upgrade solicitado: ${p?.nome}. Você receberá um SMS de confirmação.`);
+              showToast(`Upgrade solicitado: ${p?.nome}. Confirmação enviada via ${canais}.`);
             }}
             className="w-full rounded-md bg-[#660099] py-3 text-sm font-semibold text-white transition hover:bg-[#520077] disabled:cursor-not-allowed disabled:opacity-50"
           >
