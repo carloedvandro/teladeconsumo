@@ -62,8 +62,8 @@ function ringColor(pct: number) {
 }
 
 function formatGB(gb: number) {
-  if (gb < 1) return `${(gb * 1024).toFixed(2)} MB`;
-  return `${gb.toFixed(2)} GB`;
+  if (gb < 1) return `${(gb * 1024).toFixed(0)} MB`;
+  return `${gb.toFixed(1)} GB`;
 }
 
 function hexToRgb(hex: string) {
