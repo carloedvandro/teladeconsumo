@@ -288,7 +288,7 @@ function ResumoConsumo() {
           <button
             aria-label="Expandir"
             onClick={() => setExpandOpen(true)}
-            className="absolute bottom-4 right-6 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-[#660099] shadow hover:bg-white"
+            className="hidden"
           >
             <Plus className="h-5 w-5" />
           </button>
