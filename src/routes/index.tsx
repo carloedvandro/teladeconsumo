@@ -69,15 +69,9 @@ function formatGB(gb: number) {
 function ConsumoRing({ line }: { line: Line }) {
   const pct = Math.min(100, (line.used / line.total) * 100);
   const usedPct = Math.round(pct);
-  const r = 90;
-  const c = 2 * Math.PI * r;
-  const dash = (pct / 100) * c;
   const color = ringColor(pct);
-  const isFull = pct >= 99.5;
-  const gradId = useMemo(
-    () => `g-${Math.random().toString(36).slice(2, 8)}`,
-    [],
-  );
+
+
 
   // Conic gradient that walks green → yellow → orange → red along the arc.
   // We pin the color stops to the actual filled angle so the red tip lands
