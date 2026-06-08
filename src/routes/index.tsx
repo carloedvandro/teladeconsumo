@@ -281,7 +281,8 @@ function ResumoConsumo() {
       status: i === currentMonth ? "Em andamento" : "Fechado",
       idx: i,
     }))
-    .filter((m) => m.idx <= currentMonth);
+    .filter((m) => m.idx <= currentMonth)
+    .reverse();
 
 
 
@@ -458,14 +459,14 @@ function ResumoConsumo() {
               Histórico mensal
             </div>
             <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
-              {months.map((m, i) => {
+              {months.map((m) => {
                 const minutosVals = [820, 645, 712, 538, 690, 756, 623, 589, 701, 534, 678, 612];
                 const smsVals = [42, 31, 58, 24, 37, 45, 29, 51, 33, 48, 27, 40];
                 const valor =
                   activeCard === "minutos"
-                    ? `${minutosVals[i]} min`
+                    ? `${minutosVals[m.idx]} min`
                     : activeCard === "sms"
-                      ? `${smsVals[i]} SMS`
+                      ? `${smsVals[m.idx]} SMS`
                       : formatGB(m.consumo);
                 return (
                   <li
