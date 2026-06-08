@@ -233,16 +233,16 @@ function ResumoConsumo() {
             alt="Família usando tablet"
             width={1280}
             height={768}
-            className="h-[460px] w-full object-cover"
+            className="h-[320px] w-full object-cover md:h-[460px]"
           />
 
           {/* Consumption panel overlay - centered/right like reference */}
-          <div className="absolute right-8 top-1/2 w-[640px] -translate-y-1/2 overflow-hidden rounded-md bg-white/95 p-8 pb-12 shadow-xl backdrop-blur">
+          <div className="relative mx-4 -mt-24 overflow-hidden rounded-md bg-white/95 p-5 pb-10 shadow-xl backdrop-blur md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[640px] md:-translate-y-1/2 md:p-8 md:pb-12">
             {/* Gray diagonal triangle in the corner with + near the tip */}
             <button
               aria-label="Ver histórico de consumo"
               onClick={() => setExpandOpen(true)}
-              className="group absolute bottom-0 right-0 h-20 w-20 text-[#660099]"
+              className="group absolute bottom-0 right-0 h-16 w-16 text-[#660099] md:h-20 md:w-20"
               style={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
             >
               <span className="absolute inset-0 bg-[#d9d9d9] transition group-hover:bg-[#c8c8c8]" />
@@ -251,7 +251,7 @@ function ResumoConsumo() {
                 strokeWidth={2.75}
               />
             </button>
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-4 md:gap-8">
               <ConsumoRing line={line} />
 
               <div className="flex-1">
