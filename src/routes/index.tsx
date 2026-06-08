@@ -13,7 +13,8 @@ import {
   MessageSquare,
   Wifi,
 } from "lucide-react";
-import familyImg from "@/assets/family-tablet.jpg";
+import familyImgAsset from "@/assets/family-tablet.jpg.asset.json";
+const familyImg = familyImgAsset.url;
 
 export const Route = createFileRoute("/")({
   head: () => ({
