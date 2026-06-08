@@ -331,10 +331,11 @@ function ResumoConsumo() {
                 strokeWidth={2.75}
               />
             </button>
-            <div className="flex flex-col items-center gap-4 md:flex-row md:items-center md:justify-center md:gap-6">
+            <div className="flex flex-col items-center gap-4 md:flex-row md:items-center md:justify-center md:gap-4 md:pr-8">
               <ConsumoRing line={line} />
 
-              <div className="md:w-[240px]">
+              <div className="md:w-[220px]">
+
 
                 <h2 className="text-[15px] font-semibold tracking-wide text-[#1a1a1a]">
                   {line.plan}
