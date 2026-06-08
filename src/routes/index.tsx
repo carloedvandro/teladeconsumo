@@ -149,9 +149,6 @@ function ConsumoRing({ line }: { line: Line }) {
             <div className="mt-2 text-xs text-[#9a9a9a]">
               consumidos de <span className="font-semibold text-[#7a7a7a]">{line.total} GB</span>
             </div>
-            <div className="mt-1 text-[11px] font-semibold" style={{ color }}>
-              {usedPct}%
-            </div>
           </>
         )}
       </div>
