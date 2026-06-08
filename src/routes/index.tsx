@@ -330,7 +330,15 @@ function ResumoConsumo() {
           />
 
           {/* Consumption panel overlay - centered/right like reference */}
-          <div className="relative mx-4 -mt-24 overflow-hidden rounded-md p-5 pb-10 shadow-xl backdrop-blur md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[520px] md:-translate-y-1/2 md:p-5 md:pb-8" style={{ background: "rgba(255,255,255,0.74)" }}>
+          <div
+            className="relative mx-4 -mt-24 overflow-hidden rounded-md p-5 pb-10 md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[520px] md:-translate-y-1/2 md:p-5 md:pb-8"
+            style={{
+              background: "rgba(255,255,255,0.74)",
+              backdropFilter: "blur(6px)",
+              boxShadow:
+                "0 8px 32px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.45)",
+            }}
+          >
             {/* Gray diagonal triangle in the corner with + near the tip */}
             <button
               aria-label="Ver histórico de consumo"
