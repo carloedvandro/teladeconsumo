@@ -347,7 +347,7 @@ function ResumoConsumo() {
                 </p>
 
                 <ul className="mt-5 text-sm">
-                  <li className="flex items-center justify-between gap-4 border-b border-[#d9d9d9] py-3">
+                  <li className="flex items-center justify-between gap-4 border-b border-[#a8a8a8] py-3">
                     <span className="flex items-center gap-2 text-[#9a9a9a]">
                       <span
                         className="inline-block h-3 w-3 rounded-full border-[3px]"
@@ -359,7 +359,7 @@ function ResumoConsumo() {
                       {usedPct}% - {formatGB(line.used)}
                     </span>
                   </li>
-                  <li className="flex items-center justify-between gap-4 border-b border-[#d9d9d9] py-3">
+                  <li className="flex items-center justify-between gap-4 border-b border-[#a8a8a8] py-3">
                     <span className="flex items-center gap-2 text-[#9a9a9a]">
                       <span className="inline-block h-3 w-3 rounded-full border-[3px] border-[#660099]" />
                       Disponíveis
