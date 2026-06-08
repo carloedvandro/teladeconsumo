@@ -456,8 +456,8 @@ function ResumoConsumo() {
             </div>
             <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
               {months.map((m, i) => {
-                const minutosVals = [820, 645, 712, 538, 690];
-                const smsVals = [42, 31, 58, 24, 37];
+                const minutosVals = [820, 645, 712, 538, 690, 756, 623, 589, 701, 534, 678, 612];
+                const smsVals = [42, 31, 58, 24, 37, 45, 29, 51, 33, 48, 27, 40];
                 const valor =
                   activeCard === "minutos"
                     ? `${minutosVals[i]} min`
