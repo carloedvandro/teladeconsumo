@@ -447,31 +447,6 @@ function ResumoConsumo() {
             </button>
           </div>
 
-          {activeCard === "dados" && (
-            <div className="rounded-md border border-[#eee] bg-[#fafafa] p-4 text-sm text-[#444]">
-              <div className="mb-1 font-semibold text-[#660099]">Dados móveis</div>
-              <div>Consumido: <span className="font-semibold text-[#333]">{formatGB(line.used)}</span></div>
-              <div>Disponível: <span className="font-semibold text-[#333]">{formatGB(available)}</span></div>
-              <div>Franquia total: <span className="font-semibold text-[#333]">{line.total} GB</span></div>
-              <div className="mt-1 text-xs text-[#888]">Uso de internet 4G/5G no ciclo atual.</div>
-            </div>
-          )}
-          {activeCard === "minutos" && (
-            <div className="rounded-md border border-[#eee] bg-[#fafafa] p-4 text-sm text-[#444]">
-              <div className="mb-1 font-semibold text-[#660099]">Minutos</div>
-              <div>Ligações: <span className="font-semibold text-[#333]">Ilimitadas</span></div>
-              <div>Destinos: <span className="font-semibold text-[#333]">Brasil — fixo e móvel</span></div>
-              <div className="mt-1 text-xs text-[#888]">Sem cobrança adicional para chamadas locais e DDD.</div>
-            </div>
-          )}
-          {activeCard === "sms" && (
-            <div className="rounded-md border border-[#eee] bg-[#fafafa] p-4 text-sm text-[#444]">
-              <div className="mb-1 font-semibold text-[#660099]">SMS</div>
-              <div>Envios: <span className="font-semibold text-[#333]">Ilimitados</span></div>
-              <div>Destinos: <span className="font-semibold text-[#333]">Qualquer operadora nacional</span></div>
-              <div className="mt-1 text-xs text-[#888]">Mensagens de texto sem limite no ciclo.</div>
-            </div>
-          )}
 
           <div>
             <div className="mb-2 text-sm font-semibold text-[#333]">
