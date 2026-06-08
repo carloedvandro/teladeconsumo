@@ -203,7 +203,7 @@ function ResumoConsumo() {
     { id: "ctrl10", nome: "Vivo Controle 10GB", giga: "10 GB", preco: "R$ 79,99/mês", bonus: "+ Apps ilimitados" },
     { id: "pos15", nome: "Vivo Pós 15GB", giga: "15 GB", preco: "R$ 99,99/mês", bonus: "+ Disney+ incluso" },
     { id: "pos30", nome: "Vivo Pós 30GB", giga: "30 GB", preco: "R$ 129,99/mês", bonus: "+ Netflix + Disney+" },
-    { id: "ili", nome: "Vivo Ilimitado", giga: "Ilimitado", preco: "R$ 189,99/mês", bonus: "+ Todos os streamings" },
+    
   ];
 
   return (
