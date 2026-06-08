@@ -284,14 +284,6 @@ function ResumoConsumo() {
               </div>
             </div>
           </div>
-
-          <button
-            aria-label="Expandir"
-            onClick={() => setExpandOpen(true)}
-            className="hidden"
-          >
-            <Plus className="h-5 w-5" />
-          </button>
         </section>
 
         {/* Upgrade card */}
