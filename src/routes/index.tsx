@@ -246,7 +246,7 @@ function ResumoConsumo() {
     <div className="min-h-screen bg-[#f3f3f3]">
 
       <main className="mx-auto max-w-[1400px] px-4 pt-6 pb-16 md:px-6 md:pt-8">
-        <h1 className="text-[32px] font-bold leading-tight text-[#660099] md:text-[42px]">
+        <h1 className="text-[32px] font-semibold leading-tight text-[#660099] md:text-[42px]">
           Resumo de Consumo
         </h1>
         <p className="mt-1 text-sm text-[#666]">
