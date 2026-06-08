@@ -314,11 +314,11 @@ function ResumoConsumo() {
             alt="Família usando tablet"
             width={1280}
             height={768}
-            className="h-[320px] w-full object-cover md:h-[460px]"
+            className="h-[280px] w-full object-cover md:h-[400px]"
           />
 
           {/* Consumption panel overlay - centered/right like reference */}
-          <div className="relative mx-4 -mt-24 overflow-hidden rounded-md bg-white/95 p-5 pb-10 shadow-xl backdrop-blur md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[540px] md:-translate-y-1/2 md:p-6 md:pb-10">
+          <div className="relative mx-4 -mt-24 overflow-hidden rounded-md bg-white/95 p-5 pb-10 shadow-xl backdrop-blur md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[480px] md:-translate-y-1/2 md:p-5 md:pb-8">
             {/* Gray diagonal triangle in the corner with + near the tip */}
             <button
               aria-label="Ver histórico de consumo"
