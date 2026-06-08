@@ -85,11 +85,21 @@ function ConsumoRing({ line }: { line: Line }) {
         <defs>
           <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#b8d432" />
-            <stop offset="50%" stopColor="#f08a1c" />
+            <stop offset="40%" stopColor="#f0c419" />
+            <stop offset="70%" stopColor="#f08a1c" />
             <stop offset="100%" stopColor="#e63329" />
           </linearGradient>
         </defs>
-        <circle cx="110" cy="110" r={r} fill="none" stroke="#ececec" strokeWidth="10" />
+        {/* Thin fixed purple base ring (always visible) */}
+        <circle
+          cx="110"
+          cy="110"
+          r={r}
+          fill="none"
+          stroke="#660099"
+          strokeWidth="4"
+        />
+        {/* Progress arc on top - thicker, colored by usage */}
         {pct > 0 && (
           <circle
             cx="110"
@@ -103,7 +113,8 @@ function ConsumoRing({ line }: { line: Line }) {
             className="transition-all duration-700 ease-out"
           />
         )}
-        {!isFull && pct > 0 && pct < 100 && (
+        {/* Bright green leading tip */}
+        {!isFull && pct > 0 && (
           <circle
             cx="110"
             cy="110"
@@ -127,13 +138,13 @@ function ConsumoRing({ line }: { line: Line }) {
           </>
         ) : (
           <>
-            <div className="text-[44px] font-light leading-none text-[#222]">
+            <div className="text-[40px] font-light leading-none text-[#222]">
               {line.used < 1
                 ? line.used.toFixed(2)
                 : line.used % 1 === 0
                   ? line.used
-                  : line.used.toFixed(line.used < 10 ? 1 : 2)}
-              <span className="ml-1 text-xl text-[#666]">GB</span>
+                  : line.used.toFixed(line.used < 10 ? 2 : 1)}
+              <span className="ml-1 text-lg text-[#666]">GB</span>
             </div>
             <div className="mt-2 text-xs text-[#666]">
               consumidos de {line.total} GB
