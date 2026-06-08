@@ -39,14 +39,14 @@ type Line = {
 const LINES: Line[] = [
   {
     number: "(31) 97115-7584",
-    used: 15,
+    used: 19.3,
     total: 50,
     plan: "SmartVoz 50GB",
     cycleDays: 3,
   },
   {
     number: "(32) 99963-0109",
-    used: 0.64,
+    used: 23.3,
     total: 50,
     plan: "SmartVoz 50GB",
     cycleDays: 3,
