@@ -125,7 +125,7 @@ function ConsumoRing({ line }: { line: Line }) {
         style={{ shapeRendering: "geometricPrecision" }}
       >
         {/* Purple base track (thin) */}
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke="#660099" strokeWidth={2} />
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke="#7b1fa2" strokeWidth={3} />
 
         {/* Colored consumed arc — rotate -90° so 0% sits at top */}
         <g transform={`rotate(-90 ${cx} ${cy})`}>
@@ -157,7 +157,7 @@ function ConsumoRing({ line }: { line: Line }) {
           <>
             <defs>
               <filter id={`tipShadow-${line.number.replace(/\D/g,"")}`} x="-50%" y="-50%" width="200%" height="200%">
-                <feDropShadow dx="0" dy="1.5" stdDeviation="1.2" floodColor="#000" floodOpacity="0.35" />
+                <feDropShadow dx="0" dy="2.5" stdDeviation="2" floodColor="#000" floodOpacity="0.55" />
               </filter>
             </defs>
             <circle
