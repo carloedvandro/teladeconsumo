@@ -251,12 +251,13 @@ function ResumoConsumo() {
   }
 
   const months = [
-    { mes: "Janeiro/2023", consumo: line.used, status: "Em andamento" },
-    { mes: "Dezembro/2022", consumo: 6.42, status: "Fechado" },
-    { mes: "Novembro/2022", consumo: 7.81, status: "Fechado" },
-    { mes: "Outubro/2022", consumo: 4.15, status: "Fechado" },
-    { mes: "Setembro/2022", consumo: 5.67, status: "Fechado" },
+    { mes: "Junho/2026", consumo: line.used, status: "Em andamento" },
+    { mes: "Maio/2026", consumo: 6.42, status: "Fechado" },
+    { mes: "Abril/2026", consumo: 7.81, status: "Fechado" },
+    { mes: "Março/2026", consumo: 4.15, status: "Fechado" },
+    { mes: "Fevereiro/2026", consumo: 5.67, status: "Fechado" },
   ];
+
 
   const plans = [
     { id: "sv50", nome: "SmartVoz 50GB", giga: "50 GB", preco: "R$ 99,90/mês", bonus: "+ Apps ilimitados" },
@@ -274,9 +275,10 @@ function ResumoConsumo() {
         </h1>
         <p className="mt-1 text-sm text-[#666]">
           Informação atualizada em{" "}
-          <span className="font-semibold text-[#333]">17/01/2023</span> às{" "}
+          <span className="font-semibold text-[#333]">08/06/2026</span> às{" "}
           <span className="font-semibold text-[#333]">12:34</span>
         </p>
+
 
         {/* Hero card */}
         <section className="relative mt-6 overflow-hidden rounded-md">
