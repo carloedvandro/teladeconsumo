@@ -331,7 +331,7 @@ function ResumoConsumo() {
                 strokeWidth={2.75}
               />
             </button>
-            <div className="flex flex-col items-center gap-4 md:flex-row md:items-center md:justify-center md:gap-4 md:pr-4">
+            <div className="flex flex-col items-center gap-4 md:flex-row md:items-center md:justify-center md:gap-4">
               <ConsumoRing line={line} />
 
               <div className="md:w-[220px]">
