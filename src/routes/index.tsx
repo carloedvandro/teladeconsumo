@@ -54,6 +54,17 @@ const LINES: Line[] = [
   },
 ];
 
+// Calcula dias até o próximo dia 6 (renovação mensal do ciclo).
+function daysUntilCycleRenewal(renewalDay = 6, today = new Date()) {
+  const y = today.getFullYear();
+  const m = today.getMonth();
+  const d = today.getDate();
+  let next = new Date(y, m, renewalDay);
+  if (d >= renewalDay) next = new Date(y, m + 1, renewalDay);
+  const ms = next.getTime() - new Date(y, m, d).getTime();
+  return Math.round(ms / 86400000);
+}
+
 // Progress arc color: green → yellow → orange → red as it fills toward 100%
 function ringColor(pct: number) {
   if (pct >= 95) return "#ff2a2a"; // red
