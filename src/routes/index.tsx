@@ -54,6 +54,17 @@ const LINES: Line[] = [
   },
 ];
 
+// Calcula dias até o próximo dia 6 (renovação mensal do ciclo).
+function daysUntilCycleRenewal(renewalDay = 6, today = new Date()) {
+  const y = today.getFullYear();
+  const m = today.getMonth();
+  const d = today.getDate();
+  let next = new Date(y, m, renewalDay);
+  if (d >= renewalDay) next = new Date(y, m + 1, renewalDay);
+  const ms = next.getTime() - new Date(y, m, d).getTime();
+  return Math.round(ms / 86400000);
+}
+
 // Progress arc color: green → yellow → orange → red as it fills toward 100%
 function ringColor(pct: number) {
   if (pct >= 95) return "#ff2a2a"; // red
@@ -258,6 +269,7 @@ function ResumoConsumo() {
   const availPct = Math.round(100 - pct);
   const usedPct = Math.round(pct);
   const color = ringColor(pct);
+  const cycleDaysLeft = daysUntilCycleRenewal(6);
 
   function showToast(msg: string) {
     setToast(msg);
@@ -343,7 +355,7 @@ function ResumoConsumo() {
                 </h2>
                 <p className="mt-1 text-sm text-[#9a9a9a]">
                   Fim do ciclo em{" "}
-                  <span className="font-semibold text-[#1a1a1a]">{line.cycleDays} dias</span>
+                  <span className="font-semibold text-[#1a1a1a]">{cycleDaysLeft} dias</span>
                 </p>
 
                 <ul className="mt-5 text-sm">
@@ -612,7 +624,7 @@ function ResumoConsumo() {
             </div>
             <div className="flex justify-between">
               <span className="text-[#666]">Fim do ciclo</span>
-              <span className="font-semibold text-[#660099]">em {line.cycleDays} dias</span>
+              <span className="font-semibold text-[#660099]">em {cycleDaysLeft} dias</span>
             </div>
           </div>
         </div>
