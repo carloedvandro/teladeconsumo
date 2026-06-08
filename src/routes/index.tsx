@@ -281,7 +281,8 @@ function ResumoConsumo() {
       status: i === currentMonth ? "Em andamento" : "Fechado",
       idx: i,
     }))
-    .filter((m) => m.idx <= currentMonth);
+    .filter((m) => m.idx <= currentMonth)
+    .reverse();
 
 
 
