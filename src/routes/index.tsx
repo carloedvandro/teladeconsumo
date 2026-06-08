@@ -231,13 +231,18 @@ function ResumoConsumo() {
 
           {/* Consumption panel overlay - centered/right like reference */}
           <div className="absolute right-8 top-1/2 w-[640px] -translate-y-1/2 overflow-hidden rounded-md bg-white/95 p-8 pb-12 shadow-xl backdrop-blur">
-            {/* Gray separator strip with + button (opens history) */}
+            {/* Gray diagonal triangle in the corner with + near the tip */}
             <button
               aria-label="Ver histórico de consumo"
               onClick={() => setExpandOpen(true)}
-              className="absolute bottom-0 right-0 flex h-9 w-16 items-center justify-center rounded-tl-md bg-[#e5e5e5] text-[#660099] transition hover:bg-[#d8d8d8]"
+              className="group absolute bottom-0 right-0 h-20 w-20 text-[#660099]"
+              style={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
             >
-              <Plus className="h-5 w-5" strokeWidth={2.5} />
+              <span className="absolute inset-0 bg-[#d9d9d9] transition group-hover:bg-[#c8c8c8]" />
+              <Plus
+                className="absolute bottom-1.5 right-1.5 h-4 w-4"
+                strokeWidth={2.75}
+              />
             </button>
             <div className="flex items-center gap-8">
               <ConsumoRing line={line} />
