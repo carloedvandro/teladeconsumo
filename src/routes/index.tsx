@@ -341,7 +341,7 @@ function ResumoConsumo() {
               <Wifi className="mx-auto h-5 w-5 text-[#660099]" />
               <div className="mt-1 text-xs text-[#666]">Dados</div>
               <div className="text-sm font-semibold text-[#333]">
-                {formatGB(line.used)}
+                {line.total} GB
               </div>
             </button>
             <button
