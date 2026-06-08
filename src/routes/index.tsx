@@ -331,7 +331,7 @@ function ResumoConsumo() {
           <ChevronRight className="h-5 w-5 text-[#660099]" />
         </button>
 
-        <h2 className="mt-10 text-[32px] font-light text-[#660099]">Meus Créditos</h2>
+        
       </main>
 
       {/* Details modal */}
