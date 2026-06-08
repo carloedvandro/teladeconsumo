@@ -332,7 +332,7 @@ function ResumoConsumo() {
               />
             </button>
             <div className="flex flex-col items-center gap-4 md:flex-row md:items-center md:justify-center md:gap-4">
-              <ConsumoRing line={line} />
+              <div className="md:-ml-6"><ConsumoRing line={line} /></div>
 
               <div className="md:w-[220px]">
 
