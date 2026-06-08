@@ -164,9 +164,10 @@ function ConsumoRing({ line }: { line: Line }) {
               cx={tipX}
               cy={tipY}
               r={strokeW / 2}
-              fill={tip}
+              fill="#7ec832"
               filter={`url(#tipShadow-${line.number.replace(/\D/g,"")})`}
             />
+
             <circle cx={tipX} cy={tipY} r={1.6} fill="white" />
           </>
         )}
