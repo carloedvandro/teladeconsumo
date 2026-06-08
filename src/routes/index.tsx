@@ -152,10 +152,22 @@ function ConsumoRing({ line }: { line: Line }) {
           })}
         </g>
 
-        {/* White tip marker */}
+        {/* Tip marker — colored cap matching bar tone with soft shadow + tiny white dot */}
         {pct > 0 && (
           <>
-            <circle cx={tipX} cy={tipY} r={4} fill="white" stroke={tip} strokeWidth={2} />
+            <defs>
+              <filter id={`tipShadow-${line.id}`} x="-50%" y="-50%" width="200%" height="200%">
+                <feDropShadow dx="0" dy="1.5" stdDeviation="1.2" floodColor="#000" floodOpacity="0.35" />
+              </filter>
+            </defs>
+            <circle
+              cx={tipX}
+              cy={tipY}
+              r={strokeW / 2}
+              fill={tip}
+              filter={`url(#tipShadow-${line.id})`}
+            />
+            <circle cx={tipX} cy={tipY} r={1.6} fill="white" />
           </>
         )}
       </svg>
