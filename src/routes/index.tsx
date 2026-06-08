@@ -355,7 +355,7 @@ function ResumoConsumo() {
           </div>
 
           <div>
-            <div className="mb-2 text-sm font-semibold text-[#333]">
+            <div className="mb-2 text-sm font-bold text-[#333]">
               Histórico mensal
             </div>
             <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
@@ -368,7 +368,7 @@ function ResumoConsumo() {
                     <div className="text-[#333]">{m.mes}</div>
                     <div className="text-xs text-[#888]">{m.status}</div>
                   </div>
-                  <div className="font-semibold text-[#660099]">
+                  <div className="font-bold text-[#660099]">
                     {formatGB(m.consumo)}
                   </div>
                 </li>
@@ -395,7 +395,7 @@ function ResumoConsumo() {
               setSelectedPlan(null);
               showToast(`Upgrade solicitado: ${p?.nome}. Você receberá um SMS de confirmação.`);
             }}
-            className="w-full rounded-md bg-[#660099] py-3 text-sm font-semibold text-white transition hover:bg-[#520077] disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-md bg-[#660099] py-3 text-sm font-bold text-white transition hover:bg-[#520077] disabled:cursor-not-allowed disabled:opacity-50"
           >
             Confirmar upgrade
           </button>
@@ -418,16 +418,16 @@ function ResumoConsumo() {
                 }`}
               >
                 <div>
-                  <div className="font-semibold text-[#333]">{p.nome}</div>
+                  <div className="font-bold text-[#333]">{p.nome}</div>
                   <div className="text-xs text-[#888]">{p.bonus}</div>
-                  <div className="mt-1 text-sm font-semibold text-[#660099]">
+                  <div className="mt-1 text-sm font-bold text-[#660099]">
                     {p.preco}
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="text-right">
                     <div className="text-xs text-[#888]">Internet</div>
-                    <div className="text-sm font-semibold text-[#333]">{p.giga}</div>
+                    <div className="text-sm font-bold text-[#333]">{p.giga}</div>
                   </div>
                   <div
                     className={`flex h-6 w-6 items-center justify-center rounded-full border-2 ${
@@ -454,23 +454,23 @@ function ResumoConsumo() {
           <div className="w-full space-y-2 text-sm">
             <div className="flex justify-between border-b border-[#eee] pb-2">
               <span className="text-[#666]">Plano</span>
-              <span className="font-semibold text-[#333]">{line.plan}</span>
+              <span className="font-bold text-[#333]">{line.plan}</span>
             </div>
             <div className="flex justify-between border-b border-[#eee] pb-2">
               <span className="text-[#666]">Linha</span>
-              <span className="font-semibold text-[#333]">{line.number}</span>
+              <span className="font-bold text-[#333]">{line.number}</span>
             </div>
             <div className="flex justify-between border-b border-[#eee] pb-2">
               <span className="text-[#666]">Consumido</span>
-              <span className="font-semibold text-[#333]">{formatGB(line.used)}</span>
+              <span className="font-bold text-[#333]">{formatGB(line.used)}</span>
             </div>
             <div className="flex justify-between border-b border-[#eee] pb-2">
               <span className="text-[#666]">Disponível</span>
-              <span className="font-semibold text-[#333]">{formatGB(available)}</span>
+              <span className="font-bold text-[#333]">{formatGB(available)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-[#666]">Fim do ciclo</span>
-              <span className="font-semibold text-[#333]">em {line.cycleDays} dias</span>
+              <span className="font-bold text-[#333]">em {line.cycleDays} dias</span>
             </div>
           </div>
         </div>
