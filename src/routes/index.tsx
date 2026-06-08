@@ -234,61 +234,6 @@ function ResumoConsumo() {
 
   return (
     <div className="min-h-screen bg-[#f3f3f3]">
-      {/* Top purple bar */}
-      <header className="bg-[#660099] text-white">
-        <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-3">
-          <div className="relative">
-            <button
-              onClick={() => setOpen((v) => !v)}
-              className="flex w-[260px] items-center justify-between rounded bg-white px-4 py-2 text-left text-[#333] shadow-sm"
-            >
-              <div>
-                <div className="text-[11px] leading-tight text-[#660099]">Vivo Móvel</div>
-                <div className="text-sm font-medium leading-tight">{line.number}</div>
-              </div>
-              <ChevronDown
-                className={`h-4 w-4 text-[#660099] transition-transform ${open ? "rotate-180" : ""}`}
-              />
-            </button>
-            {open && (
-              <ul className="absolute z-20 mt-1 w-[260px] overflow-hidden rounded bg-white text-[#333] shadow-lg">
-                {LINES.map((l, i) => (
-                  <li key={l.number}>
-                    <button
-                      onClick={() => {
-                        setLineIdx(i);
-                        setOpen(false);
-                      }}
-                      className={`flex w-full flex-col px-4 py-2 text-left hover:bg-[#f3eaf7] ${
-                        i === lineIdx ? "bg-[#f3eaf7]" : ""
-                      }`}
-                    >
-                      <span className="text-[11px] text-[#660099]">Vivo Móvel</span>
-                      <span className="text-sm font-medium">{l.number}</span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          <nav className="flex items-center gap-8">
-            <button
-              onClick={() => showToast("Aura: Olá Helena! Como posso ajudar?")}
-              className="flex items-center gap-2 text-sm"
-            >
-              <span className="inline-block h-5 w-5 rounded-full border border-white/70 bg-gradient-to-br from-white/30 to-transparent" />
-              Pergunte à Aura
-            </button>
-            <button className="flex items-center gap-2 text-sm font-medium">
-              <User className="h-4 w-4" /> HELENA <ChevronDown className="h-3 w-3" />
-            </button>
-            <button aria-label="Menu" onClick={() => showToast("Menu aberto")}>
-              <Grid3x3 className="h-5 w-5" />
-            </button>
-          </nav>
-        </div>
-      </header>
 
       <main className="mx-auto max-w-[1400px] px-6 pt-8 pb-16">
         <h1 className="text-[42px] font-light leading-tight text-[#660099]">
