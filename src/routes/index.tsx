@@ -124,7 +124,7 @@ function ConsumoRing({ line }: { line: Line }) {
               <span className="ml-1 text-lg font-semibold text-[#1a1a1a]">GB</span>
             </div>
             <div className="mt-2 text-xs text-[#9a9a9a]">
-              consumidos de <span className="font-semibold text-[#7a7a7a]">{line.total} GB</span>
+              consumidos de <span className="font-bold text-[#1a1a1a]">{line.total} GB</span>
             </div>
           </>
         )}
