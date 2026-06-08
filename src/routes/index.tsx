@@ -103,7 +103,7 @@ function ConsumoRing({ line }: { line: Line }) {
   stops.push(`transparent ${p}% 100%`);
   const progressBg = `conic-gradient(from 0deg, ${stops.join(", ")})`;
   const baseBg =
-    "radial-gradient(circle, transparent 0 84px, #660099 85px 95px, transparent 96px)";
+    "radial-gradient(circle, transparent 0 88px, #660099 89px 91px, transparent 92px)";
 
   // Position of the tip dot — angle from top (0deg) clockwise.
   const angle = (p / 100) * 360;
