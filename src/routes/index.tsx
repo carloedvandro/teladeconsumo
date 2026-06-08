@@ -400,26 +400,27 @@ function ResumoConsumo() {
               </div>
             </div>
           </div>
-        </section>
 
-        {/* Upgrade card */}
-        <button
-          onClick={() => setUpgradeOpen(true)}
-          className="mt-4 flex w-full items-center justify-between rounded-md bg-white px-6 py-5 shadow-sm transition hover:shadow-md"
-        >
-          <div className="flex items-center gap-4">
-            <FileText className="h-7 w-7 text-[#660099]" />
-            <div className="text-left">
-              <div className="text-[15px] font-semibold text-[#333]">
-                Quer falar e navegar ainda mais?
-              </div>
-              <div className="text-sm text-[#666]">
-                Faça um upgrade no seu plano agora
+          {/* Upgrade card - overlaid on hero, below consumption panel */}
+          <button
+            onClick={() => setUpgradeOpen(true)}
+            className="relative mt-4 flex w-full items-center justify-between rounded-md bg-white px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:right-8 md:bottom-6 md:mt-0 md:w-[520px]"
+          >
+            <div className="flex items-center gap-4">
+              <FileText className="h-7 w-7 text-[#660099]" />
+              <div className="text-left">
+                <div className="text-[15px] font-semibold text-[#333]">
+                  Quer falar e navegar ainda mais?
+                </div>
+                <div className="text-sm text-[#666]">
+                  Faça um upgrade no seu plano agora
+                </div>
               </div>
             </div>
-          </div>
-          <ChevronRight className="h-5 w-5 text-[#660099]" />
-        </button>
+            <ChevronRight className="h-5 w-5 text-[#660099]" />
+          </button>
+        </section>
+
 
         
       </main>
