@@ -185,6 +185,7 @@ function ResumoConsumo() {
   const [expandOpen, setExpandOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [activeCard, setActiveCard] = useState<"dados" | "minutos" | "sms" | null>("dados");
 
   const line = LINES[lineIdx];
   const pct = Math.min(100, (line.used / line.total) * 100);
