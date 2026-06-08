@@ -55,10 +55,10 @@ const LINES: Line[] = [
 
 // Progress arc color: green → yellow → orange → red as it fills toward 100%
 function ringColor(pct: number) {
-  if (pct >= 95) return "#e63329"; // red
-  if (pct >= 75) return "#f08a1c"; // orange
-  if (pct >= 45) return "#f0c419"; // yellow
-  return "#b8d432"; // green
+  if (pct >= 95) return "#ff2a2a"; // red
+  if (pct >= 75) return "#ff7a18"; // orange
+  if (pct >= 45) return "#f4c20d"; // yellow
+  return "#7ec832"; // green
 }
 
 function formatGB(gb: number) {
@@ -82,9 +82,9 @@ function lerpColor(a: string, b: string, t: number) {
 // shifts smoothly green → yellow → orange → red as consumption grows.
 function tipColor(pct: number) {
   const p = Math.min(100, Math.max(0, pct));
-  if (p <= 50) return lerpColor("#b8d432", "#f0c419", p / 50);
-  if (p <= 80) return lerpColor("#f0c419", "#f08a1c", (p - 50) / 30);
-  return lerpColor("#f08a1c", "#e63329", (p - 80) / 20);
+  if (p <= 50) return lerpColor("#7ec832", "#f4c20d", p / 50);
+  if (p <= 80) return lerpColor("#f4c20d", "#ff7a18", (p - 50) / 30);
+  return lerpColor("#ff7a18", "#ff2a2a", (p - 80) / 20);
 }
 
 function ConsumoRing({ line }: { line: Line }) {
@@ -98,10 +98,10 @@ function ConsumoRing({ line }: { line: Line }) {
   const ringMask =
     "radial-gradient(circle, transparent 0 84px, #000 85px 95px, transparent 96px)";
   const progressBg = `conic-gradient(from 0deg,
-    #b8d432 0%,
-    #f0c419 50%,
-    #f08a1c 80%,
-    #e63329 100%,
+    #7ec832 0%,
+    #f4c20d 50%,
+    #ff7a18 80%,
+    #ff2a2a 100%,
     transparent ${p}% 100%)`;
   const baseBg =
     "radial-gradient(circle, transparent 0 88px, #660099 89px 91px, transparent 92px)";
