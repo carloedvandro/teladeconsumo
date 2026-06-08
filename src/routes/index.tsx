@@ -399,20 +399,28 @@ function ResumoConsumo() {
               Histórico mensal
             </div>
             <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
-              {months.map((m) => (
-                <li
-                  key={m.mes}
-                  className="flex items-center justify-between px-3 py-2 text-sm"
-                >
-                  <div>
-                    <div className="text-[#333]">{m.mes}</div>
-                    <div className="text-xs text-[#888]">{m.status}</div>
-                  </div>
-                  <div className="font-semibold text-[#660099]">
-                    {formatGB(m.consumo)}
-                  </div>
-                </li>
-              ))}
+              {months.map((m, i) => {
+                const minutosVals = [820, 645, 712, 538, 690];
+                const smsVals = [42, 31, 58, 24, 37];
+                const valor =
+                  activeCard === "minutos"
+                    ? `${minutosVals[i]} min`
+                    : activeCard === "sms"
+                      ? `${smsVals[i]} SMS`
+                      : formatGB(m.consumo);
+                return (
+                  <li
+                    key={m.mes}
+                    className="flex items-center justify-between px-3 py-2 text-sm"
+                  >
+                    <div>
+                      <div className="text-[#333]">{m.mes}</div>
+                      <div className="text-xs text-[#888]">{m.status}</div>
+                    </div>
+                    <div className="font-semibold text-[#660099]">{valor}</div>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>
