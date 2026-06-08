@@ -355,7 +355,7 @@ function ResumoConsumo() {
                 </h2>
                 <p className="mt-1 text-sm text-[#9a9a9a]">
                   Fim do ciclo em{" "}
-                  <span className="font-semibold text-[#1a1a1a]">{line.cycleDays} dias</span>
+                  <span className="font-semibold text-[#1a1a1a]">{cycleDaysLeft} dias</span>
                 </p>
 
                 <ul className="mt-5 text-sm">
@@ -624,7 +624,7 @@ function ResumoConsumo() {
             </div>
             <div className="flex justify-between">
               <span className="text-[#666]">Fim do ciclo</span>
-              <span className="font-semibold text-[#660099]">em {line.cycleDays} dias</span>
+              <span className="font-semibold text-[#660099]">em {cycleDaysLeft} dias</span>
             </div>
           </div>
         </div>
