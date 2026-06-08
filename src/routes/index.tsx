@@ -263,7 +263,7 @@ function ResumoConsumo() {
                   <li className="flex items-center justify-between gap-4">
                     <span className="flex items-center gap-2 text-[#9a9a9a]">
                       <span
-                        className="inline-block h-3 w-3 rounded-full border-2"
+                        className="inline-block h-3 w-3 rounded-full border-[3px]"
                         style={{ borderColor: color }}
                       />
                       Meu Consumo
@@ -274,7 +274,7 @@ function ResumoConsumo() {
                   </li>
                   <li className="flex items-center justify-between gap-4 border-b border-t border-[#eee] py-3">
                     <span className="flex items-center gap-2 text-[#9a9a9a]">
-                      <span className="inline-block h-3 w-3 rounded-full border-2 border-[#660099]" />
+                      <span className="inline-block h-3 w-3 rounded-full border-[3px] border-[#660099]" />
                       Disponíveis
                     </span>
                     <span className="font-semibold text-[#1a1a1a]">
