@@ -186,6 +186,9 @@ function ResumoConsumo() {
   const [toast, setToast] = useState<string | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [activeCard, setActiveCard] = useState<"dados" | "minutos" | "sms" | null>("dados");
+  const [notifyEmail, setNotifyEmail] = useState(true);
+  const [notifyWhats, setNotifyWhats] = useState(true);
+  const [notifySms, setNotifySms] = useState(true);
 
   const line = LINES[lineIdx];
   const pct = Math.min(100, (line.used / line.total) * 100);
@@ -433,12 +436,19 @@ function ResumoConsumo() {
         title="Faça upgrade do seu plano"
         footer={
           <button
-            disabled={!selectedPlan}
+            disabled={!selectedPlan || (!notifyEmail && !notifyWhats && !notifySms)}
             onClick={() => {
               const p = plans.find((x) => x.id === selectedPlan);
+              const canais = [
+                notifyEmail && "e-mail",
+                notifyWhats && "WhatsApp",
+                notifySms && "SMS",
+              ].filter(Boolean).join(", ");
+              // TODO: integrar APIs reais (SendGrid/Resend, Twilio/WhatsApp Business, Twilio SMS)
+              console.log("Upgrade notification channels:", { email: notifyEmail, whatsapp: notifyWhats, sms: notifySms, plan: p?.nome });
               setUpgradeOpen(false);
               setSelectedPlan(null);
-              showToast(`Upgrade solicitado: ${p?.nome}. Você receberá um SMS de confirmação.`);
+              showToast(`Upgrade solicitado: ${p?.nome}. Confirmação enviada via ${canais}.`);
             }}
             className="w-full rounded-md bg-[#660099] py-3 text-sm font-semibold text-white transition hover:bg-[#520077] disabled:cursor-not-allowed disabled:opacity-50"
           >
@@ -485,6 +495,31 @@ function ResumoConsumo() {
               </button>
             );
           })}
+        </div>
+
+        <div className="mt-5 rounded-md border border-[#eee] bg-[#fafafa] p-4">
+          <div className="mb-2 text-sm font-semibold text-[#333]">Receber confirmação por</div>
+          <p className="mb-3 text-xs text-[#888]">Escolha os canais para receber a confirmação do upgrade.</p>
+          <div className="space-y-2">
+            {[
+              { key: "email", label: "E-mail", checked: notifyEmail, set: setNotifyEmail },
+              { key: "whats", label: "WhatsApp", checked: notifyWhats, set: setNotifyWhats },
+              { key: "sms", label: "SMS", checked: notifySms, set: setNotifySms },
+            ].map((c) => (
+              <label key={c.key} className="flex cursor-pointer items-center justify-between rounded-md border border-[#eee] bg-white px-3 py-2 text-sm">
+                <span className="text-[#333]">{c.label}</span>
+                <button
+                  type="button"
+                  onClick={() => c.set(!c.checked)}
+                  className={`relative h-6 w-11 rounded-full transition ${c.checked ? "bg-[#660099]" : "bg-[#ccc]"}`}
+                  aria-pressed={c.checked}
+                  aria-label={`Notificar por ${c.label}`}
+                >
+                  <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition ${c.checked ? "left-[22px]" : "left-0.5"}`} />
+                </button>
+              </label>
+            ))}
+          </div>
         </div>
       </Modal>
 
