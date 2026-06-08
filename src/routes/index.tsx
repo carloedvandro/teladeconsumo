@@ -151,7 +151,7 @@ function Modal({
       onClick={onClose}
     >
       <div
-        className="relative max-h-[85vh] w-full max-w-[560px] overflow-y-auto rounded-lg bg-white shadow-2xl"
+        className="no-scrollbar relative max-h-[85vh] w-full max-w-[560px] overflow-y-auto rounded-lg bg-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between border-b border-[#eee] px-6 py-4">
