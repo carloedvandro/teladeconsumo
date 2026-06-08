@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import {
   ChevronDown,
   User,
@@ -69,65 +69,42 @@ function formatGB(gb: number) {
 function ConsumoRing({ line }: { line: Line }) {
   const pct = Math.min(100, (line.used / line.total) * 100);
   const usedPct = Math.round(pct);
-  const r = 90;
-  const c = 2 * Math.PI * r;
-  const dash = (pct / 100) * c;
   const color = ringColor(pct);
-  const isFull = pct >= 99.5;
-  const gradId = useMemo(
-    () => `g-${Math.random().toString(36).slice(2, 8)}`,
-    [],
-  );
+
+
+
+  // Conic gradient that walks green → yellow → orange → red along the arc.
+  // We pin the color stops to the actual filled angle so the red tip lands
+  // exactly where the arc ends (matches the reference image).
+  const p = Math.max(0.0001, pct);
+  const ringMask =
+    "radial-gradient(circle, transparent 0 84px, #000 85px 95px, transparent 96px)";
+  const progressBg = `conic-gradient(from 0deg,
+    #b8d432 0%,
+    #c9d12a ${p * 0.25}%,
+    #f0c419 ${p * 0.5}%,
+    #f08a1c ${p * 0.78}%,
+    #e63329 ${p}%,
+    transparent ${p}% 100%)`;
+  const baseBg =
+    "radial-gradient(circle, transparent 0 88px, #660099 89px 91px, transparent 92px)";
 
   return (
     <div className="relative h-[220px] w-[220px] shrink-0">
-      <svg viewBox="0 0 220 220" className="h-full w-full -rotate-90">
-        <defs>
-          <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#b8d432" />
-            <stop offset="40%" stopColor="#f0c419" />
-            <stop offset="70%" stopColor="#f08a1c" />
-            <stop offset="100%" stopColor="#e63329" />
-          </linearGradient>
-        </defs>
-        {/* Thin fixed purple base ring (always visible) */}
-        <circle
-          cx="110"
-          cy="110"
-          r={r}
-          fill="none"
-          stroke="#660099"
-          strokeWidth="4"
+      {/* Thin fixed purple base ring */}
+      <div className="absolute inset-0" style={{ background: baseBg }} />
+      {/* Progress arc with conic gradient, masked to a ring */}
+      {pct > 0 && (
+        <div
+          className="absolute inset-0 transition-all duration-700 ease-out"
+          style={{
+            background: progressBg,
+            WebkitMask: ringMask,
+            mask: ringMask,
+          }}
         />
-        {/* Progress arc on top - always uses green→yellow→orange→red gradient */}
-        {pct > 0 && (
-          <circle
-            cx="110"
-            cy="110"
-            r={r}
-            fill="none"
-            stroke={`url(#${gradId})`}
-            strokeWidth="10"
-            strokeLinecap="round"
-            strokeDasharray={`${dash} ${c}`}
-            className="transition-all duration-700 ease-out"
-          />
-        )}
-        {/* Bright green leading tip */}
-        {!isFull && pct > 0 && (
-          <circle
-            cx="110"
-            cy="110"
-            r={r}
-            fill="none"
-            stroke="#b8d432"
-            strokeWidth="10"
-            strokeLinecap="round"
-            strokeDasharray={`${Math.min(dash, 14)} ${c}`}
-            strokeDashoffset={-Math.max(0, dash - 14)}
-          />
-        )}
-      </svg>
+      )}
+
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         {line.used === 0 ? (
           <>
