@@ -274,11 +274,14 @@ function ResumoConsumo() {
     23.8, 19.5, 21.2, 17.4, 24.1, 15.6,
   ];
 
-  const months = monthNames.map((nome, i) => ({
-    mes: `${nome}/${currentYear}`,
-    consumo: consumoSimulado[i],
-    status: i === currentMonth ? "Em andamento" : "Fechado",
-  }));
+  const months = monthNames
+    .map((nome, i) => ({
+      mes: `${nome}/${currentYear}`,
+      consumo: consumoSimulado[i],
+      status: i === currentMonth ? "Em andamento" : "Fechado",
+      idx: i,
+    }))
+    .filter((m) => m.idx <= currentMonth);
 
 
 
