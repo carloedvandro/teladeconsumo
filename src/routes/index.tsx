@@ -92,49 +92,73 @@ function ConsumoRing({ line }: { line: Line }) {
   const p = Math.max(0.0001, pct);
   const tip = tipColor(pct);
 
-  // Build conic-gradient stops: render colors only up to p% so the rest of the
-  // ring stays as the purple "disponível" track. Tip color reflects absolute %.
-  const ringMask =
-    "radial-gradient(circle, transparent 0 84px, #000 85px 95px, transparent 96px)";
-  const stops: string[] = ["#7ec832 0%"];
-  if (p > 50) stops.push("#f4c20d 50%");
-  if (p > 80) stops.push("#ff7a18 80%");
-  stops.push(`${tip} ${p}%`);
-  stops.push(`transparent ${p}% 100%`);
-  const progressBg = `conic-gradient(from 0deg, ${stops.join(", ")})`;
-  const baseBg =
-    "radial-gradient(circle, transparent 0 88px, #660099 89px 91px, transparent 92px)";
+  // SVG-based ring for crisp rendering at any zoom level.
+  const size = 220;
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = 90;
+  const strokeW = 10;
+  const circ = 2 * Math.PI * r;
 
-  // Position of the tip dot — angle from top (0deg) clockwise.
+  // Multi-color segments: each piece of the consumed arc gets its own color
+  // so the gradient feel (green → yellow → orange → red) is preserved.
+  const palette = [
+    { from: 0, to: 50, color: "#7ec832" },
+    { from: 50, to: 80, color: "#f4c20d" },
+    { from: 80, to: 99.5, color: "#ff7a18" },
+    { from: 99.5, to: 100, color: "#ff2a2a" },
+  ];
+  const segments = palette
+    .filter((s) => p > s.from)
+    .map((s) => ({ ...s, to: Math.min(p, s.to) }));
+
+  // Tip dot angle (0° = top, clockwise).
   const angle = (p / 100) * 360;
+  const tipX = cx + r * Math.sin((angle * Math.PI) / 180);
+  const tipY = cy - r * Math.cos((angle * Math.PI) / 180);
 
   return (
     <div className="relative h-[220px] w-[220px] shrink-0">
-      {/* Thin fixed purple base ring */}
-      <div className="absolute inset-0" style={{ background: baseBg }} />
-      {/* Progress arc with conic gradient, masked to a ring */}
-      {pct > 0 && (
-        <div
-          className="absolute inset-0 transition-all duration-700 ease-out"
-          style={{
-            background: progressBg,
-            WebkitMask: ringMask,
-            mask: ringMask,
-          }}
-        />
-      )}
-      {/* Tip dot: white center with colored ring matching arc tip color */}
-      {pct > 0 && (
-        <div
-          className="pointer-events-none absolute left-1/2 top-1/2 h-0 w-0 transition-transform duration-700 ease-out"
-          style={{ transform: `rotate(${angle}deg) translateY(-90px)` }}
-        >
-          <div
-            className="absolute h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white"
-            style={{ border: `3px solid ${tip}`, boxShadow: "0 0 2px rgba(0,0,0,0.15)" }}
-          />
-        </div>
-      )}
+      <svg
+        viewBox={`0 0 ${size} ${size}`}
+        className="absolute inset-0 h-full w-full"
+        style={{ shapeRendering: "geometricPrecision" }}
+      >
+        {/* Purple base track (thin) */}
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke="#660099" strokeWidth={2} />
+
+        {/* Colored consumed arc — rotate -90° so 0% sits at top */}
+        <g transform={`rotate(-90 ${cx} ${cy})`}>
+          {segments.map((s, i) => {
+            const segLen = ((s.to - s.from) / 100) * circ;
+            const segOffset = (s.from / 100) * circ;
+            const isFirst = i === 0;
+            const isLast = i === segments.length - 1;
+            return (
+              <circle
+                key={i}
+                cx={cx}
+                cy={cy}
+                r={r}
+                fill="none"
+                stroke={s.color}
+                strokeWidth={strokeW}
+                strokeLinecap={isFirst || isLast ? "round" : "butt"}
+                strokeDasharray={`${segLen} ${circ}`}
+                strokeDashoffset={-segOffset}
+                style={{ transition: "stroke-dasharray 700ms ease-out" }}
+              />
+            );
+          })}
+        </g>
+
+        {/* White tip marker */}
+        {pct > 0 && (
+          <>
+            <circle cx={tipX} cy={tipY} r={6} fill="white" stroke={tip} strokeWidth={2.5} />
+          </>
+        )}
+      </svg>
 
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <div className="text-[40px] font-semibold leading-none text-[#1a1a1a]">
@@ -151,10 +175,10 @@ function ConsumoRing({ line }: { line: Line }) {
           consumidos de <span className="font-bold text-[#1a1a1a]">{line.total} GB</span>
         </div>
       </div>
-
     </div>
   );
 }
+
 
 
 function Modal({
