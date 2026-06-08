@@ -53,12 +53,12 @@ const LINES: Line[] = [
   },
 ];
 
-// Colour scale: green -> yellow -> orange -> red as usage climbs
+// Progress arc color: green → yellow → orange → red as it fills toward 100%
 function ringColor(pct: number) {
   if (pct >= 95) return "#e63329"; // red
-  if (pct >= 80) return "#f08a1c"; // orange
-  if (pct >= 50) return "#f0c419"; // yellow
-  return "#660099"; // vivo purple (low usage like screenshot)
+  if (pct >= 75) return "#f08a1c"; // orange
+  if (pct >= 45) return "#f0c419"; // yellow
+  return "#b8d432"; // green
 }
 
 function formatGB(gb: number) {
