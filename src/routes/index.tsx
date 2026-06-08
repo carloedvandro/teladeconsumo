@@ -106,29 +106,21 @@ function ConsumoRing({ line }: { line: Line }) {
       )}
 
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        {line.used === 0 ? (
-          <>
-            <div className="text-[44px] font-light leading-none text-[#222]">0%</div>
-            <div className="mt-2 px-2 text-center text-[11px] text-[#666]">
-              sem franquia contratada
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="text-[40px] font-semibold leading-none text-[#1a1a1a]">
-              {line.used < 1
-                ? line.used.toFixed(2)
-                : line.used % 1 === 0
-                  ? line.used
-                  : line.used.toFixed(line.used < 10 ? 2 : 1)}
-              <span className="ml-1 text-lg font-semibold text-[#1a1a1a]">GB</span>
-            </div>
-            <div className="mt-2 text-xs text-[#9a9a9a]">
-              consumidos de <span className="font-bold text-[#1a1a1a]">{line.total} GB</span>
-            </div>
-          </>
-        )}
+        <div className="text-[40px] font-semibold leading-none text-[#1a1a1a]">
+          {line.used === 0
+            ? 0
+            : line.used < 1
+              ? line.used.toFixed(2)
+              : line.used % 1 === 0
+                ? line.used
+                : line.used.toFixed(line.used < 10 ? 2 : 1)}
+          <span className="ml-1 text-lg font-semibold text-[#1a1a1a]">GB</span>
+        </div>
+        <div className="mt-2 text-xs text-[#9a9a9a]">
+          consumidos de <span className="font-bold text-[#1a1a1a]">{line.total} GB</span>
+        </div>
       </div>
+
     </div>
   );
 }
@@ -271,7 +263,7 @@ function ResumoConsumo() {
                   <li className="flex items-center justify-between gap-4">
                     <span className="flex items-center gap-2 text-[#9a9a9a]">
                       <span
-                        className="inline-block h-3 w-3 rounded-full border-2"
+                        className="inline-block h-3 w-3 rounded-full border-[3px]"
                         style={{ borderColor: color }}
                       />
                       Meu Consumo
@@ -282,7 +274,7 @@ function ResumoConsumo() {
                   </li>
                   <li className="flex items-center justify-between gap-4 border-b border-t border-[#eee] py-3">
                     <span className="flex items-center gap-2 text-[#9a9a9a]">
-                      <span className="inline-block h-3 w-3 rounded-full border-2 border-[#660099]" />
+                      <span className="inline-block h-3 w-3 rounded-full border-[3px] border-[#660099]" />
                       Disponíveis
                     </span>
                     <span className="font-semibold text-[#1a1a1a]">
