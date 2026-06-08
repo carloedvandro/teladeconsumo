@@ -100,17 +100,17 @@ function ConsumoRing({ line }: { line: Line }) {
   const strokeW = 10;
   const circ = 2 * Math.PI * r;
 
-  // Multi-color segments: each piece of the consumed arc gets its own color
-  // so the gradient feel (green → yellow → orange → red) is preserved.
-  const palette = [
-    { from: 0, to: 50, color: "#7ec832" },
-    { from: 50, to: 80, color: "#f4c20d" },
-    { from: 80, to: 99.5, color: "#ff7a18" },
-    { from: 99.5, to: 100, color: "#ff2a2a" },
-  ];
-  const segments = palette
-    .filter((s) => p > s.from)
-    .map((s) => ({ ...s, to: Math.min(p, s.to) }));
+  // Smooth gradient arc: split the consumed portion into many tiny segments,
+  // each painted with the interpolated color at its midpoint (green→yellow→
+  // orange→red). Produces a seamless rastro of tones along the path.
+  const STEPS = 80;
+  const segments = Array.from({ length: STEPS }, (_, i) => {
+    const from = (i / STEPS) * p;
+    const to = ((i + 1) / STEPS) * p;
+    const mid = (from + to) / 2;
+    return { from, to, color: tipColor(mid) };
+  });
+
 
   // Tip dot angle (0° = top, clockwise).
   const angle = (p / 100) * 360;
