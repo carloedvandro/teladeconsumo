@@ -269,6 +269,7 @@ function ResumoConsumo() {
   const availPct = Math.round(100 - pct);
   const usedPct = Math.round(pct);
   const color = ringColor(pct);
+  const cycleDaysLeft = daysUntilCycleRenewal(6);
 
   function showToast(msg: string) {
     setToast(msg);
