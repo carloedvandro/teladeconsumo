@@ -39,7 +39,7 @@ type Line = {
 const LINES: Line[] = [
   {
     number: "(31) 97115-7584",
-    used: 0.74,
+    used: 32.4,
     total: 50,
     plan: "VIVO CONTROLE 50GB PLN",
     cycleDays: 3,
