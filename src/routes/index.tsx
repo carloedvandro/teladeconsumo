@@ -138,11 +138,13 @@ function Modal({
   onClose,
   title,
   children,
+  footer,
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
   children: React.ReactNode;
+  footer?: React.ReactNode;
 }) {
   if (!open) return null;
   return (
@@ -165,6 +167,11 @@ function Modal({
           </button>
         </div>
         <div className="no-scrollbar flex-1 overflow-y-auto px-6 py-5">{children}</div>
+        {footer && (
+          <div className="shrink-0 border-t border-[#eee] bg-white px-6 py-4">
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   );
