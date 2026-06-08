@@ -262,11 +262,19 @@ function ResumoConsumo() {
 
   const months = [
     { mes: "Junho/2026", consumo: line.used, status: "Em andamento" },
-    { mes: "Maio/2026", consumo: 6.42, status: "Fechado" },
-    { mes: "Abril/2026", consumo: 7.81, status: "Fechado" },
-    { mes: "Março/2026", consumo: 4.15, status: "Fechado" },
-    { mes: "Fevereiro/2026", consumo: 5.67, status: "Fechado" },
+    { mes: "Maio/2026", consumo: 22.4, status: "Fechado" },
+    { mes: "Abril/2026", consumo: 18.7, status: "Fechado" },
+    { mes: "Março/2026", consumo: 25.1, status: "Fechado" },
+    { mes: "Fevereiro/2026", consumo: 16.3, status: "Fechado" },
+    { mes: "Janeiro/2026", consumo: 20.9, status: "Fechado" },
+    { mes: "Dezembro/2025", consumo: 27.5, status: "Fechado" },
+    { mes: "Novembro/2025", consumo: 19.2, status: "Fechado" },
+    { mes: "Outubro/2025", consumo: 21.8, status: "Fechado" },
+    { mes: "Setembro/2025", consumo: 17.6, status: "Fechado" },
+    { mes: "Agosto/2025", consumo: 23.4, status: "Fechado" },
+    { mes: "Julho/2025", consumo: 15.9, status: "Fechado" },
   ];
+
 
 
   const plans = [
