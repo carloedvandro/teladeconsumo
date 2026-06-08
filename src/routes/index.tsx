@@ -318,7 +318,7 @@ function ResumoConsumo() {
           />
 
           {/* Consumption panel overlay - centered/right like reference */}
-          <div className="relative mx-4 -mt-24 overflow-hidden rounded-md bg-white/95 p-5 pb-10 shadow-xl backdrop-blur md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[540px] md:-translate-y-1/2 md:p-6 md:pb-10">
+          <div className="relative mx-4 -mt-24 overflow-hidden rounded-md bg-white/95 p-5 pb-10 shadow-xl backdrop-blur md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[430px] md:-translate-y-1/2 md:p-6 md:pb-10">
             {/* Gray diagonal triangle in the corner with + near the tip */}
             <button
               aria-label="Ver histórico de consumo"
@@ -344,8 +344,8 @@ function ResumoConsumo() {
                   <span className="font-semibold text-[#1a1a1a]">{line.cycleDays} dias</span>
                 </p>
 
-                <ul className="mt-5 space-y-3 text-sm">
-                  <li className="flex items-center justify-between gap-4">
+                <ul className="mt-5 space-y-0 text-sm border-t border-[#eee]">
+                  <li className="flex items-center justify-between gap-2 border-b border-[#eee] py-3">
                     <span className="flex items-center gap-2 text-[#9a9a9a]">
                       <span
                         className="inline-block h-3 w-3 rounded-full border-[3px]"
@@ -357,7 +357,8 @@ function ResumoConsumo() {
                       {usedPct}% - {formatGB(line.used)}
                     </span>
                   </li>
-                  <li className="flex items-center justify-between gap-4 border-b border-t border-[#eee] py-3">
+                  <li className="flex items-center justify-between gap-2 border-b border-[#eee] py-3">
+
                     <span className="flex items-center gap-2 text-[#9a9a9a]">
                       <span className="inline-block h-3 w-3 rounded-full border-[3px] border-[#660099]" />
                       Disponíveis
