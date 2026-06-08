@@ -156,7 +156,7 @@ function ConsumoRing({ line }: { line: Line }) {
         {pct > 0 && (
           <>
             <defs>
-              <filter id={`tipShadow-${line.number.replace(/\\D/g,"")}`} x="-50%" y="-50%" width="200%" height="200%">
+              <filter id={`tipShadow-${line.number.replace(/\D/g,"")}`} x="-50%" y="-50%" width="200%" height="200%">
                 <feDropShadow dx="0" dy="1.5" stdDeviation="1.2" floodColor="#000" floodOpacity="0.35" />
               </filter>
             </defs>
