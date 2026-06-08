@@ -157,16 +157,17 @@ function ConsumoRing({ line }: { line: Line }) {
           <>
             <defs>
               <filter id={`tipShadow-${line.number.replace(/\D/g,"")}`} x="-50%" y="-50%" width="200%" height="200%">
-                <feDropShadow dx="0" dy="2.5" stdDeviation="2" floodColor="#000" floodOpacity="0.55" />
+                <feDropShadow dx="0" dy="0" stdDeviation="2.5" floodColor="#000" floodOpacity="0.55" />
               </filter>
             </defs>
             <circle
               cx={tipX}
               cy={tipY}
               r={strokeW / 2}
-              fill="#7ec832"
+              fill={tip}
               filter={`url(#tipShadow-${line.number.replace(/\D/g,"")})`}
             />
+
 
             <circle cx={tipX} cy={tipY} r={1.6} fill="white" />
           </>
