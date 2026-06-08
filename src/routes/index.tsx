@@ -166,9 +166,7 @@ function ConsumoRing({ line }: { line: Line }) {
             ? 0
             : line.used < 1
               ? line.used.toFixed(2)
-              : line.used % 1 === 0
-                ? line.used
-                : line.used.toFixed(line.used < 10 ? 2 : 1)}
+              : line.used.toFixed(1)}
           <span className="ml-1 text-lg font-semibold text-[#1a1a1a]">GB</span>
         </div>
         <div className="mt-2 text-xs text-[#9a9a9a]">
