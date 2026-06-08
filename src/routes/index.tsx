@@ -386,6 +386,20 @@ function ResumoConsumo() {
           setSelectedPlan(null);
         }}
         title="Faça upgrade do seu plano"
+        footer={
+          <button
+            disabled={!selectedPlan}
+            onClick={() => {
+              const p = plans.find((x) => x.id === selectedPlan);
+              setUpgradeOpen(false);
+              setSelectedPlan(null);
+              showToast(`Upgrade solicitado: ${p?.nome}. Você receberá um SMS de confirmação.`);
+            }}
+            className="w-full rounded-md bg-[#660099] py-3 text-sm font-semibold text-white transition hover:bg-[#520077] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Confirmar upgrade
+          </button>
+        }
       >
         <p className="mb-4 text-sm text-[#666]">
           Escolha o melhor plano para você. A mudança entra em vigor no próximo ciclo.
@@ -427,18 +441,6 @@ function ResumoConsumo() {
             );
           })}
         </div>
-        <button
-          disabled={!selectedPlan}
-          onClick={() => {
-            const p = plans.find((x) => x.id === selectedPlan);
-            setUpgradeOpen(false);
-            setSelectedPlan(null);
-            showToast(`Upgrade solicitado: ${p?.nome}. Você receberá um SMS de confirmação.`);
-          }}
-          className="mt-5 w-full rounded-md bg-[#660099] py-3 text-sm font-semibold text-white transition hover:bg-[#520077] disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          Confirmar upgrade
-        </button>
       </Modal>
 
       {/* Expanded view modal */}
