@@ -39,14 +39,14 @@ type Line = {
 const LINES: Line[] = [
   {
     number: "(31) 97115-7584",
-    used: 15,
+    used: 19.3,
     total: 50,
     plan: "SmartVoz 50GB",
     cycleDays: 3,
   },
   {
     number: "(32) 99963-0109",
-    used: 0.64,
+    used: 23.3,
     total: 50,
     plan: "SmartVoz 50GB",
     cycleDays: 3,
@@ -62,8 +62,8 @@ function ringColor(pct: number) {
 }
 
 function formatGB(gb: number) {
-  if (gb < 1) return `${(gb * 1024).toFixed(2)} MB`;
-  return `${gb.toFixed(2)} GB`;
+  if (gb < 1) return `${(gb * 1024).toFixed(0)} MB`;
+  return `${gb.toFixed(1)} GB`;
 }
 
 function hexToRgb(hex: string) {
@@ -166,9 +166,7 @@ function ConsumoRing({ line }: { line: Line }) {
             ? 0
             : line.used < 1
               ? line.used.toFixed(2)
-              : line.used % 1 === 0
-                ? line.used
-                : line.used.toFixed(line.used < 10 ? 2 : 1)}
+              : line.used.toFixed(1)}
           <span className="ml-1 text-lg font-semibold text-[#1a1a1a]">GB</span>
         </div>
         <div className="mt-2 text-xs text-[#9a9a9a]">
