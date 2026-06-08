@@ -66,28 +66,48 @@ function formatGB(gb: number) {
   return `${gb.toFixed(2)} GB`;
 }
 
+function hexToRgb(hex: string) {
+  const h = hex.replace("#", "");
+  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)] as const;
+}
+function lerpColor(a: string, b: string, t: number) {
+  const [ar, ag, ab] = hexToRgb(a);
+  const [br, bg, bb] = hexToRgb(b);
+  const r = Math.round(ar + (br - ar) * t);
+  const g = Math.round(ag + (bg - ag) * t);
+  const bl = Math.round(ab + (bb - ab) * t);
+  return `rgb(${r}, ${g}, ${bl})`;
+}
+// Tip color interpolated across the full 0-100% spectrum so the arc tip
+// shifts smoothly green → yellow → orange → red as consumption grows.
+function tipColor(pct: number) {
+  const p = Math.min(100, Math.max(0, pct));
+  if (p <= 50) return lerpColor("#b8d432", "#f0c419", p / 50);
+  if (p <= 80) return lerpColor("#f0c419", "#f08a1c", (p - 50) / 30);
+  return lerpColor("#f08a1c", "#e63329", (p - 80) / 20);
+}
+
 function ConsumoRing({ line }: { line: Line }) {
   const pct = Math.min(100, (line.used / line.total) * 100);
-  const usedPct = Math.round(pct);
-  const color = ringColor(pct);
-
-
-
-  // Conic gradient that walks green → yellow → orange → red along the arc.
-  // We pin the color stops to the actual filled angle so the red tip lands
-  // exactly where the arc ends (matches the reference image).
   const p = Math.max(0.0001, pct);
+  const tip = tipColor(pct);
+
+  // Conic gradient walks green → yellow → orange → red across the FULL 100%
+  // (not stretched to the filled portion), so the tip color reflects the
+  // actual consumption level — only fully red when reaching 100%.
   const ringMask =
     "radial-gradient(circle, transparent 0 84px, #000 85px 95px, transparent 96px)";
   const progressBg = `conic-gradient(from 0deg,
     #b8d432 0%,
-    #c9d12a ${p * 0.25}%,
-    #f0c419 ${p * 0.5}%,
-    #f08a1c ${p * 0.78}%,
-    #e63329 ${p}%,
+    #f0c419 50%,
+    #f08a1c 80%,
+    #e63329 100%,
     transparent ${p}% 100%)`;
   const baseBg =
     "radial-gradient(circle, transparent 0 88px, #660099 89px 91px, transparent 92px)";
+
+  // Position of the tip dot — angle from top (0deg) clockwise.
+  const angle = (p / 100) * 360;
 
   return (
     <div className="relative h-[220px] w-[220px] shrink-0">
@@ -103,6 +123,18 @@ function ConsumoRing({ line }: { line: Line }) {
             mask: ringMask,
           }}
         />
+      )}
+      {/* Tip dot: white center with colored ring matching arc tip color */}
+      {pct > 0 && (
+        <div
+          className="pointer-events-none absolute left-1/2 top-1/2 h-0 w-0 transition-transform duration-700 ease-out"
+          style={{ transform: `rotate(${angle}deg) translateY(-90px)` }}
+        >
+          <div
+            className="absolute h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white"
+            style={{ border: `3px solid ${tip}`, boxShadow: "0 0 2px rgba(0,0,0,0.15)" }}
+          />
+        </div>
       )}
 
       <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -124,6 +156,7 @@ function ConsumoRing({ line }: { line: Line }) {
     </div>
   );
 }
+
 
 function Modal({
   open,
