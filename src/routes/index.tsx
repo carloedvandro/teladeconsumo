@@ -261,33 +261,33 @@ function ResumoConsumo() {
               <ConsumoRing line={line} />
 
               <div className="flex-1">
-                <h2 className="text-[15px] font-semibold tracking-wide text-[#333]">
+                <h2 className="text-[15px] font-bold tracking-wide text-[#1a1a1a]">
                   {line.plan}
                 </h2>
-                <p className="mt-1 text-sm text-[#666]">
+                <p className="mt-1 text-sm text-[#9a9a9a]">
                   Fim do ciclo em{" "}
-                  <span className="font-semibold text-[#333]">{line.cycleDays} dias</span>
+                  <span className="font-bold text-[#1a1a1a]">{line.cycleDays} dias</span>
                 </p>
 
                 <ul className="mt-5 space-y-3 text-sm">
                   <li className="flex items-center justify-between gap-4">
-                    <span className="flex items-center gap-2 text-[#333]">
+                    <span className="flex items-center gap-2 text-[#9a9a9a]">
                       <span
                         className="inline-block h-3 w-3 rounded-full border-2"
                         style={{ borderColor: color }}
                       />
                       Meu Consumo
                     </span>
-                    <span className="text-[#333]">
+                    <span className="font-bold text-[#1a1a1a]">
                       {usedPct}% - {formatGB(line.used)}
                     </span>
                   </li>
                   <li className="flex items-center justify-between gap-4 border-b border-t border-[#eee] py-3">
-                    <span className="flex items-center gap-2 text-[#333]">
+                    <span className="flex items-center gap-2 text-[#9a9a9a]">
                       <span className="inline-block h-3 w-3 rounded-full border-2 border-[#660099]" />
                       Disponíveis
                     </span>
-                    <span className="text-[#333]">
+                    <span className="font-bold text-[#1a1a1a]">
                       {availPct}% - {formatGB(available)}
                     </span>
                   </li>
