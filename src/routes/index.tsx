@@ -125,7 +125,7 @@ function ConsumoRing({ line }: { line: Line }) {
         style={{ shapeRendering: "geometricPrecision" }}
       >
         {/* Purple base track (thin) */}
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke="#660099" strokeWidth={2} />
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke="#7b1fa2" strokeWidth={3} />
 
         {/* Colored consumed arc — rotate -90° so 0% sits at top */}
         <g transform={`rotate(-90 ${cx} ${cy})`}>
