@@ -263,20 +263,22 @@ function ResumoConsumo() {
     setTimeout(() => setToast(null), 2800);
   }
 
-  const months = [
-    { mes: "Junho/2026", consumo: line.used, status: "Em andamento" },
-    { mes: "Maio/2026", consumo: 22.4, status: "Fechado" },
-    { mes: "Abril/2026", consumo: 18.7, status: "Fechado" },
-    { mes: "Março/2026", consumo: 25.1, status: "Fechado" },
-    { mes: "Fevereiro/2026", consumo: 16.3, status: "Fechado" },
-    { mes: "Janeiro/2026", consumo: 20.9, status: "Fechado" },
-    { mes: "Dezembro/2025", consumo: 27.5, status: "Fechado" },
-    { mes: "Novembro/2025", consumo: 19.2, status: "Fechado" },
-    { mes: "Outubro/2025", consumo: 21.8, status: "Fechado" },
-    { mes: "Setembro/2025", consumo: 17.6, status: "Fechado" },
-    { mes: "Agosto/2025", consumo: 23.4, status: "Fechado" },
-    { mes: "Julho/2025", consumo: 15.9, status: "Fechado" },
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth(); // 0-11
+  const monthNames = [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
   ];
+  const consumoSimulado = [
+    20.9, 16.3, 25.1, 18.7, 22.4, line.used,
+    23.8, 19.5, 21.2, 17.4, 24.1, 15.6,
+  ];
+
+  const months = monthNames.map((nome, i) => ({
+    mes: `${nome}/${currentYear}`,
+    consumo: consumoSimulado[i],
+    status: i === currentMonth ? "Em andamento" : "Fechado",
+  }));
 
 
 
@@ -454,8 +456,8 @@ function ResumoConsumo() {
             </div>
             <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
               {months.map((m, i) => {
-                const minutosVals = [820, 645, 712, 538, 690];
-                const smsVals = [42, 31, 58, 24, 37];
+                const minutosVals = [820, 645, 712, 538, 690, 756, 623, 589, 701, 534, 678, 612];
+                const smsVals = [42, 31, 58, 24, 37, 45, 29, 51, 33, 48, 27, 40];
                 const valor =
                   activeCard === "minutos"
                     ? `${minutosVals[i]} min`
