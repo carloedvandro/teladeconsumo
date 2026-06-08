@@ -200,9 +200,9 @@ function ResumoConsumo() {
   ];
 
   const plans = [
-    { id: "ctrl10", nome: "Vivo Controle 10GB", giga: "10 GB", preco: "R$ 79,99/mês", bonus: "+ Apps ilimitados" },
-    { id: "pos15", nome: "Vivo Pós 15GB", giga: "15 GB", preco: "R$ 99,99/mês", bonus: "+ Disney+ incluso" },
-    { id: "pos30", nome: "Vivo Pós 30GB", giga: "30 GB", preco: "R$ 129,99/mês", bonus: "+ Netflix + Disney+" },
+    { id: "sv50", nome: "SmartVoz 50GB", giga: "50 GB", preco: "R$ 99,90/mês", bonus: "+ Apps ilimitados" },
+    { id: "sv80", nome: "SmartVoz 80GB", giga: "80 GB", preco: "R$ 124,90/mês", bonus: "+ Disney+ incluso" },
+    { id: "sv100", nome: "SmartVoz 100GB", giga: "100 GB", preco: "R$ 149,90/mês", bonus: "+ Netflix + Disney+" },
     
   ];
 
