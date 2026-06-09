@@ -267,8 +267,12 @@ function ResumoConsumo() {
   const [notifyEmail, setNotifyEmail] = useState(true);
   const [notifyWhats, setNotifyWhats] = useState(true);
   const [notifySms, setNotifySms] = useState(true);
+  const [autoDebit, setAutoDebit] = useState(false);
 
-  const line = LINES[lineIdx];
+  const baseLine = LINES[lineIdx];
+  const bonusDebito = autoDebit ? 20 : 0;
+  const franquiaTotal = baseLine.total + bonusDebito;
+  const line: Line = { ...baseLine, total: franquiaTotal };
   const pct = Math.min(100, (line.used / line.total) * 100);
   const available = +(line.total - line.used).toFixed(2);
   const availPct = Math.round(100 - pct);
