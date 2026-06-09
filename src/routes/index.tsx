@@ -197,7 +197,7 @@ function ConsumoRing({ line, bonus = 0 }: { line: Line; bonus?: number }) {
               : line.used.toFixed(1)}
           <span className="ml-1 text-lg font-semibold text-[#1a1a1a]">GB</span>
         </div>
-        <div className="mt-2 text-xs text-[#9a9a9a]">
+        <div className="mt-2 text-xs text-[#6b6b6b]">
           consumidos de{" "}
           <span className={`font-bold ${bonus > 0 ? "text-[#16a34a]" : "text-[#1a1a1a]"}`}>
             {line.total} GB
@@ -378,14 +378,15 @@ function ResumoConsumo() {
                     </span>
                   )}
                 </div>
-                <p className="mt-1 text-sm text-[#9a9a9a]">
+                <p className="mt-1 text-sm text-[#5a5a5a]">
                   Fim do ciclo em{" "}
                   <span className="font-semibold text-[#1a1a1a]">{cycleDaysLeft} dias</span>
                 </p>
 
                 <ul className="mt-5 text-sm">
                   <li className="flex items-center justify-between gap-4 border-b border-[#a8a8a8] py-3">
-                    <span className="flex items-center gap-2 text-[#9a9a9a]">
+                    <span className="flex items-center gap-2 text-[#5a5a5a]">
+
                       <span
                         className="inline-block h-3 w-3 rounded-full border-[3px]"
                         style={{ borderColor: color }}
@@ -397,7 +398,7 @@ function ResumoConsumo() {
                     </span>
                   </li>
                   <li className="flex items-center justify-between gap-4 border-b border-[#a8a8a8] py-3">
-                    <span className="flex items-center gap-2 text-[#9a9a9a]">
+                    <span className="flex items-center gap-2 text-[#5a5a5a]">
                       <span className="inline-block h-3 w-3 rounded-full border-[3px] border-[#660099]" />
                       Disponíveis
                     </span>
