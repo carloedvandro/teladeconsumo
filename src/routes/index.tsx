@@ -267,6 +267,7 @@ function ResumoConsumo() {
   const [notifyWhats, setNotifyWhats] = useState(true);
   const [notifySms, setNotifySms] = useState(true);
   const [autoDebit, setAutoDebit] = useState(false);
+  const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
 
   const baseLine = LINES[lineIdx];
   const bonusDebito = autoDebit ? 20 : 0;
