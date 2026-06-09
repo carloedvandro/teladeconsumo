@@ -704,8 +704,16 @@ function ResumoConsumo() {
             {/* Body */}
             <div className="no-scrollbar flex-1 overflow-y-auto px-6 py-5">
               <p className="mb-4 text-sm text-[#5a5a5a]">
-                Escolha o melhor plano para você. A mudança entra em vigor no próximo ciclo.
+                Escolha o melhor plano para você. A nova franquia será liberada imediatamente neste ciclo.
               </p>
+              <div
+                className="mb-4 flex items-start gap-2 rounded-lg border border-[#660099]/15 bg-[#f9f5fc] px-3 py-2.5 text-[12px] leading-snug text-[#4a2c66]"
+              >
+                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[#660099]" />
+                <span>
+                  Ao confirmar, sua franquia será atualizada imediatamente, mantendo o consumo já utilizado neste ciclo. O novo valor será cobrado apenas no próximo vencimento.
+                </span>
+              </div>
               <div className="space-y-3">
                 {plans.map((p, idx) => {
                   const sel = selectedPlan === p.id;
