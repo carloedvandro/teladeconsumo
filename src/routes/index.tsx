@@ -550,7 +550,7 @@ function ResumoConsumo() {
             <div className="text-[11px] font-semibold uppercase tracking-wider text-[#444]">
               Linha
             </div>
-            <div className="mt-1 text-[22px] font-bold tracking-tight text-[#0a0a0a]">
+            <div className="mt-1 text-[22px] font-bold tracking-tight text-[#660099]">
               {line.number}
             </div>
           </div>
