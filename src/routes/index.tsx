@@ -13,6 +13,7 @@ import {
   MessageSquare,
   Wifi,
   RefreshCw,
+  ArrowUpCircle,
 } from "lucide-react";
 import familyImgAsset from "@/assets/family-tablet.jpg.asset.json";
 const familyImg = familyImgAsset.url;
