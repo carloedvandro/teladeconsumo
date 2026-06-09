@@ -580,14 +580,14 @@ function ResumoConsumo() {
                   className="rounded-xl p-3 text-center transition"
                   style={{
                     background: active
-                      ? "linear-gradient(160deg, rgba(102,0,153,0.10), rgba(102,0,153,0.03))"
+                      ? "rgba(102,0,153,0.04)"
                       : "#ffffff",
                     border: active
-                      ? "1px solid rgba(102,0,153,0.55)"
+                      ? "1px solid rgba(102,0,153,0.25)"
                       : "1px solid rgba(0,0,0,0.06)",
                     boxShadow: active
-                      ? "0 10px 24px -14px rgba(102,0,153,0.55), inset 0 1px 0 rgba(255,255,255,0.8)"
-                      : "0 4px 14px -10px rgba(0,0,0,0.18)",
+                      ? "0 0 18px -6px rgba(102,0,153,0.25)"
+                      : "0 2px 8px -4px rgba(0,0,0,0.08)",
                   }}
                 >
                   <img
@@ -596,9 +596,9 @@ function ResumoConsumo() {
                     loading="lazy"
                     width={64}
                     height={64}
-                    className="mx-auto h-16 w-16 object-contain drop-shadow-[0_4px_8px_rgba(102,0,153,0.35)]"
+                    className="mx-auto h-16 w-16 object-contain"
                   />
-                  <div className="mt-1.5 text-[11px] font-medium text-[#666]">{card.label}</div>
+                  <div className="mt-1.5 text-[11px] font-medium text-[#660099]">{card.label}</div>
                   <div className="text-[13px] font-bold text-[#1a1a1a]">{card.value}</div>
                 </button>
               );
