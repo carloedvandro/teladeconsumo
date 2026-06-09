@@ -546,22 +546,12 @@ function ResumoConsumo() {
         title="Detalhes do seu consumo"
       >
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-3 px-1 py-2">
-            <div>
-              <div className="text-[11px] font-semibold uppercase tracking-wider text-[#660099]">
-                Linha
-              </div>
-              <div className="mt-1 text-[16px] font-bold tracking-tight text-[#1a1a1a]">
-                {line.number}
-              </div>
+          <div className="px-1 py-2">
+            <div className="text-[11px] font-semibold uppercase tracking-wider text-[#444]">
+              Linha
             </div>
-            <div className="text-right">
-              <div className="text-[11px] font-semibold uppercase tracking-wider text-[#660099]">
-                Plano
-              </div>
-              <div className="mt-1 text-[16px] font-bold tracking-tight text-[#1a1a1a]">
-                {line.plan}
-              </div>
+            <div className="mt-1 text-[22px] font-bold tracking-tight text-[#0a0a0a]">
+              {line.number}
             </div>
           </div>
 
