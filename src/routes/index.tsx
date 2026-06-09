@@ -603,9 +603,9 @@ function ResumoConsumo() {
                     src={card.icon}
                     alt=""
                     loading="lazy"
-                    width={48}
-                    height={48}
-                    className="mx-auto h-12 w-12 object-contain drop-shadow-[0_4px_8px_rgba(102,0,153,0.35)]"
+                    width={64}
+                    height={64}
+                    className="mx-auto h-16 w-16 object-contain drop-shadow-[0_4px_8px_rgba(102,0,153,0.35)]"
                   />
                   <div className="mt-1.5 text-[11px] font-medium text-[#666]">{card.label}</div>
                   <div className="text-[13px] font-bold text-[#1a1a1a]">{card.value}</div>
