@@ -909,30 +909,19 @@ function ResumoConsumo() {
                   </div>
               </div>
 
-              {/* Alerta premium */}
-              <div
-                className="rounded-xl p-4"
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(234,88,12,0.08), rgba(234,88,12,0.03))",
-                  borderLeft: "3px solid #ea580c",
-                  border: "1px solid rgba(234,88,12,0.22)",
-                  borderLeftWidth: 3,
-                }}
-              >
-                <div className="flex items-start gap-3">
-                  <img
-                    src={icon3dAlert}
-                    alt="Atenção"
-                    width={28}
-                    height={28}
-                    loading="lazy"
-                    className="h-7 w-7 shrink-0 object-contain -mt-0.5"
-                  />
-                  <p className="text-[13px] leading-relaxed text-[#7c2d12]">
-                    <span className="font-semibold">Atenção:</span> após ativar, esta função não poderá ser desativada manualmente.
-                  </p>
-                </div>
+              {/* Alerta */}
+              <div className="flex items-start gap-3 px-1">
+                <img
+                  src={icon3dAlert}
+                  alt="Atenção"
+                  width={28}
+                  height={28}
+                  loading="lazy"
+                  className="h-7 w-7 shrink-0 object-contain -mt-0.5"
+                />
+                <p className="text-[13px] leading-relaxed text-[#b91c1c]">
+                  <span className="font-semibold text-[#991b1b]">Atenção:</span> após ativar, esta função não poderá ser desativada manualmente.
+                </p>
               </div>
 
               <p className="text-[12px] leading-relaxed text-[#777]">
