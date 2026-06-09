@@ -12,6 +12,7 @@ import {
   Phone,
   MessageSquare,
   Wifi,
+  RefreshCw,
 } from "lucide-react";
 import familyImgAsset from "@/assets/family-tablet.jpg.asset.json";
 const familyImg = familyImgAsset.url;
@@ -266,6 +267,7 @@ function ResumoConsumo() {
   const [notifyWhats, setNotifyWhats] = useState(true);
   const [notifySms, setNotifySms] = useState(true);
   const [autoDebit, setAutoDebit] = useState(false);
+  const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
 
   const baseLine = LINES[lineIdx];
   const bonusDebito = autoDebit ? 20 : 0;
@@ -430,9 +432,12 @@ function ResumoConsumo() {
                     type="button"
                     role="switch"
                     aria-checked={autoDebit}
-                    onClick={() => setAutoDebit((v) => !v)}
+                    disabled={autoDebit}
+                    onClick={() => {
+                      if (!autoDebit) setConfirmAutoDebit(true);
+                    }}
                     className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors duration-300 ${
-                      autoDebit ? "bg-[#16a34a]" : "bg-[#bfbfbf]"
+                      autoDebit ? "bg-[#16a34a] cursor-default" : "bg-[#bfbfbf] cursor-pointer"
                     }`}
                   >
                     <span
@@ -692,6 +697,69 @@ function ResumoConsumo() {
           </div>
         </div>
       </Modal>
+
+      {/* Confirm Auto-Renewal Modal */}
+      {confirmAutoDebit && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 animate-fade-in"
+          onClick={() => setConfirmAutoDebit(false)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl animate-fade-in"
+          >
+            <div className="flex items-start gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#dcfce7]">
+                <RefreshCw className="h-5 w-5 text-[#16a34a]" />
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-lg font-bold text-[#1a1a1a]">
+                  Ativar Renovação Automática
+                </h3>
+              </div>
+            </div>
+
+            <div className="mt-4 space-y-2.5">
+              <p className="text-sm leading-relaxed text-[#555]">
+                Ao ativar a renovação automática, seu plano será renovado automaticamente todos os meses utilizando o saldo disponível da sua carteira virtual/comissões.
+              </p>
+              <p className="text-sm font-semibold text-[#15803d]">
+                Você receberá +20GB de bônus no seu plano atual.
+              </p>
+              <p className="text-sm font-medium text-[#d97706]">
+                Atenção: após ativar, esta função não poderá ser desativada manualmente.
+              </p>
+              <p className="text-xs leading-relaxed text-[#777]">
+                Os valores da renovação serão descontados automaticamente do saldo disponível da sua conta.
+              </p>
+            </div>
+
+            <div className="mt-6 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setConfirmAutoDebit(false)}
+                className="rounded-md border border-[#d4d4d4] bg-white px-5 py-2 text-sm font-semibold text-[#333] hover:bg-[#f5f5f5] transition"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setAutoDebit(true);
+                  setConfirmAutoDebit(false);
+                  setToast("Renovação automática ativada · +20GB liberados");
+                  setTimeout(() => setToast(null), 3000);
+                }}
+                className="rounded-md bg-[#16a34a] px-5 py-2 text-sm font-semibold text-white shadow hover:bg-[#15803d] transition"
+              >
+                Ativar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Toast */}
       {toast && (
