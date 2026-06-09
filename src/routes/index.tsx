@@ -99,7 +99,7 @@ function tipColor(pct: number) {
   return lerpColor("#ff7a18", "#ff2a2a", (p - 80) / 20);
 }
 
-function ConsumoRing({ line }: { line: Line }) {
+function ConsumoRing({ line, bonus = 0 }: { line: Line; bonus?: number }) {
   const pct = Math.min(100, (line.used / line.total) * 100);
   const p = Math.max(0.0001, pct);
   const tip = tipColor(pct);
