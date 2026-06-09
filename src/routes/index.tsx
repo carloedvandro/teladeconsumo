@@ -279,8 +279,6 @@ function ResumoConsumo() {
   const [notifySms, setNotifySms] = useState(true);
   const [autoDebit, setAutoDebit] = useState(false);
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
-  const [planOverrides, setPlanOverrides] = useState<Record<number, { plan: string; total: number; previousPlan: string }>>({});
-  const [pendingBilling, setPendingBilling] = useState<Record<number, { plan: string; preco: string }>>({});
 
   const [fluctuatingUsed, setFluctuatingUsed] = useState(() => 36 + Math.random() * 5);
   useEffect(() => {
@@ -296,11 +294,7 @@ function ResumoConsumo() {
     return () => clearInterval(id);
   }, []);
 
-  const rawLine = LINES[lineIdx];
-  const override = planOverrides[lineIdx];
-  const baseLine: Line = override
-    ? { ...rawLine, plan: override.plan, total: override.total }
-    : rawLine;
+  const baseLine = LINES[lineIdx];
   const bonusDebito = autoDebit ? 25 : 0;
   const franquiaTotal = baseLine.total + bonusDebito;
   const line: Line = {
@@ -308,7 +302,6 @@ function ResumoConsumo() {
     total: franquiaTotal,
     used: lineIdx === 0 ? fluctuatingUsed : baseLine.used,
   };
-  const pendingForLine = pendingBilling[lineIdx];
   const pct = Math.min(100, (line.used / line.total) * 100);
   const available = +(line.total - line.used).toFixed(2);
   const availPct = Math.round(100 - pct);
@@ -387,9 +380,9 @@ function ResumoConsumo() {
 
 
   const plans = [
-    { id: "sv50", nome: "SmartVoz 50GB", giga: "50 GB", total: 50, preco: "R$ 99,90/mês", bonus: "+ Apps ilimitados" },
-    { id: "sv80", nome: "SmartVoz 80GB", giga: "80 GB", total: 80, preco: "R$ 124,90/mês", bonus: "+ Disney+ incluso" },
-    { id: "sv100", nome: "SmartVoz 100GB", giga: "100 GB", total: 100, preco: "R$ 149,90/mês", bonus: "+ Netflix + Disney+" },
+    { id: "sv50", nome: "SmartVoz 50GB", giga: "50 GB", preco: "R$ 99,90/mês", bonus: "+ Apps ilimitados" },
+    { id: "sv80", nome: "SmartVoz 80GB", giga: "80 GB", preco: "R$ 124,90/mês", bonus: "+ Disney+ incluso" },
+    { id: "sv100", nome: "SmartVoz 100GB", giga: "100 GB", preco: "R$ 149,90/mês", bonus: "+ Netflix + Disney+" },
     
   ];
 
@@ -462,11 +455,6 @@ function ResumoConsumo() {
                   Fim do ciclo{" "}
                   <span className="font-semibold text-[#1a1a1a]">{cycleLabel}</span>
                 </p>
-                {pendingForLine && (
-                  <p className="mt-1 text-[11px] font-medium text-[#660099]">
-                    Novo valor {pendingForLine.preco} no próximo vencimento
-                  </p>
-                )}
 
                 <ul className="mt-5 text-sm">
                   <li className="flex items-center justify-between gap-4 border-b border-[#a8a8a8] py-3">
@@ -709,16 +697,8 @@ function ResumoConsumo() {
             {/* Body */}
             <div className="no-scrollbar flex-1 overflow-y-auto px-6 py-5">
               <p className="mb-4 text-sm text-[#5a5a5a]">
-                Escolha o melhor plano para você. A nova franquia será liberada imediatamente neste ciclo.
+                Escolha o melhor plano para você. A mudança entra em vigor no próximo ciclo.
               </p>
-              <div
-                className="mb-4 flex items-start gap-2 rounded-lg border border-[#660099]/15 bg-[#f9f5fc] px-3 py-2.5 text-[12px] leading-snug text-[#4a2c66]"
-              >
-                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[#660099]" />
-                <span>
-                  Ao confirmar, sua franquia será atualizada imediatamente, mantendo o consumo já utilizado neste ciclo. O novo valor será cobrado apenas no próximo vencimento.
-                </span>
-              </div>
               <div className="space-y-3">
                 {plans.map((p, idx) => {
                   const sel = selectedPlan === p.id;
@@ -809,35 +789,15 @@ function ResumoConsumo() {
                 disabled={!selectedPlan || (!notifyEmail && !notifyWhats && !notifySms)}
                 onClick={() => {
                   const p = plans.find((x) => x.id === selectedPlan);
-                  if (!p) return;
                   const canais = [
                     notifyEmail && "e-mail",
                     notifyWhats && "WhatsApp",
                     notifySms && "SMS",
                   ].filter(Boolean).join(", ");
-                  const previousPlan = baseLine.plan;
-                  setPlanOverrides((prev) => ({
-                    ...prev,
-                    [lineIdx]: { plan: p.nome, total: p.total, previousPlan },
-                  }));
-                  setPendingBilling((prev) => ({
-                    ...prev,
-                    [lineIdx]: { plan: p.nome, preco: p.preco },
-                  }));
-                  console.log("Upgrade aplicado:", {
-                    plano_atual: p.nome,
-                    plano_anterior: previousPlan,
-                    franquia_base_gb: p.total,
-                    bonus_debito_automatico_gb: bonusDebito,
-                    franquia_total_gb: p.total + bonusDebito,
-                    upgrade_ativo: true,
-                    cobranca_imediata: false,
-                    novo_valor_proximo_ciclo: true,
-                    canais,
-                  });
+                  console.log("Upgrade notification channels:", { email: notifyEmail, whatsapp: notifyWhats, sms: notifySms, plan: p?.nome });
                   setUpgradeOpen(false);
                   setSelectedPlan(null);
-                  showToast(`Upgrade realizado! ${p.nome} já disponível. Novo valor cobrado no próximo vencimento.`);
+                  showToast(`Upgrade solicitado: ${p?.nome}. Confirmação enviada via ${canais}.`);
                 }}
                 className="group relative w-full overflow-hidden rounded-xl py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
                 style={{
