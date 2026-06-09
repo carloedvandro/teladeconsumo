@@ -234,7 +234,7 @@ function Modal({
       onClick={onClose}
     >
       <div
-        className="relative flex max-h-[85vh] w-full max-w-[560px] flex-col overflow-hidden rounded-lg bg-white shadow-2xl"
+        className="relative flex max-h-[85vh] w-full max-w-[480px] flex-col overflow-hidden rounded-lg bg-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex shrink-0 items-center justify-between border-b border-[#eee] bg-white px-6 py-4">
@@ -634,7 +634,7 @@ function ResumoConsumo() {
             role="dialog"
             aria-modal="true"
             onClick={(e) => e.stopPropagation()}
-            className="relative flex max-h-[88vh] w-full max-w-[560px] flex-col overflow-hidden rounded-2xl animate-scale-in"
+            className="relative flex max-h-[88vh] w-full max-w-[480px] flex-col overflow-hidden rounded-2xl animate-scale-in"
             style={{
               background: "rgba(255,255,255,0.92)",
               backdropFilter: "blur(14px)",
@@ -833,7 +833,7 @@ function ResumoConsumo() {
             role="dialog"
             aria-modal="true"
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-md overflow-hidden rounded-2xl p-7 sm:p-8 animate-slide-up"
+            className="relative w-full max-w-[480px] overflow-hidden rounded-2xl p-7 sm:p-8 animate-slide-up"
             style={{
               background: "#ffffff",
               border: "1px solid rgba(0,0,0,0.06)",
