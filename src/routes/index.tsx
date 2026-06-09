@@ -845,14 +845,13 @@ function ResumoConsumo() {
             onClick={(e) => e.stopPropagation()}
             className="relative w-full max-w-md overflow-hidden rounded-2xl p-7 sm:p-8 animate-slide-up"
             style={{
-              background: "rgba(255,255,255,0.88)",
-              backdropFilter: "blur(18px) saturate(140%)",
-              WebkitBackdropFilter: "blur(18px) saturate(140%)",
-              border: "1px solid rgba(255,255,255,0.6)",
+              background: "#ffffff",
+              border: "1px solid rgba(0,0,0,0.06)",
               boxShadow:
-                "0 30px 60px -20px rgba(102,0,153,0.25), 0 18px 40px -15px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.8)",
+                "0 30px 60px -20px rgba(102,0,153,0.25), 0 18px 40px -15px rgba(0,0,0,0.18)",
             }}
           >
+
             {/* glow ring top */}
             <div
               aria-hidden
