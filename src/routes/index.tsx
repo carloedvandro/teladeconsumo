@@ -477,7 +477,7 @@ function ResumoConsumo() {
                         </div>
                       ) : (
                         <div className="text-[11px] font-medium text-[#666] transition-all duration-500">
-                          Ative e ganhe +20GB de bônus
+                          Ative e ganhe +25GB de bônus
                         </div>
                       )}
 
@@ -965,7 +965,7 @@ function ResumoConsumo() {
                 onClick={() => {
                   setAutoDebit(true);
                   setConfirmAutoDebit(false);
-                  setToast("Renovação automática ativada · +20GB liberados");
+                  setToast("Renovação automática ativada · +25GB liberados");
                   setTimeout(() => setToast(null), 3000);
                 }}
                 className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
