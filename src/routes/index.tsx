@@ -659,7 +659,7 @@ function ResumoConsumo() {
             {/* Header */}
             <div className="flex shrink-0 items-center justify-between border-b border-[#660099]/10 px-6 py-4">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#7B2CF3] to-[#A855F7] shadow-md">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#660099] to-[#7a00b3] shadow-md">
                   <ArrowUpCircle className="h-4.5 w-4.5 text-white" strokeWidth={2.4} />
                 </div>
                 <h3 className="text-lg font-semibold text-[#660099]">Upgrade de plano</h3>
@@ -715,7 +715,7 @@ function ResumoConsumo() {
                         <div
                           className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-all duration-300 ${
                             sel
-                              ? "bg-gradient-to-br from-[#7B2CF3] to-[#A855F7] shadow-[0_0_0_4px_rgba(168,85,247,0.15)]"
+                              ? "bg-gradient-to-br from-[#660099] to-[#7a00b3] shadow-[0_0_0_4px_rgba(102,0,153,0.15)]"
                               : "border-2 border-[#d4d4d8] bg-white"
                           }`}
                         >
@@ -783,9 +783,9 @@ function ResumoConsumo() {
                 }}
                 className="group relative w-full overflow-hidden rounded-xl py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
                 style={{
-                  background: "linear-gradient(135deg, #7B2CF3 0%, #A855F7 100%)",
+                  background: "linear-gradient(135deg, #660099 0%, #7a00b3 100%)",
                   boxShadow:
-                    "0 8px 20px -6px rgba(123,44,243,0.50), 0 2px 6px rgba(168,85,247,0.30), inset 0 1px 0 rgba(255,255,255,0.25)",
+                    "0 8px 20px -6px rgba(102,0,153,0.50), 0 2px 6px rgba(102,0,153,0.30), inset 0 1px 0 rgba(255,255,255,0.25)",
                 }}
               >
                 <span className="relative z-10">Confirmar upgrade</span>
@@ -894,7 +894,7 @@ function ResumoConsumo() {
                 className="flex items-center gap-3 rounded-xl px-3 py-2.5"
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(102,0,153,0.06), rgba(142,45,226,0.02))",
+                    "linear-gradient(135deg, rgba(102,0,153,0.06), rgba(102,0,153,0.02))",
                   border: "1px solid rgba(102,0,153,0.14)",
                   boxShadow:
                     "0 6px 18px -12px rgba(102,0,153,0.30), inset 0 1px 0 rgba(255,255,255,0.6)",
@@ -912,7 +912,7 @@ function ResumoConsumo() {
                   <p className="text-[14px] font-semibold text-[#660099] leading-tight">
                     Bônus de internet liberado
                   </p>
-                  <p className="mt-0.5 text-[12.5px] leading-snug text-[#5a3a7a]">
+                  <p className="mt-0.5 text-[12.5px] leading-snug text-[#660099]">
                     Seu plano receberá internet extra automaticamente.
                   </p>
                 </div>
@@ -970,9 +970,9 @@ function ResumoConsumo() {
                 }}
                 className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
                 style={{
-                  background: "linear-gradient(135deg,#6A11CB,#8E2DE2)",
+                  background: "linear-gradient(135deg,#660099,#7a00b3)",
                   boxShadow:
-                    "0 10px 28px -8px rgba(106,17,203,0.6), 0 4px 12px -2px rgba(142,45,226,0.4), inset 0 1px 0 rgba(255,255,255,0.35)",
+                    "0 10px 28px -8px rgba(102,0,153,0.6), 0 4px 12px -2px rgba(102,0,153,0.4), inset 0 1px 0 rgba(255,255,255,0.35)",
                 }}
               >
                 Ativar
