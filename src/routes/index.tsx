@@ -409,7 +409,7 @@ function ResumoConsumo() {
                 </ul>
 
                 {/* Renovação automática (integrada, sem card) */}
-                <div className="mt-3 flex items-center justify-between gap-3">
+                <div className="mt-3 flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-semibold text-[#1a1a1a]">Renovação automática</span>
@@ -419,13 +419,13 @@ function ResumoConsumo() {
                         </span>
                       )}
                     </div>
-                    <div className="mt-0.5 text-[11px] leading-tight">
+                    <div className="mt-2 text-[11px] leading-tight">
                       {autoDebit ? (
                         <span
-                          className="text-[#15803d] font-medium animate-fade-in"
-                          style={{ textShadow: "0 0 6px rgba(34,197,94,0.35)" }}
+                          className="text-[#15803d] font-semibold animate-fade-in"
+                          style={{ textShadow: "0 0 6px rgba(34,197,94,0.25)" }}
                         >
-                          Débito automático ativo · +20GB bônus liberado
+                          +20GB bônus ativo
                         </span>
                       ) : (
                         <span className="text-[#666]">Ative e ganhe +20GB de bônus</span>
@@ -443,7 +443,7 @@ function ResumoConsumo() {
                         setConfirmAutoDebit(true);
                       }
                     }}
-                    className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
+                    className={`relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
                       autoDebit ? "bg-[#16a34a]" : "bg-[#bfbfbf]"
                     }`}
                   >
@@ -454,6 +454,7 @@ function ResumoConsumo() {
                     />
                   </button>
                 </div>
+
 
                 <button
                   onClick={() => setDetailsOpen(true)}
