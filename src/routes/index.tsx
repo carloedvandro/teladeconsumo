@@ -407,10 +407,10 @@ function ResumoConsumo() {
                   </li>
                 </ul>
 
-                {/* Renovação automática */}
-                <div className="mt-4 flex items-center justify-between gap-3 rounded-md border border-[#e5e5e5] bg-white/60 px-3 py-2.5">
+                {/* Renovação automática (integrada, sem card) */}
+                <div className="mt-3 flex items-center justify-between gap-3">
                   <div className="min-w-0">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-semibold text-[#1a1a1a]">Renovação automática</span>
                       {autoDebit && (
                         <span className="inline-flex items-center rounded-full bg-[#16a34a] px-2 py-0.5 text-[10px] font-semibold text-white animate-fade-in">
@@ -418,13 +418,16 @@ function ResumoConsumo() {
                         </span>
                       )}
                     </div>
-                    <div className="mt-0.5 text-[11px] leading-tight text-[#666]">
+                    <div className="mt-0.5 text-[11px] leading-tight">
                       {autoDebit ? (
-                        <span className="text-[#15803d] font-medium animate-fade-in">
+                        <span
+                          className="text-[#15803d] font-medium animate-fade-in"
+                          style={{ textShadow: "0 0 6px rgba(34,197,94,0.35)" }}
+                        >
                           Débito automático ativo · +20GB bônus liberado
                         </span>
                       ) : (
-                        <span>Ative e ganhe +20GB de bônus</span>
+                        <span className="text-[#666]">Ative e ganhe +20GB de bônus</span>
                       )}
                     </div>
                   </div>
