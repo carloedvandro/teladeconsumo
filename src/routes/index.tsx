@@ -14,7 +14,10 @@ import {
   Wifi,
   RefreshCw,
   ArrowUpCircle,
+  Sparkles,
+  AlertTriangle,
 } from "lucide-react";
+
 import familyImgAsset from "@/assets/family-tablet.jpg.asset.json";
 const familyImg = familyImgAsset.url;
 
