@@ -197,7 +197,12 @@ function ConsumoRing({ line, bonus = 0 }: { line: Line; bonus?: number }) {
           <span className="ml-1 text-lg font-semibold text-[#1a1a1a]">GB</span>
         </div>
         <div className="mt-2 text-xs text-[#9a9a9a]">
-          consumidos de <span className="font-bold text-[#1a1a1a]">{line.total} GB</span>
+          consumidos de <span className="font-bold text-[#1a1a1a]">{line.total - bonus} GB</span>
+          {bonus > 0 && (
+            <span className="ml-1 font-bold text-[#16a34a] animate-fade-in" style={{ textShadow: "0 0 6px rgba(34,197,94,0.35)" }}>
+              + {bonus}GB bônus
+            </span>
+          )}
         </div>
       </div>
     </div>
