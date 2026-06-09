@@ -409,26 +409,33 @@ function ResumoConsumo() {
                 </ul>
 
                 {/* Renovação automática (integrada, sem card) */}
-                <div className="mt-3 flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-semibold text-[#1a1a1a]">Renovação automática</span>
-                      {autoDebit && (
-                        <span className="inline-flex items-center rounded-full bg-[#16a34a] px-2 py-0.5 text-[10px] font-semibold text-white animate-fade-in">
-                          Ativada
-                        </span>
-                      )}
-                    </div>
-                    <div className="mt-2 text-[11px] leading-tight">
+                <div className="mt-4 flex items-start justify-between gap-4">
+                  <div className="min-w-0 pt-0.5">
+                    <span className="text-sm font-semibold text-[#1a1a1a]">Renovação automática</span>
+                    <div className="mt-2.5 space-y-0.5">
                       {autoDebit ? (
-                        <span
-                          className="text-[#15803d] font-semibold animate-fade-in"
-                          style={{ textShadow: "0 0 6px rgba(34,197,94,0.25)" }}
-                        >
-                          +20GB bônus ativo
-                        </span>
+                        <>
+                          <div
+                            className="text-[11px] font-semibold text-[#15803d] transition-all duration-500"
+                            style={{ opacity: autoDebit ? 1 : 0, transform: autoDebit ? 'translateY(0)' : 'translateY(4px)' }}
+                          >
+                            Débito automático ativo
+                          </div>
+                          <div
+                            className="text-[11px] font-medium text-[#16a34a] transition-all duration-700"
+                            style={{
+                              opacity: autoDebit ? 1 : 0,
+                              transform: autoDebit ? 'translateY(0)' : 'translateY(4px)',
+                              textShadow: '0 0 6px rgba(34,197,94,0.20)',
+                            }}
+                          >
+                            +20GB bônus liberado
+                          </div>
+                        </>
                       ) : (
-                        <span className="text-[#666]">Ative e ganhe +20GB de bônus</span>
+                        <div className="text-[11px] font-medium text-[#666] transition-all duration-500">
+                          Ative e ganhe +20GB de bônus
+                        </div>
                       )}
                     </div>
                   </div>
