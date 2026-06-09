@@ -13,6 +13,7 @@ import {
   MessageSquare,
   Wifi,
   RefreshCw,
+  ArrowUpCircle,
 } from "lucide-react";
 import familyImgAsset from "@/assets/family-tablet.jpg.asset.json";
 const familyImg = familyImgAsset.url;
@@ -606,102 +607,174 @@ function ResumoConsumo() {
         </div>
       </Modal>
 
-      {/* Upgrade modal */}
-      <Modal
-        open={upgradeOpen}
-        onClose={() => {
-          setUpgradeOpen(false);
-          setSelectedPlan(null);
-        }}
-        title="Faça upgrade do seu plano"
-        footer={
-          <button
-            disabled={!selectedPlan || (!notifyEmail && !notifyWhats && !notifySms)}
-            onClick={() => {
-              const p = plans.find((x) => x.id === selectedPlan);
-              const canais = [
-                notifyEmail && "e-mail",
-                notifyWhats && "WhatsApp",
-                notifySms && "SMS",
-              ].filter(Boolean).join(", ");
-              // TODO: integrar APIs reais (SendGrid/Resend, Twilio/WhatsApp Business, Twilio SMS)
-              console.log("Upgrade notification channels:", { email: notifyEmail, whatsapp: notifyWhats, sms: notifySms, plan: p?.nome });
-              setUpgradeOpen(false);
-              setSelectedPlan(null);
-              showToast(`Upgrade solicitado: ${p?.nome}. Confirmação enviada via ${canais}.`);
+      {/* Upgrade modal - premium glass */}
+      {upgradeOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-fade-in"
+          style={{ backdropFilter: "blur(4px)" }}
+          onClick={() => {
+            setUpgradeOpen(false);
+            setSelectedPlan(null);
+          }}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            onClick={(e) => e.stopPropagation()}
+            className="relative flex max-h-[88vh] w-full max-w-[560px] flex-col overflow-hidden rounded-2xl animate-scale-in"
+            style={{
+              background: "rgba(255,255,255,0.92)",
+              backdropFilter: "blur(14px)",
+              boxShadow:
+                "0 20px 60px -10px rgba(102,0,153,0.25), 0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.6)",
+              border: "1px solid rgba(255,255,255,0.5)",
             }}
-            className="w-full rounded-md bg-[#660099] py-3 text-sm font-semibold text-white transition hover:bg-[#520077] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Confirmar upgrade
-          </button>
-        }
-      >
-        <p className="mb-4 text-sm text-[#666]">
-          Escolha o melhor plano para você. A mudança entra em vigor no próximo ciclo.
-        </p>
-        <div className="space-y-3">
-          {plans.map((p) => {
-            const sel = selectedPlan === p.id;
-            return (
+            {/* Header */}
+            <div className="flex shrink-0 items-center justify-between border-b border-[#660099]/10 px-6 py-4">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#7B2CF3] to-[#A855F7] shadow-md">
+                  <ArrowUpCircle className="h-4.5 w-4.5 text-white" strokeWidth={2.4} />
+                </div>
+                <h3 className="text-lg font-semibold text-[#660099]">Upgrade de plano</h3>
+              </div>
               <button
-                key={p.id}
-                onClick={() => setSelectedPlan(p.id)}
-                className={`flex w-full items-center justify-between rounded-md border-2 p-4 text-left transition ${
-                  sel
-                    ? "border-[#660099] bg-[#f9f5fc]"
-                    : "border-[#eee] hover:border-[#cda8e0]"
-                }`}
+                onClick={() => {
+                  setUpgradeOpen(false);
+                  setSelectedPlan(null);
+                }}
+                aria-label="Fechar"
+                className="rounded-full p-1.5 text-[#666] transition hover:bg-[#660099]/10 hover:text-[#660099]"
               >
-                <div>
-                  <div className="font-semibold text-[#333]">{p.nome}</div>
-                  <div className="text-xs text-[#888]">{p.bonus}</div>
-                  <div className="mt-1 text-sm font-semibold text-[#660099]">
-                    {p.preco}
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="text-right">
-                    <div className="text-xs text-[#888]">Internet</div>
-                    <div className="text-sm font-semibold text-[#333]">{p.giga}</div>
-                  </div>
-                  <div
-                    className={`flex h-6 w-6 items-center justify-center rounded-full border-2 ${
-                      sel ? "border-[#660099] bg-[#660099]" : "border-[#ccc]"
-                    }`}
-                  >
-                    {sel && <Check className="h-4 w-4 text-white" />}
-                  </div>
-                </div>
+                <X className="h-5 w-5" />
               </button>
-            );
-          })}
-        </div>
+            </div>
 
-        <div className="mt-5 rounded-md border border-[#eee] bg-[#fafafa] p-4">
-          <div className="mb-2 text-sm font-semibold text-[#333]">Receber confirmação por</div>
-          <p className="mb-3 text-xs text-[#888]">Escolha os canais para receber a confirmação do upgrade.</p>
-          <div className="space-y-2">
-            {[
-              { key: "email", label: "E-mail", checked: notifyEmail, set: setNotifyEmail },
-              { key: "whats", label: "WhatsApp", checked: notifyWhats, set: setNotifyWhats },
-              { key: "sms", label: "SMS", checked: notifySms, set: setNotifySms },
-            ].map((c) => (
-              <label key={c.key} className="flex cursor-pointer items-center justify-between rounded-md border border-[#eee] bg-white px-3 py-2 text-sm">
-                <span className="text-[#333]">{c.label}</span>
-                <button
-                  type="button"
-                  onClick={() => c.set(!c.checked)}
-                  className={`relative h-6 w-11 rounded-full transition ${c.checked ? "bg-[#660099]" : "bg-[#ccc]"}`}
-                  aria-pressed={c.checked}
-                  aria-label={`Notificar por ${c.label}`}
-                >
-                  <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition ${c.checked ? "left-[22px]" : "left-0.5"}`} />
-                </button>
-              </label>
-            ))}
+            {/* Body */}
+            <div className="no-scrollbar flex-1 overflow-y-auto px-6 py-5">
+              <p className="mb-4 text-sm text-[#5a5a5a]">
+                Escolha o melhor plano para você. A mudança entra em vigor no próximo ciclo.
+              </p>
+              <div className="space-y-3">
+                {plans.map((p, idx) => {
+                  const sel = selectedPlan === p.id;
+                  return (
+                    <button
+                      key={p.id}
+                      onClick={() => setSelectedPlan(p.id)}
+                      className={`group relative flex w-full items-center justify-between gap-4 rounded-xl border p-4 text-left transition-all duration-300 animate-fade-in ${
+                        sel
+                          ? "border-[#660099] bg-gradient-to-br from-[#f9f5fc] to-[#fff]"
+                          : "border-[#e8e8ee] bg-white/70 hover:-translate-y-0.5 hover:border-[#cda8e0] hover:bg-white"
+                      }`}
+                      style={{
+                        animationDelay: `${idx * 60}ms`,
+                        boxShadow: sel
+                          ? "0 8px 24px -8px rgba(102,0,153,0.30), inset 0 1px 0 rgba(255,255,255,0.8)"
+                          : "0 1px 2px rgba(0,0,0,0.03), inset 0 1px 0 rgba(255,255,255,0.6)",
+                      }}
+                    >
+                      <div className="min-w-0">
+                        <div className="text-[15px] font-semibold text-[#1a1a1a]">{p.nome}</div>
+                        <div className="mt-0.5 text-[11px] text-[#888]">{p.bonus}</div>
+                        <div className="mt-2 text-sm font-semibold text-[#660099]">
+                          {p.preco}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="text-right">
+                          <div className="text-[10px] uppercase tracking-wide text-[#999]">Internet</div>
+                          <div className="text-base font-bold text-[#1a1a1a]">{p.giga}</div>
+                        </div>
+                        <div
+                          className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-all duration-300 ${
+                            sel
+                              ? "bg-gradient-to-br from-[#7B2CF3] to-[#A855F7] shadow-[0_0_0_4px_rgba(168,85,247,0.15)]"
+                              : "border-2 border-[#d4d4d8] bg-white"
+                          }`}
+                        >
+                          {sel && <Check className="h-3.5 w-3.5 text-white" strokeWidth={3} />}
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div
+                className="mt-5 rounded-xl border border-[#660099]/10 p-4"
+                style={{ background: "rgba(249,245,252,0.6)" }}
+              >
+                <div className="mb-1 text-sm font-semibold text-[#1a1a1a]">Receber confirmação por</div>
+                <p className="mb-3 text-xs text-[#888]">Escolha os canais para receber a confirmação do upgrade.</p>
+                <div className="space-y-2">
+                  {[
+                    { key: "email", label: "E-mail", checked: notifyEmail, set: setNotifyEmail },
+                    { key: "whats", label: "WhatsApp", checked: notifyWhats, set: setNotifyWhats },
+                    { key: "sms", label: "SMS", checked: notifySms, set: setNotifySms },
+                  ].map((c) => (
+                    <label
+                      key={c.key}
+                      className="flex cursor-pointer items-center justify-between rounded-lg border border-[#ececf2] bg-white/80 px-3 py-2 text-sm transition hover:border-[#cda8e0]"
+                    >
+                      <span className="text-[#333]">{c.label}</span>
+                      <button
+                        type="button"
+                        onClick={() => c.set(!c.checked)}
+                        className={`relative h-6 w-11 rounded-full transition-colors duration-300 ${
+                          c.checked ? "bg-[#660099]" : "bg-[#ccc]"
+                        }`}
+                        aria-pressed={c.checked}
+                        aria-label={`Notificar por ${c.label}`}
+                      >
+                        <span
+                          className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform duration-300 ${
+                            c.checked ? "left-[22px]" : "left-0.5"
+                          }`}
+                        />
+                      </button>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="shrink-0 border-t border-[#660099]/10 bg-white/60 px-6 py-4">
+              <button
+                disabled={!selectedPlan || (!notifyEmail && !notifyWhats && !notifySms)}
+                onClick={() => {
+                  const p = plans.find((x) => x.id === selectedPlan);
+                  const canais = [
+                    notifyEmail && "e-mail",
+                    notifyWhats && "WhatsApp",
+                    notifySms && "SMS",
+                  ].filter(Boolean).join(", ");
+                  console.log("Upgrade notification channels:", { email: notifyEmail, whatsapp: notifyWhats, sms: notifySms, plan: p?.nome });
+                  setUpgradeOpen(false);
+                  setSelectedPlan(null);
+                  showToast(`Upgrade solicitado: ${p?.nome}. Confirmação enviada via ${canais}.`);
+                }}
+                className="group relative w-full overflow-hidden rounded-xl py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+                style={{
+                  background: "linear-gradient(135deg, #7B2CF3 0%, #A855F7 100%)",
+                  boxShadow:
+                    "0 8px 20px -6px rgba(123,44,243,0.50), 0 2px 6px rgba(168,85,247,0.30), inset 0 1px 0 rgba(255,255,255,0.25)",
+                }}
+              >
+                <span className="relative z-10">Confirmar upgrade</span>
+                <span
+                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0))",
+                  }}
+                />
+              </button>
+            </div>
           </div>
         </div>
-      </Modal>
+      )}
+
 
       {/* Expanded view modal */}
       <Modal
