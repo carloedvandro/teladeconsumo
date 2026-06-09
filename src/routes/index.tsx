@@ -299,11 +299,30 @@ function ResumoConsumo() {
       document.removeEventListener("visibilitychange", onFocus);
     };
   }, []);
+
+  const [lastUpdated, setLastUpdated] = useState(() => new Date());
+  useEffect(() => {
+    const refresh = () => setLastUpdated(new Date());
+    const interval = window.setInterval(refresh, 60_000);
+    const onFocus = () => refresh();
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onFocus);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onFocus);
+    };
+  }, []);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const lastUpdatedDate = `${pad(lastUpdated.getDate())}/${pad(lastUpdated.getMonth() + 1)}/${lastUpdated.getFullYear()}`;
+  const lastUpdatedTime = `${pad(lastUpdated.getHours())}:${pad(lastUpdated.getMinutes())}`;
+
   const cycleDaysLeft = daysUntilCycleRenewal(6, now);
   const cycleLabel =
     cycleDaysLeft === 0
       ? "hoje"
       : `em ${cycleDaysLeft} ${cycleDaysLeft === 1 ? "dia" : "dias"}`;
+
 
   function showToast(msg: string) {
     setToast(msg);
@@ -348,8 +367,9 @@ function ResumoConsumo() {
         </h1>
         <p className="mt-1 text-sm text-[#666]">
           Informação atualizada em{" "}
-          <span className="font-semibold text-[#333]">08/06/2026</span> às{" "}
-          <span className="font-semibold text-[#333]">12:34</span>
+          <span className="font-semibold text-[#333]">{lastUpdatedDate}</span> às{" "}
+          <span className="font-semibold text-[#333]">{lastUpdatedTime}</span>
+
         </p>
 
 
