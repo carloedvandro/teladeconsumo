@@ -432,9 +432,12 @@ function ResumoConsumo() {
                     type="button"
                     role="switch"
                     aria-checked={autoDebit}
-                    onClick={() => setAutoDebit((v) => !v)}
+                    disabled={autoDebit}
+                    onClick={() => {
+                      if (!autoDebit) setConfirmAutoDebit(true);
+                    }}
                     className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors duration-300 ${
-                      autoDebit ? "bg-[#16a34a]" : "bg-[#bfbfbf]"
+                      autoDebit ? "bg-[#16a34a] cursor-default" : "bg-[#bfbfbf] cursor-pointer"
                     }`}
                   >
                     <span
