@@ -197,12 +197,10 @@ function ConsumoRing({ line, bonus = 0 }: { line: Line; bonus?: number }) {
           <span className="ml-1 text-lg font-semibold text-[#1a1a1a]">GB</span>
         </div>
         <div className="mt-2 text-xs text-[#9a9a9a]">
-          consumidos de <span className="font-bold text-[#1a1a1a]">{line.total - bonus} GB</span>
-          {bonus > 0 && (
-            <span className="ml-1 font-bold text-[#16a34a] animate-fade-in" style={{ textShadow: "0 0 6px rgba(34,197,94,0.35)" }}>
-              + {bonus}GB bônus
-            </span>
-          )}
+          consumidos de{" "}
+          <span className={`font-bold ${bonus > 0 ? "text-[#16a34a]" : "text-[#1a1a1a]"}`}>
+            {line.total} GB
+          </span>
         </div>
       </div>
     </div>
@@ -455,25 +453,26 @@ function ResumoConsumo() {
             </div>
           </div>
 
-          {/* Upgrade card - overlaid on hero, below consumption panel */}
-          <button
-            onClick={() => setUpgradeOpen(true)}
-            className="relative mt-4 flex w-full items-center justify-between rounded-md bg-white px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:right-8 md:bottom-6 md:mt-0 md:w-[520px]"
-          >
-            <div className="flex items-center gap-4">
-              <FileText className="h-7 w-7 text-[#660099]" />
-              <div className="text-left">
-                <div className="text-[15px] font-semibold text-[#333]">
-                  Quer falar e navegar ainda mais?
-                </div>
-                <div className="text-sm text-[#666]">
-                  Faça um upgrade no seu plano agora
-                </div>
+        </section>
+
+        {/* Upgrade card - separate block below hero */}
+        <button
+          onClick={() => setUpgradeOpen(true)}
+          className="mt-4 flex w-full items-center justify-between rounded-md bg-white px-6 py-5 shadow-sm transition hover:shadow-md"
+        >
+          <div className="flex items-center gap-4">
+            <FileText className="h-7 w-7 text-[#660099]" />
+            <div className="text-left">
+              <div className="text-[15px] font-semibold text-[#333]">
+                Quer falar e navegar ainda mais?
+              </div>
+              <div className="text-sm text-[#666]">
+                Faça um upgrade no seu plano agora
               </div>
             </div>
-            <ChevronRight className="h-5 w-5 text-[#660099]" />
-          </button>
-        </section>
+          </div>
+          <ChevronRight className="h-5 w-5 text-[#660099]" />
+        </button>
 
 
         
