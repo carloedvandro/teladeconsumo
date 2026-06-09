@@ -25,6 +25,7 @@ import icon3dSms from "@/assets/icon-3d-sms.png";
 import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
 import icon3dBonus from "@/assets/icon-3d-bonus.png";
 import icon3dAlert from "@/assets/icon-3d-alert.png";
+import icon3dUpgrade from "@/assets/icon-3d-upgrade.png";
 const familyImg = familyImgAsset.url;
 
 
@@ -522,21 +523,29 @@ function ResumoConsumo() {
         {/* Upgrade card - separate block below hero */}
         <button
           onClick={() => setUpgradeOpen(true)}
-          className="mt-4 flex w-full items-center justify-between rounded-md bg-white px-6 py-5 shadow-sm transition hover:shadow-md"
+          className="group mt-4 flex w-full items-center justify-between rounded-2xl border border-[rgba(102,0,153,0.08)] bg-white px-5 py-4 shadow-[0_8px_28px_rgba(0,0,0,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[rgba(102,0,153,0.22)] hover:shadow-[0_12px_34px_rgba(102,0,153,0.16)] sm:px-7 sm:py-5"
         >
-          <div className="flex items-center gap-4">
-            <FileText className="h-7 w-7 text-[#660099]" />
+          <div className="flex items-center gap-3 sm:gap-5">
+            <img
+              src={icon3dUpgrade}
+              alt="Upgrade do plano"
+              width={64}
+              height={64}
+              loading="lazy"
+              className="h-12 w-12 object-contain drop-shadow-[0_8px_14px_rgba(102,0,153,0.28)] transition-transform duration-300 group-hover:scale-105 sm:h-14 sm:w-14"
+            />
             <div className="text-left">
-              <div className="text-[15px] font-semibold text-[#333]">
+              <div className="text-[15px] font-bold text-[#1f1f1f] sm:text-[18px]">
                 Quer falar e navegar ainda mais?
               </div>
-              <div className="text-sm text-[#666]">
+              <div className="text-[13px] text-[#6b6b6b] sm:text-[15px]">
                 Faça um upgrade no seu plano agora
               </div>
             </div>
           </div>
-          <ChevronRight className="h-5 w-5 text-[#660099]" />
+          <ChevronRight className="h-6 w-6 shrink-0 text-[#660099] transition-transform duration-300 group-hover:translate-x-0.5" />
         </button>
+
 
 
         
