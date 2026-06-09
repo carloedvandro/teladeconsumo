@@ -19,7 +19,11 @@ import {
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/family-tablet.jpg.asset.json";
+import icon3dData from "@/assets/icon-3d-data.png";
+import icon3dPhone from "@/assets/icon-3d-phone.png";
+import icon3dSms from "@/assets/icon-3d-sms.png";
 const familyImg = familyImgAsset.url;
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
