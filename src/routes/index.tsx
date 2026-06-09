@@ -199,7 +199,7 @@ function ConsumoRing({ line, bonus = 0 }: { line: Line; bonus?: number }) {
         </div>
         <div className="mt-2 text-xs text-[#6b6b6b]">
           consumidos de{" "}
-          <span className={`font-bold ${bonus > 0 ? "text-[#16a34a]" : "text-[#1a1a1a]"}`}>
+          <span className="font-bold text-[#1a1a1a]">
             {line.total} GB
           </span>
         </div>
