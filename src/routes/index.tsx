@@ -846,7 +846,7 @@ function ResumoConsumo() {
             role="dialog"
             aria-modal="true"
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-[480px] overflow-hidden rounded-2xl p-7 sm:p-8 animate-slide-up"
+            className="relative w-full max-w-[480px] overflow-hidden rounded-2xl p-5 sm:p-8 animate-slide-up"
             style={{
               background: "#ffffff",
               border: "1px solid rgba(0,0,0,0.06)",
@@ -865,17 +865,17 @@ function ResumoConsumo() {
               }}
             />
 
-            <div className="relative flex items-center gap-4">
+            <div className="relative flex items-center gap-3 sm:gap-4">
               <img
                 src={icon3dAutorenew}
                 alt="Renovação automática"
                 width={56}
                 height={56}
                 loading="lazy"
-                className="h-14 w-14 shrink-0 object-contain"
+                className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 object-contain"
               />
-              <div className="min-w-0">
-                <h3 className="text-[20px] font-semibold tracking-tight text-[#1a1a1a]">
+              <div className="min-w-0 flex-1">
+                <h3 className="text-[17px] sm:text-[20px] font-semibold tracking-tight text-[#1a1a1a] leading-tight whitespace-nowrap">
                   Ativar Renovação Automática
                 </h3>
                 <p className="mt-0.5 text-xs font-medium text-[#660099]/80">
@@ -890,37 +890,55 @@ function ResumoConsumo() {
               </p>
 
               {/* Bônus */}
-              <div className="flex items-start gap-3 px-1">
+              <div
+                className="flex items-center gap-3 rounded-xl px-3 py-2.5"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(102,0,153,0.06), rgba(142,45,226,0.02))",
+                  border: "1px solid rgba(102,0,153,0.14)",
+                  boxShadow:
+                    "0 6px 18px -12px rgba(102,0,153,0.30), inset 0 1px 0 rgba(255,255,255,0.6)",
+                }}
+              >
                 <img
                   src={icon3dBonus}
                   alt="Bônus de internet"
-                  width={44}
-                  height={44}
+                  width={40}
+                  height={40}
                   loading="lazy"
-                  className="h-11 w-11 shrink-0 object-contain"
+                  className="h-10 w-10 shrink-0 object-contain"
                 />
-                  <div className="min-w-0">
-                    <p className="text-[14px] font-semibold text-[#660099]">
-                      Bônus de internet liberado
-                    </p>
-                    <p className="mt-0.5 text-[13px] leading-relaxed text-[#5a3a7a]">
-                      Seu plano receberá internet extra automaticamente.
-                    </p>
-                  </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[14px] font-semibold text-[#660099] leading-tight">
+                    Bônus de internet liberado
+                  </p>
+                  <p className="mt-0.5 text-[12.5px] leading-snug text-[#5a3a7a]">
+                    Seu plano receberá internet extra automaticamente.
+                  </p>
+                </div>
               </div>
 
               {/* Alerta */}
-              <div className="flex items-start gap-3 px-1">
+              <div
+                className="flex items-center gap-3 rounded-xl px-3 py-2.5"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(220,38,38,0.05), rgba(220,38,38,0.015))",
+                  borderLeft: "3px solid #dc2626",
+                  border: "1px solid rgba(220,38,38,0.18)",
+                  borderLeftWidth: 3,
+                }}
+              >
                 <img
                   src={icon3dAlert}
                   alt="Atenção"
-                  width={28}
-                  height={28}
+                  width={40}
+                  height={40}
                   loading="lazy"
-                  className="h-7 w-7 shrink-0 object-contain -mt-0.5"
+                  className="h-10 w-10 shrink-0 object-contain"
                 />
-                <p className="text-[13px] leading-relaxed text-[#b91c1c]">
-                  <span className="font-semibold text-[#991b1b]">Atenção:</span> após ativar, esta função não poderá ser desativada manualmente.
+                <p className="text-[12.5px] leading-snug text-[#991b1b] flex-1">
+                  <span className="font-semibold">Atenção:</span> após ativar, esta função não poderá ser desativada manualmente.
                 </p>
               </div>
 
