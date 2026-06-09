@@ -99,7 +99,7 @@ function tipColor(pct: number) {
   return lerpColor("#ff7a18", "#ff2a2a", (p - 80) / 20);
 }
 
-function ConsumoRing({ line }: { line: Line }) {
+function ConsumoRing({ line, bonus = 0 }: { line: Line; bonus?: number }) {
   const pct = Math.min(100, (line.used / line.total) * 100);
   const p = Math.max(0.0001, pct);
   const tip = tipColor(pct);
@@ -197,7 +197,12 @@ function ConsumoRing({ line }: { line: Line }) {
           <span className="ml-1 text-lg font-semibold text-[#1a1a1a]">GB</span>
         </div>
         <div className="mt-2 text-xs text-[#9a9a9a]">
-          consumidos de <span className="font-bold text-[#1a1a1a]">{line.total} GB</span>
+          consumidos de <span className="font-bold text-[#1a1a1a]">{line.total - bonus} GB</span>
+          {bonus > 0 && (
+            <span className="ml-1 font-bold text-[#16a34a] animate-fade-in" style={{ textShadow: "0 0 6px rgba(34,197,94,0.35)" }}>
+              + {bonus}GB bônus
+            </span>
+          )}
         </div>
       </div>
     </div>
@@ -262,8 +267,12 @@ function ResumoConsumo() {
   const [notifyEmail, setNotifyEmail] = useState(true);
   const [notifyWhats, setNotifyWhats] = useState(true);
   const [notifySms, setNotifySms] = useState(true);
+  const [autoDebit, setAutoDebit] = useState(false);
 
-  const line = LINES[lineIdx];
+  const baseLine = LINES[lineIdx];
+  const bonusDebito = autoDebit ? 20 : 0;
+  const franquiaTotal = baseLine.total + bonusDebito;
+  const line: Line = { ...baseLine, total: franquiaTotal };
   const pct = Math.min(100, (line.used / line.total) * 100);
   const available = +(line.total - line.used).toFixed(2);
   const availPct = Math.round(100 - pct);
@@ -353,15 +362,22 @@ function ResumoConsumo() {
               />
             </button>
             <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-4">
-              <div className="self-center md:-ml-6 md:self-auto"><ConsumoRing line={line} /></div>
+              <div className="self-center md:-ml-6 md:self-auto"><ConsumoRing line={line} bonus={bonusDebito} /></div>
 
               <div className="w-full md:w-[220px]">
 
 
 
-                <h2 className="text-[15px] font-semibold tracking-wide text-[#1a1a1a]">
-                  {line.plan}
-                </h2>
+                <div className="flex flex-wrap items-center gap-2">
+                  <h2 className="text-[15px] font-semibold tracking-wide text-[#1a1a1a]">
+                    {baseLine.plan}
+                  </h2>
+                  {bonusDebito > 0 && (
+                    <span className="inline-flex items-center rounded-full bg-[#16a34a]/15 px-2 py-0.5 text-[10px] font-semibold text-[#15803d] ring-1 ring-[#16a34a]/30 animate-fade-in">
+                      +{bonusDebito}GB liberado
+                    </span>
+                  )}
+                </div>
                 <p className="mt-1 text-sm text-[#9a9a9a]">
                   Fim do ciclo em{" "}
                   <span className="font-semibold text-[#1a1a1a]">{cycleDaysLeft} dias</span>
@@ -390,6 +406,44 @@ function ResumoConsumo() {
                     </span>
                   </li>
                 </ul>
+
+                {/* Renovação automática */}
+                <div className="mt-4 flex items-center justify-between gap-3 rounded-md border border-[#e5e5e5] bg-white/60 px-3 py-2.5">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-[#1a1a1a]">Renovação automática</span>
+                      {autoDebit && (
+                        <span className="inline-flex items-center rounded-full bg-[#16a34a] px-2 py-0.5 text-[10px] font-semibold text-white animate-fade-in">
+                          Ativada
+                        </span>
+                      )}
+                    </div>
+                    <div className="mt-0.5 text-[11px] leading-tight text-[#666]">
+                      {autoDebit ? (
+                        <span className="text-[#15803d] font-medium animate-fade-in">
+                          Débito automático ativo · +20GB bônus liberado
+                        </span>
+                      ) : (
+                        <span>Ative e ganhe +20GB de bônus</span>
+                      )}
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={autoDebit}
+                    onClick={() => setAutoDebit((v) => !v)}
+                    className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors duration-300 ${
+                      autoDebit ? "bg-[#16a34a]" : "bg-[#bfbfbf]"
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-300 ${
+                        autoDebit ? "translate-x-[22px]" : "translate-x-[2px]"
+                      }`}
+                    />
+                  </button>
+                </div>
 
                 <button
                   onClick={() => setDetailsOpen(true)}
