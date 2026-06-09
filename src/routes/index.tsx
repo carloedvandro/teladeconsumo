@@ -199,7 +199,7 @@ function ConsumoRing({ line, bonus = 0 }: { line: Line; bonus?: number }) {
         </div>
         <div className="mt-2 text-xs text-[#6b6b6b]">
           consumidos de{" "}
-          <span className={`font-bold ${bonus > 0 ? "text-[#16a34a]" : "text-[#1a1a1a]"}`}>
+          <span className="font-bold text-[#1a1a1a]">
             {line.total} GB
           </span>
         </div>
@@ -416,17 +416,16 @@ function ResumoConsumo() {
                       {autoDebit ? (
                         <>
                           <div
-                            className="text-[11px] font-semibold text-[#15803d] transition-all duration-500"
+                            className="text-[11px] font-semibold text-[#660099] transition-all duration-500"
                             style={{ opacity: autoDebit ? 1 : 0, transform: autoDebit ? 'translateY(0)' : 'translateY(4px)' }}
                           >
                             Débito automático ativo
                           </div>
                           <div
-                            className="text-[11px] font-medium text-[#16a34a] transition-all duration-700"
+                            className="text-[11px] font-medium text-[#660099] transition-all duration-700"
                             style={{
                               opacity: autoDebit ? 1 : 0,
                               transform: autoDebit ? 'translateY(0)' : 'translateY(4px)',
-                              textShadow: '0 0 6px rgba(34,197,94,0.20)',
                             }}
                           >
                             +20GB bônus liberado
