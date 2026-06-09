@@ -903,27 +903,26 @@ function ResumoConsumo() {
                 className="rounded-xl p-4"
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(22,163,74,0.10), rgba(27,201,107,0.04))",
-                  border: "1px solid rgba(22,163,74,0.25)",
+                    "linear-gradient(135deg, rgba(102,0,153,0.08), rgba(142,45,226,0.03))",
+                  border: "1px solid rgba(102,0,153,0.22)",
                   boxShadow:
-                    "0 8px 24px -12px rgba(22,163,74,0.35), inset 0 1px 0 rgba(255,255,255,0.6)",
+                    "0 8px 24px -12px rgba(102,0,153,0.35), inset 0 1px 0 rgba(255,255,255,0.6)",
                 }}
               >
                 <div className="flex items-start gap-3">
-                  <div
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full"
-                    style={{
-                      background: "linear-gradient(135deg,#14AE5C,#1BC96B)",
-                      boxShadow: "0 4px 12px -2px rgba(20,174,92,0.5)",
-                    }}
-                  >
-                    <Sparkles className="h-4 w-4 text-white" />
-                  </div>
+                  <img
+                    src={icon3dBonus}
+                    alt="+20GB bônus"
+                    width={40}
+                    height={40}
+                    loading="lazy"
+                    className="h-10 w-10 shrink-0 object-contain"
+                  />
                   <div className="min-w-0">
-                    <p className="text-[14px] font-semibold text-[#15803d]">
+                    <p className="text-[14px] font-semibold text-[#660099]">
                       +20GB bônus liberado
                     </p>
-                    <p className="mt-0.5 text-[13px] leading-relaxed text-[#3f6b4a]">
+                    <p className="mt-0.5 text-[13px] leading-relaxed text-[#5a3a7a]">
                       Seu plano receberá internet extra automaticamente.
                     </p>
                   </div>
