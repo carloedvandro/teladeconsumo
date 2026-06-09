@@ -462,28 +462,18 @@ function ResumoConsumo() {
                     <span className="text-sm font-semibold text-[#1a1a1a]">Renovação automática</span>
                     <div className="mt-2.5 space-y-0.5">
                       {autoDebit ? (
-                        <>
-                          <div
-                            className="text-[11px] font-semibold text-[#660099] transition-all duration-500"
-                            style={{ opacity: autoDebit ? 1 : 0, transform: autoDebit ? 'translateY(0)' : 'translateY(4px)' }}
-                          >
-                            Débito automático ativo
-                          </div>
-                          <div
-                            className="text-[11px] font-medium text-[#660099] transition-all duration-700"
-                            style={{
-                              opacity: autoDebit ? 1 : 0,
-                              transform: autoDebit ? 'translateY(0)' : 'translateY(4px)',
-                            }}
-                          >
-                            +20GB bônus liberado
-                          </div>
-                        </>
+                        <div
+                          className="text-[11px] font-semibold text-[#660099] transition-all duration-500"
+                          style={{ opacity: 1, transform: 'translateY(0)' }}
+                        >
+                          Débito automático ativo
+                        </div>
                       ) : (
                         <div className="text-[11px] font-medium text-[#666] transition-all duration-500">
                           Ative e ganhe +20GB de bônus
                         </div>
                       )}
+
                     </div>
                   </div>
                   <button
