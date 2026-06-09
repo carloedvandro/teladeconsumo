@@ -462,6 +462,11 @@ function ResumoConsumo() {
                   Fim do ciclo{" "}
                   <span className="font-semibold text-[#1a1a1a]">{cycleLabel}</span>
                 </p>
+                {pendingForLine && (
+                  <p className="mt-1 text-[11px] font-medium text-[#660099]">
+                    Novo valor {pendingForLine.preco} no próximo vencimento
+                  </p>
+                )}
 
                 <ul className="mt-5 text-sm">
                   <li className="flex items-center justify-between gap-4 border-b border-[#a8a8a8] py-3">
