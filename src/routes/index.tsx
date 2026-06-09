@@ -920,7 +920,7 @@ function ResumoConsumo() {
                   />
                   <div className="min-w-0">
                     <p className="text-[14px] font-semibold text-[#660099]">
-                      +20GB bônus liberado
+                      Bônus de internet liberado
                     </p>
                     <p className="mt-0.5 text-[13px] leading-relaxed text-[#5a3a7a]">
                       Seu plano receberá internet extra automaticamente.
