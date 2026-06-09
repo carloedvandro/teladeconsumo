@@ -281,7 +281,7 @@ function ResumoConsumo() {
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
 
   const baseLine = LINES[lineIdx];
-  const bonusDebito = autoDebit ? 20 : 0;
+  const bonusDebito = autoDebit ? 25 : 0;
   const franquiaTotal = baseLine.total + bonusDebito;
   const line: Line = { ...baseLine, total: franquiaTotal };
   const pct = Math.min(100, (line.used / line.total) * 100);
