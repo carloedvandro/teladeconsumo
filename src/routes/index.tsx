@@ -403,8 +403,8 @@ function ResumoConsumo() {
                   )}
                 </div>
                 <p className="mt-1 text-sm text-[#5a5a5a]">
-                  Fim do ciclo em{" "}
-                  <span className="font-semibold text-[#1a1a1a]">{cycleDaysLeft} dias</span>
+                  {cycleDaysLeft === 0 ? "Fim do ciclo " : "Fim do ciclo "}
+                  <span className="font-semibold text-[#1a1a1a]">{cycleLabel}</span>
                 </p>
 
                 <ul className="mt-5 text-sm">
