@@ -384,11 +384,13 @@ function ResumoConsumo() {
 
 
         {/* Hero card */}
-        <section className="relative mt-6 overflow-hidden rounded-[28px] bg-[#f4f0f8]">
+        <section className="relative mt-6 overflow-hidden rounded-md">
           <img
             src={familyImg}
-            alt="Mulher usando celular"
-            className="h-[520px] w-full object-contain object-top md:h-[780px] md:object-center"
+            alt="Família usando tablet"
+            width={1280}
+            height={768}
+            className="h-[340px] w-full object-cover md:h-[520px]"
           />
 
           {/* Consumption panel overlay - centered/right like reference */}
