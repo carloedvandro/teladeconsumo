@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ChevronDown,
   User,
@@ -278,7 +278,31 @@ function ResumoConsumo() {
   const availPct = Math.round(100 - pct);
   const usedPct = Math.round(pct);
   const color = ringColor(pct);
-  const cycleDaysLeft = daysUntilCycleRenewal(6);
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const scheduleMidnight = () => {
+      const n = new Date();
+      const next = new Date(n.getFullYear(), n.getMonth(), n.getDate() + 1, 0, 0, 1);
+      return window.setTimeout(() => {
+        setNow(new Date());
+        timer = scheduleMidnight();
+      }, next.getTime() - n.getTime());
+    };
+    let timer = scheduleMidnight();
+    const onFocus = () => setNow(new Date());
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onFocus);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onFocus);
+    };
+  }, []);
+  const cycleDaysLeft = daysUntilCycleRenewal(6, now);
+  const cycleLabel =
+    cycleDaysLeft === 0
+      ? "hoje"
+      : `em ${cycleDaysLeft} ${cycleDaysLeft === 1 ? "dia" : "dias"}`;
 
   function showToast(msg: string) {
     setToast(msg);
@@ -379,8 +403,8 @@ function ResumoConsumo() {
                   )}
                 </div>
                 <p className="mt-1 text-sm text-[#5a5a5a]">
-                  Fim do ciclo em{" "}
-                  <span className="font-semibold text-[#1a1a1a]">{cycleDaysLeft} dias</span>
+                  Fim do ciclo{" "}
+                  <span className="font-semibold text-[#1a1a1a]">{cycleLabel}</span>
                 </p>
 
                 <ul className="mt-5 text-sm">
@@ -706,7 +730,7 @@ function ResumoConsumo() {
             </div>
             <div className="flex justify-between">
               <span className="text-[#666]">Fim do ciclo</span>
-              <span className="font-semibold text-[#660099]">em {cycleDaysLeft} dias</span>
+              <span className="font-semibold text-[#660099]">{cycleLabel}</span>
             </div>
           </div>
         </div>
