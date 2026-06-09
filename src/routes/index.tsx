@@ -546,16 +546,7 @@ function ResumoConsumo() {
         title="Detalhes do seu consumo"
       >
         <div className="space-y-4">
-          <div
-            className="grid grid-cols-2 gap-3 rounded-2xl p-4"
-            style={{
-              background:
-                "linear-gradient(135deg, rgba(102,0,153,0.08), rgba(102,0,153,0.03))",
-              border: "1px solid rgba(102,0,153,0.14)",
-              boxShadow:
-                "0 8px 24px -14px rgba(102,0,153,0.35), inset 0 1px 0 rgba(255,255,255,0.7)",
-            }}
-          >
+          <div className="grid grid-cols-2 gap-3 px-1 py-2">
             <div>
               <div className="text-[11px] font-semibold uppercase tracking-wider text-[#660099]">
                 Linha
