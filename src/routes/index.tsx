@@ -888,26 +888,16 @@ function ResumoConsumo() {
                 Ao ativar a renovação automática, seu plano será renovado todos os meses utilizando o saldo disponível da sua carteira virtual/comissões.
               </p>
 
-              {/* Bônus premium */}
-              <div
-                className="rounded-xl p-4"
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(102,0,153,0.08), rgba(142,45,226,0.03))",
-                  border: "1px solid rgba(102,0,153,0.22)",
-                  boxShadow:
-                    "0 8px 24px -12px rgba(102,0,153,0.35), inset 0 1px 0 rgba(255,255,255,0.6)",
-                }}
-              >
-                <div className="flex items-start gap-3">
-                  <img
-                    src={icon3dBonus}
-                    alt="+20GB bônus"
-                    width={40}
-                    height={40}
-                    loading="lazy"
-                    className="h-10 w-10 shrink-0 object-contain"
-                  />
+              {/* Bônus */}
+              <div className="flex items-start gap-3 px-1">
+                <img
+                  src={icon3dBonus}
+                  alt="Bônus de internet"
+                  width={44}
+                  height={44}
+                  loading="lazy"
+                  className="h-11 w-11 shrink-0 object-contain"
+                />
                   <div className="min-w-0">
                     <p className="text-[14px] font-semibold text-[#660099]">
                       Bônus de internet liberado
