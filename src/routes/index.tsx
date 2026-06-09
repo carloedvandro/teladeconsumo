@@ -52,7 +52,7 @@ type Line = {
 const LINES: Line[] = [
   {
     number: "(31) 97115-7584",
-    used: 39,
+    used: 19.3,
     total: 50,
     plan: "SmartVoz 50GB",
     cycleDays: 3,
@@ -280,28 +280,10 @@ function ResumoConsumo() {
   const [autoDebit, setAutoDebit] = useState(false);
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
 
-  const [fluctuatingUsed, setFluctuatingUsed] = useState(() => 36 + Math.random() * 5);
-  useEffect(() => {
-    const id = setInterval(() => {
-      setFluctuatingUsed((prev) => {
-        const delta = (Math.random() - 0.5) * 1.5;
-        let next = +(prev + delta).toFixed(1);
-        if (next < 35) next = 35;
-        if (next > 41) next = 41;
-        return next;
-      });
-    }, 8000);
-    return () => clearInterval(id);
-  }, []);
-
   const baseLine = LINES[lineIdx];
   const bonusDebito = autoDebit ? 25 : 0;
   const franquiaTotal = baseLine.total + bonusDebito;
-  const line: Line = {
-    ...baseLine,
-    total: franquiaTotal,
-    used: lineIdx === 0 ? fluctuatingUsed : baseLine.used,
-  };
+  const line: Line = { ...baseLine, total: franquiaTotal };
   const pct = Math.min(100, (line.used / line.total) * 100);
   const available = +(line.total - line.used).toFixed(2);
   const availPct = Math.round(100 - pct);
