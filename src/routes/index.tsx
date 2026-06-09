@@ -278,7 +278,31 @@ function ResumoConsumo() {
   const availPct = Math.round(100 - pct);
   const usedPct = Math.round(pct);
   const color = ringColor(pct);
-  const cycleDaysLeft = daysUntilCycleRenewal(6);
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const scheduleMidnight = () => {
+      const n = new Date();
+      const next = new Date(n.getFullYear(), n.getMonth(), n.getDate() + 1, 0, 0, 1);
+      return window.setTimeout(() => {
+        setNow(new Date());
+        timer = scheduleMidnight();
+      }, next.getTime() - n.getTime());
+    };
+    let timer = scheduleMidnight();
+    const onFocus = () => setNow(new Date());
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onFocus);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onFocus);
+    };
+  }, []);
+  const cycleDaysLeft = daysUntilCycleRenewal(6, now);
+  const cycleLabel =
+    cycleDaysLeft === 0
+      ? "hoje"
+      : `em ${cycleDaysLeft} ${cycleDaysLeft === 1 ? "dia" : "dias"}`;
 
   function showToast(msg: string) {
     setToast(msg);
