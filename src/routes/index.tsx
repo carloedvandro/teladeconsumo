@@ -906,7 +906,6 @@ function ResumoConsumo() {
                       Seu plano receberá internet extra automaticamente.
                     </p>
                   </div>
-                </div>
               </div>
 
               {/* Alerta premium */}
