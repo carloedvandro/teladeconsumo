@@ -19,7 +19,11 @@ import {
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/family-tablet.jpg.asset.json";
+import icon3dData from "@/assets/icon-3d-data.png";
+import icon3dPhone from "@/assets/icon-3d-phone.png";
+import icon3dSms from "@/assets/icon-3d-sms.png";
 const familyImg = familyImgAsset.url;
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -542,50 +546,75 @@ function ResumoConsumo() {
         title="Detalhes do seu consumo"
       >
         <div className="space-y-4">
-          <div className="rounded-md bg-[#f9f5fc] p-4">
-            <div className="text-xs text-[#660099]">Linha</div>
-            <div className="text-sm font-semibold text-[#333]">{line.number}</div>
-            <div className="mt-2 text-xs text-[#660099]">Plano</div>
-            <div className="text-sm font-semibold text-[#333]">{line.plan}</div>
+          <div
+            className="grid grid-cols-2 gap-3 rounded-2xl p-4"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(102,0,153,0.08), rgba(102,0,153,0.03))",
+              border: "1px solid rgba(102,0,153,0.14)",
+              boxShadow:
+                "0 8px 24px -14px rgba(102,0,153,0.35), inset 0 1px 0 rgba(255,255,255,0.7)",
+            }}
+          >
+            <div>
+              <div className="text-[11px] font-semibold uppercase tracking-wider text-[#660099]">
+                Linha
+              </div>
+              <div className="mt-1 text-[16px] font-bold tracking-tight text-[#1a1a1a]">
+                {line.number}
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-[11px] font-semibold uppercase tracking-wider text-[#660099]">
+                Plano
+              </div>
+              <div className="mt-1 text-[16px] font-bold tracking-tight text-[#1a1a1a]">
+                {line.plan}
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-3 gap-3">
-            <button
-              type="button"
-              onClick={() => setActiveCard(activeCard === "dados" ? null : "dados")}
-              className={`rounded-md border p-3 text-center transition ${
-                activeCard === "dados" ? "border-[#660099] bg-[#f9f5fc]" : "border-[#eee] hover:border-[#cda8e0]"
-              }`}
-            >
-              <Wifi className="mx-auto h-5 w-5 text-[#660099]" />
-              <div className="mt-1 text-xs text-[#666]">Dados</div>
-              <div className="text-sm font-semibold text-[#333]">
-                {line.total} GB
-              </div>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveCard(activeCard === "minutos" ? null : "minutos")}
-              className={`rounded-md border p-3 text-center transition ${
-                activeCard === "minutos" ? "border-[#660099] bg-[#f9f5fc]" : "border-[#eee] hover:border-[#cda8e0]"
-              }`}
-            >
-              <Phone className="mx-auto h-5 w-5 text-[#660099]" />
-              <div className="mt-1 text-xs text-[#666]">Minutos</div>
-              <div className="text-sm font-semibold text-[#333]">Ilimitado</div>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveCard(activeCard === "sms" ? null : "sms")}
-              className={`rounded-md border p-3 text-center transition ${
-                activeCard === "sms" ? "border-[#660099] bg-[#f9f5fc]" : "border-[#eee] hover:border-[#cda8e0]"
-              }`}
-            >
-              <MessageSquare className="mx-auto h-5 w-5 text-[#660099]" />
-              <div className="mt-1 text-xs text-[#666]">SMS</div>
-              <div className="text-sm font-semibold text-[#333]">Ilimitado</div>
-            </button>
+            {[
+              { key: "dados" as const, icon: icon3dData, label: "Dados", value: `${line.total} GB` },
+              { key: "minutos" as const, icon: icon3dPhone, label: "Minutos", value: "Ilimitado" },
+              { key: "sms" as const, icon: icon3dSms, label: "SMS", value: "Ilimitado" },
+            ].map((card) => {
+              const active = activeCard === card.key;
+              return (
+                <button
+                  key={card.key}
+                  type="button"
+                  onClick={() => setActiveCard(active ? null : card.key)}
+                  className="rounded-xl p-3 text-center transition"
+                  style={{
+                    background: active
+                      ? "linear-gradient(160deg, rgba(102,0,153,0.10), rgba(102,0,153,0.03))"
+                      : "#ffffff",
+                    border: active
+                      ? "1px solid rgba(102,0,153,0.55)"
+                      : "1px solid rgba(0,0,0,0.06)",
+                    boxShadow: active
+                      ? "0 10px 24px -14px rgba(102,0,153,0.55), inset 0 1px 0 rgba(255,255,255,0.8)"
+                      : "0 4px 14px -10px rgba(0,0,0,0.18)",
+                  }}
+                >
+                  <img
+                    src={card.icon}
+                    alt=""
+                    loading="lazy"
+                    width={48}
+                    height={48}
+                    className="mx-auto h-12 w-12 object-contain drop-shadow-[0_4px_8px_rgba(102,0,153,0.35)]"
+                  />
+                  <div className="mt-1.5 text-[11px] font-medium text-[#666]">{card.label}</div>
+                  <div className="text-[13px] font-bold text-[#1a1a1a]">{card.value}</div>
+                </button>
+              );
+            })}
           </div>
+
+
 
 
           <div>
