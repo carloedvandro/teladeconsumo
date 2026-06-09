@@ -804,15 +804,35 @@ function ResumoConsumo() {
                 disabled={!selectedPlan || (!notifyEmail && !notifyWhats && !notifySms)}
                 onClick={() => {
                   const p = plans.find((x) => x.id === selectedPlan);
+                  if (!p) return;
                   const canais = [
                     notifyEmail && "e-mail",
                     notifyWhats && "WhatsApp",
                     notifySms && "SMS",
                   ].filter(Boolean).join(", ");
-                  console.log("Upgrade notification channels:", { email: notifyEmail, whatsapp: notifyWhats, sms: notifySms, plan: p?.nome });
+                  const previousPlan = baseLine.plan;
+                  setPlanOverrides((prev) => ({
+                    ...prev,
+                    [lineIdx]: { plan: p.nome, total: p.total, previousPlan },
+                  }));
+                  setPendingBilling((prev) => ({
+                    ...prev,
+                    [lineIdx]: { plan: p.nome, preco: p.preco },
+                  }));
+                  console.log("Upgrade aplicado:", {
+                    plano_atual: p.nome,
+                    plano_anterior: previousPlan,
+                    franquia_base_gb: p.total,
+                    bonus_debito_automatico_gb: bonusDebito,
+                    franquia_total_gb: p.total + bonusDebito,
+                    upgrade_ativo: true,
+                    cobranca_imediata: false,
+                    novo_valor_proximo_ciclo: true,
+                    canais,
+                  });
                   setUpgradeOpen(false);
                   setSelectedPlan(null);
-                  showToast(`Upgrade solicitado: ${p?.nome}. Confirmação enviada via ${canais}.`);
+                  showToast(`Upgrade realizado! ${p.nome} já disponível. Novo valor cobrado no próximo vencimento.`);
                 }}
                 className="group relative w-full overflow-hidden rounded-xl py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
                 style={{
