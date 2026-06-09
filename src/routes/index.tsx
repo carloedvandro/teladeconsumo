@@ -24,6 +24,7 @@ import icon3dPhone from "@/assets/icon-3d-phone.png";
 import icon3dSms from "@/assets/icon-3d-sms.png";
 import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
 import icon3dBonus from "@/assets/icon-3d-bonus.png";
+import icon3dAlert from "@/assets/icon-3d-alert.png";
 const familyImg = familyImgAsset.url;
 
 
@@ -920,7 +921,14 @@ function ResumoConsumo() {
                 }}
               >
                 <div className="flex items-start gap-3">
-                  <AlertTriangle className="h-4 w-4 shrink-0 text-[#c2410c] mt-0.5" />
+                  <img
+                    src={icon3dAlert}
+                    alt="Atenção"
+                    width={28}
+                    height={28}
+                    loading="lazy"
+                    className="h-7 w-7 shrink-0 object-contain -mt-0.5"
+                  />
                   <p className="text-[13px] leading-relaxed text-[#7c2d12]">
                     <span className="font-semibold">Atenção:</span> após ativar, esta função não poderá ser desativada manualmente.
                   </p>
