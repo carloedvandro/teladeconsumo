@@ -22,6 +22,8 @@ import familyImgAsset from "@/assets/family-tablet.jpg.asset.json";
 import icon3dData from "@/assets/icon-3d-data.png";
 import icon3dPhone from "@/assets/icon-3d-phone.png";
 import icon3dSms from "@/assets/icon-3d-sms.png";
+import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
+import icon3dBonus from "@/assets/icon-3d-bonus.png";
 const familyImg = familyImgAsset.url;
 
 
