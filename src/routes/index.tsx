@@ -865,24 +865,14 @@ function ResumoConsumo() {
             />
 
             <div className="relative flex items-center gap-4">
-              <div
-                className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full"
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(102,0,153,0.10), rgba(142,45,226,0.04))",
-                  boxShadow:
-                    "0 10px 28px -8px rgba(102,0,153,0.45), inset 0 1px 0 rgba(255,255,255,0.7), inset 0 0 0 1px rgba(102,0,153,0.18)",
-                }}
-              >
-                <img
-                  src={icon3dAutorenew}
-                  alt="Renovação automática"
-                  width={56}
-                  height={56}
-                  loading="lazy"
-                  className="h-12 w-12 object-contain"
-                />
-              </div>
+              <img
+                src={icon3dAutorenew}
+                alt="Renovação automática"
+                width={56}
+                height={56}
+                loading="lazy"
+                className="h-14 w-14 shrink-0 object-contain"
+              />
               <div className="min-w-0">
                 <h3 className="text-[20px] font-semibold tracking-tight text-[#1a1a1a]">
                   Ativar Renovação Automática
