@@ -279,6 +279,8 @@ function ResumoConsumo() {
   const [notifySms, setNotifySms] = useState(true);
   const [autoDebit, setAutoDebit] = useState(false);
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
+  const [planOverrides, setPlanOverrides] = useState<Record<number, { plan: string; total: number; previousPlan: string }>>({});
+  const [pendingBilling, setPendingBilling] = useState<Record<number, { plan: string; preco: string }>>({});
 
   const [fluctuatingUsed, setFluctuatingUsed] = useState(() => 36 + Math.random() * 5);
   useEffect(() => {
@@ -294,7 +296,11 @@ function ResumoConsumo() {
     return () => clearInterval(id);
   }, []);
 
-  const baseLine = LINES[lineIdx];
+  const rawLine = LINES[lineIdx];
+  const override = planOverrides[lineIdx];
+  const baseLine: Line = override
+    ? { ...rawLine, plan: override.plan, total: override.total }
+    : rawLine;
   const bonusDebito = autoDebit ? 25 : 0;
   const franquiaTotal = baseLine.total + bonusDebito;
   const line: Line = {
@@ -302,6 +308,7 @@ function ResumoConsumo() {
     total: franquiaTotal,
     used: lineIdx === 0 ? fluctuatingUsed : baseLine.used,
   };
+  const pendingForLine = pendingBilling[lineIdx];
   const pct = Math.min(100, (line.used / line.total) * 100);
   const available = +(line.total - line.used).toFixed(2);
   const availPct = Math.round(100 - pct);
