@@ -150,3 +150,10 @@ body::-webkit-scrollbar { width: 0; height: 0; display: none; }
 
 .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
 .no-scrollbar::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+@keyframes slide-up-modal {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-slide-up { animation: slide-up-modal 0.32s cubic-bezier(0.22, 1, 0.36, 1) both; }
+

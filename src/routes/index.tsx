@@ -14,7 +14,10 @@ import {
   Wifi,
   RefreshCw,
   ArrowUpCircle,
+  Sparkles,
+  AlertTriangle,
 } from "lucide-react";
+
 import familyImgAsset from "@/assets/family-tablet.jpg.asset.json";
 const familyImg = familyImgAsset.url;
 
@@ -832,46 +835,127 @@ function ResumoConsumo() {
       {/* Confirm Auto-Renewal Modal */}
       {confirmAutoDebit && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 animate-fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 animate-fade-in"
+          style={{ backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }}
           onClick={() => setConfirmAutoDebit(false)}
         >
           <div
             role="dialog"
             aria-modal="true"
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl animate-fade-in"
+            className="relative w-full max-w-md overflow-hidden rounded-2xl p-7 sm:p-8 animate-slide-up"
+            style={{
+              background: "rgba(255,255,255,0.88)",
+              backdropFilter: "blur(18px) saturate(140%)",
+              WebkitBackdropFilter: "blur(18px) saturate(140%)",
+              border: "1px solid rgba(255,255,255,0.6)",
+              boxShadow:
+                "0 30px 60px -20px rgba(102,0,153,0.25), 0 18px 40px -15px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.8)",
+            }}
           >
-            <div className="flex items-start gap-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#dcfce7]">
-                <RefreshCw className="h-5 w-5 text-[#16a34a]" />
+            {/* glow ring top */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -top-24 left-1/2 h-48 w-[140%] -translate-x-1/2 rounded-full"
+              style={{
+                background:
+                  "radial-gradient(closest-side, rgba(102,0,153,0.18), rgba(102,0,153,0))",
+              }}
+            />
+
+            <div className="relative flex items-center gap-4">
+              <div
+                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(22,163,74,0.18), rgba(27,201,107,0.10))",
+                  boxShadow:
+                    "0 8px 24px -6px rgba(22,163,74,0.45), inset 0 1px 0 rgba(255,255,255,0.7), inset 0 0 0 1px rgba(22,163,74,0.25)",
+                }}
+              >
+                <RefreshCw className="h-6 w-6 text-[#15803d]" />
               </div>
               <div className="min-w-0">
-                <h3 className="text-lg font-bold text-[#1a1a1a]">
+                <h3 className="text-[20px] font-semibold tracking-tight text-[#1a1a1a]">
                   Ativar Renovação Automática
                 </h3>
+                <p className="mt-0.5 text-xs font-medium text-[#660099]/80">
+                  Função premium SmartVoz
+                </p>
               </div>
             </div>
 
-            <div className="mt-4 space-y-2.5">
-              <p className="text-sm leading-relaxed text-[#555]">
-                Ao ativar a renovação automática, seu plano será renovado automaticamente todos os meses utilizando o saldo disponível da sua carteira virtual/comissões.
+            <div className="relative mt-6 space-y-4">
+              <p className="text-[14px] leading-relaxed text-[#4a4a4a]">
+                Ao ativar a renovação automática, seu plano será renovado todos os meses utilizando o saldo disponível da sua carteira virtual/comissões.
               </p>
-              <p className="text-sm font-semibold text-[#15803d]">
-                Você receberá +20GB de bônus no seu plano atual.
-              </p>
-              <p className="text-sm font-medium text-[#d97706]">
-                Atenção: após ativar, esta função não poderá ser desativada manualmente.
-              </p>
-              <p className="text-xs leading-relaxed text-[#777]">
+
+              {/* Bônus premium */}
+              <div
+                className="rounded-xl p-4"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(22,163,74,0.10), rgba(27,201,107,0.04))",
+                  border: "1px solid rgba(22,163,74,0.25)",
+                  boxShadow:
+                    "0 8px 24px -12px rgba(22,163,74,0.35), inset 0 1px 0 rgba(255,255,255,0.6)",
+                }}
+              >
+                <div className="flex items-start gap-3">
+                  <div
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full"
+                    style={{
+                      background: "linear-gradient(135deg,#14AE5C,#1BC96B)",
+                      boxShadow: "0 4px 12px -2px rgba(20,174,92,0.5)",
+                    }}
+                  >
+                    <Sparkles className="h-4 w-4 text-white" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[14px] font-semibold text-[#15803d]">
+                      +20GB bônus liberado
+                    </p>
+                    <p className="mt-0.5 text-[13px] leading-relaxed text-[#3f6b4a]">
+                      Seu plano receberá internet extra automaticamente.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Alerta premium */}
+              <div
+                className="rounded-xl p-4"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(234,88,12,0.08), rgba(234,88,12,0.03))",
+                  borderLeft: "3px solid #ea580c",
+                  border: "1px solid rgba(234,88,12,0.22)",
+                  borderLeftWidth: 3,
+                }}
+              >
+                <div className="flex items-start gap-3">
+                  <AlertTriangle className="h-4 w-4 shrink-0 text-[#c2410c] mt-0.5" />
+                  <p className="text-[13px] leading-relaxed text-[#7c2d12]">
+                    <span className="font-semibold">Atenção:</span> após ativar, esta função não poderá ser desativada manualmente.
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-[12px] leading-relaxed text-[#777]">
                 Os valores da renovação serão descontados automaticamente do saldo disponível da sua conta.
               </p>
             </div>
 
-            <div className="mt-6 flex justify-end gap-2">
+            <div className="relative mt-7 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
               <button
                 type="button"
                 onClick={() => setConfirmAutoDebit(false)}
-                className="rounded-md border border-[#d4d4d4] bg-white px-5 py-2 text-sm font-semibold text-[#333] hover:bg-[#f5f5f5] transition"
+                className="rounded-xl px-5 py-2.5 text-sm font-semibold text-[#333] transition hover:bg-white"
+                style={{
+                  background: "rgba(255,255,255,0.7)",
+                  border: "1px solid rgba(0,0,0,0.08)",
+                  backdropFilter: "blur(8px)",
+                }}
               >
                 Cancelar
               </button>
@@ -883,7 +967,12 @@ function ResumoConsumo() {
                   setToast("Renovação automática ativada · +20GB liberados");
                   setTimeout(() => setToast(null), 3000);
                 }}
-                className="rounded-md bg-[#16a34a] px-5 py-2 text-sm font-semibold text-white shadow hover:bg-[#15803d] transition"
+                className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
+                style={{
+                  background: "linear-gradient(135deg,#14AE5C,#1BC96B)",
+                  boxShadow:
+                    "0 10px 24px -8px rgba(20,174,92,0.55), inset 0 1px 0 rgba(255,255,255,0.35)",
+                }}
               >
                 Ativar
               </button>
@@ -891,6 +980,7 @@ function ResumoConsumo() {
           </div>
         </div>
       )}
+
 
       {/* Toast */}
       {toast && (
