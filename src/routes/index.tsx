@@ -22,6 +22,8 @@ import familyImgAsset from "@/assets/family-tablet.jpg.asset.json";
 import icon3dData from "@/assets/icon-3d-data.png";
 import icon3dPhone from "@/assets/icon-3d-phone.png";
 import icon3dSms from "@/assets/icon-3d-sms.png";
+import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
+import icon3dBonus from "@/assets/icon-3d-bonus.png";
 const familyImg = familyImgAsset.url;
 
 
@@ -864,15 +866,22 @@ function ResumoConsumo() {
 
             <div className="relative flex items-center gap-4">
               <div
-                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full"
+                className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full"
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(22,163,74,0.18), rgba(27,201,107,0.10))",
+                    "linear-gradient(135deg, rgba(102,0,153,0.10), rgba(142,45,226,0.04))",
                   boxShadow:
-                    "0 8px 24px -6px rgba(22,163,74,0.45), inset 0 1px 0 rgba(255,255,255,0.7), inset 0 0 0 1px rgba(22,163,74,0.25)",
+                    "0 10px 28px -8px rgba(102,0,153,0.45), inset 0 1px 0 rgba(255,255,255,0.7), inset 0 0 0 1px rgba(102,0,153,0.18)",
                 }}
               >
-                <RefreshCw className="h-6 w-6 text-[#15803d]" />
+                <img
+                  src={icon3dAutorenew}
+                  alt="Renovação automática"
+                  width={56}
+                  height={56}
+                  loading="lazy"
+                  className="h-12 w-12 object-contain"
+                />
               </div>
               <div className="min-w-0">
                 <h3 className="text-[20px] font-semibold tracking-tight text-[#1a1a1a]">
@@ -894,27 +903,26 @@ function ResumoConsumo() {
                 className="rounded-xl p-4"
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(22,163,74,0.10), rgba(27,201,107,0.04))",
-                  border: "1px solid rgba(22,163,74,0.25)",
+                    "linear-gradient(135deg, rgba(102,0,153,0.08), rgba(142,45,226,0.03))",
+                  border: "1px solid rgba(102,0,153,0.22)",
                   boxShadow:
-                    "0 8px 24px -12px rgba(22,163,74,0.35), inset 0 1px 0 rgba(255,255,255,0.6)",
+                    "0 8px 24px -12px rgba(102,0,153,0.35), inset 0 1px 0 rgba(255,255,255,0.6)",
                 }}
               >
                 <div className="flex items-start gap-3">
-                  <div
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full"
-                    style={{
-                      background: "linear-gradient(135deg,#14AE5C,#1BC96B)",
-                      boxShadow: "0 4px 12px -2px rgba(20,174,92,0.5)",
-                    }}
-                  >
-                    <Sparkles className="h-4 w-4 text-white" />
-                  </div>
+                  <img
+                    src={icon3dBonus}
+                    alt="+20GB bônus"
+                    width={40}
+                    height={40}
+                    loading="lazy"
+                    className="h-10 w-10 shrink-0 object-contain"
+                  />
                   <div className="min-w-0">
-                    <p className="text-[14px] font-semibold text-[#15803d]">
+                    <p className="text-[14px] font-semibold text-[#660099]">
                       +20GB bônus liberado
                     </p>
-                    <p className="mt-0.5 text-[13px] leading-relaxed text-[#3f6b4a]">
+                    <p className="mt-0.5 text-[13px] leading-relaxed text-[#5a3a7a]">
                       Seu plano receberá internet extra automaticamente.
                     </p>
                   </div>
@@ -949,10 +957,10 @@ function ResumoConsumo() {
               <button
                 type="button"
                 onClick={() => setConfirmAutoDebit(false)}
-                className="rounded-xl px-5 py-2.5 text-sm font-semibold text-[#333] transition hover:bg-white"
+                className="rounded-xl px-5 py-2.5 text-sm font-semibold text-[#660099] transition hover:bg-[rgba(102,0,153,0.06)]"
                 style={{
                   background: "rgba(255,255,255,0.7)",
-                  border: "1px solid rgba(0,0,0,0.08)",
+                  border: "1px solid rgba(102,0,153,0.35)",
                   backdropFilter: "blur(8px)",
                 }}
               >
@@ -968,9 +976,9 @@ function ResumoConsumo() {
                 }}
                 className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
                 style={{
-                  background: "linear-gradient(135deg,#14AE5C,#1BC96B)",
+                  background: "linear-gradient(135deg,#6A11CB,#8E2DE2)",
                   boxShadow:
-                    "0 10px 24px -8px rgba(20,174,92,0.55), inset 0 1px 0 rgba(255,255,255,0.35)",
+                    "0 10px 28px -8px rgba(106,17,203,0.6), 0 4px 12px -2px rgba(142,45,226,0.4), inset 0 1px 0 rgba(255,255,255,0.35)",
                 }}
               >
                 Ativar
