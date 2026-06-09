@@ -524,20 +524,29 @@ function ResumoConsumo() {
         {/* Upgrade card - separate block below hero */}
         <button
           onClick={() => setUpgradeOpen(true)}
-          className="mt-4 flex w-full items-center justify-between rounded-md bg-white px-6 py-5 shadow-sm transition hover:shadow-md"
+          className="group mt-4 flex w-full items-center justify-between rounded-[22px] border border-[rgba(106,17,203,0.14)] bg-white px-5 py-4 shadow-[0_18px_42px_rgba(106,17,203,0.13)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[rgba(106,17,203,0.24)] hover:shadow-[0_24px_52px_rgba(106,17,203,0.2)] sm:rounded-[28px] sm:px-10 sm:py-6"
         >
-          <div className="flex items-center gap-4">
-            <FileText className="h-7 w-7 text-[#660099]" />
+          <div className="flex items-center gap-4 sm:gap-8">
+            <img
+              src={icon3dUpgrade}
+              alt=""
+              width={184}
+              height={184}
+              loading="lazy"
+              className="h-[58px] w-[58px] object-contain drop-shadow-[0_12px_18px_rgba(106,17,203,0.28)] transition-transform duration-300 group-hover:scale-105 sm:h-[92px] sm:w-[92px]"
+            />
             <div className="text-left">
-              <div className="text-[15px] font-semibold text-[#333]">
+              <div className="text-[17px] font-extrabold leading-tight text-[#202124] sm:mb-2 sm:text-[26px]">
                 Quer falar e navegar ainda mais?
               </div>
-              <div className="text-sm text-[#666]">
+              <div className="text-[14px] leading-snug text-[#6b6b6b] sm:text-[18px]">
                 Faça um upgrade no seu plano agora
               </div>
             </div>
           </div>
-          <ChevronRight className="h-5 w-5 text-[#660099]" />
+          <span className="ml-3 text-[32px] font-bold leading-none text-[#6a0dad] transition-transform duration-300 group-hover:translate-x-1 sm:text-[46px]">
+            ›
+          </span>
         </button>
 
 
