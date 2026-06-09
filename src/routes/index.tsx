@@ -957,10 +957,10 @@ function ResumoConsumo() {
               <button
                 type="button"
                 onClick={() => setConfirmAutoDebit(false)}
-                className="rounded-xl px-5 py-2.5 text-sm font-semibold text-[#333] transition hover:bg-white"
+                className="rounded-xl px-5 py-2.5 text-sm font-semibold text-[#660099] transition hover:bg-[rgba(102,0,153,0.06)]"
                 style={{
                   background: "rgba(255,255,255,0.7)",
-                  border: "1px solid rgba(0,0,0,0.08)",
+                  border: "1px solid rgba(102,0,153,0.35)",
                   backdropFilter: "blur(8px)",
                 }}
               >
@@ -976,9 +976,9 @@ function ResumoConsumo() {
                 }}
                 className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
                 style={{
-                  background: "linear-gradient(135deg,#14AE5C,#1BC96B)",
+                  background: "linear-gradient(135deg,#6A11CB,#8E2DE2)",
                   boxShadow:
-                    "0 10px 24px -8px rgba(20,174,92,0.55), inset 0 1px 0 rgba(255,255,255,0.35)",
+                    "0 10px 28px -8px rgba(106,17,203,0.6), 0 4px 12px -2px rgba(142,45,226,0.4), inset 0 1px 0 rgba(255,255,255,0.35)",
                 }}
               >
                 Ativar
