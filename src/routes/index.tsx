@@ -446,8 +446,8 @@ function ResumoConsumo() {
         </h1>
         <p className="mt-1 text-sm text-[#666]">
           Informação atualizada em{" "}
-          <span className="font-semibold text-[#333]">{lastUpdatedDate}</span> às{" "}
-          <span className="font-semibold text-[#333]">{lastUpdatedTime}</span>
+          <span suppressHydrationWarning className="font-semibold text-[#333]">{lastUpdatedDate}</span> às{" "}
+          <span suppressHydrationWarning className="font-semibold text-[#333]">{lastUpdatedTime}</span>
 
         </p>
 
