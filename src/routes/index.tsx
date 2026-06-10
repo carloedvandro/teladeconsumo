@@ -27,6 +27,15 @@ import icon3dBonus from "@/assets/icon-3d-bonus.png";
 import icon3dAlert from "@/assets/icon-3d-alert.png";
 const familyImg = familyImgAsset.url;
 
+const PRELOAD_ICONS = [
+  icon3dData,
+  icon3dPhone,
+  icon3dSms,
+  icon3dAutorenew,
+  icon3dBonus,
+  icon3dAlert,
+];
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -37,6 +46,7 @@ export const Route = createFileRoute("/")({
         content: "Acompanhe seu consumo de dados Vivo Móvel em tempo real.",
       },
     ],
+    links: PRELOAD_ICONS.map((href) => ({ rel: "preload", as: "image", href })),
   }),
   component: ResumoConsumo,
 });
@@ -265,14 +275,35 @@ function Modal({
   );
 }
 
-const PRELOAD_ICONS = [
-  icon3dData,
-  icon3dPhone,
-  icon3dSms,
-  icon3dAutorenew,
-  icon3dBonus,
-  icon3dAlert,
-];
+const iconPreloadCache = new Map<string, Promise<void>>();
+
+function preloadIcon(src: string) {
+  const cached = iconPreloadCache.get(src);
+  if (cached) return cached;
+
+  if (typeof window === "undefined") return Promise.resolve();
+
+  const promise = new Promise<void>((resolve) => {
+    const img = new window.Image();
+    const finish = () => {
+      img.decode?.().catch(() => undefined).finally(resolve);
+    };
+
+    img.decoding = "sync";
+    img.onload = finish;
+    img.onerror = () => resolve();
+    img.src = src;
+
+    if (img.complete) finish();
+  });
+
+  iconPreloadCache.set(src, promise);
+  return promise;
+}
+
+function preloadAllIcons() {
+  return Promise.all(PRELOAD_ICONS.map(preloadIcon));
+}
 
 function ResumoConsumo() {
   const [lineIdx, setLineIdx] = useState(0);
