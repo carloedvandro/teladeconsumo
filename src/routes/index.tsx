@@ -610,7 +610,7 @@ function ResumoConsumo() {
                   <img
                     src={card.icon}
                     alt=""
-                    loading="lazy"
+                    loading="eager" decoding="sync" fetchPriority="high"
                     width={64}
                     height={64}
                     className="mx-auto h-16 w-16 object-contain"
@@ -895,7 +895,7 @@ function ResumoConsumo() {
                 alt="Renovação automática"
                 width={56}
                 height={56}
-                loading="lazy"
+                loading="eager" decoding="sync" fetchPriority="high"
                 className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 object-contain"
               />
               <div className="min-w-0 flex-1">
@@ -929,7 +929,7 @@ function ResumoConsumo() {
                   alt="Bônus de internet"
                   width={40}
                   height={40}
-                  loading="lazy"
+                  loading="eager" decoding="sync" fetchPriority="high"
                   className="h-10 w-10 shrink-0 object-contain"
                 />
                 <div className="min-w-0 flex-1">
@@ -958,7 +958,7 @@ function ResumoConsumo() {
                   alt="Atenção"
                   width={40}
                   height={40}
-                  loading="lazy"
+                  loading="eager" decoding="sync" fetchPriority="high"
                   className="h-10 w-10 shrink-0 object-contain"
                 />
                 <p className="text-[12.5px] leading-snug text-[#991b1b] flex-1">
