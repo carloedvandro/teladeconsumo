@@ -520,7 +520,13 @@ function ResumoConsumo() {
           {/* Upgrade card - inside hero art, below consumption card */}
           <button
             onClick={() => setUpgradeOpen(true)}
-            className="relative mx-2 mt-4 flex w-[calc(100%-1rem)] items-center justify-between rounded-md bg-white px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:bottom-8 md:right-8 md:mx-0 md:mt-0 md:w-[520px]"
+            className="relative mx-2 mt-4 flex w-[calc(100%-1rem)] items-center justify-between rounded-md px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:bottom-8 md:right-8 md:mx-0 md:mt-0 md:w-[520px]"
+            style={{
+              background: "rgba(255,255,255,0.74)",
+              backdropFilter: "blur(6px)",
+              boxShadow:
+                "0 8px 32px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.45)",
+            }}
           >
             <div className="flex items-center gap-4">
               <FileText className="h-7 w-7 text-[#660099]" />
