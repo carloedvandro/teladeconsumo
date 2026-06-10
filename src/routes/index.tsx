@@ -407,12 +407,12 @@ function ResumoConsumo() {
             <button
               aria-label="Ver histórico de consumo"
               onClick={() => setExpandOpen(true)}
-              className="absolute bottom-0 right-0 h-10 w-10 text-[#660099] md:h-12 md:w-12"
+              className="group absolute bottom-0 right-0 h-10 w-10 text-[#660099] md:h-12 md:w-12"
               style={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
             >
-              <span className="absolute inset-0 bg-[#d9d9d9]" />
+              <span className="absolute inset-0 bg-[#d9d9d9] transition-colors duration-200 group-hover:bg-[#e8e8e8]" />
               <Plus
-                className="absolute bottom-1 right-1 h-4 w-4"
+                className="absolute bottom-1 right-1 h-4 w-4 transition-transform duration-200 group-hover:scale-110"
                 strokeWidth={2.75}
               />
             </button>
@@ -520,7 +520,7 @@ function ResumoConsumo() {
           {/* Upgrade card - inside hero art, below consumption card */}
           <button
             onClick={() => setUpgradeOpen(true)}
-            className="relative mx-2 mt-4 flex w-[calc(100%-1rem)] items-center justify-between overflow-hidden rounded-md px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:bottom-8 md:right-8 md:mx-0 md:mt-0 md:w-[520px]"
+            className="relative mx-2 mt-4 flex w-[calc(100%-1rem)] items-center justify-between rounded-md px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:bottom-8 md:right-8 md:mx-0 md:mt-0 md:w-[520px]"
             style={{
               background: "rgba(255,255,255,0.74)",
               backdropFilter: "blur(6px)",
@@ -540,18 +540,6 @@ function ResumoConsumo() {
               </div>
             </div>
             <ChevronRight className="h-5 w-5 text-[#660099]" />
-            {/* Darker triangle marker at bottom-right corner */}
-            <span
-              aria-hidden
-              className="pointer-events-none absolute bottom-0 right-0"
-              style={{
-                width: 0,
-                height: 0,
-                borderStyle: "solid",
-                borderWidth: "0 0 22px 22px",
-                borderColor: "transparent transparent rgba(0,0,0,0.18) transparent",
-              }}
-            />
           </button>
 
         </section>
