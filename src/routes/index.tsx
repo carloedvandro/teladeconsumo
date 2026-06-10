@@ -311,6 +311,7 @@ function ResumoConsumo() {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [expandOpen, setExpandOpen] = useState(false);
+  const [iconsReady, setIconsReady] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [activeCard, setActiveCard] = useState<"dados" | "minutos" | "sms" | null>("dados");
@@ -320,13 +321,15 @@ function ResumoConsumo() {
   const [autoDebit, setAutoDebit] = useState(false);
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
 
-  // Preload all 3D icons used in modals so they appear instantly when modals open.
   useEffect(() => {
-    PRELOAD_ICONS.forEach((src) => {
-      const img = new Image();
-      img.decoding = "async";
-      img.src = src;
+    let mounted = true;
+    preloadAllIcons().then(() => {
+      if (mounted) setIconsReady(true);
     });
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const baseLine = LINES[lineIdx];
@@ -386,6 +389,18 @@ function ResumoConsumo() {
   function showToast(msg: string) {
     setToast(msg);
     setTimeout(() => setToast(null), 2800);
+  }
+
+  function openAfterIconsReady(openModal: () => void) {
+    if (iconsReady) {
+      openModal();
+      return;
+    }
+
+    preloadAllIcons().then(() => {
+      setIconsReady(true);
+      openModal();
+    });
   }
 
   const currentYear = new Date().getFullYear();
