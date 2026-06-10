@@ -286,7 +286,12 @@ function preloadIcon(src: string) {
   const promise = new Promise<void>((resolve) => {
     const img = new window.Image();
     const finish = () => {
-      img.decode?.().catch(() => undefined).finally(resolve);
+      const decoded = img.decode?.();
+      if (decoded) {
+        decoded.catch(() => undefined).finally(resolve);
+      } else {
+        resolve();
+      }
     };
 
     img.decoding = "sync";
