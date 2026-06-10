@@ -265,6 +265,15 @@ function Modal({
   );
 }
 
+const PRELOAD_ICONS = [
+  icon3dData,
+  icon3dPhone,
+  icon3dSms,
+  icon3dAutorenew,
+  icon3dBonus,
+  icon3dAlert,
+];
+
 function ResumoConsumo() {
   const [lineIdx, setLineIdx] = useState(0);
   const [open, setOpen] = useState(false);
@@ -279,6 +288,15 @@ function ResumoConsumo() {
   const [notifySms, setNotifySms] = useState(true);
   const [autoDebit, setAutoDebit] = useState(false);
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
+
+  // Preload all 3D icons used in modals so they appear instantly when modals open.
+  useEffect(() => {
+    PRELOAD_ICONS.forEach((src) => {
+      const img = new Image();
+      img.decoding = "async";
+      img.src = src;
+    });
+  }, []);
 
   const baseLine = LINES[lineIdx];
   const bonusDebito = autoDebit ? 25 : 0;
