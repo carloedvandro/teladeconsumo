@@ -265,6 +265,15 @@ function Modal({
   );
 }
 
+const PRELOAD_ICONS = [
+  icon3dData,
+  icon3dPhone,
+  icon3dSms,
+  icon3dAutorenew,
+  icon3dBonus,
+  icon3dAlert,
+];
+
 function ResumoConsumo() {
   const [lineIdx, setLineIdx] = useState(0);
   const [open, setOpen] = useState(false);
@@ -279,6 +288,15 @@ function ResumoConsumo() {
   const [notifySms, setNotifySms] = useState(true);
   const [autoDebit, setAutoDebit] = useState(false);
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
+
+  // Preload all 3D icons used in modals so they appear instantly when modals open.
+  useEffect(() => {
+    PRELOAD_ICONS.forEach((src) => {
+      const img = new Image();
+      img.decoding = "async";
+      img.src = src;
+    });
+  }, []);
 
   const baseLine = LINES[lineIdx];
   const bonusDebito = autoDebit ? 25 : 0;
@@ -592,7 +610,7 @@ function ResumoConsumo() {
                   <img
                     src={card.icon}
                     alt=""
-                    loading="lazy"
+                    loading="eager" decoding="sync" fetchPriority="high"
                     width={64}
                     height={64}
                     className="mx-auto h-16 w-16 object-contain"
@@ -877,7 +895,7 @@ function ResumoConsumo() {
                 alt="Renovação automática"
                 width={56}
                 height={56}
-                loading="lazy"
+                loading="eager" decoding="sync" fetchPriority="high"
                 className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 object-contain"
               />
               <div className="min-w-0 flex-1">
@@ -911,7 +929,7 @@ function ResumoConsumo() {
                   alt="Bônus de internet"
                   width={40}
                   height={40}
-                  loading="lazy"
+                  loading="eager" decoding="sync" fetchPriority="high"
                   className="h-10 w-10 shrink-0 object-contain"
                 />
                 <div className="min-w-0 flex-1">
@@ -940,7 +958,7 @@ function ResumoConsumo() {
                   alt="Atenção"
                   width={40}
                   height={40}
-                  loading="lazy"
+                  loading="eager" decoding="sync" fetchPriority="high"
                   className="h-10 w-10 shrink-0 object-contain"
                 />
                 <p className="text-[12.5px] leading-snug text-[#991b1b] flex-1">
