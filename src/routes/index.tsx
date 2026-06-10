@@ -27,6 +27,15 @@ import icon3dBonus from "@/assets/icon-3d-bonus.png";
 import icon3dAlert from "@/assets/icon-3d-alert.png";
 const familyImg = familyImgAsset.url;
 
+const PRELOAD_ICONS = [
+  icon3dData,
+  icon3dPhone,
+  icon3dSms,
+  icon3dAutorenew,
+  icon3dBonus,
+  icon3dAlert,
+];
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -37,6 +46,7 @@ export const Route = createFileRoute("/")({
         content: "Acompanhe seu consumo de dados Vivo Móvel em tempo real.",
       },
     ],
+    links: PRELOAD_ICONS.map((href) => ({ rel: "preload", as: "image", href })),
   }),
   component: ResumoConsumo,
 });
@@ -265,14 +275,40 @@ function Modal({
   );
 }
 
-const PRELOAD_ICONS = [
-  icon3dData,
-  icon3dPhone,
-  icon3dSms,
-  icon3dAutorenew,
-  icon3dBonus,
-  icon3dAlert,
-];
+const iconPreloadCache = new Map<string, Promise<void>>();
+
+function preloadIcon(src: string) {
+  const cached = iconPreloadCache.get(src);
+  if (cached) return cached;
+
+  if (typeof window === "undefined") return Promise.resolve();
+
+  const promise = new Promise<void>((resolve) => {
+    const img = new window.Image();
+    const finish = () => {
+      const decoded = img.decode?.();
+      if (decoded) {
+        decoded.catch(() => undefined).finally(resolve);
+      } else {
+        resolve();
+      }
+    };
+
+    img.decoding = "sync";
+    img.onload = finish;
+    img.onerror = () => resolve();
+    img.src = src;
+
+    if (img.complete) finish();
+  });
+
+  iconPreloadCache.set(src, promise);
+  return promise;
+}
+
+function preloadAllIcons() {
+  return Promise.all(PRELOAD_ICONS.map(preloadIcon));
+}
 
 function ResumoConsumo() {
   const [lineIdx, setLineIdx] = useState(0);
@@ -280,6 +316,7 @@ function ResumoConsumo() {
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [expandOpen, setExpandOpen] = useState(false);
+  const [iconsReady, setIconsReady] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [activeCard, setActiveCard] = useState<"dados" | "minutos" | "sms" | null>("dados");
@@ -289,13 +326,15 @@ function ResumoConsumo() {
   const [autoDebit, setAutoDebit] = useState(false);
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
 
-  // Preload all 3D icons used in modals so they appear instantly when modals open.
   useEffect(() => {
-    PRELOAD_ICONS.forEach((src) => {
-      const img = new Image();
-      img.decoding = "async";
-      img.src = src;
+    let mounted = true;
+    preloadAllIcons().then(() => {
+      if (mounted) setIconsReady(true);
     });
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const baseLine = LINES[lineIdx];
@@ -357,6 +396,18 @@ function ResumoConsumo() {
     setTimeout(() => setToast(null), 2800);
   }
 
+  function openAfterIconsReady(openModal: () => void) {
+    if (iconsReady) {
+      openModal();
+      return;
+    }
+
+    preloadAllIcons().then(() => {
+      setIconsReady(true);
+      openModal();
+    });
+  }
+
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth(); // 0-11
   const monthNames = [
@@ -395,8 +446,8 @@ function ResumoConsumo() {
         </h1>
         <p className="mt-1 text-sm text-[#666]">
           Informação atualizada em{" "}
-          <span className="font-semibold text-[#333]">{lastUpdatedDate}</span> às{" "}
-          <span className="font-semibold text-[#333]">{lastUpdatedTime}</span>
+          <span suppressHydrationWarning className="font-semibold text-[#333]">{lastUpdatedDate}</span> às{" "}
+          <span suppressHydrationWarning className="font-semibold text-[#333]">{lastUpdatedTime}</span>
 
         </p>
 
@@ -424,7 +475,7 @@ function ResumoConsumo() {
             {/* Gray diagonal triangle in the corner with + near the tip */}
             <button
               aria-label="Ver histórico de consumo"
-              onClick={() => setExpandOpen(true)}
+              onClick={() => openAfterIconsReady(() => setExpandOpen(true))}
               className="group absolute bottom-0 right-0 h-10 w-10 text-[#660099] md:h-12 md:w-12"
               style={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
             >
@@ -509,7 +560,7 @@ function ResumoConsumo() {
                       if (autoDebit) {
                         setAutoDebit(false);
                       } else {
-                        setConfirmAutoDebit(true);
+                        openAfterIconsReady(() => setConfirmAutoDebit(true));
                       }
                     }}
                     className={`relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
@@ -526,7 +577,7 @@ function ResumoConsumo() {
 
 
                 <button
-                  onClick={() => setDetailsOpen(true)}
+                  onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
                   className="mt-4 text-sm font-semibold text-[#660099] hover:underline"
                 >
                   Ver detalhes do seu consumo &gt;
@@ -537,7 +588,7 @@ function ResumoConsumo() {
 
           {/* Upgrade card - inside hero art, below consumption card */}
           <button
-            onClick={() => setUpgradeOpen(true)}
+            onClick={() => openAfterIconsReady(() => setUpgradeOpen(true))}
             className="relative mx-2 mt-4 flex w-[calc(100%-1rem)] items-center justify-between rounded-md px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:bottom-8 md:right-8 md:mx-0 md:mt-0 md:w-[520px]"
             style={{
               background: "rgba(255,255,255,0.74)",
