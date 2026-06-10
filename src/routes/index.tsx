@@ -407,12 +407,12 @@ function ResumoConsumo() {
             <button
               aria-label="Ver histórico de consumo"
               onClick={() => setExpandOpen(true)}
-              className="absolute bottom-0 right-0 h-10 w-10 text-[#660099] md:h-12 md:w-12"
+              className="group absolute bottom-0 right-0 h-10 w-10 text-[#660099] md:h-12 md:w-12"
               style={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
             >
-              <span className="absolute inset-0 bg-[#d9d9d9]" />
+              <span className="absolute inset-0 bg-[#d9d9d9] transition-colors duration-200 group-hover:bg-[#e8e8e8]" />
               <Plus
-                className="absolute bottom-1 right-1 h-4 w-4"
+                className="absolute bottom-1 right-1 h-4 w-4 transition-transform duration-200 group-hover:scale-110"
                 strokeWidth={2.75}
               />
             </button>
