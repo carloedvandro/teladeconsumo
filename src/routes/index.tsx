@@ -271,13 +271,13 @@ function ConsumoRing({
           <div
             className="mt-1.5 flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold"
             style={{
-              background: "rgba(150,232,74,0.15)",
+              background: "rgba(141,214,48,0.15)",
               color: "#4a8a1a",
             }}
           >
             <span
               className="inline-block h-1.5 w-1.5 animate-pulse rounded-full"
-              style={{ background: "#96e84a" }}
+              style={{ background: "#8dd63a" }}
             />
             Vivo Bis: {bisUsed.toFixed(2)} / {bisTotal.toFixed(2)} GB
           </div>
