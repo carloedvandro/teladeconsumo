@@ -320,6 +320,7 @@ function ResumoConsumo() {
   const [toast, setToast] = useState<string | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [activeCard, setActiveCard] = useState<"dados" | "minutos" | "sms" | null>("dados");
+  const [historyTab, setHistoryTab] = useState<"consumo" | "vivobis">("consumo");
   const [notifyEmail, setNotifyEmail] = useState(true);
   const [notifyWhats, setNotifyWhats] = useState(true);
   const [notifySms, setNotifySms] = useState(true);
