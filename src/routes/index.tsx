@@ -1339,7 +1339,7 @@ function ResumoConsumo() {
         title="Consumo detalhado"
       >
         <div className="flex flex-col items-center gap-4">
-          <ConsumoRing line={line} />
+          <ConsumoRing line={line} bisUsed={bisUsed} bisTotal={sobrouAnterior} />
           <div className="w-full space-y-2 text-sm">
             <div className="flex justify-between border-b border-[#eee] pb-2">
               <span className="text-[#666]">Plano</span>
