@@ -513,15 +513,13 @@ function ResumoConsumo() {
   }
 
   function openAfterIconsReady(openModal: () => void) {
-    if (iconsReady) {
-      openModal();
-      return;
+    // Icons are preloaded on mount and via <link rel="preload"> in <head>,
+    // so open immediately to keep transitions instant. Kick off a background
+    // preload as a safety net without blocking the modal open.
+    openModal();
+    if (!iconsReady) {
+      preloadAllIcons().then(() => setIconsReady(true));
     }
-
-    preloadAllIcons().then(() => {
-      setIconsReady(true);
-      openModal();
-    });
   }
 
   const consumoSimulado = [
