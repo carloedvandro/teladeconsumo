@@ -141,22 +141,22 @@ function ConsumoRing({
     bisTotal > 0 ? Math.min(100, (bisUsed / bisTotal) * 100) : 0;
 
   // SVG-based ring for crisp rendering at any zoom level.
-  const size = 240;
+  const size = 220;
   const cx = size / 2;
   const cy = size / 2;
-  const r = 96;
-  const strokeW = 13;
+  const r = 90;
+  const strokeW = 10;
   const circ = 2 * Math.PI * r;
 
   // Inner Vivo Bis ring (green) — only renders when franquia hit 100%.
-  const rBis = 78;
+  const rBis = 74;
   const strokeBis = 6;
   const circBis = 2 * Math.PI * rBis;
 
   // Smooth gradient arc: split the consumed portion into many tiny segments,
   // each painted with the interpolated color at its midpoint (green→yellow→
   // orange→red). Produces a seamless rastro of tones along the path.
-  const STEPS = 100;
+  const STEPS = 80;
   const segments = Array.from({ length: STEPS }, (_, i) => {
     const from = (i / STEPS) * p;
     const to = ((i + 1) / STEPS) * p;
