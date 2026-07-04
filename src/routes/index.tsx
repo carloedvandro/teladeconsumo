@@ -588,7 +588,7 @@ function ResumoConsumo() {
               />
             </button>
             <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-4">
-              <div className="self-center md:-ml-6 md:self-auto"><ConsumoRing line={line} bonus={bonusDebito} /></div>
+              <div className="self-center md:-ml-6 md:self-auto"><ConsumoRing line={line} bonus={bonusDebito} bisUsed={bisUsed} bisTotal={sobrouAnterior} /></div>
 
               <div className="w-full md:w-[220px]">
 
