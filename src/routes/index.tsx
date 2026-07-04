@@ -1060,10 +1060,13 @@ function ResumoConsumo() {
                       let statusLabel: string;
                       let statusBg: string;
                       let statusColor: string;
+                      let statusTip: string;
                       if (sobrouAnterior === 0) {
                         statusLabel = "Sem bônus";
                         statusBg = "rgba(0,0,0,0.05)";
                         statusColor = "#888";
+                        statusTip =
+                          "Não havia sobra do mês anterior para acumular.";
                       } else if (isCurrent) {
                         statusLabel =
                           bisRestante > 0 ? "Disponível" : "Utilizado";
@@ -1072,14 +1075,22 @@ function ResumoConsumo() {
                             ? "rgba(126,200,50,0.18)"
                             : "rgba(255,122,24,0.15)";
                         statusColor = bisRestante > 0 ? "#3d7a12" : "#b34e00";
+                        statusTip =
+                          bisRestante > 0
+                            ? "O Vivo Bis deste mês está ativo e disponível para uso."
+                            : "O Vivo Bis deste mês já foi totalmente consumido.";
                       } else if (bisConsumido >= sobrouAnterior) {
                         statusLabel = "Utilizado";
                         statusBg = "rgba(255,122,24,0.15)";
                         statusColor = "#b34e00";
+                        statusTip =
+                          "O Vivo Bis deste mês foi totalmente utilizado antes de expirar.";
                       } else {
                         statusLabel = "Expirado";
                         statusBg = "rgba(0,0,0,0.05)";
                         statusColor = "#888";
+                        statusTip =
+                          "O Vivo Bis do mês anterior expirou após 30 dias sem uso completo.";
                       }
 
                       return (
