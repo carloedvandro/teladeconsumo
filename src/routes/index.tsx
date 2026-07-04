@@ -401,12 +401,58 @@ function ResumoConsumo() {
   const baseLine = LINES[lineIdx];
   const bonusDebito = autoDebit ? 25 : 0;
   const franquiaTotal = baseLine.total + bonusDebito;
-  const line: Line = { ...baseLine, total: franquiaTotal };
+
+  // Real-time consumption simulation:
+  // increments live usage every few seconds so the ring updates in tempo real.
+  // Ao atingir 100% da franquia, o excedente é debitado do Vivo Bis do mês anterior.
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth(); // 0-11
+  const monthNames = [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
+  ];
+  const consumoAnterior = [
+    20.9, 16.3, 25.1, 18.7, 22.4, 19.3,
+    23.8, 19.5, 21.2, 17.4, 24.1, 15.6,
+  ];
+  const prevIdx = (currentMonth - 1 + 12) % 12;
+  const sobrouAnterior = Math.max(
+    0,
+    franquiaTotal - consumoAnterior[prevIdx],
+  );
+
+  const [simExtra, setSimExtra] = useState(0);
+  useEffect(() => {
+    // Reset simulation whenever the base usage or franquia mudam.
+    setSimExtra(0);
+  }, [baseLine.used, franquiaTotal]);
+  useEffect(() => {
+    const maxExtra = Math.max(
+      0,
+      franquiaTotal + sobrouAnterior - baseLine.used,
+    );
+    if (simExtra >= maxExtra) return;
+    const id = window.setInterval(() => {
+      setSimExtra((prev) => {
+        const next = +(prev + 0.05).toFixed(2);
+        return next >= maxExtra ? maxExtra : next;
+      });
+    }, 4000);
+    return () => window.clearInterval(id);
+  }, [simExtra, franquiaTotal, sobrouAnterior, baseLine.used]);
+
+  const rawUsed = +(baseLine.used + simExtra).toFixed(2);
+  const liveUsed = Math.min(rawUsed, franquiaTotal + sobrouAnterior);
+  const bisUsed = +Math.max(0, liveUsed - franquiaTotal).toFixed(2);
+  const usedInFranquia = Math.min(liveUsed, franquiaTotal);
+
+  const line: Line = { ...baseLine, used: usedInFranquia, total: franquiaTotal };
   const pct = Math.min(100, (line.used / line.total) * 100);
   const available = +(line.total - line.used).toFixed(2);
   const availPct = Math.round(100 - pct);
   const usedPct = Math.round(pct);
   const color = ringColor(pct);
+
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
     const scheduleMidnight = () => {
