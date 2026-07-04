@@ -868,67 +868,8 @@ function ResumoConsumo() {
                   </div>
                 </div>
 
-                {/* Current month highlight */}
-                {(() => {
-                  const franquia = line.total;
-                  const prevIdx = currentMonth - 1;
-                  const sobrouAnterior =
-                    prevIdx >= 0
-                      ? Math.max(0, franquia - consumoSimulado[prevIdx])
-                      : 0;
-                  const usadoAtual = liveUsed;
-                  const bisConsumido = bisUsed;
 
-                  const bisRestante = Math.max(0, sobrouAnterior - bisConsumido);
-                  const pct =
-                    sobrouAnterior > 0
-                      ? Math.min(100, (bisConsumido / sobrouAnterior) * 100)
-                      : 0;
-                  const barColor =
-                    pct >= 95 ? "#ff2a2a" : pct >= 60 ? "#ff7a18" : "#7ec832";
-                  return (
-                    <div
-                      className="mb-3 rounded-xl border p-3"
-                      style={{
-                        borderColor: "rgba(102,0,153,0.15)",
-                        background:
-                          "linear-gradient(135deg, rgba(126,200,50,0.10), rgba(102,0,153,0.06))",
-                      }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="text-[11px] font-semibold uppercase tracking-wider text-[#660099]">
-                          Vivo Bis deste mês
-                        </div>
-                        <span
-                          className="rounded-full px-2 py-0.5 text-[10px] font-semibold"
-                          style={{
-                            background:
-                              pct >= 100
-                                ? "rgba(255,42,42,0.12)"
-                                : "rgba(126,200,50,0.18)",
-                            color: pct >= 100 ? "#c81e1e" : "#3d7a12",
-                          }}
-                        >
-                          {pct >= 100 ? "Utilizado" : "Disponível"}
-                        </span>
-                      </div>
-                      <div className="mt-1 flex items-baseline gap-2">
-                        <div className="text-[22px] font-bold text-[#1a1a1a]">
-                          {formatGB(bisRestante)}
-                        </div>
-                        <div className="text-xs text-[#666]">
-                          de {formatGB(sobrouAnterior)} · válido 30 dias
-                        </div>
-                      </div>
-                      <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[#ececec]">
-                        <div
-                          className="h-full rounded-full transition-all"
-                          style={{ width: `${pct}%`, background: barColor }}
-                        />
-                      </div>
-                    </div>
-                  );
-                })()}
+
 
                 {/* Visual diagram: como funciona o Vivo Bis */}
                 {(() => {
