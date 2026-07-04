@@ -91,10 +91,10 @@ function daysUntilCycleRenewal(closingDay = 5, today = new Date()) {
 
 // Progress arc color: green → yellow → orange → red as it fills toward 100%
 function ringColor(pct: number) {
-  if (pct >= 95) return "#ff2a2a"; // red
-  if (pct >= 75) return "#ff7a18"; // orange
-  if (pct >= 45) return "#f4c20d"; // yellow
-  return "#7ec832"; // green
+  if (pct >= 95) return "#ff4d4d"; // bright red
+  if (pct >= 75) return "#ff9633"; // bright orange
+  if (pct >= 45) return "#ffe135"; // bright yellow
+  return "#96e84a"; // bright green
 }
 
 function formatGB(gb: number) {
@@ -118,9 +118,9 @@ function lerpColor(a: string, b: string, t: number) {
 // shifts smoothly green → yellow → orange → red as consumption grows.
 function tipColor(pct: number) {
   const p = Math.min(100, Math.max(0, pct));
-  if (p <= 50) return lerpColor("#7ec832", "#f4c20d", p / 50);
-  if (p <= 80) return lerpColor("#f4c20d", "#ff7a18", (p - 50) / 30);
-  return lerpColor("#ff7a18", "#ff2a2a", (p - 80) / 20);
+  if (p <= 50) return lerpColor("#96e84a", "#ffe135", p / 50);
+  if (p <= 80) return lerpColor("#ffe135", "#ff9633", (p - 50) / 30);
+  return lerpColor("#ff9633", "#ff4d4d", (p - 80) / 20);
 }
 
 function ConsumoRing({
@@ -141,22 +141,22 @@ function ConsumoRing({
     bisTotal > 0 ? Math.min(100, (bisUsed / bisTotal) * 100) : 0;
 
   // SVG-based ring for crisp rendering at any zoom level.
-  const size = 220;
+  const size = 240;
   const cx = size / 2;
   const cy = size / 2;
-  const r = 90;
-  const strokeW = 10;
+  const r = 96;
+  const strokeW = 13;
   const circ = 2 * Math.PI * r;
 
   // Inner Vivo Bis ring (green) — only renders when franquia hit 100%.
-  const rBis = 74;
+  const rBis = 78;
   const strokeBis = 6;
   const circBis = 2 * Math.PI * rBis;
 
   // Smooth gradient arc: split the consumed portion into many tiny segments,
   // each painted with the interpolated color at its midpoint (green→yellow→
   // orange→red). Produces a seamless rastro of tones along the path.
-  const STEPS = 80;
+  const STEPS = 100;
   const segments = Array.from({ length: STEPS }, (_, i) => {
     const from = (i / STEPS) * p;
     const to = ((i + 1) / STEPS) * p;
@@ -170,18 +170,71 @@ function ConsumoRing({
   const tipX = cx + r * Math.sin((angle * Math.PI) / 180);
   const tipY = cy - r * Math.cos((angle * Math.PI) / 180);
 
+  const uid = line.number.replace(/\D/g, "");
+
   return (
-    <div className="relative h-[220px] w-[220px] shrink-0">
+    <div className="relative h-[240px] w-[240px] shrink-0">
       <svg
         viewBox={`0 0 ${size} ${size}`}
         className="absolute inset-0 h-full w-full"
         style={{ shapeRendering: "geometricPrecision" }}
       >
+        <defs>
+          {/* Glow filter for the arc */}
+          <filter id={`arcGlow-${uid}`} x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="5" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          {/* Soft outer aura */}
+          <filter id={`aura-${uid}`} x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="8" result="blur" />
+            <feComponentTransfer>
+              <feFuncA type="linear" slope="0.45" />
+            </feComponentTransfer>
+          </filter>
+          <filter id={`tipGlow-${uid}`} x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="3.5" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
         {/* Purple base track (thin) */}
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke="#7b1fa2" strokeWidth={3} />
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke="#9c4dcc" strokeWidth={3} />
+
+        {/* Outer glow aura behind the arc */}
+        <g transform={`rotate(-90 ${cx} ${cy})`} opacity={0.55}>
+          {segments.map((s, i) => {
+            const isFirst = i === 0;
+            const isLast = i === segments.length - 1;
+            const segLen = ((s.to - s.from) / 100) * circ + (isLast ? 0 : 0.6);
+            const segOffset = (s.from / 100) * circ;
+            return (
+              <circle
+                key={`aura-${i}`}
+                cx={cx}
+                cy={cy}
+                r={r}
+                fill="none"
+                stroke={s.color}
+                strokeWidth={strokeW + 6}
+                strokeLinecap={isFirst || isLast ? "round" : "butt"}
+                strokeDasharray={`${segLen} ${circ}`}
+                strokeDashoffset={-segOffset}
+                filter={`url(#aura-${uid})`}
+              />
+            );
+          })}
+        </g>
 
         {/* Colored consumed arc — rotate -90° so 0% sits at top */}
-        <g transform={`rotate(-90 ${cx} ${cy})`}>
+        <g transform={`rotate(-90 ${cx} ${cy})`} filter={`url(#arcGlow-${uid})`}>
           {segments.map((s, i) => {
             const isFirst = i === 0;
             const isLast = i === segments.length - 1;
@@ -203,7 +256,30 @@ function ConsumoRing({
               />
             );
           })}
+        </g>
 
+        {/* Glossy highlight arc (white semi-transparent overlay for crystal shine) */}
+        <g transform={`rotate(-90 ${cx} ${cy})`} opacity={0.28}>
+          {segments.map((s, i) => {
+            const isFirst = i === 0;
+            const isLast = i === segments.length - 1;
+            const segLen = ((s.to - s.from) / 100) * circ + (isLast ? 0 : 0.6);
+            const segOffset = (s.from / 100) * circ;
+            return (
+              <circle
+                key={`shine-${i}`}
+                cx={cx}
+                cy={cy}
+                r={r - 3}
+                fill="none"
+                stroke="white"
+                strokeWidth={strokeW / 2.2}
+                strokeLinecap={isFirst || isLast ? "round" : "butt"}
+                strokeDasharray={`${segLen} ${circ}`}
+                strokeDashoffset={-segOffset}
+              />
+            );
+          })}
         </g>
 
         {/* Inner Vivo Bis ring (only when franquia at 100% and há bônus) */}
@@ -214,7 +290,7 @@ function ConsumoRing({
               cy={cy}
               r={rBis}
               fill="none"
-              stroke="rgba(126,200,50,0.18)"
+              stroke="rgba(150,232,74,0.18)"
               strokeWidth={strokeBis}
             />
             <circle
@@ -222,7 +298,7 @@ function ConsumoRing({
               cy={cy}
               r={rBis}
               fill="none"
-              stroke="#7ec832"
+              stroke="#96e84a"
               strokeWidth={strokeBis}
               strokeLinecap="round"
               strokeDasharray={`${(bisPct / 100) * circBis} ${circBis}`}
@@ -234,27 +310,27 @@ function ConsumoRing({
         {/* Tip marker — colored cap matching bar tone with soft shadow + tiny white dot */}
         {pct > 0 && (
           <>
-            <defs>
-              <filter id={`tipShadow-${line.number.replace(/\D/g,"")}`} x="-50%" y="-50%" width="200%" height="200%">
-                <feDropShadow dx="0" dy="0" stdDeviation="2.5" floodColor="#000" floodOpacity="0.55" />
-              </filter>
-            </defs>
             <circle
               cx={tipX}
               cy={tipY}
-              r={strokeW / 2}
+              r={strokeW / 2 + 1.5}
               fill={tip}
-              filter={`url(#tipShadow-${line.number.replace(/\D/g,"")})`}
+              opacity={0.35}
+              filter={`url(#tipGlow-${uid})`}
             />
-
-
-            <circle cx={tipX} cy={tipY} r={1.6} fill="white" />
+            <circle
+              cx={tipX}
+              cy={tipY}
+              r={strokeW / 2 + 0.5}
+              fill={tip}
+            />
+            <circle cx={tipX} cy={tipY} r={2.2} fill="white" />
           </>
         )}
       </svg>
 
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <div className="text-[40px] font-semibold leading-none text-[#1a1a1a]">
+        <div className="text-[42px] font-semibold leading-none text-[#1a1a1a]">
           {line.used === 0
             ? 0
             : line.used < 1
@@ -272,13 +348,13 @@ function ConsumoRing({
           <div
             className="mt-1.5 flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold"
             style={{
-              background: "rgba(126,200,50,0.15)",
-              color: "#3d7a12",
+              background: "rgba(150,232,74,0.15)",
+              color: "#4a8a1a",
             }}
           >
             <span
               className="inline-block h-1.5 w-1.5 animate-pulse rounded-full"
-              style={{ background: "#7ec832" }}
+              style={{ background: "#96e84a" }}
             />
             Vivo Bis: {bisUsed.toFixed(2)} / {bisTotal.toFixed(2)} GB
           </div>
