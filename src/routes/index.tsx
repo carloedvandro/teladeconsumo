@@ -1060,10 +1060,13 @@ function ResumoConsumo() {
                       let statusLabel: string;
                       let statusBg: string;
                       let statusColor: string;
+                      let statusTip: string;
                       if (sobrouAnterior === 0) {
                         statusLabel = "Sem bônus";
                         statusBg = "rgba(0,0,0,0.05)";
                         statusColor = "#888";
+                        statusTip =
+                          "Não havia sobra do mês anterior para acumular.";
                       } else if (isCurrent) {
                         statusLabel =
                           bisRestante > 0 ? "Disponível" : "Utilizado";
@@ -1072,14 +1075,22 @@ function ResumoConsumo() {
                             ? "rgba(126,200,50,0.18)"
                             : "rgba(255,122,24,0.15)";
                         statusColor = bisRestante > 0 ? "#3d7a12" : "#b34e00";
+                        statusTip =
+                          bisRestante > 0
+                            ? "O Vivo Bis deste mês está ativo e disponível para uso."
+                            : "O Vivo Bis deste mês já foi totalmente consumido.";
                       } else if (bisConsumido >= sobrouAnterior) {
                         statusLabel = "Utilizado";
                         statusBg = "rgba(255,122,24,0.15)";
                         statusColor = "#b34e00";
+                        statusTip =
+                          "O Vivo Bis deste mês foi totalmente utilizado antes de expirar.";
                       } else {
                         statusLabel = "Expirado";
                         statusBg = "rgba(0,0,0,0.05)";
                         statusColor = "#888";
+                        statusTip =
+                          "O Vivo Bis do mês anterior expirou após 30 dias sem uso completo.";
                       }
 
                       return (
@@ -1094,12 +1105,24 @@ function ResumoConsumo() {
                             </div>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span
-                              className="rounded-full px-2 py-0.5 text-[10px] font-semibold"
-                              style={{ background: statusBg, color: statusColor }}
-                            >
-                              {statusLabel}
-                            </span>
+                            <div className="group relative">
+                              <span
+                                className="rounded-full px-2 py-0.5 text-[10px] font-semibold"
+                                style={{ background: statusBg, color: statusColor }}
+                              >
+                                {statusLabel}
+                              </span>
+                              <div
+                                className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-1.5 w-max max-w-[220px] -translate-x-1/2 rounded-md px-2.5 py-1.5 text-[10px] font-medium leading-snug text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100"
+                                style={{ background: statusColor }}
+                              >
+                                {statusTip}
+                                <span
+                                  className="absolute left-1/2 top-full -translate-x-1/2 border-[5px] border-transparent"
+                                  style={{ borderTopColor: statusColor }}
+                                />
+                              </div>
+                            </div>
                             <div className="min-w-[52px] text-right font-semibold text-[#660099]">
                               {formatGB(sobrouAnterior)}
                             </div>
