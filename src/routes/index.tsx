@@ -207,30 +207,6 @@ function ConsumoRing({
           })}
         </g>
 
-        {/* Glossy highlight arc (white semi-transparent overlay for crystal shine) */}
-        <g transform={`rotate(-90 ${cx} ${cy})`} opacity={0.28}>
-          {segments.map((s, i) => {
-            const isFirst = i === 0;
-            const isLast = i === segments.length - 1;
-            const segLen = ((s.to - s.from) / 100) * circ + (isLast ? 0 : 0.6);
-            const segOffset = (s.from / 100) * circ;
-            return (
-              <circle
-                key={`shine-${i}`}
-                cx={cx}
-                cy={cy}
-                r={r - 3}
-                fill="none"
-                stroke="white"
-                strokeWidth={strokeW / 2.2}
-                strokeLinecap={isFirst || isLast ? "round" : "butt"}
-                strokeDasharray={`${segLen} ${circ}`}
-                strokeDashoffset={-segOffset}
-              />
-            );
-          })}
-        </g>
-
         {/* Inner Vivo Bis ring (only when franquia at 100% and há bônus) */}
         {pct >= 100 && bisTotal > 0 && (
           <g transform={`rotate(-90 ${cx} ${cy})`}>
@@ -239,7 +215,7 @@ function ConsumoRing({
               cy={cy}
               r={rBis}
               fill="none"
-              stroke="rgba(150,232,74,0.18)"
+              stroke="rgba(141,214,48,0.18)"
               strokeWidth={strokeBis}
             />
             <circle
@@ -247,7 +223,7 @@ function ConsumoRing({
               cy={cy}
               r={rBis}
               fill="none"
-              stroke="#96e84a"
+              stroke="#8dd63a"
               strokeWidth={strokeBis}
               strokeLinecap="round"
               strokeDasharray={`${(bisPct / 100) * circBis} ${circBis}`}
@@ -259,19 +235,17 @@ function ConsumoRing({
         {/* Tip marker — colored cap matching bar tone with soft shadow + tiny white dot */}
         {pct > 0 && (
           <>
+            <defs>
+              <filter id={`tipShadow-${line.number.replace(/\D/g,"")}`} x="-50%" y="-50%" width="200%" height="200%">
+                <feDropShadow dx="0" dy="0" stdDeviation="2.5" floodColor="#000" floodOpacity="0.55" />
+              </filter>
+            </defs>
             <circle
               cx={tipX}
               cy={tipY}
-              r={strokeW / 2 + 1.5}
+              r={strokeW / 2}
               fill={tip}
-              opacity={0.35}
-              filter={`url(#tipGlow-${uid})`}
-            />
-            <circle
-              cx={tipX}
-              cy={tipY}
-              r={strokeW / 2 + 0.5}
-              fill={tip}
+              filter={`url(#tipShadow-${line.number.replace(/\D/g,"")})`}
             />
             <circle cx={tipX} cy={tipY} r={2.2} fill="white" />
           </>
@@ -279,7 +253,7 @@ function ConsumoRing({
       </svg>
 
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <div className="text-[42px] font-semibold leading-none text-[#1a1a1a]">
+        <div className="text-[40px] font-semibold leading-none text-[#1a1a1a]">
           {line.used === 0
             ? 0
             : line.used < 1
