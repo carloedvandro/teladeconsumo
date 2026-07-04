@@ -76,13 +76,15 @@ const LINES: Line[] = [
   },
 ];
 
-// Calcula dias até o próximo dia 6 (renovação mensal do ciclo).
-function daysUntilCycleRenewal(renewalDay = 6, today = new Date()) {
+// O ciclo fecha todo dia 5 e renova no dia 6.
+// Calcula dias até o próximo fechamento (dia 5).
+function daysUntilCycleRenewal(closingDay = 5, today = new Date()) {
   const y = today.getFullYear();
   const m = today.getMonth();
   const d = today.getDate();
-  let next = new Date(y, m, renewalDay);
-  if (d >= renewalDay) next = new Date(y, m + 1, renewalDay);
+  let next = new Date(y, m, closingDay);
+  // Depois do fechamento (dia > 5), o próximo fim de ciclo é no mês seguinte.
+  if (d > closingDay) next = new Date(y, m + 1, closingDay);
   const ms = next.getTime() - new Date(y, m, d).getTime();
   return Math.round(ms / 86400000);
 }
@@ -385,7 +387,7 @@ function ResumoConsumo() {
   const lastUpdatedDate = `${pad(lastUpdated.getDate())}/${pad(lastUpdated.getMonth() + 1)}/${lastUpdated.getFullYear()}`;
   const lastUpdatedTime = `${pad(lastUpdated.getHours())}:${pad(lastUpdated.getMinutes())}`;
 
-  const cycleDaysLeft = daysUntilCycleRenewal(6, now);
+  const cycleDaysLeft = daysUntilCycleRenewal(5, now);
   const cycleLabel =
     cycleDaysLeft === 0
       ? "hoje"
