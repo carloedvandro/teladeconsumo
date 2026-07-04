@@ -876,8 +876,9 @@ function ResumoConsumo() {
                     prevIdx >= 0
                       ? Math.max(0, franquia - consumoSimulado[prevIdx])
                       : 0;
-                  const usadoAtual = line.used;
-                  const bisConsumido = Math.max(0, usadoAtual - franquia);
+                  const usadoAtual = liveUsed;
+                  const bisConsumido = bisUsed;
+
                   const bisRestante = Math.max(0, sobrouAnterior - bisConsumido);
                   const pct =
                     sobrouAnterior > 0
