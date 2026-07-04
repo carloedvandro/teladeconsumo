@@ -515,16 +515,11 @@ function ResumoConsumo() {
     });
   }
 
-  const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().getMonth(); // 0-11
-  const monthNames = [
-    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
-  ];
   const consumoSimulado = [
     20.9, 16.3, 25.1, 18.7, 22.4, line.used,
     23.8, 19.5, 21.2, 17.4, 24.1, 15.6,
   ];
+
 
   const months = monthNames
     .map((nome, i) => ({
