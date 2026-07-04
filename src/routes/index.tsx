@@ -123,10 +123,22 @@ function tipColor(pct: number) {
   return lerpColor("#ff7a18", "#ff2a2a", (p - 80) / 20);
 }
 
-function ConsumoRing({ line, bonus = 0 }: { line: Line; bonus?: number }) {
+function ConsumoRing({
+  line,
+  bonus = 0,
+  bisUsed = 0,
+  bisTotal = 0,
+}: {
+  line: Line;
+  bonus?: number;
+  bisUsed?: number;
+  bisTotal?: number;
+}) {
   const pct = Math.min(100, (line.used / line.total) * 100);
   const p = Math.max(0.0001, pct);
   const tip = tipColor(pct);
+  const bisPct =
+    bisTotal > 0 ? Math.min(100, (bisUsed / bisTotal) * 100) : 0;
 
   // SVG-based ring for crisp rendering at any zoom level.
   const size = 220;
@@ -135,6 +147,11 @@ function ConsumoRing({ line, bonus = 0 }: { line: Line; bonus?: number }) {
   const r = 90;
   const strokeW = 10;
   const circ = 2 * Math.PI * r;
+
+  // Inner Vivo Bis ring (green) — only renders when franquia hit 100%.
+  const rBis = 74;
+  const strokeBis = 6;
+  const circBis = 2 * Math.PI * rBis;
 
   // Smooth gradient arc: split the consumed portion into many tiny segments,
   // each painted with the interpolated color at its midpoint (green→yellow→
@@ -189,6 +206,31 @@ function ConsumoRing({ line, bonus = 0 }: { line: Line; bonus?: number }) {
 
         </g>
 
+        {/* Inner Vivo Bis ring (only when franquia at 100% and há bônus) */}
+        {pct >= 100 && bisTotal > 0 && (
+          <g transform={`rotate(-90 ${cx} ${cy})`}>
+            <circle
+              cx={cx}
+              cy={cy}
+              r={rBis}
+              fill="none"
+              stroke="rgba(126,200,50,0.18)"
+              strokeWidth={strokeBis}
+            />
+            <circle
+              cx={cx}
+              cy={cy}
+              r={rBis}
+              fill="none"
+              stroke="#7ec832"
+              strokeWidth={strokeBis}
+              strokeLinecap="round"
+              strokeDasharray={`${(bisPct / 100) * circBis} ${circBis}`}
+              style={{ transition: "stroke-dasharray 600ms ease" }}
+            />
+          </g>
+        )}
+
         {/* Tip marker — colored cap matching bar tone with soft shadow + tiny white dot */}
         {pct > 0 && (
           <>
@@ -226,10 +268,26 @@ function ConsumoRing({ line, bonus = 0 }: { line: Line; bonus?: number }) {
             {line.total} GB
           </span>
         </div>
+        {pct >= 100 && bisTotal > 0 && (
+          <div
+            className="mt-1.5 flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold"
+            style={{
+              background: "rgba(126,200,50,0.15)",
+              color: "#3d7a12",
+            }}
+          >
+            <span
+              className="inline-block h-1.5 w-1.5 animate-pulse rounded-full"
+              style={{ background: "#7ec832" }}
+            />
+            Vivo Bis: {bisUsed.toFixed(2)} / {bisTotal.toFixed(2)} GB
+          </div>
+        )}
       </div>
     </div>
   );
 }
+
 
 
 
@@ -343,12 +401,58 @@ function ResumoConsumo() {
   const baseLine = LINES[lineIdx];
   const bonusDebito = autoDebit ? 25 : 0;
   const franquiaTotal = baseLine.total + bonusDebito;
-  const line: Line = { ...baseLine, total: franquiaTotal };
+
+  // Real-time consumption simulation:
+  // increments live usage every few seconds so the ring updates in tempo real.
+  // Ao atingir 100% da franquia, o excedente é debitado do Vivo Bis do mês anterior.
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth(); // 0-11
+  const monthNames = [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
+  ];
+  const consumoAnterior = [
+    20.9, 16.3, 25.1, 18.7, 22.4, 19.3,
+    23.8, 19.5, 21.2, 17.4, 24.1, 15.6,
+  ];
+  const prevIdx = (currentMonth - 1 + 12) % 12;
+  const sobrouAnterior = Math.max(
+    0,
+    franquiaTotal - consumoAnterior[prevIdx],
+  );
+
+  const [simExtra, setSimExtra] = useState(0);
+  useEffect(() => {
+    // Reset simulation whenever the base usage or franquia mudam.
+    setSimExtra(0);
+  }, [baseLine.used, franquiaTotal]);
+  useEffect(() => {
+    const maxExtra = Math.max(
+      0,
+      franquiaTotal + sobrouAnterior - baseLine.used,
+    );
+    if (simExtra >= maxExtra) return;
+    const id = window.setInterval(() => {
+      setSimExtra((prev) => {
+        const next = +(prev + 0.05).toFixed(2);
+        return next >= maxExtra ? maxExtra : next;
+      });
+    }, 4000);
+    return () => window.clearInterval(id);
+  }, [simExtra, franquiaTotal, sobrouAnterior, baseLine.used]);
+
+  const rawUsed = +(baseLine.used + simExtra).toFixed(2);
+  const liveUsed = Math.min(rawUsed, franquiaTotal + sobrouAnterior);
+  const bisUsed = +Math.max(0, liveUsed - franquiaTotal).toFixed(2);
+  const usedInFranquia = Math.min(liveUsed, franquiaTotal);
+
+  const line: Line = { ...baseLine, used: usedInFranquia, total: franquiaTotal };
   const pct = Math.min(100, (line.used / line.total) * 100);
   const available = +(line.total - line.used).toFixed(2);
   const availPct = Math.round(100 - pct);
   const usedPct = Math.round(pct);
   const color = ringColor(pct);
+
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
     const scheduleMidnight = () => {
@@ -411,16 +515,11 @@ function ResumoConsumo() {
     });
   }
 
-  const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().getMonth(); // 0-11
-  const monthNames = [
-    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
-  ];
   const consumoSimulado = [
     20.9, 16.3, 25.1, 18.7, 22.4, line.used,
     23.8, 19.5, 21.2, 17.4, 24.1, 15.6,
   ];
+
 
   const months = monthNames
     .map((nome, i) => ({
@@ -489,7 +588,7 @@ function ResumoConsumo() {
               />
             </button>
             <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-4">
-              <div className="self-center md:-ml-6 md:self-auto"><ConsumoRing line={line} bonus={bonusDebito} /></div>
+              <div className="self-center md:-ml-6 md:self-auto"><ConsumoRing line={line} bonus={bonusDebito} bisUsed={bisUsed} bisTotal={sobrouAnterior} /></div>
 
               <div className="w-full md:w-[220px]">
 
@@ -777,8 +876,9 @@ function ResumoConsumo() {
                     prevIdx >= 0
                       ? Math.max(0, franquia - consumoSimulado[prevIdx])
                       : 0;
-                  const usadoAtual = line.used;
-                  const bisConsumido = Math.max(0, usadoAtual - franquia);
+                  const usadoAtual = liveUsed;
+                  const bisConsumido = bisUsed;
+
                   const bisRestante = Math.max(0, sobrouAnterior - bisConsumido);
                   const pct =
                     sobrouAnterior > 0
@@ -1240,7 +1340,7 @@ function ResumoConsumo() {
         title="Consumo detalhado"
       >
         <div className="flex flex-col items-center gap-4">
-          <ConsumoRing line={line} />
+          <ConsumoRing line={line} bisUsed={bisUsed} bisTotal={sobrouAnterior} />
           <div className="w-full space-y-2 text-sm">
             <div className="flex justify-between border-b border-[#eee] pb-2">
               <span className="text-[#666]">Plano</span>
