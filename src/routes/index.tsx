@@ -173,7 +173,7 @@ function ConsumoRing({
   const uid = line.number.replace(/\D/g, "");
 
   return (
-    <div className="relative h-[240px] w-[240px] shrink-0">
+    <div className="relative h-[220px] w-[220px] shrink-0">
       <svg
         viewBox={`0 0 ${size} ${size}`}
         className="absolute inset-0 h-full w-full"
