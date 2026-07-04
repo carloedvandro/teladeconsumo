@@ -387,7 +387,7 @@ function ResumoConsumo() {
   const lastUpdatedDate = `${pad(lastUpdated.getDate())}/${pad(lastUpdated.getMonth() + 1)}/${lastUpdated.getFullYear()}`;
   const lastUpdatedTime = `${pad(lastUpdated.getHours())}:${pad(lastUpdated.getMinutes())}`;
 
-  const cycleDaysLeft = daysUntilCycleRenewal(6, now);
+  const cycleDaysLeft = daysUntilCycleRenewal(5, now);
   const cycleLabel =
     cycleDaysLeft === 0
       ? "hoje"
