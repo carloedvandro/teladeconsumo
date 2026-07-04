@@ -678,33 +678,232 @@ function ResumoConsumo() {
 
 
           <div>
-            <div className="mb-2 text-sm font-semibold text-[#333]">
-              Histórico mensal
+            {/* Tabs */}
+            <div
+              className="mb-3 grid grid-cols-2 gap-1 rounded-full p-1"
+              style={{
+                background: "rgba(102,0,153,0.06)",
+                border: "1px solid rgba(102,0,153,0.10)",
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => setHistoryTab("consumo")}
+                className="rounded-full px-3 py-1.5 text-[12px] font-semibold transition"
+                style={{
+                  background: historyTab === "consumo" ? "#ffffff" : "transparent",
+                  color: historyTab === "consumo" ? "#660099" : "#7a5a8f",
+                  boxShadow:
+                    historyTab === "consumo"
+                      ? "0 2px 6px -2px rgba(102,0,153,0.25)"
+                      : "none",
+                }}
+              >
+                Meu consumo disponível
+              </button>
+              <button
+                type="button"
+                onClick={() => setHistoryTab("vivobis")}
+                className="rounded-full px-3 py-1.5 text-[12px] font-semibold transition"
+                style={{
+                  background: historyTab === "vivobis" ? "#ffffff" : "transparent",
+                  color: historyTab === "vivobis" ? "#660099" : "#7a5a8f",
+                  boxShadow:
+                    historyTab === "vivobis"
+                      ? "0 2px 6px -2px rgba(102,0,153,0.25)"
+                      : "none",
+                }}
+              >
+                Vivo Bis
+              </button>
             </div>
-            <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
-              {months.map((m, i) => {
-                const minutosVals = [820, 645, 712, 538, 690, 756, 623, 589, 701, 534, 678, 612];
-                const smsVals = [42, 31, 58, 24, 37, 45, 29, 51, 33, 48, 27, 40];
-                const valor =
-                  activeCard === "minutos"
-                    ? `${minutosVals[i]} min`
-                    : activeCard === "sms"
-                      ? `${smsVals[i]} SMS`
-                      : formatGB(m.consumo);
-                return (
-                  <li
-                    key={m.mes}
-                    className="flex items-center justify-between px-3 py-2 text-sm"
-                  >
-                    <div>
-                      <div className="text-[#333]">{m.mes}</div>
-                      <div className="text-xs text-[#888]">{m.status}</div>
+
+            {historyTab === "consumo" && (
+              <>
+                <div className="mb-2 text-sm font-semibold text-[#333]">
+                  Histórico mensal
+                </div>
+                <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
+                  {months
+                    .slice()
+                    .reverse()
+                    .map((m) => {
+                      const minutosVals = [820, 645, 712, 538, 690, 756, 623, 589, 701, 534, 678, 612];
+                      const smsVals = [42, 31, 58, 24, 37, 45, 29, 51, 33, 48, 27, 40];
+                      const i = m.idx;
+                      const valor =
+                        activeCard === "minutos"
+                          ? `${minutosVals[i]} min`
+                          : activeCard === "sms"
+                            ? `${smsVals[i]} SMS`
+                            : formatGB(m.consumo);
+                      return (
+                        <li
+                          key={m.mes}
+                          className="flex items-center justify-between px-3 py-2 text-sm"
+                        >
+                          <div>
+                            <div className="text-[#333]">{m.mes}</div>
+                            <div className="text-xs text-[#888]">{m.status}</div>
+                          </div>
+                          <div className="font-semibold text-[#660099]">{valor}</div>
+                        </li>
+                      );
+                    })}
+                </ul>
+              </>
+            )}
+
+            {historyTab === "vivobis" && (
+              <>
+                <div className="mb-2 flex items-start justify-between gap-3">
+                  <div>
+                    <div className="text-sm font-semibold text-[#333]">
+                      Vivo Bis · Internet acumulativa
                     </div>
-                    <div className="font-semibold text-[#660099]">{valor}</div>
-                  </li>
-                );
-              })}
-            </ul>
+                    <div className="text-[11px] leading-snug text-[#888]">
+                      A internet que sobra do seu plano fica disponível no mês seguinte, por 30 dias.
+                    </div>
+                  </div>
+                </div>
+
+                {/* Current month highlight */}
+                {(() => {
+                  const franquia = line.total;
+                  const prevIdx = currentMonth - 1;
+                  const sobrouAnterior =
+                    prevIdx >= 0
+                      ? Math.max(0, franquia - consumoSimulado[prevIdx])
+                      : 0;
+                  const usadoAtual = line.used;
+                  const bisConsumido = Math.max(0, usadoAtual - franquia);
+                  const bisRestante = Math.max(0, sobrouAnterior - bisConsumido);
+                  const pct =
+                    sobrouAnterior > 0
+                      ? Math.min(100, (bisConsumido / sobrouAnterior) * 100)
+                      : 0;
+                  const barColor =
+                    pct >= 95 ? "#ff2a2a" : pct >= 60 ? "#ff7a18" : "#7ec832";
+                  return (
+                    <div
+                      className="mb-3 rounded-xl border p-3"
+                      style={{
+                        borderColor: "rgba(102,0,153,0.15)",
+                        background:
+                          "linear-gradient(135deg, rgba(126,200,50,0.10), rgba(102,0,153,0.06))",
+                      }}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="text-[11px] font-semibold uppercase tracking-wider text-[#660099]">
+                          Vivo Bis deste mês
+                        </div>
+                        <span
+                          className="rounded-full px-2 py-0.5 text-[10px] font-semibold"
+                          style={{
+                            background:
+                              pct >= 100
+                                ? "rgba(255,42,42,0.12)"
+                                : "rgba(126,200,50,0.18)",
+                            color: pct >= 100 ? "#c81e1e" : "#3d7a12",
+                          }}
+                        >
+                          {pct >= 100 ? "Utilizado" : "Disponível"}
+                        </span>
+                      </div>
+                      <div className="mt-1 flex items-baseline gap-2">
+                        <div className="text-[22px] font-bold text-[#1a1a1a]">
+                          {formatGB(bisRestante)}
+                        </div>
+                        <div className="text-xs text-[#666]">
+                          de {formatGB(sobrouAnterior)} · válido 30 dias
+                        </div>
+                      </div>
+                      <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[#ececec]">
+                        <div
+                          className="h-full rounded-full transition-all"
+                          style={{ width: `${pct}%`, background: barColor }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                <div className="mb-2 text-sm font-semibold text-[#333]">
+                  Histórico Vivo Bis
+                </div>
+                <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
+                  {months
+                    .slice()
+                    .reverse()
+                    .map((m) => {
+                      const franquia = line.total;
+                      const i = m.idx;
+                      const prevIdx = i - 1;
+                      const sobrouAnterior =
+                        prevIdx >= 0
+                          ? Math.max(0, franquia - consumoSimulado[prevIdx])
+                          : 0;
+                      const consumoMes = consumoSimulado[i];
+                      const bisConsumido = Math.max(0, consumoMes - franquia);
+                      const bisRestante = Math.max(
+                        0,
+                        sobrouAnterior - bisConsumido,
+                      );
+                      const isCurrent = i === currentMonth;
+
+                      let statusLabel: string;
+                      let statusBg: string;
+                      let statusColor: string;
+                      if (sobrouAnterior === 0) {
+                        statusLabel = "Sem bônus";
+                        statusBg = "rgba(0,0,0,0.05)";
+                        statusColor = "#888";
+                      } else if (isCurrent) {
+                        statusLabel =
+                          bisRestante > 0 ? "Disponível" : "Utilizado";
+                        statusBg =
+                          bisRestante > 0
+                            ? "rgba(126,200,50,0.18)"
+                            : "rgba(255,122,24,0.15)";
+                        statusColor = bisRestante > 0 ? "#3d7a12" : "#b34e00";
+                      } else if (bisConsumido >= sobrouAnterior) {
+                        statusLabel = "Utilizado";
+                        statusBg = "rgba(255,122,24,0.15)";
+                        statusColor = "#b34e00";
+                      } else {
+                        statusLabel = "Expirado";
+                        statusBg = "rgba(0,0,0,0.05)";
+                        statusColor = "#888";
+                      }
+
+                      return (
+                        <li
+                          key={m.mes}
+                          className="flex items-center justify-between gap-2 px-3 py-2 text-sm"
+                        >
+                          <div className="min-w-0">
+                            <div className="text-[#333]">{m.mes}</div>
+                            <div className="text-xs text-[#888]">
+                              Sobrou do mês anterior: {formatGB(sobrouAnterior)}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span
+                              className="rounded-full px-2 py-0.5 text-[10px] font-semibold"
+                              style={{ background: statusBg, color: statusColor }}
+                            >
+                              {statusLabel}
+                            </span>
+                            <div className="min-w-[52px] text-right font-semibold text-[#660099]">
+                              {formatGB(sobrouAnterior)}
+                            </div>
+                          </div>
+                        </li>
+                      );
+                    })}
+                </ul>
+              </>
+            )}
           </div>
         </div>
       </Modal>
