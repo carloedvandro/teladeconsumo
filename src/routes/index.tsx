@@ -179,62 +179,11 @@ function ConsumoRing({
         className="absolute inset-0 h-full w-full"
         style={{ shapeRendering: "geometricPrecision" }}
       >
-        <defs>
-          {/* Glow filter for the arc */}
-          <filter id={`arcGlow-${uid}`} x="-40%" y="-40%" width="180%" height="180%">
-            <feGaussianBlur stdDeviation="5" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-          {/* Soft outer aura */}
-          <filter id={`aura-${uid}`} x="-40%" y="-40%" width="180%" height="180%">
-            <feGaussianBlur stdDeviation="8" result="blur" />
-            <feComponentTransfer>
-              <feFuncA type="linear" slope="0.45" />
-            </feComponentTransfer>
-          </filter>
-          <filter id={`tipGlow-${uid}`} x="-60%" y="-60%" width="220%" height="220%">
-            <feGaussianBlur stdDeviation="3.5" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-
         {/* Purple base track (thin) */}
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke="#9c4dcc" strokeWidth={3} />
-
-        {/* Outer glow aura behind the arc */}
-        <g transform={`rotate(-90 ${cx} ${cy})`} opacity={0.55}>
-          {segments.map((s, i) => {
-            const isFirst = i === 0;
-            const isLast = i === segments.length - 1;
-            const segLen = ((s.to - s.from) / 100) * circ + (isLast ? 0 : 0.6);
-            const segOffset = (s.from / 100) * circ;
-            return (
-              <circle
-                key={`aura-${i}`}
-                cx={cx}
-                cy={cy}
-                r={r}
-                fill="none"
-                stroke={s.color}
-                strokeWidth={strokeW + 6}
-                strokeLinecap={isFirst || isLast ? "round" : "butt"}
-                strokeDasharray={`${segLen} ${circ}`}
-                strokeDashoffset={-segOffset}
-                filter={`url(#aura-${uid})`}
-              />
-            );
-          })}
-        </g>
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke="#7b1fa2" strokeWidth={3} />
 
         {/* Colored consumed arc — rotate -90° so 0% sits at top */}
-        <g transform={`rotate(-90 ${cx} ${cy})`} filter={`url(#arcGlow-${uid})`}>
+        <g transform={`rotate(-90 ${cx} ${cy})`}>
           {segments.map((s, i) => {
             const isFirst = i === 0;
             const isLast = i === segments.length - 1;
