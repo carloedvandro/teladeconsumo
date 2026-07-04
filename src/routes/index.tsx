@@ -91,10 +91,10 @@ function daysUntilCycleRenewal(closingDay = 5, today = new Date()) {
 
 // Progress arc color: green → yellow → orange → red as it fills toward 100%
 function ringColor(pct: number) {
-  if (pct >= 95) return "#ff4d4d"; // bright red
-  if (pct >= 75) return "#ff9633"; // bright orange
-  if (pct >= 45) return "#ffe135"; // bright yellow
-  return "#96e84a"; // bright green
+  if (pct >= 95) return "#ff3333"; // vivid red
+  if (pct >= 75) return "#ff8518"; // vivid orange
+  if (pct >= 45) return "#f5d015"; // vivid yellow
+  return "#8dd63a"; // vivid green
 }
 
 function formatGB(gb: number) {
