@@ -830,8 +830,162 @@ function ResumoConsumo() {
                   );
                 })()}
 
+                {/* Visual diagram: como funciona o Vivo Bis */}
+                {(() => {
+                  const franquia = line.total;
+                  const prevIdx = currentMonth - 1;
+                  const prevUsado =
+                    prevIdx >= 0 ? Math.min(franquia, consumoSimulado[prevIdx]) : 0;
+                  const prevSobrou =
+                    prevIdx >= 0 ? Math.max(0, franquia - consumoSimulado[prevIdx]) : 0;
+                  const prevMesNome =
+                    prevIdx >= 0 ? months[prevIdx].mes : "Mês anterior";
+                  const curMesNome = months[currentMonth].mes;
+                  // Heights proportional to franquia
+                  const boxH = 132; // px total for franquia column
+                  const sobrouH =
+                    franquia > 0 ? (prevSobrou / franquia) * boxH : 0;
+                  const usouH = boxH - sobrouH;
+                  const bisH = sobrouH; // same GB carried
+                  return (
+                    <div
+                      className="mb-3 rounded-xl border p-3"
+                      style={{
+                        borderColor: "rgba(102,0,153,0.12)",
+                        background:
+                          "linear-gradient(135deg, #faf6ff 0%, #f3ecfb 100%)",
+                      }}
+                    >
+                      <div className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-[#660099]">
+                        Como funciona
+                      </div>
+                      <div className="flex items-end justify-center gap-6 pt-1">
+                        {/* Franquia label */}
+                        <div className="flex flex-col items-center justify-end pb-6 text-center">
+                          <div className="text-[10px] leading-tight text-[#888]">
+                            Franquia<br />mensal
+                          </div>
+                          <div className="mt-1 text-[13px] font-bold text-[#333]">
+                            {formatGB(franquia)}
+                          </div>
+                        </div>
+
+                        {/* 1º mês */}
+                        <div className="flex flex-col items-center">
+                          <div
+                            className="w-[74px] overflow-hidden rounded-md shadow-sm"
+                            style={{ height: boxH }}
+                          >
+                            {prevSobrou > 0 && (
+                              <div
+                                className="flex flex-col items-center justify-center text-white"
+                                style={{
+                                  height: sobrouH,
+                                  background:
+                                    "linear-gradient(180deg, #8ed14f, #6fb332)",
+                                }}
+                              >
+                                <div className="text-[9px] font-semibold uppercase leading-none">
+                                  Sobrou
+                                </div>
+                                <div className="mt-0.5 text-[12px] font-bold leading-none">
+                                  {formatGB(prevSobrou)}
+                                </div>
+                              </div>
+                            )}
+                            <div
+                              className="flex flex-col items-center justify-center text-white"
+                              style={{
+                                height: usouH,
+                                background:
+                                  "linear-gradient(180deg, #7b1fa2, #4a0072)",
+                              }}
+                            >
+                              <div className="text-[9px] font-semibold uppercase leading-none">
+                                Usou
+                              </div>
+                              <div className="mt-0.5 text-[12px] font-bold leading-none">
+                                {formatGB(prevUsado)}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="mt-1.5 text-[10px] font-medium text-[#888]">
+                            {prevMesNome}
+                          </div>
+                        </div>
+
+                        {/* Arrow */}
+                        <div
+                          className="pb-8 text-[#660099]"
+                          aria-hidden
+                          style={{ fontSize: 22, lineHeight: 1 }}
+                        >
+                          ↷
+                        </div>
+
+                        {/* 2º mês */}
+                        <div className="flex flex-col items-center">
+                          {prevSobrou > 0 && (
+                            <div
+                              className="mb-0.5 rounded-sm px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white"
+                              style={{
+                                background:
+                                  "linear-gradient(90deg,#660099,#8e24aa)",
+                              }}
+                            >
+                              Vivo Bis
+                            </div>
+                          )}
+                          <div
+                            className="w-[74px] overflow-hidden rounded-md shadow-sm"
+                            style={{ height: boxH + bisH }}
+                          >
+                            {prevSobrou > 0 && (
+                              <div
+                                className="flex flex-col items-center justify-center text-white"
+                                style={{
+                                  height: bisH,
+                                  background:
+                                    "linear-gradient(180deg, #8ed14f, #6fb332)",
+                                }}
+                              >
+                                <div className="text-[11px] font-bold leading-none">
+                                  {formatGB(prevSobrou)}
+                                </div>
+                              </div>
+                            )}
+                            <div
+                              className="flex flex-col items-center justify-center text-white"
+                              style={{
+                                height: boxH,
+                                background:
+                                  "linear-gradient(180deg, #7b1fa2, #4a0072)",
+                              }}
+                            >
+                              <div className="text-[9px] font-semibold uppercase leading-none">
+                                Franquia
+                              </div>
+                              <div className="mt-0.5 text-[13px] font-bold leading-none">
+                                {formatGB(franquia)}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="mt-1.5 text-[10px] font-medium text-[#888]">
+                            {curMesNome}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-2 text-center text-[10px] leading-snug text-[#7a5a8f]">
+                        O que sobrou vira <strong>Vivo Bis</strong> e soma à
+                        franquia do mês seguinte por 30 dias.
+                      </div>
+                    </div>
+                  );
+                })()}
+
                 <div className="mb-2 text-sm font-semibold text-[#333]">
                   Histórico Vivo Bis
+
                 </div>
                 <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
                   {months
