@@ -118,9 +118,9 @@ function lerpColor(a: string, b: string, t: number) {
 // shifts smoothly green → yellow → orange → red as consumption grows.
 function tipColor(pct: number) {
   const p = Math.min(100, Math.max(0, pct));
-  if (p <= 50) return lerpColor("#96e84a", "#ffe135", p / 50);
-  if (p <= 80) return lerpColor("#ffe135", "#ff9633", (p - 50) / 30);
-  return lerpColor("#ff9633", "#ff4d4d", (p - 80) / 20);
+  if (p <= 50) return lerpColor("#8dd63a", "#f5d015", p / 50);
+  if (p <= 80) return lerpColor("#f5d015", "#ff8518", (p - 50) / 30);
+  return lerpColor("#ff8518", "#ff3333", (p - 80) / 20);
 }
 
 function ConsumoRing({
