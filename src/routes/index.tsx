@@ -821,7 +821,7 @@ function ResumoConsumo() {
                       : "none",
                 }}
               >
-                Vivo Bis
+                Consumo Vivo Bis
               </button>
             </div>
 
