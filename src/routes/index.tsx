@@ -1329,57 +1329,10 @@ function ResumoConsumo() {
               <span className="text-[#666]">Disponível</span>
               <span className="font-semibold text-[#660099]">{formatGB(available)}</span>
             </div>
-            <div className="flex justify-between border-b border-[#eee] pb-2">
+            <div className="flex justify-between">
               <span className="text-[#666]">Fim do ciclo</span>
               <span className="font-semibold text-[#660099]">{cycleLabel}</span>
             </div>
-
-            {sobrouAnterior > 0 && (
-              <>
-                <div className="mt-3 flex items-center justify-between">
-                  <span className="text-[11px] font-semibold uppercase tracking-wide text-[#7e57a0]">
-                    Vivo Bis · sobra do mês anterior
-                  </span>
-                  <span
-                    className="rounded-full px-2 py-0.5 text-[10px] font-semibold"
-                    style={{
-                      background:
-                        sobrouAnterior - bisUsed > 0
-                          ? "rgba(126,200,50,0.18)"
-                          : "rgba(255,122,24,0.15)",
-                      color:
-                        sobrouAnterior - bisUsed > 0 ? "#3d7a12" : "#b34e00",
-                    }}
-                  >
-                    {sobrouAnterior - bisUsed > 0 ? "Disponível" : "Utilizado"}
-                  </span>
-                </div>
-                <div className="flex justify-between border-b border-[#eee] pb-2">
-                  <span className="text-[#666]">Acumulado</span>
-                  <span className="font-semibold text-[#660099]">
-                    {formatGB(sobrouAnterior)}
-                  </span>
-                </div>
-                <div className="flex justify-between border-b border-[#eee] pb-2">
-                  <span className="text-[#666]">Utilizado</span>
-                  <span className="font-semibold text-[#660099]">
-                    {formatGB(bisUsed)}
-                  </span>
-                </div>
-                <div className="flex justify-between border-b border-[#eee] pb-2">
-                  <span className="text-[#666]">Restante</span>
-                  <span className="font-semibold text-[#660099]">
-                    {formatGB(Math.max(0, sobrouAnterior - bisUsed))}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-[#666]">Expira</span>
-                  <span className="font-semibold text-[#660099]">
-                    {cycleLabel}
-                  </span>
-                </div>
-              </>
-            )}
           </div>
         </div>
       </Modal>
