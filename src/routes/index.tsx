@@ -617,8 +617,8 @@ function ResumoConsumo() {
                 </p>
 
                 <ul className="mt-5 text-sm">
-                  <li className="flex items-center justify-between gap-4 border-b border-[#a8a8a8] py-3">
-                    <span className="flex items-center gap-2 text-[#5a5a5a]">
+                  <li className="flex items-center justify-between gap-3 border-b border-[#a8a8a8] py-3">
+                    <span className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[#5a5a5a]">
 
                       <span
                         className="inline-block h-3 w-3 rounded-full border-[3px]"
@@ -626,19 +626,20 @@ function ResumoConsumo() {
                       />
                       Meu Consumo
                     </span>
-                    <span className="font-semibold text-[#1a1a1a]">
+                    <span className="whitespace-nowrap text-right font-semibold text-[#1a1a1a]">
                       {usedPct}% - {formatGB(line.used)}
                     </span>
                   </li>
-                  <li className="flex items-center justify-between gap-4 border-b border-[#a8a8a8] py-3">
-                    <span className="flex items-center gap-2 text-[#5a5a5a]">
+                  <li className="flex items-center justify-between gap-3 border-b border-[#a8a8a8] py-3">
+                    <span className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[#5a5a5a]">
                       <span className="inline-block h-3 w-3 rounded-full border-[3px] border-[#660099]" />
                       Disponíveis
                     </span>
-                    <span className="font-semibold text-[#1a1a1a]">
+                    <span className="whitespace-nowrap text-right font-semibold text-[#1a1a1a]">
                       {availPct}% - {formatGB(available)}
                     </span>
                   </li>
+
                 </ul>
 
                 {/* Renovação automática (integrada, sem card) */}
