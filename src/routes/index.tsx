@@ -881,20 +881,25 @@ function ResumoConsumo() {
                 {/* Visual diagram: como funciona o Vivo Bis */}
                 {(() => {
                   const franquia = line.total;
-                  const prevIdx = currentMonth - 1;
-                  const prevUsado =
-                    prevIdx >= 0 ? Math.min(franquia, consumoSimulado[prevIdx]) : 0;
-                  const prevSobrou =
-                    prevIdx >= 0 ? Math.max(0, franquia - consumoSimulado[prevIdx]) : 0;
-                  const prevMesNome =
-                    prevIdx >= 0 ? months[prevIdx].mes : "Mês anterior";
-                  const curMesNome = months[currentMonth].mes;
+                  // Mostra o ciclo atual → próximo mês, refletindo a franquia
+                  // consumida em tempo real. Se atingir 100%, não sobra Vivo Bis
+                  // e o próximo mês fica sem bônus (apenas franquia).
+                  const curUsado = Math.min(franquia, line.used);
+                  const curSobrou = Math.max(0, franquia - curUsado);
+                  const nextIdx = (currentMonth + 1) % 12;
+                  const nextYear =
+                    currentMonth === 11 ? currentYear + 1 : currentYear;
+                  const prevMesNome = `${monthNames[currentMonth]}/${currentYear}`;
+                  const curMesNome = `${monthNames[nextIdx]}/${nextYear}`;
+                  const prevUsado = curUsado;
+                  const prevSobrou = curSobrou;
                   // Heights proportional to franquia
                   const boxH = 132; // px total for franquia column
                   const sobrouH =
                     franquia > 0 ? (prevSobrou / franquia) * boxH : 0;
                   const usouH = boxH - sobrouH;
                   const bisH = sobrouH; // same GB carried
+
                   return (
                     <div
                       className="mb-3 rounded-xl border p-3"
