@@ -1041,10 +1041,69 @@ function ResumoConsumo() {
 
                 </div>
                 <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
+                  {(() => {
+                    // Projeção do próximo mês baseada no consumo em tempo real.
+                    // Se a franquia atingir 100% neste ciclo, o Vivo Bis do
+                    // próximo mês fica zerado ("Sem bônus").
+                    const franquia = line.total;
+                    const projSobrou = Math.max(0, franquia - line.used);
+                    const nextIdx = (currentMonth + 1) % 12;
+                    const nextYear =
+                      currentMonth === 11 ? currentYear + 1 : currentYear;
+                    const nextMesNome = `${monthNames[nextIdx]}/${nextYear}`;
+                    const zerado = projSobrou <= 0;
+                    const label = zerado ? "Sem bônus" : "Previsto";
+                    const bg = zerado
+                      ? "rgba(0,0,0,0.05)"
+                      : "rgba(126,200,50,0.18)";
+                    const color = zerado ? "#888" : "#3d7a12";
+                    const tip = zerado
+                      ? "Franquia 100% utilizada — não haverá Vivo Bis no próximo mês."
+                      : "Projeção do Vivo Bis que será acumulado para o próximo mês.";
+                    return (
+                      <li className="flex items-center justify-between gap-2 px-3 py-2 text-sm">
+                        <div className="min-w-0">
+                          <div className="text-[#333]">
+                            {nextMesNome}
+                            <span className="ml-1.5 text-[10px] font-medium uppercase tracking-wider text-[#888]">
+                              Projeção
+                            </span>
+                          </div>
+                          <div className="text-xs text-[#888]">
+                            Sobra prevista deste mês: {formatGB(projSobrou)}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="group relative">
+                            <span
+                              className="rounded-full px-2 py-0.5 text-[10px] font-semibold"
+                              style={{ background: bg, color }}
+                            >
+                              {label}
+                            </span>
+                            <div
+                              className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-1.5 w-max max-w-[220px] -translate-x-1/2 rounded-md px-2.5 py-1.5 text-[10px] font-medium leading-snug text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100"
+                              style={{ background: color }}
+                            >
+                              {tip}
+                              <span
+                                className="absolute left-1/2 top-full -translate-x-1/2 border-[5px] border-transparent"
+                                style={{ borderTopColor: color }}
+                              />
+                            </div>
+                          </div>
+                          <div className="min-w-[52px] text-right font-semibold text-[#660099]">
+                            {formatGB(projSobrou)}
+                          </div>
+                        </div>
+                      </li>
+                    );
+                  })()}
                   {months
                     .slice()
                     .reverse()
                     .map((m) => {
+
                       const franquia = line.total;
                       const i = m.idx;
                       const prevIdx = i - 1;
