@@ -782,7 +782,7 @@ function ResumoConsumo() {
                 <div className="mb-2 text-sm font-semibold text-[#333]">
                   Histórico mensal
                 </div>
-                <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
+                <ul className="divide-y divide-[#eee]">
                   {months
                     .slice()
                     .reverse()
@@ -991,7 +991,7 @@ function ResumoConsumo() {
                   Histórico Vivo Bis
 
                 </div>
-                <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
+                <ul className="divide-y divide-[#eee]">
                   {(() => {
                     // Projeção do próximo mês baseada no consumo em tempo real.
                     // Se a franquia atingir 100% neste ciclo, o Vivo Bis do
