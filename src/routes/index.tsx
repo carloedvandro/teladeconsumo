@@ -496,7 +496,7 @@ function ResumoConsumo() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#f3f3f3]">
 
       <main className="mx-auto max-w-[1400px] px-4 pt-6 pb-16 md:px-6 md:pt-8">
         <h1 className="text-[32px] font-semibold leading-tight text-[#660099] md:text-[42px]">
@@ -519,8 +519,6 @@ function ResumoConsumo() {
             height={768}
             className="h-[340px] w-full object-cover md:h-[520px]"
           />
-          {/* White overlay to remove gray background behind upgrade card */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-white md:h-56" />
 
           {/* Consumption panel overlay - centered/right like reference */}
           <div
