@@ -78,17 +78,27 @@ const LINES: Line[] = [
   },
 ];
 
-// O ciclo fecha todo dia 5 e renova no dia 6.
-// Calcula dias até o próximo fechamento (dia 5).
-function daysUntilCycleRenewal(closingDay = 5, today = new Date()) {
+// O ciclo fecha todo dia 24 e renova no dia 25.
+// Calcula dias até o próximo fechamento (dia 24).
+function daysUntilCycleRenewal(closingDay = 24, today = new Date()) {
   const y = today.getFullYear();
   const m = today.getMonth();
   const d = today.getDate();
   let next = new Date(y, m, closingDay);
-  // Depois do fechamento (dia > 5), o próximo fim de ciclo é no mês seguinte.
+  // Depois do fechamento (dia > 24), o próximo fim de ciclo é no mês seguinte.
   if (d > closingDay) next = new Date(y, m + 1, closingDay);
   const ms = next.getTime() - new Date(y, m, d).getTime();
   return Math.round(ms / 86400000);
+}
+
+// Calcula a data da próxima renovação (dia 25) no formato DD/MM.
+function nextRenewalDate(renewalDay = 25, today = new Date()) {
+  const y = today.getFullYear();
+  const m = today.getMonth();
+  const d = today.getDate();
+  // Se ainda não passou do dia de renovação, é este mês; senão, é o próximo.
+  const next = d >= renewalDay ? new Date(y, m + 1, renewalDay) : new Date(y, m, renewalDay);
+  return `${String(next.getDate()).padStart(2, "0")}/${String(next.getMonth() + 1).padStart(2, "0")}`;
 }
 
 // Progress arc color: green → yellow → orange → red as it fills toward 100%
@@ -354,14 +364,14 @@ function ResumoConsumo() {
   // Real-time consumption simulation:
   // increments live usage every few seconds so the ring updates in tempo real.
   // Ao atingir 100% da franquia, o excedente é debitado do Vivo Bis do mês anterior.
-  // O ciclo fecha dia 5 e renova dia 6. Até o dia 5 ainda estamos no ciclo
-  // que iniciou no dia 6 do mês anterior — então o "mês atual" para efeito
+  // O ciclo fecha dia 24 e renova dia 25. Até o dia 24 ainda estamos no ciclo
+  // que iniciou no dia 25 do mês anterior — então o "mês atual" para efeito
   // de histórico e Vivo Bis é o mês anterior do calendário.
   const _today = new Date();
   const _cycleAnchor =
-    _today.getDate() <= 5
-      ? new Date(_today.getFullYear(), _today.getMonth() - 1, 6)
-      : new Date(_today.getFullYear(), _today.getMonth(), 6);
+    _today.getDate() <= 24
+      ? new Date(_today.getFullYear(), _today.getMonth() - 1, 25)
+      : new Date(_today.getFullYear(), _today.getMonth(), 25);
   const currentYear = _cycleAnchor.getFullYear();
   const currentMonth = _cycleAnchor.getMonth(); // 0-11 (mês do ciclo)
 
@@ -449,11 +459,12 @@ function ResumoConsumo() {
   const lastUpdatedDate = `${pad(lastUpdated.getDate())}/${pad(lastUpdated.getMonth() + 1)}/${lastUpdated.getFullYear()}`;
   const lastUpdatedTime = `${pad(lastUpdated.getHours())}:${pad(lastUpdated.getMinutes())}`;
 
-  const cycleDaysLeft = daysUntilCycleRenewal(5, now);
+  const cycleDaysLeft = daysUntilCycleRenewal(24, now);
   const cycleLabel =
     cycleDaysLeft === 0
       ? "hoje"
       : `em ${cycleDaysLeft} ${cycleDaysLeft === 1 ? "dia" : "dias"}`;
+  const renewalDateLabel = nextRenewalDate(25, now);
 
 
   function showToast(msg: string) {
@@ -563,6 +574,10 @@ function ResumoConsumo() {
                 <p className="mt-1 text-sm text-[#5a5a5a]">
                   Fim do ciclo{" "}
                   <span className="font-semibold text-[#1a1a1a]">{cycleLabel}</span>
+                </p>
+                <p className="mt-0.5 text-sm text-[#5a5a5a]">
+                  Próxima renovação:{" "}
+                  <span className="font-semibold text-[#1a1a1a]">{renewalDateLabel}</span>
                 </p>
 
                 <ul className="mt-5 text-sm">
@@ -1316,9 +1331,13 @@ function ResumoConsumo() {
               <span className="text-[#666]">Disponível</span>
               <span className="font-semibold text-[#660099]">{formatGB(available)}</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between border-b border-[#eee] pb-2">
               <span className="text-[#666]">Fim do ciclo</span>
               <span className="font-semibold text-[#660099]">{cycleLabel}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-[#666]">Próxima renovação</span>
+              <span className="font-semibold text-[#660099]">{renewalDateLabel}</span>
             </div>
           </div>
         </div>
