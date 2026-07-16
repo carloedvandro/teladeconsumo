@@ -1399,7 +1399,9 @@ function ResumoConsumo() {
 
             <div className="relative mt-6 space-y-4">
               <p className="text-[14px] leading-relaxed text-[#4a4a4a]">
-                Ao ativar a renovação automática, seu plano será renovado todos os meses utilizando o saldo disponível da sua carteira virtual/comissões.
+                {autoDebit
+                  ? "Ao ativar o débito automático você está ciente que essa função não pode ser desfeita. Seu plano continuará sendo renovado automaticamente todos os meses."
+                  : "Ao ativar a renovação automática, seu plano será renovado todos os meses utilizando o saldo disponível da sua carteira virtual/comissões."}
               </p>
 
               {/* Bônus */}
