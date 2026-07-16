@@ -365,14 +365,14 @@ function ResumoConsumo() {
   // Real-time consumption simulation:
   // increments live usage every few seconds so the ring updates in tempo real.
   // Ao atingir 100% da franquia, o excedente é debitado do Vivo Bis do mês anterior.
-  // O ciclo fecha dia 24 e renova dia 25. Até o dia 24 ainda estamos no ciclo
-  // que iniciou no dia 25 do mês anterior — então o "mês atual" para efeito
+  // O ciclo fecha dia 1 e renova dia 2. Até o dia  admin ainda estamos no ciclo
+  // que iniciou no dia 2 do mês anterior — então o "mês atual" para efeito
   // de histórico e Vivo Bis é o mês anterior do calendário.
   const _today = new Date();
   const _cycleAnchor =
-    _today.getDate() <= 24
-      ? new Date(_today.getFullYear(), _today.getMonth() - 1, 25)
-      : new Date(_today.getFullYear(), _today.getMonth(), 25);
+    _today.getDate() <= 1
+      ? new Date(_today.getFullYear(), _today.getMonth() - 1, 2)
+      : new Date(_today.getFullYear(), _today.getMonth(), 2);
   const currentYear = _cycleAnchor.getFullYear();
   const currentMonth = _cycleAnchor.getMonth(); // 0-11 (mês do ciclo)
 
