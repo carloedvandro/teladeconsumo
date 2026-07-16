@@ -679,7 +679,7 @@ function ResumoConsumo() {
         title="Detalhes do seu consumo"
       >
         <div className="space-y-4">
-          <div className="px-1 py-2">
+          <div className="py-2">
             <div className="text-[11px] font-semibold uppercase tracking-wider text-[#444]">
               Linha
             </div>
@@ -797,7 +797,7 @@ function ResumoConsumo() {
                       return (
                         <li
                           key={m.mes}
-                          className="flex items-center justify-between px-3 py-2 text-sm"
+                          className="flex items-center justify-between py-2.5 text-sm"
                         >
                           <div>
                             <div className="text-[#333]">{m.mes}</div>
@@ -1003,7 +1003,7 @@ function ResumoConsumo() {
                       ? "Franquia 100% utilizada — não haverá Vivo Bis no próximo mês."
                       : "Projeção do Vivo Bis que será acumulado para o próximo mês.";
                     return (
-                      <li className="flex items-center justify-between gap-2 px-3 py-2 text-sm">
+                      <li className="flex items-center justify-between gap-2 py-2.5 text-sm">
                         <div className="min-w-0">
                           <div className="text-[#333]">
                             {nextMesNome}
@@ -1100,7 +1100,7 @@ function ResumoConsumo() {
                       return (
                         <li
                           key={m.mes}
-                          className="flex items-center justify-between gap-2 px-3 py-2 text-sm"
+                          className="flex items-center justify-between gap-2 py-2.5 text-sm"
                         >
                           <div className="min-w-0">
                             <div className="text-[#333]">{m.mes}</div>
