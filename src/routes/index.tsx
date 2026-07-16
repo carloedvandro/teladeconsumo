@@ -78,20 +78,22 @@ const LINES: Line[] = [
   },
 ];
 
-// O ciclo renova no dia 25 (zera a franquia).
-// Calcula dias até a próxima renovação (dia 25).
-function daysUntilCycleRenewal(renewalDay = 25, today = new Date()) {
+// O ciclo renova no dia 2 (zera a franquia) e fecha no dia 1.
+// Calcula dias até o fim do ciclo (dia 1), contando o dia atual inclusivamente.
+function daysUntilCycleEnd(closingDay = 1, today = new Date()) {
   const y = today.getFullYear();
   const m = today.getMonth();
   const d = today.getDate();
-  // Se já é o dia de renovação ou depois, a próxima renovação é no mês seguinte.
-  const next = d >= renewalDay ? new Date(y, m + 1, renewalDay) : new Date(y, m, renewalDay);
+  // Se já passou do dia de fechamento, o próximo fim é no mês seguinte.
+  const next = d > closingDay ? new Date(y, m + 1, closingDay) : new Date(y, m, closingDay);
   const ms = next.getTime() - new Date(y, m, d).getTime();
-  return Math.round(ms / 86400000);
+  const days = Math.round(ms / 86400000);
+  // Contagem inclusiva: hoje conta como o primeiro dia restante.
+  return days === 0 ? 0 : days + 1;
 }
 
-// Calcula a data da próxima renovação (dia 25) no formato DD/MM.
-function nextRenewalDate(renewalDay = 25, today = new Date()) {
+// Calcula a data da próxima renovação (dia 2) no formato DD/MM.
+function nextRenewalDate(renewalDay = 2, today = new Date()) {
   const y = today.getFullYear();
   const m = today.getMonth();
   const d = today.getDate();
@@ -363,14 +365,14 @@ function ResumoConsumo() {
   // Real-time consumption simulation:
   // increments live usage every few seconds so the ring updates in tempo real.
   // Ao atingir 100% da franquia, o excedente é debitado do Vivo Bis do mês anterior.
-  // O ciclo fecha dia 24 e renova dia 25. Até o dia 24 ainda estamos no ciclo
-  // que iniciou no dia 25 do mês anterior — então o "mês atual" para efeito
+  // O ciclo fecha dia 1 e renova dia 2. Até o dia 1 ainda estamos no ciclo
+  // que iniciou no dia 2 do mês anterior — então o "mês atual" para efeito
   // de histórico e Vivo Bis é o mês anterior do calendário.
   const _today = new Date();
   const _cycleAnchor =
-    _today.getDate() <= 24
-      ? new Date(_today.getFullYear(), _today.getMonth() - 1, 25)
-      : new Date(_today.getFullYear(), _today.getMonth(), 25);
+    _today.getDate() <= 1
+      ? new Date(_today.getFullYear(), _today.getMonth() - 1, 2)
+      : new Date(_today.getFullYear(), _today.getMonth(), 2);
   const currentYear = _cycleAnchor.getFullYear();
   const currentMonth = _cycleAnchor.getMonth(); // 0-11 (mês do ciclo)
 
@@ -458,12 +460,12 @@ function ResumoConsumo() {
   const lastUpdatedDate = `${pad(lastUpdated.getDate())}/${pad(lastUpdated.getMonth() + 1)}/${lastUpdated.getFullYear()}`;
   const lastUpdatedTime = `${pad(lastUpdated.getHours())}:${pad(lastUpdated.getMinutes())}`;
 
-  const cycleDaysLeft = daysUntilCycleRenewal(25, now);
+  const cycleDaysLeft = daysUntilCycleEnd(1, now);
   const cycleLabel =
     cycleDaysLeft === 0
       ? "hoje"
       : `em ${cycleDaysLeft} ${cycleDaysLeft === 1 ? "dia" : "dias"}`;
-  const renewalDateLabel = nextRenewalDate(25, now);
+  const renewalDateLabel = nextRenewalDate(2, now);
 
 
   function showToast(msg: string) {
