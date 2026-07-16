@@ -532,7 +532,7 @@ function ResumoConsumo() {
 
           {/* Consumption panel overlay - centered/right like reference */}
           <div
-            className="relative -mt-24 overflow-hidden rounded-md p-5 pb-10 md:absolute md:right-8 md:top-20 md:mx-0 md:mt-0 md:w-[520px] md:translate-y-0 md:p-5 md:pb-8"
+            className="relative -mt-24 overflow-hidden rounded-md p-5 pb-10 md:absolute md:right-8 md:top-4 md:mx-0 md:mt-0 md:w-[520px] md:translate-y-0 md:p-5 md:pb-8"
             style={{
               background: "rgba(255,255,255,0.74)",
               backdropFilter: "blur(6px)",
@@ -658,7 +658,7 @@ function ResumoConsumo() {
           {/* Upgrade card - inside hero art, below consumption card */}
           <button
             onClick={() => openAfterIconsReady(() => setUpgradeOpen(true))}
-            className="relative mt-6 flex w-full items-center justify-between rounded-md px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:bottom-8 md:right-8 md:mx-0 md:mt-0 md:w-[520px]"
+            className="relative mt-6 flex w-full items-center justify-between rounded-md px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:bottom-16 md:right-8 md:mx-0 md:mt-0 md:w-[520px]"
             style={{
               background: "rgba(255,255,255,0.74)",
               backdropFilter: "blur(6px)",
