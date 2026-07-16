@@ -78,15 +78,14 @@ const LINES: Line[] = [
   },
 ];
 
-// O ciclo fecha todo dia 24 e renova no dia 25.
-// Calcula dias até o próximo fechamento (dia 24).
-function daysUntilCycleRenewal(closingDay = 24, today = new Date()) {
+// O ciclo renova no dia 25 (zera a franquia).
+// Calcula dias até a próxima renovação (dia 25).
+function daysUntilCycleRenewal(renewalDay = 25, today = new Date()) {
   const y = today.getFullYear();
   const m = today.getMonth();
   const d = today.getDate();
-  let next = new Date(y, m, closingDay);
-  // Depois do fechamento (dia > 24), o próximo fim de ciclo é no mês seguinte.
-  if (d > closingDay) next = new Date(y, m + 1, closingDay);
+  // Se já é o dia de renovação ou depois, a próxima renovação é no mês seguinte.
+  const next = d >= renewalDay ? new Date(y, m + 1, renewalDay) : new Date(y, m, renewalDay);
   const ms = next.getTime() - new Date(y, m, d).getTime();
   return Math.round(ms / 86400000);
 }
@@ -459,7 +458,7 @@ function ResumoConsumo() {
   const lastUpdatedDate = `${pad(lastUpdated.getDate())}/${pad(lastUpdated.getMonth() + 1)}/${lastUpdated.getFullYear()}`;
   const lastUpdatedTime = `${pad(lastUpdated.getHours())}:${pad(lastUpdated.getMinutes())}`;
 
-  const cycleDaysLeft = daysUntilCycleRenewal(24, now);
+  const cycleDaysLeft = daysUntilCycleRenewal(25, now);
   const cycleLabel =
     cycleDaysLeft === 0
       ? "hoje"
@@ -659,7 +658,7 @@ function ResumoConsumo() {
           {/* Upgrade card - inside hero art, below consumption card */}
           <button
             onClick={() => openAfterIconsReady(() => setUpgradeOpen(true))}
-            className="relative mt-4 flex w-full items-center justify-between rounded-md px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:bottom-8 md:right-8 md:mx-0 md:mt-0 md:w-[520px]"
+            className="relative mt-6 flex w-full items-center justify-between rounded-md px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:bottom-8 md:right-8 md:mx-0 md:mt-0 md:w-[520px]"
             style={{
               background: "rgba(255,255,255,0.74)",
               backdropFilter: "blur(6px)",
