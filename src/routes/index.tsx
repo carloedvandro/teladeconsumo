@@ -1463,35 +1463,52 @@ function ResumoConsumo() {
             </div>
 
             <div className="relative mt-7 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-              <button
-                type="button"
-                onClick={() => setConfirmAutoDebit(false)}
-                className="rounded-xl px-5 py-2.5 text-sm font-semibold text-[#660099] transition hover:bg-[rgba(102,0,153,0.06)]"
-                style={{
-                  background: "rgba(255,255,255,0.7)",
-                  border: "1px solid rgba(102,0,153,0.35)",
-                  backdropFilter: "blur(8px)",
-                }}
-              >
-                Cancelar
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setAutoDebit(true);
-                  setConfirmAutoDebit(false);
-                  setToast("Renovação automática ativada · +25GB liberados");
-                  setTimeout(() => setToast(null), 3000);
-                }}
-                className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
-                style={{
-                  background: "linear-gradient(135deg,#660099,#7a00b3)",
-                  boxShadow:
-                    "0 10px 28px -8px rgba(102,0,153,0.6), 0 4px 12px -2px rgba(102,0,153,0.4), inset 0 1px 0 rgba(255,255,255,0.35)",
-                }}
-              >
-                Ativar
-              </button>
+              {autoDebit ? (
+                <button
+                  type="button"
+                  onClick={() => setConfirmAutoDebit(false)}
+                  className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
+                  style={{
+                    background: "linear-gradient(135deg,#660099,#7a00b3)",
+                    boxShadow:
+                      "0 10px 28px -8px rgba(102,0,153,0.6), 0 4px 12px -2px rgba(102,0,153,0.4), inset 0 1px 0 rgba(255,255,255,0.35)",
+                  }}
+                >
+                  Entendi
+                </button>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmAutoDebit(false)}
+                    className="rounded-xl px-5 py-2.5 text-sm font-semibold text-[#660099] transition hover:bg-[rgba(102,0,153,0.06)]"
+                    style={{
+                      background: "rgba(255,255,255,0.7)",
+                      border: "1px solid rgba(102,0,153,0.35)",
+                      backdropFilter: "blur(8px)",
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAutoDebit(true);
+                      setConfirmAutoDebit(false);
+                      setToast("Renovação automática ativada · +25GB liberados");
+                      setTimeout(() => setToast(null), 3000);
+                    }}
+                    className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
+                    style={{
+                      background: "linear-gradient(135deg,#660099,#7a00b3)",
+                      boxShadow:
+                        "0 10px 28px -8px rgba(102,0,153,0.6), 0 4px 12px -2px rgba(102,0,153,0.4), inset 0 1px 0 rgba(255,255,255,0.35)",
+                    }}
+                  >
+                    Ativar
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
