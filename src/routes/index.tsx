@@ -614,11 +614,7 @@ function ResumoConsumo() {
                     role="switch"
                     aria-checked={autoDebit}
                     onClick={() => {
-                      if (autoDebit) {
-                        setAutoDebit(false);
-                      } else {
-                        openAfterIconsReady(() => setConfirmAutoDebit(true));
-                      }
+                      openAfterIconsReady(() => setConfirmAutoDebit(true));
                     }}
                     className={`relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
                       autoDebit ? "bg-[#16a34a]" : "bg-[#bfbfbf]"
