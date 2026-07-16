@@ -1255,7 +1255,7 @@ function ResumoConsumo() {
             </div>
 
             {/* Footer */}
-            <div className="shrink-0 border-t border-[#660099]/10 bg-white/60 px-6 py-4">
+            <div className="shrink-0 border-t border-[#660099]/10 bg-white/60 px-3 py-4 sm:px-6">
               <button
                 disabled={!selectedPlan || (!notifyEmail && !notifyWhats && !notifySms)}
                 onClick={() => {
