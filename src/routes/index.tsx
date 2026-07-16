@@ -78,15 +78,14 @@ const LINES: Line[] = [
   },
 ];
 
-// O ciclo fecha todo dia 24 e renova no dia 25.
-// Calcula dias até o próximo fechamento (dia 24).
-function daysUntilCycleRenewal(closingDay = 24, today = new Date()) {
+// O ciclo renova no dia 25 (zera a franquia).
+// Calcula dias até a próxima renovação (dia 25).
+function daysUntilCycleRenewal(renewalDay = 25, today = new Date()) {
   const y = today.getFullYear();
   const m = today.getMonth();
   const d = today.getDate();
-  let next = new Date(y, m, closingDay);
-  // Depois do fechamento (dia > 24), o próximo fim de ciclo é no mês seguinte.
-  if (d > closingDay) next = new Date(y, m + 1, closingDay);
+  // Se já é o dia de renovação ou depois, a próxima renovação é no mês seguinte.
+  const next = d >= renewalDay ? new Date(y, m + 1, renewalDay) : new Date(y, m, renewalDay);
   const ms = next.getTime() - new Date(y, m, d).getTime();
   return Math.round(ms / 86400000);
 }
