@@ -850,14 +850,7 @@ function ResumoConsumo() {
                   const bisH = sobrouH; // same GB carried
 
                   return (
-                    <div
-                      className="mb-3 rounded-xl border p-3"
-                      style={{
-                        borderColor: "rgba(102,0,153,0.12)",
-                        background:
-                          "linear-gradient(135deg, #faf6ff 0%, #f3ecfb 100%)",
-                      }}
-                    >
+                    <div className="mb-3 py-3">
                       <div className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-[#660099]">
                         Como funciona
                       </div>
