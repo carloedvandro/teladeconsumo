@@ -271,7 +271,7 @@ function Modal({
             <X className="h-5 w-5" />
           </button>
         </div>
-        <div className="no-scrollbar flex-1 overflow-y-auto px-6 py-5">{children}</div>
+        <div className="no-scrollbar flex-1 overflow-y-auto px-3 py-5 sm:px-6">{children}</div>
         {footer && (
           <div className="shrink-0 border-t border-[#eee] bg-white px-6 py-4">
             {footer}
@@ -736,23 +736,30 @@ function ResumoConsumo() {
           <div>
             {/* Tabs */}
             <div
-              className="mb-3 grid grid-cols-2 gap-1 rounded-full p-1"
+              className="relative mb-3 grid grid-cols-2 rounded-full p-1"
               style={{
                 background: "rgba(102,0,153,0.06)",
                 border: "1px solid rgba(102,0,153,0.10)",
               }}
             >
+              {/* Sliding indicator */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-full bg-white transition-transform duration-300 ease-out"
+                style={{
+                  transform:
+                    historyTab === "vivobis"
+                      ? "translateX(100%)"
+                      : "translateX(0%)",
+                  boxShadow: "0 2px 6px -2px rgba(102,0,153,0.25)",
+                }}
+              />
               <button
                 type="button"
                 onClick={() => setHistoryTab("consumo")}
-                className="rounded-full px-3 py-1.5 text-[12px] font-semibold transition"
+                className="relative z-10 rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors"
                 style={{
-                  background: historyTab === "consumo" ? "#ffffff" : "transparent",
                   color: historyTab === "consumo" ? "#660099" : "#7a5a8f",
-                  boxShadow:
-                    historyTab === "consumo"
-                      ? "0 2px 6px -2px rgba(102,0,153,0.25)"
-                      : "none",
                 }}
               >
                 Meu consumo disponível
@@ -760,26 +767,22 @@ function ResumoConsumo() {
               <button
                 type="button"
                 onClick={() => setHistoryTab("vivobis")}
-                className="rounded-full px-3 py-1.5 text-[12px] font-semibold transition"
+                className="relative z-10 rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors"
                 style={{
-                  background: historyTab === "vivobis" ? "#ffffff" : "transparent",
                   color: historyTab === "vivobis" ? "#660099" : "#7a5a8f",
-                  boxShadow:
-                    historyTab === "vivobis"
-                      ? "0 2px 6px -2px rgba(102,0,153,0.25)"
-                      : "none",
                 }}
               >
                 Vivo Bis
               </button>
             </div>
 
+
             {historyTab === "consumo" && (
               <>
                 <div className="mb-2 text-sm font-semibold text-[#333]">
                   Histórico mensal
                 </div>
-                <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
+                <ul className="divide-y divide-[#eee]">
                   {months
                     .slice()
                     .reverse()
@@ -988,7 +991,7 @@ function ResumoConsumo() {
                   Histórico Vivo Bis
 
                 </div>
-                <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
+                <ul className="divide-y divide-[#eee]">
                   {(() => {
                     // Projeção do próximo mês baseada no consumo em tempo real.
                     // Se a franquia atingir 100% neste ciclo, o Vivo Bis do
