@@ -78,17 +78,27 @@ const LINES: Line[] = [
   },
 ];
 
-// O ciclo fecha todo dia 5 e renova no dia 6.
-// Calcula dias até o próximo fechamento (dia 5).
-function daysUntilCycleRenewal(closingDay = 5, today = new Date()) {
+// O ciclo fecha todo dia 24 e renova no dia 25.
+// Calcula dias até o próximo fechamento (dia 24).
+function daysUntilCycleRenewal(closingDay = 24, today = new Date()) {
   const y = today.getFullYear();
   const m = today.getMonth();
   const d = today.getDate();
   let next = new Date(y, m, closingDay);
-  // Depois do fechamento (dia > 5), o próximo fim de ciclo é no mês seguinte.
+  // Depois do fechamento (dia > 24), o próximo fim de ciclo é no mês seguinte.
   if (d > closingDay) next = new Date(y, m + 1, closingDay);
   const ms = next.getTime() - new Date(y, m, d).getTime();
   return Math.round(ms / 86400000);
+}
+
+// Calcula a data da próxima renovação (dia 25) no formato DD/MM.
+function nextRenewalDate(renewalDay = 25, today = new Date()) {
+  const y = today.getFullYear();
+  const m = today.getMonth();
+  const d = today.getDate();
+  // Se ainda não passou do dia de renovação, é este mês; senão, é o próximo.
+  const next = d >= renewalDay ? new Date(y, m + 1, renewalDay) : new Date(y, m, renewalDay);
+  return `${String(next.getDate()).padStart(2, "0")}/${String(next.getMonth() + 1).padStart(2, "0")}`;
 }
 
 // Progress arc color: green → yellow → orange → red as it fills toward 100%
