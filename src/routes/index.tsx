@@ -62,7 +62,7 @@ type Line = {
 const LINES: Line[] = [
   {
     number: "(31) 97115-7584",
-    used: 19.3,
+    used: 50,
     total: 50,
     plan: "SmartVoz 50GB",
     cycleDays: 3,
