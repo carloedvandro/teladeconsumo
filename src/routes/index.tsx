@@ -679,7 +679,7 @@ function ResumoConsumo() {
         title="Detalhes do seu consumo"
       >
         <div className="space-y-4">
-          <div className="py-2">
+          <div className="px-1 py-2">
             <div className="text-[11px] font-semibold uppercase tracking-wider text-[#444]">
               Linha
             </div>
@@ -797,7 +797,7 @@ function ResumoConsumo() {
                       return (
                         <li
                           key={m.mes}
-                          className="flex items-center justify-between py-2.5 text-sm"
+                          className="flex items-center justify-between px-3 py-2 text-sm"
                         >
                           <div>
                             <div className="text-[#333]">{m.mes}</div>
@@ -1003,7 +1003,7 @@ function ResumoConsumo() {
                       ? "Franquia 100% utilizada — não haverá Vivo Bis no próximo mês."
                       : "Projeção do Vivo Bis que será acumulado para o próximo mês.";
                     return (
-                      <li className="flex items-center justify-between gap-2 py-2.5 text-sm">
+                      <li className="flex items-center justify-between gap-2 px-3 py-2 text-sm">
                         <div className="min-w-0">
                           <div className="text-[#333]">
                             {nextMesNome}
@@ -1100,7 +1100,7 @@ function ResumoConsumo() {
                       return (
                         <li
                           key={m.mes}
-                          className="flex items-center justify-between gap-2 py-2.5 text-sm"
+                          className="flex items-center justify-between gap-2 px-3 py-2 text-sm"
                         >
                           <div className="min-w-0">
                             <div className="text-[#333]">{m.mes}</div>
@@ -1186,7 +1186,7 @@ function ResumoConsumo() {
             </div>
 
             {/* Body */}
-            <div className="no-scrollbar flex-1 overflow-y-auto px-3 py-5 sm:px-6">
+            <div className="no-scrollbar flex-1 overflow-y-auto px-6 py-5">
               <p className="mb-4 text-sm text-[#5a5a5a]">
                 Escolha o melhor plano para você. A mudança entra em vigor no próximo ciclo.
               </p>
@@ -1199,14 +1199,14 @@ function ResumoConsumo() {
                       onClick={() => setSelectedPlan(p.id)}
                       className={`group relative flex w-full items-center justify-between gap-4 rounded-xl border p-4 text-left transition-all duration-300 animate-fade-in ${
                         sel
-                          ? "border-[#660099] bg-white"
-                          : "border-[#e8e8ee] bg-white hover:-translate-y-0.5 hover:border-[#cda8e0]"
+                          ? "border-[#660099] bg-gradient-to-br from-[#f9f5fc] to-[#fff]"
+                          : "border-[#e8e8ee] bg-white/70 hover:-translate-y-0.5 hover:border-[#cda8e0] hover:bg-white"
                       }`}
                       style={{
                         animationDelay: `${idx * 60}ms`,
                         boxShadow: sel
-                          ? "0 8px 24px -8px rgba(102,0,153,0.25), inset 0 1px 0 rgba(255,255,255,0.8)"
-                          : "0 1px 2px rgba(0,0,0,0.03)",
+                          ? "0 8px 24px -8px rgba(102,0,153,0.30), inset 0 1px 0 rgba(255,255,255,0.8)"
+                          : "0 1px 2px rgba(0,0,0,0.03), inset 0 1px 0 rgba(255,255,255,0.6)",
                       }}
                     >
                       <div className="min-w-0">
@@ -1236,10 +1236,13 @@ function ResumoConsumo() {
                 })}
               </div>
 
-              <div className="mt-5 rounded-xl border border-[#e8e8ee] bg-white p-4">
+              <div
+                className="mt-5 rounded-xl border border-[#660099]/10 p-4"
+                style={{ background: "rgba(249,245,252,0.6)" }}
+              >
                 <div className="mb-1 text-sm font-semibold text-[#1a1a1a]">Receber confirmação por</div>
                 <p className="mb-3 text-xs text-[#888]">A confirmação do upgrade será enviada para o seu e-mail.</p>
-                <div className="flex items-center justify-between rounded-lg border border-[#ececf2] bg-white px-3 py-2.5 text-sm">
+                <div className="flex items-center justify-between rounded-lg border border-[#ececf2] bg-white/80 px-3 py-2.5 text-sm">
                   <span className="flex items-center gap-2 text-[#333]">
                     <Mail className="h-4 w-4 text-[#660099]" />
                     <span className="font-medium">E-mail</span>
@@ -1255,7 +1258,7 @@ function ResumoConsumo() {
             </div>
 
             {/* Footer */}
-            <div className="shrink-0 border-t border-[#660099]/10 bg-white/60 px-3 py-4 sm:px-6">
+            <div className="shrink-0 border-t border-[#660099]/10 bg-white/60 px-6 py-4">
               <button
                 disabled={!selectedPlan || (!notifyEmail && !notifyWhats && !notifySms)}
                 onClick={() => {
