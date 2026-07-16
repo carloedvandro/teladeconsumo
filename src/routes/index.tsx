@@ -1331,9 +1331,13 @@ function ResumoConsumo() {
               <span className="text-[#666]">Disponível</span>
               <span className="font-semibold text-[#660099]">{formatGB(available)}</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between border-b border-[#eee] pb-2">
               <span className="text-[#666]">Fim do ciclo</span>
               <span className="font-semibold text-[#660099]">{cycleLabel}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-[#666]">Próxima renovação</span>
+              <span className="font-semibold text-[#660099]">{renewalDateLabel}</span>
             </div>
           </div>
         </div>
