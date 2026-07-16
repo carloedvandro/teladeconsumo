@@ -519,6 +519,8 @@ function ResumoConsumo() {
             height={768}
             className="h-[340px] w-full object-cover md:h-[520px]"
           />
+          {/* White overlay to remove gray background behind upgrade card */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-white md:h-56" />
 
           {/* Consumption panel overlay - centered/right like reference */}
           <div
