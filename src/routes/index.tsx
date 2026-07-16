@@ -331,7 +331,7 @@ function ResumoConsumo() {
   const [notifyEmail, setNotifyEmail] = useState(true);
   const [notifyWhats, setNotifyWhats] = useState(true);
   const [notifySms, setNotifySms] = useState(true);
-  const [autoDebit, setAutoDebit] = useState(false);
+  const [autoDebit, setAutoDebit] = useState(true);
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
 
   useEffect(() => {
