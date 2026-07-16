@@ -496,13 +496,13 @@ function ResumoConsumo() {
   ];
 
   return (
-    <div className="min-h-screen bg-white md:bg-[#f3f3f3]">
+    <div className="min-h-screen bg-[#f3f3f3]">
 
-      <main className="mx-auto max-w-[1400px] px-0 pt-6 pb-16 md:px-6 md:pt-8">
-        <h1 className="px-4 text-[32px] font-semibold leading-tight text-[#660099] md:px-0 md:text-[42px]">
+      <main className="mx-auto max-w-[1400px] px-4 pt-6 pb-16 md:px-6 md:pt-8">
+        <h1 className="text-[32px] font-semibold leading-tight text-[#660099] md:text-[42px]">
           Resumo de Consumo
         </h1>
-        <p className="mt-1 px-4 text-sm text-[#666] md:px-0">
+        <p className="mt-1 text-sm text-[#666]">
           Informação atualizada em{" "}
           <span suppressHydrationWarning className="font-semibold text-[#333]">{lastUpdatedDate}</span> às{" "}
           <span suppressHydrationWarning className="font-semibold text-[#333]">{lastUpdatedTime}</span>
@@ -644,7 +644,7 @@ function ResumoConsumo() {
           {/* Upgrade card - inside hero art, below consumption card */}
           <button
             onClick={() => openAfterIconsReady(() => setUpgradeOpen(true))}
-            className="relative mt-4 flex w-full items-center justify-between rounded-md px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:bottom-8 md:right-8 md:mx-0 md:mt-0 md:w-[520px]"
+            className="relative mx-2 mt-4 flex w-[calc(100%-1rem)] items-center justify-between rounded-md px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:bottom-8 md:right-8 md:mx-0 md:mt-0 md:w-[520px]"
             style={{
               background: "rgba(255,255,255,0.74)",
               backdropFilter: "blur(6px)",
