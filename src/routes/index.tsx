@@ -1149,7 +1149,7 @@ function ResumoConsumo() {
       {/* Upgrade modal - premium glass */}
       {upgradeOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-fade-in"
+          className="fixed inset-0 z-50 flex items-stretch justify-center bg-black/50 p-0 animate-fade-in sm:items-center sm:p-4"
           style={{ backdropFilter: "blur(4px)" }}
           onClick={() => {
             setUpgradeOpen(false);
@@ -1160,7 +1160,7 @@ function ResumoConsumo() {
             role="dialog"
             aria-modal="true"
             onClick={(e) => e.stopPropagation()}
-            className="relative flex max-h-[88vh] w-full max-w-[480px] flex-col overflow-hidden rounded-2xl animate-scale-in"
+            className="relative flex h-full max-h-none w-full max-w-none flex-col overflow-hidden rounded-none animate-scale-in sm:h-auto sm:max-h-[88vh] sm:max-w-[480px] sm:rounded-2xl"
             style={{
               background: "rgba(255,255,255,0.92)",
               backdropFilter: "blur(14px)",
@@ -1169,6 +1169,7 @@ function ResumoConsumo() {
               border: "1px solid rgba(255,255,255,0.5)",
             }}
           >
+
             {/* Header */}
             <div className="flex shrink-0 items-center justify-between border-b border-[#660099]/10 px-6 py-4">
               <div className="flex items-center gap-2.5">
