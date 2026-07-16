@@ -575,6 +575,10 @@ function ResumoConsumo() {
                   Fim do ciclo{" "}
                   <span className="font-semibold text-[#1a1a1a]">{cycleLabel}</span>
                 </p>
+                <p className="mt-0.5 text-sm text-[#5a5a5a]">
+                  Próxima renovação:{" "}
+                  <span className="font-semibold text-[#1a1a1a]">{renewalDateLabel}</span>
+                </p>
 
                 <ul className="mt-5 text-sm">
                   <li className="flex items-center justify-between gap-3 border-b border-[#a8a8a8] py-3">
