@@ -331,7 +331,7 @@ function ResumoConsumo() {
   const [notifyEmail, setNotifyEmail] = useState(true);
   const [notifyWhats, setNotifyWhats] = useState(true);
   const [notifySms, setNotifySms] = useState(true);
-  const [autoDebit, setAutoDebit] = useState(false);
+  const [autoDebit, setAutoDebit] = useState(true);
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
 
   useEffect(() => {
@@ -614,11 +614,7 @@ function ResumoConsumo() {
                     role="switch"
                     aria-checked={autoDebit}
                     onClick={() => {
-                      if (autoDebit) {
-                        setAutoDebit(false);
-                      } else {
-                        openAfterIconsReady(() => setConfirmAutoDebit(true));
-                      }
+                      openAfterIconsReady(() => setConfirmAutoDebit(true));
                     }}
                     className={`relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
                       autoDebit ? "bg-[#16a34a]" : "bg-[#bfbfbf]"
@@ -1393,17 +1389,19 @@ function ResumoConsumo() {
               />
               <div className="min-w-0 flex-1">
                 <h3 className="text-[17px] sm:text-[20px] font-semibold tracking-tight text-[#1a1a1a] leading-tight whitespace-nowrap">
-                  Ativar Renovação Automática
+                  {autoDebit ? "Renovação Automática Ativa" : "Ativar Renovação Automática"}
                 </h3>
                 <p className="mt-0.5 text-xs font-medium text-[#660099]/80">
-                  Função premium SmartVoz
+                  {autoDebit ? "Função ativa · não pode ser desativada" : "Função premium SmartVoz"}
                 </p>
               </div>
             </div>
 
             <div className="relative mt-6 space-y-4">
               <p className="text-[14px] leading-relaxed text-[#4a4a4a]">
-                Ao ativar a renovação automática, seu plano será renovado todos os meses utilizando o saldo disponível da sua carteira virtual/comissões.
+                {autoDebit
+                  ? "Ao ativar o débito automático você está ciente que essa função não pode ser desfeita. Seu plano continuará sendo renovado automaticamente todos os meses."
+                  : "Ao ativar a renovação automática, seu plano será renovado todos os meses utilizando o saldo disponível da sua carteira virtual/comissões."}
               </p>
 
               {/* Bônus */}
@@ -1465,35 +1463,52 @@ function ResumoConsumo() {
             </div>
 
             <div className="relative mt-7 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-              <button
-                type="button"
-                onClick={() => setConfirmAutoDebit(false)}
-                className="rounded-xl px-5 py-2.5 text-sm font-semibold text-[#660099] transition hover:bg-[rgba(102,0,153,0.06)]"
-                style={{
-                  background: "rgba(255,255,255,0.7)",
-                  border: "1px solid rgba(102,0,153,0.35)",
-                  backdropFilter: "blur(8px)",
-                }}
-              >
-                Cancelar
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setAutoDebit(true);
-                  setConfirmAutoDebit(false);
-                  setToast("Renovação automática ativada · +25GB liberados");
-                  setTimeout(() => setToast(null), 3000);
-                }}
-                className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
-                style={{
-                  background: "linear-gradient(135deg,#660099,#7a00b3)",
-                  boxShadow:
-                    "0 10px 28px -8px rgba(102,0,153,0.6), 0 4px 12px -2px rgba(102,0,153,0.4), inset 0 1px 0 rgba(255,255,255,0.35)",
-                }}
-              >
-                Ativar
-              </button>
+              {autoDebit ? (
+                <button
+                  type="button"
+                  onClick={() => setConfirmAutoDebit(false)}
+                  className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
+                  style={{
+                    background: "linear-gradient(135deg,#660099,#7a00b3)",
+                    boxShadow:
+                      "0 10px 28px -8px rgba(102,0,153,0.6), 0 4px 12px -2px rgba(102,0,153,0.4), inset 0 1px 0 rgba(255,255,255,0.35)",
+                  }}
+                >
+                  Entendi
+                </button>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmAutoDebit(false)}
+                    className="rounded-xl px-5 py-2.5 text-sm font-semibold text-[#660099] transition hover:bg-[rgba(102,0,153,0.06)]"
+                    style={{
+                      background: "rgba(255,255,255,0.7)",
+                      border: "1px solid rgba(102,0,153,0.35)",
+                      backdropFilter: "blur(8px)",
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAutoDebit(true);
+                      setConfirmAutoDebit(false);
+                      setToast("Renovação automática ativada · +25GB liberados");
+                      setTimeout(() => setToast(null), 3000);
+                    }}
+                    className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
+                    style={{
+                      background: "linear-gradient(135deg,#660099,#7a00b3)",
+                      boxShadow:
+                        "0 10px 28px -8px rgba(102,0,153,0.6), 0 4px 12px -2px rgba(102,0,153,0.4), inset 0 1px 0 rgba(255,255,255,0.35)",
+                    }}
+                  >
+                    Ativar
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
