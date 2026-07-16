@@ -271,7 +271,7 @@ function Modal({
             <X className="h-5 w-5" />
           </button>
         </div>
-        <div className="no-scrollbar flex-1 overflow-y-auto px-6 py-5">{children}</div>
+        <div className="no-scrollbar flex-1 overflow-y-auto px-3 py-5 sm:px-6">{children}</div>
         {footer && (
           <div className="shrink-0 border-t border-[#eee] bg-white px-6 py-4">
             {footer}
