@@ -271,7 +271,7 @@ function Modal({
             <X className="h-5 w-5" />
           </button>
         </div>
-        <div className="no-scrollbar flex-1 overflow-y-auto px-3 py-5 sm:px-6">{children}</div>
+        <div className="no-scrollbar flex-1 overflow-y-auto px-6 py-5">{children}</div>
         {footer && (
           <div className="shrink-0 border-t border-[#eee] bg-white px-6 py-4">
             {footer}
@@ -331,7 +331,7 @@ function ResumoConsumo() {
   const [notifyEmail, setNotifyEmail] = useState(true);
   const [notifyWhats, setNotifyWhats] = useState(true);
   const [notifySms, setNotifySms] = useState(true);
-  const [autoDebit, setAutoDebit] = useState(true);
+  const [autoDebit, setAutoDebit] = useState(false);
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
 
   useEffect(() => {
@@ -614,7 +614,11 @@ function ResumoConsumo() {
                     role="switch"
                     aria-checked={autoDebit}
                     onClick={() => {
-                      openAfterIconsReady(() => setConfirmAutoDebit(true));
+                      if (autoDebit) {
+                        setAutoDebit(false);
+                      } else {
+                        openAfterIconsReady(() => setConfirmAutoDebit(true));
+                      }
                     }}
                     className={`relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
                       autoDebit ? "bg-[#16a34a]" : "bg-[#bfbfbf]"
@@ -732,30 +736,23 @@ function ResumoConsumo() {
           <div>
             {/* Tabs */}
             <div
-              className="relative mb-3 grid grid-cols-2 rounded-full p-1"
+              className="mb-3 grid grid-cols-2 gap-1 rounded-full p-1"
               style={{
                 background: "rgba(102,0,153,0.06)",
                 border: "1px solid rgba(102,0,153,0.10)",
               }}
             >
-              {/* Sliding indicator */}
-              <span
-                aria-hidden
-                className="pointer-events-none absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-full bg-white transition-transform duration-300 ease-out"
-                style={{
-                  transform:
-                    historyTab === "vivobis"
-                      ? "translateX(100%)"
-                      : "translateX(0%)",
-                  boxShadow: "0 2px 6px -2px rgba(102,0,153,0.25)",
-                }}
-              />
               <button
                 type="button"
                 onClick={() => setHistoryTab("consumo")}
-                className="relative z-10 rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors"
+                className="rounded-full px-3 py-1.5 text-[12px] font-semibold transition"
                 style={{
+                  background: historyTab === "consumo" ? "#ffffff" : "transparent",
                   color: historyTab === "consumo" ? "#660099" : "#7a5a8f",
+                  boxShadow:
+                    historyTab === "consumo"
+                      ? "0 2px 6px -2px rgba(102,0,153,0.25)"
+                      : "none",
                 }}
               >
                 Meu consumo disponível
@@ -763,22 +760,26 @@ function ResumoConsumo() {
               <button
                 type="button"
                 onClick={() => setHistoryTab("vivobis")}
-                className="relative z-10 rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors"
+                className="rounded-full px-3 py-1.5 text-[12px] font-semibold transition"
                 style={{
+                  background: historyTab === "vivobis" ? "#ffffff" : "transparent",
                   color: historyTab === "vivobis" ? "#660099" : "#7a5a8f",
+                  boxShadow:
+                    historyTab === "vivobis"
+                      ? "0 2px 6px -2px rgba(102,0,153,0.25)"
+                      : "none",
                 }}
               >
                 Vivo Bis
               </button>
             </div>
 
-
             {historyTab === "consumo" && (
               <>
                 <div className="mb-2 text-sm font-semibold text-[#333]">
                   Histórico mensal
                 </div>
-                <ul className="divide-y divide-[#eee]">
+                <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
                   {months
                     .slice()
                     .reverse()
@@ -987,7 +988,7 @@ function ResumoConsumo() {
                   Histórico Vivo Bis
 
                 </div>
-                <ul className="divide-y divide-[#eee]">
+                <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
                   {(() => {
                     // Projeção do próximo mês baseada no consumo em tempo real.
                     // Se a franquia atingir 100% neste ciclo, o Vivo Bis do
@@ -1389,19 +1390,17 @@ function ResumoConsumo() {
               />
               <div className="min-w-0 flex-1">
                 <h3 className="text-[17px] sm:text-[20px] font-semibold tracking-tight text-[#1a1a1a] leading-tight whitespace-nowrap">
-                  {autoDebit ? "Renovação Automática Ativa" : "Ativar Renovação Automática"}
+                  Ativar Renovação Automática
                 </h3>
                 <p className="mt-0.5 text-xs font-medium text-[#660099]/80">
-                  {autoDebit ? "Função ativa · não pode ser desativada" : "Função premium SmartVoz"}
+                  Função premium SmartVoz
                 </p>
               </div>
             </div>
 
             <div className="relative mt-6 space-y-4">
               <p className="text-[14px] leading-relaxed text-[#4a4a4a]">
-                {autoDebit
-                  ? "Ao ativar o débito automático você está ciente que essa função não pode ser desfeita. Seu plano continuará sendo renovado automaticamente todos os meses."
-                  : "Ao ativar a renovação automática, seu plano será renovado todos os meses utilizando o saldo disponível da sua carteira virtual/comissões."}
+                Ao ativar a renovação automática, seu plano será renovado todos os meses utilizando o saldo disponível da sua carteira virtual/comissões.
               </p>
 
               {/* Bônus */}
@@ -1463,52 +1462,35 @@ function ResumoConsumo() {
             </div>
 
             <div className="relative mt-7 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-              {autoDebit ? (
-                <button
-                  type="button"
-                  onClick={() => setConfirmAutoDebit(false)}
-                  className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
-                  style={{
-                    background: "linear-gradient(135deg,#660099,#7a00b3)",
-                    boxShadow:
-                      "0 10px 28px -8px rgba(102,0,153,0.6), 0 4px 12px -2px rgba(102,0,153,0.4), inset 0 1px 0 rgba(255,255,255,0.35)",
-                  }}
-                >
-                  Entendi
-                </button>
-              ) : (
-                <>
-                  <button
-                    type="button"
-                    onClick={() => setConfirmAutoDebit(false)}
-                    className="rounded-xl px-5 py-2.5 text-sm font-semibold text-[#660099] transition hover:bg-[rgba(102,0,153,0.06)]"
-                    style={{
-                      background: "rgba(255,255,255,0.7)",
-                      border: "1px solid rgba(102,0,153,0.35)",
-                      backdropFilter: "blur(8px)",
-                    }}
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setAutoDebit(true);
-                      setConfirmAutoDebit(false);
-                      setToast("Renovação automática ativada · +25GB liberados");
-                      setTimeout(() => setToast(null), 3000);
-                    }}
-                    className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
-                    style={{
-                      background: "linear-gradient(135deg,#660099,#7a00b3)",
-                      boxShadow:
-                        "0 10px 28px -8px rgba(102,0,153,0.6), 0 4px 12px -2px rgba(102,0,153,0.4), inset 0 1px 0 rgba(255,255,255,0.35)",
-                    }}
-                  >
-                    Ativar
-                  </button>
-                </>
-              )}
+              <button
+                type="button"
+                onClick={() => setConfirmAutoDebit(false)}
+                className="rounded-xl px-5 py-2.5 text-sm font-semibold text-[#660099] transition hover:bg-[rgba(102,0,153,0.06)]"
+                style={{
+                  background: "rgba(255,255,255,0.7)",
+                  border: "1px solid rgba(102,0,153,0.35)",
+                  backdropFilter: "blur(8px)",
+                }}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setAutoDebit(true);
+                  setConfirmAutoDebit(false);
+                  setToast("Renovação automática ativada · +25GB liberados");
+                  setTimeout(() => setToast(null), 3000);
+                }}
+                className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
+                style={{
+                  background: "linear-gradient(135deg,#660099,#7a00b3)",
+                  boxShadow:
+                    "0 10px 28px -8px rgba(102,0,153,0.6), 0 4px 12px -2px rgba(102,0,153,0.4), inset 0 1px 0 rgba(255,255,255,0.35)",
+                }}
+              >
+                Ativar
+              </button>
             </div>
           </div>
         </div>
