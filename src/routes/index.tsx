@@ -16,6 +16,8 @@ import {
   ArrowUpCircle,
   Sparkles,
   AlertTriangle,
+  Mail,
+
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
@@ -271,7 +273,7 @@ function Modal({
             <X className="h-5 w-5" />
           </button>
         </div>
-        <div className="no-scrollbar flex-1 overflow-y-auto px-6 py-5">{children}</div>
+        <div className="no-scrollbar flex-1 overflow-y-auto px-3 py-5 sm:px-6">{children}</div>
         {footer && (
           <div className="shrink-0 border-t border-[#eee] bg-white px-6 py-4">
             {footer}
@@ -331,7 +333,7 @@ function ResumoConsumo() {
   const [notifyEmail, setNotifyEmail] = useState(true);
   const [notifyWhats, setNotifyWhats] = useState(true);
   const [notifySms, setNotifySms] = useState(true);
-  const [autoDebit, setAutoDebit] = useState(false);
+  const [autoDebit, setAutoDebit] = useState(true);
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
 
   useEffect(() => {
@@ -614,11 +616,7 @@ function ResumoConsumo() {
                     role="switch"
                     aria-checked={autoDebit}
                     onClick={() => {
-                      if (autoDebit) {
-                        setAutoDebit(false);
-                      } else {
-                        openAfterIconsReady(() => setConfirmAutoDebit(true));
-                      }
+                      openAfterIconsReady(() => setConfirmAutoDebit(true));
                     }}
                     className={`relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
                       autoDebit ? "bg-[#16a34a]" : "bg-[#bfbfbf]"
@@ -646,7 +644,7 @@ function ResumoConsumo() {
           {/* Upgrade card - inside hero art, below consumption card */}
           <button
             onClick={() => openAfterIconsReady(() => setUpgradeOpen(true))}
-            className="relative mx-2 mt-4 flex w-[calc(100%-1rem)] items-center justify-between rounded-md px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:bottom-8 md:right-8 md:mx-0 md:mt-0 md:w-[520px]"
+            className="relative mt-4 flex w-full items-center justify-between rounded-md px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:bottom-8 md:right-8 md:mx-0 md:mt-0 md:w-[520px]"
             style={{
               background: "rgba(255,255,255,0.74)",
               backdropFilter: "blur(6px)",
@@ -681,7 +679,7 @@ function ResumoConsumo() {
         title="Detalhes do seu consumo"
       >
         <div className="space-y-4">
-          <div className="px-1 py-2">
+          <div className="py-2">
             <div className="text-[11px] font-semibold uppercase tracking-wider text-[#444]">
               Linha
             </div>
@@ -736,23 +734,30 @@ function ResumoConsumo() {
           <div>
             {/* Tabs */}
             <div
-              className="mb-3 grid grid-cols-2 gap-1 rounded-full p-1"
+              className="relative mb-3 grid grid-cols-2 rounded-full p-1"
               style={{
                 background: "rgba(102,0,153,0.06)",
                 border: "1px solid rgba(102,0,153,0.10)",
               }}
             >
+              {/* Sliding indicator */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute top-1 bottom-1 left-1 w-[calc(50%-4px)] rounded-full bg-white transition-transform duration-300 ease-out"
+                style={{
+                  transform:
+                    historyTab === "vivobis"
+                      ? "translateX(100%)"
+                      : "translateX(0%)",
+                  boxShadow: "0 2px 6px -2px rgba(102,0,153,0.25)",
+                }}
+              />
               <button
                 type="button"
                 onClick={() => setHistoryTab("consumo")}
-                className="rounded-full px-3 py-1.5 text-[12px] font-semibold transition"
+                className="relative z-10 rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors"
                 style={{
-                  background: historyTab === "consumo" ? "#ffffff" : "transparent",
                   color: historyTab === "consumo" ? "#660099" : "#7a5a8f",
-                  boxShadow:
-                    historyTab === "consumo"
-                      ? "0 2px 6px -2px rgba(102,0,153,0.25)"
-                      : "none",
                 }}
               >
                 Meu consumo disponível
@@ -760,26 +765,22 @@ function ResumoConsumo() {
               <button
                 type="button"
                 onClick={() => setHistoryTab("vivobis")}
-                className="rounded-full px-3 py-1.5 text-[12px] font-semibold transition"
+                className="relative z-10 rounded-full px-3 py-1.5 text-[12px] font-semibold transition-colors"
                 style={{
-                  background: historyTab === "vivobis" ? "#ffffff" : "transparent",
                   color: historyTab === "vivobis" ? "#660099" : "#7a5a8f",
-                  boxShadow:
-                    historyTab === "vivobis"
-                      ? "0 2px 6px -2px rgba(102,0,153,0.25)"
-                      : "none",
                 }}
               >
                 Vivo Bis
               </button>
             </div>
 
+
             {historyTab === "consumo" && (
               <>
                 <div className="mb-2 text-sm font-semibold text-[#333]">
                   Histórico mensal
                 </div>
-                <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
+                <ul className="divide-y divide-[#eee]">
                   {months
                     .slice()
                     .reverse()
@@ -796,7 +797,7 @@ function ResumoConsumo() {
                       return (
                         <li
                           key={m.mes}
-                          className="flex items-center justify-between px-3 py-2 text-sm"
+                          className="flex items-center justify-between py-2.5 text-sm"
                         >
                           <div>
                             <div className="text-[#333]">{m.mes}</div>
@@ -849,14 +850,7 @@ function ResumoConsumo() {
                   const bisH = sobrouH; // same GB carried
 
                   return (
-                    <div
-                      className="mb-3 rounded-xl border p-3"
-                      style={{
-                        borderColor: "rgba(102,0,153,0.12)",
-                        background:
-                          "linear-gradient(135deg, #faf6ff 0%, #f3ecfb 100%)",
-                      }}
-                    >
+                    <div className="mb-3 py-3">
                       <div className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-[#660099]">
                         Como funciona
                       </div>
@@ -988,7 +982,7 @@ function ResumoConsumo() {
                   Histórico Vivo Bis
 
                 </div>
-                <ul className="divide-y divide-[#eee] rounded-md border border-[#eee]">
+                <ul className="divide-y divide-[#eee]">
                   {(() => {
                     // Projeção do próximo mês baseada no consumo em tempo real.
                     // Se a franquia atingir 100% neste ciclo, o Vivo Bis do
@@ -1009,7 +1003,7 @@ function ResumoConsumo() {
                       ? "Franquia 100% utilizada — não haverá Vivo Bis no próximo mês."
                       : "Projeção do Vivo Bis que será acumulado para o próximo mês.";
                     return (
-                      <li className="flex items-center justify-between gap-2 px-3 py-2 text-sm">
+                      <li className="flex items-center justify-between gap-2 py-2.5 text-sm">
                         <div className="min-w-0">
                           <div className="text-[#333]">
                             {nextMesNome}
@@ -1106,7 +1100,7 @@ function ResumoConsumo() {
                       return (
                         <li
                           key={m.mes}
-                          className="flex items-center justify-between gap-2 px-3 py-2 text-sm"
+                          className="flex items-center justify-between gap-2 py-2.5 text-sm"
                         >
                           <div className="min-w-0">
                             <div className="text-[#333]">{m.mes}</div>
@@ -1150,7 +1144,7 @@ function ResumoConsumo() {
       {/* Upgrade modal - premium glass */}
       {upgradeOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-fade-in"
+          className="fixed inset-0 z-50 flex items-stretch justify-center bg-black/50 p-0 animate-fade-in sm:items-center sm:p-4"
           style={{ backdropFilter: "blur(4px)" }}
           onClick={() => {
             setUpgradeOpen(false);
@@ -1161,7 +1155,7 @@ function ResumoConsumo() {
             role="dialog"
             aria-modal="true"
             onClick={(e) => e.stopPropagation()}
-            className="relative flex max-h-[88vh] w-full max-w-[480px] flex-col overflow-hidden rounded-2xl animate-scale-in"
+            className="relative flex h-full max-h-none w-full max-w-none flex-col overflow-hidden rounded-none animate-scale-in sm:h-auto sm:max-h-[88vh] sm:max-w-[480px] sm:rounded-2xl"
             style={{
               background: "rgba(255,255,255,0.92)",
               backdropFilter: "blur(14px)",
@@ -1170,6 +1164,7 @@ function ResumoConsumo() {
               border: "1px solid rgba(255,255,255,0.5)",
             }}
           >
+
             {/* Header */}
             <div className="flex shrink-0 items-center justify-between border-b border-[#660099]/10 px-6 py-4">
               <div className="flex items-center gap-2.5">
@@ -1191,7 +1186,7 @@ function ResumoConsumo() {
             </div>
 
             {/* Body */}
-            <div className="no-scrollbar flex-1 overflow-y-auto px-6 py-5">
+            <div className="no-scrollbar flex-1 overflow-y-auto px-3 py-5 sm:px-6">
               <p className="mb-4 text-sm text-[#5a5a5a]">
                 Escolha o melhor plano para você. A mudança entra em vigor no próximo ciclo.
               </p>
@@ -1204,14 +1199,14 @@ function ResumoConsumo() {
                       onClick={() => setSelectedPlan(p.id)}
                       className={`group relative flex w-full items-center justify-between gap-4 rounded-xl border p-4 text-left transition-all duration-300 animate-fade-in ${
                         sel
-                          ? "border-[#660099] bg-gradient-to-br from-[#f9f5fc] to-[#fff]"
-                          : "border-[#e8e8ee] bg-white/70 hover:-translate-y-0.5 hover:border-[#cda8e0] hover:bg-white"
+                          ? "border-[#660099] bg-white"
+                          : "border-[#e8e8ee] bg-white hover:-translate-y-0.5 hover:border-[#cda8e0]"
                       }`}
                       style={{
                         animationDelay: `${idx * 60}ms`,
                         boxShadow: sel
-                          ? "0 8px 24px -8px rgba(102,0,153,0.30), inset 0 1px 0 rgba(255,255,255,0.8)"
-                          : "0 1px 2px rgba(0,0,0,0.03), inset 0 1px 0 rgba(255,255,255,0.6)",
+                          ? "0 8px 24px -8px rgba(102,0,153,0.25), inset 0 1px 0 rgba(255,255,255,0.8)"
+                          : "0 1px 2px rgba(0,0,0,0.03)",
                       }}
                     >
                       <div className="min-w-0">
@@ -1241,46 +1236,26 @@ function ResumoConsumo() {
                 })}
               </div>
 
-              <div
-                className="mt-5 rounded-xl border border-[#660099]/10 p-4"
-                style={{ background: "rgba(249,245,252,0.6)" }}
-              >
+              <div className="mt-5 rounded-xl border border-[#e8e8ee] bg-white p-4">
                 <div className="mb-1 text-sm font-semibold text-[#1a1a1a]">Receber confirmação por</div>
-                <p className="mb-3 text-xs text-[#888]">Escolha os canais para receber a confirmação do upgrade.</p>
-                <div className="space-y-2">
-                  {[
-                    { key: "email", label: "E-mail", checked: notifyEmail, set: setNotifyEmail },
-                    { key: "whats", label: "WhatsApp", checked: notifyWhats, set: setNotifyWhats },
-                    { key: "sms", label: "SMS", checked: notifySms, set: setNotifySms },
-                  ].map((c) => (
-                    <label
-                      key={c.key}
-                      className="flex cursor-pointer items-center justify-between rounded-lg border border-[#ececf2] bg-white/80 px-3 py-2 text-sm transition hover:border-[#cda8e0]"
-                    >
-                      <span className="text-[#333]">{c.label}</span>
-                      <button
-                        type="button"
-                        onClick={() => c.set(!c.checked)}
-                        className={`relative h-6 w-11 rounded-full transition-colors duration-300 ${
-                          c.checked ? "bg-[#660099]" : "bg-[#ccc]"
-                        }`}
-                        aria-pressed={c.checked}
-                        aria-label={`Notificar por ${c.label}`}
-                      >
-                        <span
-                          className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform duration-300 ${
-                            c.checked ? "left-[22px]" : "left-0.5"
-                          }`}
-                        />
-                      </button>
-                    </label>
-                  ))}
+                <p className="mb-3 text-xs text-[#888]">A confirmação do upgrade será enviada para o seu e-mail.</p>
+                <div className="flex items-center justify-between rounded-lg border border-[#ececf2] bg-white px-3 py-2.5 text-sm">
+                  <span className="flex items-center gap-2 text-[#333]">
+                    <Mail className="h-4 w-4 text-[#660099]" />
+                    <span className="font-medium">E-mail</span>
+                    <span className="text-xs text-[#888]">(joeliaalmeidas@gmail.com)</span>
+                  </span>
+                  <span className="flex items-center gap-1 text-xs font-semibold text-[#16a34a]">
+                    <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                    Padrão
+                  </span>
                 </div>
               </div>
+
             </div>
 
             {/* Footer */}
-            <div className="shrink-0 border-t border-[#660099]/10 bg-white/60 px-6 py-4">
+            <div className="shrink-0 border-t border-[#660099]/10 bg-white/60 px-3 py-4 sm:px-6">
               <button
                 disabled={!selectedPlan || (!notifyEmail && !notifyWhats && !notifySms)}
                 onClick={() => {
@@ -1390,17 +1365,19 @@ function ResumoConsumo() {
               />
               <div className="min-w-0 flex-1">
                 <h3 className="text-[17px] sm:text-[20px] font-semibold tracking-tight text-[#1a1a1a] leading-tight whitespace-nowrap">
-                  Ativar Renovação Automática
+                  {autoDebit ? "Renovação Automática Ativa" : "Ativar Renovação Automática"}
                 </h3>
                 <p className="mt-0.5 text-xs font-medium text-[#660099]/80">
-                  Função premium SmartVoz
+                  {autoDebit ? "Função ativa · não pode ser desativada" : "Função premium SmartVoz"}
                 </p>
               </div>
             </div>
 
             <div className="relative mt-6 space-y-4">
               <p className="text-[14px] leading-relaxed text-[#4a4a4a]">
-                Ao ativar a renovação automática, seu plano será renovado todos os meses utilizando o saldo disponível da sua carteira virtual/comissões.
+                {autoDebit
+                  ? "Ao ativar o débito automático você está ciente que essa função não pode ser desfeita. Seu plano continuará sendo renovado automaticamente todos os meses."
+                  : "Ao ativar a renovação automática, seu plano será renovado todos os meses utilizando o saldo disponível da sua carteira virtual/comissões."}
               </p>
 
               {/* Bônus */}
@@ -1462,35 +1439,52 @@ function ResumoConsumo() {
             </div>
 
             <div className="relative mt-7 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-              <button
-                type="button"
-                onClick={() => setConfirmAutoDebit(false)}
-                className="rounded-xl px-5 py-2.5 text-sm font-semibold text-[#660099] transition hover:bg-[rgba(102,0,153,0.06)]"
-                style={{
-                  background: "rgba(255,255,255,0.7)",
-                  border: "1px solid rgba(102,0,153,0.35)",
-                  backdropFilter: "blur(8px)",
-                }}
-              >
-                Cancelar
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setAutoDebit(true);
-                  setConfirmAutoDebit(false);
-                  setToast("Renovação automática ativada · +25GB liberados");
-                  setTimeout(() => setToast(null), 3000);
-                }}
-                className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
-                style={{
-                  background: "linear-gradient(135deg,#660099,#7a00b3)",
-                  boxShadow:
-                    "0 10px 28px -8px rgba(102,0,153,0.6), 0 4px 12px -2px rgba(102,0,153,0.4), inset 0 1px 0 rgba(255,255,255,0.35)",
-                }}
-              >
-                Ativar
-              </button>
+              {autoDebit ? (
+                <button
+                  type="button"
+                  onClick={() => setConfirmAutoDebit(false)}
+                  className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
+                  style={{
+                    background: "linear-gradient(135deg,#660099,#7a00b3)",
+                    boxShadow:
+                      "0 10px 28px -8px rgba(102,0,153,0.6), 0 4px 12px -2px rgba(102,0,153,0.4), inset 0 1px 0 rgba(255,255,255,0.35)",
+                  }}
+                >
+                  Entendi
+                </button>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmAutoDebit(false)}
+                    className="rounded-xl px-5 py-2.5 text-sm font-semibold text-[#660099] transition hover:bg-[rgba(102,0,153,0.06)]"
+                    style={{
+                      background: "rgba(255,255,255,0.7)",
+                      border: "1px solid rgba(102,0,153,0.35)",
+                      backdropFilter: "blur(8px)",
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAutoDebit(true);
+                      setConfirmAutoDebit(false);
+                      setToast("Renovação automática ativada · +25GB liberados");
+                      setTimeout(() => setToast(null), 3000);
+                    }}
+                    className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
+                    style={{
+                      background: "linear-gradient(135deg,#660099,#7a00b3)",
+                      boxShadow:
+                        "0 10px 28px -8px rgba(102,0,153,0.6), 0 4px 12px -2px rgba(102,0,153,0.4), inset 0 1px 0 rgba(255,255,255,0.35)",
+                    }}
+                  >
+                    Ativar
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
