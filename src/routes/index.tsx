@@ -348,6 +348,10 @@ function ResumoConsumo() {
   const [notifySms, setNotifySms] = useState(true);
   const [autoDebit, setAutoDebit] = useState(true);
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
+  const [unlockOpen, setUnlockOpen] = useState(false);
+  const [lineBlocked, setLineBlocked] = useState(true);
+  const [hasOverdueInvoice, setHasOverdueInvoice] = useState(true);
+  const [unlockRequested, setUnlockRequested] = useState(false);
 
   useEffect(() => {
     let mounted = true;
