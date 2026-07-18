@@ -17,7 +17,9 @@ import {
   Sparkles,
   AlertTriangle,
   Mail,
-
+  Lock,
+  Unlock,
+  CheckCircle2,
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
