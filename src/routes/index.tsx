@@ -1750,7 +1750,148 @@ function ResumoConsumo() {
         )}
       </Modal>
 
+      {/* Pay Invoice Modal */}
+      <Modal open={payInvoiceOpen} onClose={() => setPayInvoiceOpen(false)} title="Pagar fatura">
+        <div className="flex flex-col gap-4">
+          <div className="rounded-2xl border border-[#eee] bg-white p-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs uppercase tracking-wider text-[#888]">Valor</span>
+              <span className="text-lg font-bold text-[#660099]">{invoice.valor}</span>
+            </div>
+            <div className="my-2 h-px bg-[#f0f0f0]" />
+            <div className="flex items-center justify-between">
+              <span className="text-xs uppercase tracking-wider text-[#888]">Vencimento</span>
+              <span className="text-sm font-semibold text-[#b91c1c]">{invoice.vencimento}</span>
+            </div>
+            <div className="my-2 h-px bg-[#f0f0f0]" />
+            <div className="flex items-center justify-between">
+              <span className="text-xs uppercase tracking-wider text-[#888]">Status</span>
+              <span className="rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-semibold text-red-700">
+                Vencida
+              </span>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-[#eee] bg-white p-4">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-[#888]">
+              Pix copia e cola
+            </p>
+            <div className="mt-2 break-all rounded-lg bg-[#f7f7f7] p-2 font-mono text-[11px] text-[#333]">
+              {invoice.pixCode}
+            </div>
+            <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+              <button
+                onClick={() => {
+                  if (typeof navigator !== "undefined" && navigator.clipboard) {
+                    navigator.clipboard.writeText(invoice.pixCode);
+                  }
+                  showToast("Código Pix copiado");
+                }}
+                className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-4 py-2.5 text-sm font-semibold text-[#660099] hover:bg-[#faf5ff]"
+              >
+                Copiar código
+              </button>
+              <a
+                href={invoice.checkoutUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="flex-1 rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-2.5 text-center text-sm font-semibold text-white shadow-[0_6px_18px_rgba(102,0,153,0.30)]"
+              >
+                Abrir cobrança
+              </a>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-[#e9d5ff] bg-[#faf5ff] p-3 text-xs text-[#4b1478]">
+            Efetue o pagamento da fatura para que a regularização da linha ocorra automaticamente
+            após a confirmação bancária.
+          </div>
+          <div className="rounded-xl border border-orange-200 bg-orange-50 p-3 text-xs text-[#7c2d12]">
+            <strong>Atenção:</strong> o pagamento não desbloqueia a linha no mesmo clique. A
+            normalização ocorrerá automaticamente após a confirmação do pagamento, em até 24 horas.
+          </div>
+
+          <button
+            onClick={() => setPayInvoiceOpen(false)}
+            className="w-full rounded-xl border border-[#e5e5e5] bg-white px-4 py-3 text-sm font-semibold text-[#666]"
+          >
+            Fechar
+          </button>
+        </div>
+      </Modal>
+
+      {/* Payment Check Modal (Já efetuei o pagamento) */}
+      <Modal
+        open={paymentCheckOpen}
+        onClose={() => setPaymentCheckOpen(false)}
+        title={invoiceStatus === "paga" ? "Solicitar desbloqueio" : "Pagamento em análise"}
+      >
+        {invoiceStatus === "paga" ? (
+          <div className="flex flex-col items-center gap-4 py-2 text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#f3e8ff]">
+              <Unlock size={36} className="text-[#660099]" />
+            </div>
+            <h3 className="text-lg font-bold text-[#660099]">Solicitar desbloqueio</h3>
+            <p className="text-sm text-[#444]">
+              Sua fatura está <strong>em dia</strong>. Você pode solicitar o desbloqueio da sua
+              linha agora mesmo.
+            </p>
+            <div className="w-full rounded-xl border border-[#e9d5ff] bg-[#faf5ff] p-3 text-left text-xs text-[#4b1478]">
+              Normalmente, o desbloqueio ocorre de forma automática assim que a baixa bancária do
+              pagamento é confirmada. Caso ainda não tenha sido reativada, prossiga abaixo.
+            </div>
+            <div className="flex w-full gap-2">
+              <button
+                onClick={() => setPaymentCheckOpen(false)}
+                className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-4 py-3 text-sm font-semibold text-[#666]"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => {
+                  setPaymentCheckOpen(false);
+                  setUnlockRequested(true);
+                  setUnlockOpen(true);
+                }}
+                className="flex-1 rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-3 text-sm font-semibold text-white shadow-[0_6px_20px_rgba(102,0,153,0.35)]"
+              >
+                Desbloquear agora
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-4 py-2 text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-orange-100">
+              <AlertTriangle size={36} className="text-orange-600" />
+            </div>
+            <h3 className="text-lg font-bold text-[#c2410c]">Pagamento em análise</h3>
+            <p className="text-sm text-[#444]">
+              Ainda não identificamos a confirmação bancária do pagamento. Assim que a baixa for
+              confirmada, sua linha será normalizada automaticamente.
+            </p>
+            <div className="flex w-full gap-2">
+              <button
+                onClick={() => setPaymentCheckOpen(false)}
+                className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-4 py-3 text-sm font-semibold text-[#666]"
+              >
+                Fechar
+              </button>
+              <button
+                onClick={() => {
+                  setPaymentCheckOpen(false);
+                  setPayInvoiceOpen(true);
+                }}
+                className="flex-1 rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-3 text-sm font-semibold text-white shadow-[0_6px_20px_rgba(102,0,153,0.35)]"
+              >
+                Ver fatura
+              </button>
+            </div>
+          </div>
+        )}
+      </Modal>
+
       {/* Confirm Auto-Renewal Modal */}
+
       {confirmAutoDebit && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 animate-fade-in"
