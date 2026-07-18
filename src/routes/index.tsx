@@ -1347,7 +1347,131 @@ function ResumoConsumo() {
               <span className="font-semibold text-[#660099]">{renewalDateLabel}</span>
             </div>
           </div>
+
+          <button
+            onClick={() => {
+              setUnlockRequested(false);
+              setUnlockOpen(true);
+            }}
+            className={`mt-2 flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-white transition-all active:scale-[0.98] ${
+              lineBlocked
+                ? "bg-gradient-to-r from-[#660099] to-[#8b1fbf] shadow-[0_6px_20px_rgba(102,0,153,0.35)] hover:shadow-[0_8px_24px_rgba(102,0,153,0.45)]"
+                : "bg-gradient-to-r from-[#16a34a] to-[#22c55e] shadow-[0_6px_20px_rgba(22,163,74,0.35)]"
+            }`}
+          >
+            {lineBlocked ? <Lock size={16} /> : <Unlock size={16} />}
+            {lineBlocked ? "Desbloquear linha" : "Linha ativa"}
+          </button>
         </div>
+      </Modal>
+
+      {/* Unlock Line Modal */}
+      <Modal
+        open={unlockOpen}
+        onClose={() => setUnlockOpen(false)}
+        title="Desbloqueio de linha"
+      >
+        {!lineBlocked ? (
+          <div className="flex flex-col items-center gap-4 py-4 text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+              <CheckCircle2 size={40} className="text-green-600" />
+            </div>
+            <h3 className="text-lg font-bold text-[#660099]">Sua linha está ativa</h3>
+            <p className="text-sm text-[#666]">
+              Nenhum bloqueio identificado. Você pode usar sua linha normalmente.
+            </p>
+            <button
+              onClick={() => setUnlockOpen(false)}
+              className="mt-2 w-full rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-3 text-sm font-semibold text-white shadow-[0_6px_20px_rgba(102,0,153,0.35)]"
+            >
+              Entendi
+            </button>
+          </div>
+        ) : hasOverdueInvoice ? (
+          <div className="flex flex-col items-center gap-4 py-2 text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
+              <AlertTriangle size={36} className="text-red-600" />
+            </div>
+            <h3 className="text-lg font-bold text-[#b91c1c]">Fatura em aberto</h3>
+            <p className="text-sm text-[#444]">
+              Identificamos uma <strong>fatura vencida</strong> na sua conta. Para solicitar o
+              desbloqueio da linha, é necessário efetuar o pagamento.
+            </p>
+            <div className="w-full rounded-xl border border-red-200 bg-red-50 p-3 text-left text-xs text-[#7f1d1d]">
+              <p className="font-semibold">Como funciona:</p>
+              <ul className="mt-1 list-disc space-y-1 pl-4">
+                <li>Efetue o pagamento da fatura em aberto</li>
+                <li>Assim que a baixa bancária for confirmada, o desbloqueio é automático</li>
+                <li>Sem necessidade de solicitação manual</li>
+              </ul>
+            </div>
+            <div className="flex w-full gap-2">
+              <button
+                onClick={() => setUnlockOpen(false)}
+                className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-4 py-3 text-sm font-semibold text-[#666]"
+              >
+                Fechar
+              </button>
+              <button
+                onClick={() => {
+                  // Simulate payment → clear overdue
+                  setHasOverdueInvoice(false);
+                }}
+                className="flex-1 rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-3 text-sm font-semibold text-white shadow-[0_6px_20px_rgba(102,0,153,0.35)]"
+              >
+                Pagar fatura
+              </button>
+            </div>
+          </div>
+        ) : unlockRequested ? (
+          <div className="flex flex-col items-center gap-4 py-4 text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+              <CheckCircle2 size={40} className="text-green-600" />
+            </div>
+            <h3 className="text-lg font-bold text-green-700">Desbloqueio solicitado!</h3>
+            <p className="text-sm text-[#444]">
+              Sua linha será reativada em instantes. Você receberá uma confirmação por e-mail.
+            </p>
+            <button
+              onClick={() => {
+                setLineBlocked(false);
+                setUnlockOpen(false);
+              }}
+              className="mt-2 w-full rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-3 text-sm font-semibold text-white shadow-[0_6px_20px_rgba(102,0,153,0.35)]"
+            >
+              Concluir
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-4 py-2 text-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#f3e8ff]">
+              <Unlock size={36} className="text-[#660099]" />
+            </div>
+            <h3 className="text-lg font-bold text-[#660099]">Solicitar desbloqueio</h3>
+            <p className="text-sm text-[#444]">
+              Sua fatura está <strong>em dia</strong>. Você pode solicitar o desbloqueio da sua
+              linha agora mesmo.
+            </p>
+            <div className="w-full rounded-xl border border-[#e9d5ff] bg-[#faf5ff] p-3 text-left text-xs text-[#4b1478]">
+              Normalmente, o desbloqueio ocorre de forma automática assim que a baixa bancária do
+              pagamento é confirmada. Caso ainda não tenha sido reativada, prossiga abaixo.
+            </div>
+            <div className="flex w-full gap-2">
+              <button
+                onClick={() => setUnlockOpen(false)}
+                className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-4 py-3 text-sm font-semibold text-[#666]"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => setUnlockRequested(true)}
+                className="flex-1 rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-3 text-sm font-semibold text-white shadow-[0_6px_20px_rgba(102,0,153,0.35)]"
+              >
+                Desbloquear agora
+              </button>
+            </div>
+          </div>
+        )}
       </Modal>
 
       {/* Confirm Auto-Renewal Modal */}
