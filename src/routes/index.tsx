@@ -351,7 +351,29 @@ function ResumoConsumo() {
   const [unlockOpen, setUnlockOpen] = useState(false);
   const [lineBlocked, setLineBlocked] = useState(true);
   const [hasOverdueInvoice, setHasOverdueInvoice] = useState(true);
+  const [lineReduced, setLineReduced] = useState(false);
   const [unlockRequested, setUnlockRequested] = useState(false);
+  const [payInvoiceOpen, setPayInvoiceOpen] = useState(false);
+  const [paymentCheckOpen, setPaymentCheckOpen] = useState(false);
+  const lineStatus: "ativa" | "reduzida" | "bloqueada" = lineBlocked
+    ? "bloqueada"
+    : lineReduced
+      ? "reduzida"
+      : "ativa";
+  const invoiceStatus: "em_dia" | "vencida" | "paga" = hasOverdueInvoice
+    ? "vencida"
+    : lineBlocked
+      ? "paga"
+      : "em_dia";
+  // Mock invoice data (Asaas-style)
+  const invoice = {
+    valor: "R$ 89,90",
+    vencimento: "10/07/2025",
+    pixCode:
+      "00020126360014BR.GOV.BCB.PIX0114+5511999999999520400005303986540589.905802BR5913VIVO TELEFONICA6009SAO PAULO62070503***6304ABCD",
+    boletoUrl: "https://cobranca.exemplo.com/boleto/123",
+    checkoutUrl: "https://cobranca.exemplo.com/checkout/123",
+  };
 
   useEffect(() => {
     let mounted = true;
