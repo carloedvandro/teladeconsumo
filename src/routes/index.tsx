@@ -685,7 +685,185 @@ function ResumoConsumo() {
             </div>
           </div>
 
+          {/* Status da linha - dynamic block below consumption card */}
+          <div className="relative mt-6 w-full">
+            {lineStatus === "ativa" && (
+              <div className="w-full overflow-hidden rounded-2xl border border-green-100 bg-white shadow-[0_8px_24px_rgba(0,0,0,0.06)]">
+                <div className="flex items-center gap-3 bg-gradient-to-r from-[#15803d] to-[#22c55e] px-5 py-3 text-white">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 backdrop-blur">
+                    <CheckCircle2 size={18} />
+                  </div>
+                  <div>
+                    <p className="text-[11px] uppercase tracking-wider text-white/85">Status da linha</p>
+                    <p className="text-base font-bold leading-tight">Linha ativa</p>
+                  </div>
+                </div>
+                <div className="px-5 py-4">
+                  <p className="text-sm text-[#444]">Você pode usar sua linha normalmente.</p>
+                  <div className="mt-3 flex items-center justify-between text-xs">
+                    <span className="text-[#888]">Linha</span>
+                    <span className="font-semibold text-[#333]">{line.number}</span>
+                  </div>
+                  <div className="mt-1 flex items-center justify-between text-xs">
+                    <span className="text-[#888]">Plano</span>
+                    <span className="font-semibold text-[#333]">{line.plan}</span>
+                  </div>
+                  <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+                    <button
+                      onClick={() => showToast("Abrindo faturas...")}
+                      className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-4 py-2.5 text-sm font-semibold text-[#660099] hover:bg-[#faf5ff]"
+                    >
+                      Ver faturas
+                    </button>
+                    <button
+                      onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
+                      className="flex-1 rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_6px_18px_rgba(102,0,153,0.30)]"
+                    >
+                      Ver detalhes do consumo
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {lineStatus === "reduzida" && (
+              <div className="w-full overflow-hidden rounded-2xl border border-orange-100 bg-white shadow-[0_8px_24px_rgba(0,0,0,0.06)]">
+                <div className="flex items-center gap-3 bg-gradient-to-r from-[#c2410c] to-[#f59e0b] px-5 py-3 text-white">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 backdrop-blur">
+                    <AlertTriangle size={18} />
+                  </div>
+                  <div>
+                    <p className="text-[11px] uppercase tracking-wider text-white/85">Status da linha</p>
+                    <p className="text-base font-bold leading-tight">Velocidade reduzida</p>
+                  </div>
+                </div>
+                <div className="px-5 py-4">
+                  <p className="text-sm text-[#444]">
+                    Sua franquia foi consumida. A navegação continua com velocidade reduzida até a
+                    renovação do ciclo ou contratação adicional, se disponível.
+                  </p>
+                  <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+                    <button
+                      onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
+                      className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-4 py-2.5 text-sm font-semibold text-[#660099] hover:bg-[#faf5ff]"
+                    >
+                      Ver detalhes do consumo
+                    </button>
+                    <button
+                      onClick={() => showToast("Abrindo faturas...")}
+                      className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-4 py-2.5 text-sm font-semibold text-[#660099] hover:bg-[#faf5ff]"
+                    >
+                      Ver faturas
+                    </button>
+                    <button
+                      onClick={() => openAfterIconsReady(() => setUpgradeOpen(true))}
+                      className="flex-1 rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_6px_18px_rgba(102,0,153,0.30)]"
+                    >
+                      Contratar adicional
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {lineStatus === "bloqueada" && (
+              <div className="w-full overflow-hidden rounded-2xl border border-red-100 bg-white shadow-[0_8px_24px_rgba(0,0,0,0.06)]">
+                <div className="flex items-center gap-3 bg-gradient-to-r from-[#b91c1c] to-[#ef4444] px-5 py-3 text-white">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 backdrop-blur">
+                    <Lock size={18} />
+                  </div>
+                  <div>
+                    <p className="text-[11px] uppercase tracking-wider text-white/85">Status da linha</p>
+                    <p className="text-base font-bold leading-tight">Linha bloqueada</p>
+                    <p className="text-[11px] text-white/90">
+                      {invoiceStatus === "vencida"
+                        ? "Bloqueada por fatura em aberto"
+                        : "Fatura em dia — solicite o desbloqueio"}
+                    </p>
+                  </div>
+                </div>
+                <div className="px-5 py-4">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-[#888]">Linha</span>
+                    <span className="font-semibold text-[#333]">{line.number}</span>
+                  </div>
+                  <div className="mt-1 flex items-center justify-between text-xs">
+                    <span className="text-[#888]">Plano</span>
+                    <span className="font-semibold text-[#333]">{line.plan}</span>
+                  </div>
+
+                  {invoiceStatus === "vencida" ? (
+                    <>
+                      <div className="mt-4 flex flex-col gap-2">
+                        <button
+                          onClick={() => openAfterIconsReady(() => setPayInvoiceOpen(true))}
+                          className="w-full rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-3 text-sm font-semibold text-white shadow-[0_6px_18px_rgba(102,0,153,0.30)]"
+                        >
+                          Pagar fatura
+                        </button>
+                        <button
+                          onClick={() => openAfterIconsReady(() => setPaymentCheckOpen(true))}
+                          className="w-full rounded-xl border border-[#e5e5e5] bg-white px-4 py-3 text-sm font-semibold text-[#660099] hover:bg-[#faf5ff]"
+                        >
+                          Já efetuei o pagamento
+                        </button>
+                      </div>
+                      <p className="mt-3 text-[11px] leading-relaxed text-[#666]">
+                        Após a confirmação do pagamento, sua linha será normalizada automaticamente
+                        em até 24 horas.
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <div className="mt-4">
+                        <button
+                          onClick={() => {
+                            setUnlockRequested(false);
+                            openAfterIconsReady(() => setUnlockOpen(true));
+                          }}
+                          className="w-full rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-3 text-sm font-semibold text-white shadow-[0_6px_18px_rgba(102,0,153,0.30)]"
+                        >
+                          Desbloquear agora
+                        </button>
+                      </div>
+                      <p className="mt-3 text-[11px] leading-relaxed text-[#666]">
+                        Sua fatura está em dia. Normalmente o desbloqueio ocorre automaticamente
+                        após a baixa bancária.
+                      </p>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Provisional simulator for QA */}
+            <div className="mt-3 rounded-xl border border-dashed border-[#e5d4f5] bg-[#faf5ff]/70 p-2">
+              <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-[#660099]">
+                Simulação (provisório)
+              </p>
+              <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
+                <button
+                  onClick={() => { setLineBlocked(false); setLineReduced(false); setHasOverdueInvoice(false); }}
+                  className={`rounded-md px-2 py-1.5 text-[11px] font-semibold ${lineStatus === "ativa" ? "bg-green-600 text-white" : "border border-[#e5e5e5] bg-white text-[#666]"}`}
+                >Ativa</button>
+                <button
+                  onClick={() => { setLineBlocked(false); setLineReduced(true); setHasOverdueInvoice(false); }}
+                  className={`rounded-md px-2 py-1.5 text-[11px] font-semibold ${lineStatus === "reduzida" ? "bg-orange-500 text-white" : "border border-[#e5e5e5] bg-white text-[#666]"}`}
+                >Reduzida</button>
+                <button
+                  onClick={() => { setLineBlocked(true); setLineReduced(false); setHasOverdueInvoice(true); }}
+                  className={`rounded-md px-2 py-1.5 text-[11px] font-semibold ${lineStatus === "bloqueada" && invoiceStatus === "vencida" ? "bg-red-600 text-white" : "border border-[#e5e5e5] bg-white text-[#666]"}`}
+                >Bloq. + fatura</button>
+                <button
+                  onClick={() => { setLineBlocked(true); setLineReduced(false); setHasOverdueInvoice(false); }}
+                  className={`rounded-md px-2 py-1.5 text-[11px] font-semibold ${lineStatus === "bloqueada" && invoiceStatus === "paga" ? "bg-[#660099] text-white" : "border border-[#e5e5e5] bg-white text-[#666]"}`}
+                >Bloq. + paga</button>
+              </div>
+            </div>
+          </div>
+
           {/* Upgrade card - inside hero art, below consumption card */}
+
           <button
             onClick={() => openAfterIconsReady(() => setUpgradeOpen(true))}
             className="relative mt-6 flex w-full items-center justify-between rounded-md px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:bottom-16 md:right-8 md:mx-0 md:mt-0 md:w-[520px]"
