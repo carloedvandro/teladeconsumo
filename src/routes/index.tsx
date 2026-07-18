@@ -1317,7 +1317,7 @@ function ResumoConsumo() {
       <Modal
         open={expandOpen}
         onClose={() => setExpandOpen(false)}
-        title="Bloqueio e desbloqueio da linha"
+        title="Desbloqueio da linha"
       >
         <div className="flex flex-col gap-4">
           {/* Status hero */}
