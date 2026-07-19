@@ -564,25 +564,9 @@ function ResumoConsumo() {
     franquiaTotal - consumoAnterior[prevIdx],
   );
 
-  const [simExtra, setSimExtra] = useState(0);
-  useEffect(() => {
-    // Reset simulation whenever the base usage or franquia mudam.
-    setSimExtra(0);
-  }, [baseLine.used, franquiaTotal]);
-  useEffect(() => {
-    const maxExtra = Math.max(
-      0,
-      franquiaTotal + sobrouAnterior - baseLine.used,
-    );
-    if (simExtra >= maxExtra) return;
-    const id = window.setInterval(() => {
-      setSimExtra((prev) => {
-        const next = +(prev + 0.05).toFixed(2);
-        return next >= maxExtra ? maxExtra : next;
-      });
-    }, 4000);
-    return () => window.clearInterval(id);
-  }, [simExtra, franquiaTotal, sobrouAnterior, baseLine.used]);
+  // Consumo estático — sobe apenas na animação de entrada e para no valor real.
+  const simExtra = 0;
+
 
   const rawUsed = +(baseLine.used + simExtra).toFixed(2);
   const liveUsed = Math.min(rawUsed, franquiaTotal + sobrouAnterior);
