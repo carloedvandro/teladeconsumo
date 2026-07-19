@@ -900,7 +900,7 @@ function ResumoConsumo() {
               <span className="hidden sm:inline">Ver opções</span>
               <ChevronRight className="h-5 w-5" />
               </div>
-              <ChevronRight className="h-5 w-5 shrink-0 text-[#660099]" />
+
             </button>
           </section>
         )}
