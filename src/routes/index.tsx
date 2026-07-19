@@ -198,15 +198,15 @@ function ConsumoRing({
   const majorTicks = 11; // at 0, 10, 20 ... 100
   const minorTicks = 41; // between majors
 
-  // Needle
+  // Needle — drawn pointing straight up; the group rotates by needleAngle so
+  // we can animate the rotation smoothly with a CSS transition.
   const needleAngle = angleAt(pct);
-  const needleTip = polar(needleAngle, r - 8);
-  const needleBase1 = polar(needleAngle + 90, 8);
-  const needleBase2 = polar(needleAngle - 90, 8);
-  const needlePath = `M ${needleBase1.x} ${needleBase1.y} L ${needleTip.x} ${needleTip.y} L ${needleBase2.x} ${needleBase2.y} Z`;
+  const needleTipY = cy - (r - 8);
+  const needlePath = `M ${cx - 8} ${cy} L ${cx} ${needleTipY} L ${cx + 8} ${cy} Z`;
 
-  // Consumed tip dot at the end of the actual consumption
-  const tipPoint = polar(needleAngle, r);
+  // Consumed tip dot at the end of the actual consumption (also rotated)
+  const tipX = cx;
+  const tipY = cy - r;
   const tipCol = tipColor(pct);
 
   const gid = line.number.replace(/\D/g, "");
