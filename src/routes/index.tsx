@@ -675,24 +675,32 @@ function ResumoConsumo() {
                 {(() => {
                   const currentStatus: LineStatus =
                     statusOverride ?? (usedPct >= 100 ? "reduzida" : "ativa");
-                  const StatusIcon =
+                  const statusIconSrc =
                     currentStatus === "ativa"
-                      ? Unlock
+                      ? statusAtivaIcon
                       : currentStatus === "reduzida"
-                        ? Gauge
-                        : Lock;
+                        ? statusReduzidaIcon
+                        : currentStatus === "bloqueada_pagamento"
+                          ? statusAguardandoIcon
+                          : statusBloqueadaIcon;
                   const statusLabel =
                     currentStatus === "ativa"
                       ? "Ativa"
                       : currentStatus === "reduzida"
                         ? "Velocidade reduzida"
-                        : "Bloqueada";
+                        : currentStatus === "bloqueada_pagamento"
+                          ? "Aguardando pagamento"
+                          : "Bloqueada";
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
                       className="mt-3 flex w-full items-center gap-2 text-left text-sm font-semibold text-[#6D28D9] transition hover:text-[#5B21B6] hover:underline"
                     >
-                      <StatusIcon className="h-4 w-4" strokeWidth={2.4} />
+                      <img
+                        src={statusIconSrc}
+                        alt={statusLabel}
+                        className="h-5 w-5 object-contain"
+                      />
                       <span>Status da linha: {statusLabel}</span>
                     </button>
                   );
