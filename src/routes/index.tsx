@@ -337,7 +337,7 @@ function ResumoConsumo() {
   const [open, setOpen] = useState(false);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
-  const [expandOpen, setExpandOpen] = useState(false);
+  const [upgradeCardVisible, setUpgradeCardVisible] = useState(false);
   const [iconsReady, setIconsReady] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
@@ -571,15 +571,13 @@ function ResumoConsumo() {
             }}
           >
             <button
-              aria-label="Ver histórico de consumo"
-              onClick={() => openAfterIconsReady(() => setExpandOpen(true))}
-              className="group absolute bottom-0 right-0 h-10 w-10 text-[#660099] md:h-12 md:w-12"
-              style={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
+              aria-label={upgradeCardVisible ? "Ocultar oferta de upgrade" : "Mostrar oferta de upgrade"}
+              onClick={() => setUpgradeCardVisible((v) => !v)}
+              className="group absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-[#660099] text-white shadow-[0_4px_14px_rgba(102,0,153,0.35)] transition-all duration-200 hover:scale-105 hover:bg-[#7a1ab8] hover:shadow-[0_6px_18px_rgba(102,0,153,0.45)] md:bottom-4 md:right-4 md:h-10 md:w-10"
             >
-              <span className="absolute inset-0 bg-[#d9d9d9] transition-colors duration-200 group-hover:bg-[#e8e8e8]" />
               <Plus
-                className="absolute bottom-1 right-1 h-4 w-4 transition-transform duration-200 group-hover:scale-110"
-                strokeWidth={2.75}
+                className={`h-5 w-5 transition-transform duration-200 ${upgradeCardVisible ? "rotate-45" : ""}`}
+                strokeWidth={2.5}
               />
             </button>
 
@@ -877,29 +875,31 @@ function ResumoConsumo() {
 
         </section>
 
-        {/* Upgrade offer — secondary horizontal card below main card */}
-        <section className="mt-4 w-full px-4 md:px-6">
-          <button
-            onClick={() => openAfterIconsReady(() => setUpgradeOpen(true))}
-            className="flex w-full items-center justify-between gap-4 rounded-md bg-white/90 px-5 py-4 shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition hover:shadow-[0_6px_24px_rgba(0,0,0,0.10)] md:ml-auto md:mr-6 md:w-[860px] md:max-w-[calc(100%-3rem)]"
-            style={{ backdropFilter: "blur(4px)" }}
-          >
-            <div className="flex min-w-0 items-center gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#660099]/10">
-                <ArrowUpCircle className="h-5 w-5 text-[#660099]" />
-              </div>
-              <div className="min-w-0 text-left">
-                <div className="truncate text-[15px] font-semibold text-[#333]">
-                  Quer falar e navegar ainda mais?
+        {/* Upgrade offer — revealed by the + button */}
+        {upgradeCardVisible && (
+          <section className="mt-4 w-full px-4 md:px-6 animate-fade-in-up">
+            <button
+              onClick={() => openAfterIconsReady(() => setUpgradeOpen(true))}
+              className="flex w-full items-center justify-between gap-4 rounded-md bg-white/90 px-5 py-4 shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition hover:shadow-[0_6px_24px_rgba(0,0,0,0.10)] md:ml-auto md:mr-6 md:w-[860px] md:max-w-[calc(100%-3rem)]"
+              style={{ backdropFilter: "blur(4px)" }}
+            >
+              <div className="flex min-w-0 items-center gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#660099]/10">
+                  <ArrowUpCircle className="h-5 w-5 text-[#660099]" />
                 </div>
-                <div className="truncate text-sm text-[#666]">
-                  Faça um upgrade no seu plano agora
+                <div className="min-w-0 text-left">
+                  <div className="truncate text-[15px] font-semibold text-[#333]">
+                    Quer falar e navegar ainda mais?
+                  </div>
+                  <div className="truncate text-sm text-[#666]">
+                    Faça um upgrade no seu plano agora
+                  </div>
                 </div>
               </div>
-            </div>
-            <ChevronRight className="h-5 w-5 shrink-0 text-[#660099]" />
-          </button>
-        </section>
+              <ChevronRight className="h-5 w-5 shrink-0 text-[#660099]" />
+            </button>
+          </section>
+        )}
 
 
         
@@ -1522,135 +1522,6 @@ function ResumoConsumo() {
           </div>
         </div>
       )}
-
-
-      {/* Line block/unlock modal */}
-      <Modal
-        open={expandOpen}
-        onClose={() => setExpandOpen(false)}
-        title="Desbloqueio da linha"
-      >
-        <div className="flex flex-col gap-4">
-          {/* Status hero */}
-          <div
-            className={`relative overflow-hidden rounded-2xl p-5 text-white shadow-[0_10px_30px_rgba(0,0,0,0.12)] ${
-              lineBlocked
-                ? "bg-gradient-to-br from-[#b91c1c] via-[#dc2626] to-[#ef4444]"
-                : "bg-gradient-to-br from-[#15803d] via-[#16a34a] to-[#22c55e]"
-            }`}
-          >
-            <div
-              className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10"
-              aria-hidden
-            />
-            <div
-              className="pointer-events-none absolute -bottom-10 -left-6 h-28 w-28 rounded-full bg-white/5"
-              aria-hidden
-            />
-            <div className="relative flex items-center gap-3">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur">
-                {lineBlocked ? <Lock size={22} /> : <Unlock size={22} />}
-              </div>
-              <div className="min-w-0">
-                <p className="text-xs uppercase tracking-wider text-white/80">Status da linha</p>
-                <p className="text-lg font-bold leading-tight">
-                  {lineBlocked ? "Linha bloqueada" : "Linha ativa"}
-                </p>
-                <p className="mt-0.5 text-xs text-white/90">
-                  {lineBlocked
-                    ? hasOverdueInvoice
-                      ? "Bloqueada por fatura em aberto"
-                      : "Solicite o desbloqueio abaixo"
-                    : "Você pode usar sua linha normalmente"}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Line info */}
-          <div className="rounded-2xl border border-[#eee] bg-white p-4">
-            <div className="flex items-center justify-between">
-              <span className="text-xs uppercase tracking-wider text-[#888]">Linha</span>
-              <span className="text-sm font-bold text-[#660099]">{line.number}</span>
-            </div>
-            <div className="my-2 h-px bg-[#f0f0f0]" />
-            <div className="flex items-center justify-between">
-              <span className="text-xs uppercase tracking-wider text-[#888]">Plano</span>
-              <span className="text-sm font-semibold text-[#333]">{line.plan}</span>
-            </div>
-          </div>
-
-          {/* Action button */}
-          {lineBlocked ? (
-            <button
-              onClick={() => {
-                setUnlockRequested(false);
-                setUnlockOpen(true);
-              }}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-3.5 text-sm font-semibold text-white shadow-[0_6px_20px_rgba(102,0,153,0.35)] transition-all hover:shadow-[0_8px_24px_rgba(102,0,153,0.45)] active:scale-[0.98]"
-            >
-              <Unlock size={16} />
-              Desbloquear linha
-            </button>
-          ) : (
-            <div className="flex w-full items-center justify-center gap-2 rounded-xl border border-green-200 bg-green-50 px-4 py-3.5 text-sm font-semibold text-green-700">
-              <CheckCircle2 size={16} />
-              Sua linha está ativa e funcionando
-            </div>
-          )}
-
-          {/* Provisional simulator */}
-          <div className="rounded-2xl border border-dashed border-[#e5d4f5] bg-[#faf5ff] p-3">
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-[#660099]">
-              Simulação (provisório)
-            </p>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                onClick={() => {
-                  setLineBlocked(true);
-                  setHasOverdueInvoice(true);
-                  setUnlockRequested(false);
-                }}
-                className={`rounded-lg px-2 py-2 text-xs font-semibold transition-all ${
-                  lineBlocked && hasOverdueInvoice
-                    ? "bg-red-600 text-white shadow-sm"
-                    : "border border-[#e5e5e5] bg-white text-[#666]"
-                }`}
-              >
-                Bloqueada + fatura
-              </button>
-              <button
-                onClick={() => {
-                  setLineBlocked(true);
-                  setHasOverdueInvoice(false);
-                  setUnlockRequested(false);
-                }}
-                className={`rounded-lg px-2 py-2 text-xs font-semibold transition-all ${
-                  lineBlocked && !hasOverdueInvoice
-                    ? "bg-[#660099] text-white shadow-sm"
-                    : "border border-[#e5e5e5] bg-white text-[#666]"
-                }`}
-              >
-                Bloqueada
-              </button>
-              <button
-                onClick={() => {
-                  setLineBlocked(false);
-                  setHasOverdueInvoice(false);
-                  setUnlockRequested(false);
-                }}
-                className={`col-span-2 rounded-lg px-2 py-2 text-xs font-semibold transition-all ${
-                  !lineBlocked
-                    ? "bg-green-600 text-white shadow-sm"
-                    : "border border-[#e5e5e5] bg-white text-[#666]"
-                }`}
-              >
-                Linha ativa
-              </button>
-            </div>
-          </div>
-        </div>
-      </Modal>
 
       {/* Unlock Line Modal */}
       <Modal
