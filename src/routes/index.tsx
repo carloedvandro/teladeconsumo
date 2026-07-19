@@ -627,7 +627,7 @@ function ResumoConsumo() {
 
           {/* Consumption panel overlay - centered/right like reference */}
           <div
-            className="relative -mt-24 overflow-hidden rounded-md p-5 pb-10 md:absolute md:right-8 md:top-10 md:mx-0 md:mt-0 md:w-[520px] md:translate-y-0 md:p-5 md:pb-8"
+            className="relative -mt-24 overflow-hidden rounded-md p-5 pb-10 md:absolute md:right-6 md:top-10 md:mx-0 md:mt-0 md:w-[560px] md:translate-y-0 md:p-5 md:pb-8"
             style={{
               background: "rgba(255,255,255,0.74)",
               backdropFilter: "blur(6px)",
@@ -651,7 +651,7 @@ function ResumoConsumo() {
             <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-4">
               <div className="self-center md:self-auto"><ConsumoRing line={line} /></div>
 
-              <div className="w-full md:w-[220px]">
+              <div className="w-full md:w-[260px]">
 
 
 
@@ -687,12 +687,13 @@ function ResumoConsumo() {
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
-                          <span>
+                          <span className="text-[13px]">
                             <span className="font-bold text-[#660099]">{usedPctExact}%</span>
                             <span className="text-[#8a8a90]"> - </span>
                             <span className="font-bold text-[#1a1a1a]">{line.used.toFixed(2)} GB</span>
                           </span>
                         </div>
+
                         <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
                           <div
                             className="h-full rounded-full"
@@ -727,12 +728,13 @@ function ResumoConsumo() {
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
-                          <span>
+                          <span className="text-[13px]">
                             <span className="font-bold text-[#660099]">{availPctExact}%</span>
                             <span className="text-[#8a8a90]"> - </span>
                             <span className="font-bold text-[#1a1a1a]">{available.toFixed(2)} GB</span>
                           </span>
                         </div>
+
                         <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
                           <div
                             className="h-full rounded-full bg-[#660099]"
@@ -1840,17 +1842,30 @@ function ResumoConsumo() {
               {/* Ações */}
               <div className="space-y-2">
                 {currentStatus === "ativa" && (
-                  <button
-                    onClick={() => {
-                      setStatusOpen(false);
-                      setToast("Abrindo suas faturas...");
-                      setTimeout(() => setToast(null), 2200);
-                    }}
-                    className="w-full rounded-xl border border-[#660099] px-3 py-3 text-sm font-semibold text-[#660099] transition hover:bg-[#f5ebfa]"
-                  >
-                    Ver faturas
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        setToast("Abrindo suas faturas...");
+                        setTimeout(() => setToast(null), 2200);
+                      }}
+                      className="flex-1 rounded-xl border border-[#660099] px-3 py-3 text-sm font-semibold text-[#660099] transition hover:bg-[#f5ebfa]"
+                    >
+                      Ver faturas
+                    </button>
+                    <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        openAfterIconsReady(() => setUpgradeOpen(true));
+                      }}
+                      className="flex-1 rounded-xl px-3 py-3 text-sm font-semibold text-white transition hover:brightness-110"
+                      style={{ background: "linear-gradient(135deg,#660099,#7a00b3)" }}
+                    >
+                      Fazer upgrade
+                    </button>
+                  </div>
                 )}
+
 
 
                 {currentStatus === "bloqueada_fatura" && (
