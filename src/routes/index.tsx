@@ -317,9 +317,8 @@ function ConsumoRing({
         <circle cx={cx - 2} cy={cy - 2} r={2} fill="#c8a2ff" opacity={0.9} />
       </svg>
 
-      {/* Big value + subtitle — pushed down toward the arc tips so it does
-          not overlap the needle base. */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center">
+      {/* Big value + subtitle — pushed up a bit so it sits above the arc tips. */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-8 flex flex-col items-center">
         <div className="text-[30px] font-bold leading-none text-[#1a1a1a]">
           {line.used === 0
             ? "0.00"
@@ -650,7 +649,7 @@ function ResumoConsumo() {
               />
             </button>
             <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-4">
-              <div className="self-center md:-ml-6 md:self-auto"><ConsumoRing line={line} /></div>
+              <div className="self-center md:self-auto"><ConsumoRing line={line} /></div>
 
               <div className="w-full md:w-[220px]">
 
@@ -885,30 +884,7 @@ function ResumoConsumo() {
           </div>
 
 
-          {/* Upgrade card - inside hero art, below consumption card */}
-          <button
-            onClick={() => openAfterIconsReady(() => setUpgradeOpen(true))}
-            className="relative mt-6 flex w-full items-center justify-between rounded-md px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:bottom-6 md:right-8 md:mx-0 md:mt-0 md:w-[520px]"
-            style={{
-              background: "rgba(255,255,255,0.74)",
-              backdropFilter: "blur(6px)",
-              boxShadow:
-                "0 8px 32px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.45)",
-            }}
-          >
-            <div className="flex items-center gap-4">
-              <FileText className="h-7 w-7 text-[#660099]" />
-              <div className="text-left">
-                <div className="text-[15px] font-semibold text-[#333]">
-                  Quer falar e navegar ainda mais?
-                </div>
-                <div className="text-sm text-[#666]">
-                  Faça um upgrade no seu plano agora
-                </div>
-              </div>
-            </div>
-            <ChevronRight className="h-5 w-5 text-[#660099]" />
-          </button>
+
 
         </section>
 
@@ -1381,6 +1357,28 @@ function ResumoConsumo() {
                 </ul>
               </>
             )}
+
+            {/* Upgrade CTA - inside details modal */}
+            <button
+              onClick={() => {
+                setDetailsOpen(false);
+                openAfterIconsReady(() => setUpgradeOpen(true));
+              }}
+              className="mt-4 flex w-full items-center justify-between rounded-lg border border-[#e5e5ea] bg-white px-4 py-3.5 text-left transition hover:border-[#660099]/40 hover:shadow-sm"
+            >
+              <div className="flex items-center gap-3">
+                <FileText className="h-6 w-6 text-[#660099]" />
+                <div>
+                  <div className="text-[14px] font-semibold text-[#1a1a1a]">
+                    Quer falar e navegar ainda mais?
+                  </div>
+                  <div className="text-[12px] text-[#666]">
+                    Faça um upgrade no seu plano agora
+                  </div>
+                </div>
+              </div>
+              <ChevronRight className="h-5 w-5 text-[#660099]" />
+            </button>
           </div>
         </div>
       </Modal>
