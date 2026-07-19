@@ -815,7 +815,56 @@ function ResumoConsumo() {
                 })()}
               </div>
             </div>
+
+            {/* Full-width consumption progress bar */}
+            <div
+              className="mt-5 flex items-center gap-3 rounded-2xl px-3 py-3 md:gap-4 md:px-4"
+              style={{
+                background: "rgba(255,255,255,0.55)",
+                boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.5)",
+              }}
+            >
+              <div className="min-w-0 shrink-0">
+                <div className="text-sm font-semibold text-[#1a1a1a] leading-tight">Consumo</div>
+                <div className="text-[11px] whitespace-nowrap leading-tight">
+                  <span className="font-bold text-[#660099]">{formatGB(line.used)}</span>
+                  <span className="text-[#6b6b6b]"> de </span>
+                  <span className="font-semibold text-[#1a1a1a]">{line.total} GB</span>
+                </div>
+              </div>
+              <div className="relative h-2.5 flex-1 overflow-visible rounded-full bg-[#ececef]">
+                <div
+                  className="h-full rounded-full transition-[width] duration-500"
+                  style={{
+                    width: `${usedPct}%`,
+                    background:
+                      "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
+                  }}
+                />
+                <div
+                  className="absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-white shadow"
+                  style={{
+                    left: `calc(${Math.max(0, Math.min(100, usedPct))}% - 8px)`,
+                    boxShadow: "0 1px 4px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(0,0,0,0.06)",
+                  }}
+                />
+              </div>
+              <div className="shrink-0 text-right">
+                <div className="text-lg font-bold leading-none text-[#660099]">{usedPct}%</div>
+                <div className="text-[10px] text-[#6b6b6b]">utilizado</div>
+              </div>
+            </div>
+
+            {/* Realtime footer */}
+            <div className="mt-2 flex items-center justify-center gap-1.5 text-[11px] text-[#6b6b6b]">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#660099" opacity="0.85" />
+                <path d="m9 12 2 2 4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              Os dados são atualizados em tempo real.
+            </div>
           </div>
+
 
           {/* Upgrade card - inside hero art, below consumption card */}
           <button
