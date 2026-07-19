@@ -1995,40 +1995,6 @@ function ResumoConsumo() {
 
               </div>
 
-              {/* Simulação (dev) */}
-              <div className="rounded-xl border border-dashed border-[#e5d3f0] px-3 py-2.5">
-                <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-[#888]">
-                  Simular status
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {(
-                    [
-                      ["ativa", "Ativa"],
-                      ["bloqueada_fatura", "Bloq. fatura"],
-                      ["bloqueada_pagamento", "Aguard. desbl."],
-                      ["reduzida", "Reduzida"],
-                    ] as [LineStatus, string][]
-                  ).map(([key, label]) => (
-                    <button
-                      key={key}
-                      onClick={() => setStatusOverride(key)}
-                      className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition ${
-                        statusOverride === key
-                          ? "bg-[#660099] text-white"
-                          : "bg-[#f3eaf7] text-[#660099] hover:bg-[#e7d4f0]"
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                  <button
-                    onClick={() => setStatusOverride(null)}
-                    className="rounded-full px-2.5 py-1 text-[11px] font-medium text-[#888] hover:text-[#660099]"
-                  >
-                    Auto
-                  </button>
-                </div>
-              </div>
             </div>
           </Modal>
         );
