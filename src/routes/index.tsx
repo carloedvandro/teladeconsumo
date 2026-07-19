@@ -1897,49 +1897,6 @@ function ResumoConsumo() {
                   </div>
                 )}
 
-
-
-                {currentStatus === "bloqueada_fatura" && (
-                  <>
-                    <button
-                      onClick={() => {
-                        setStatusOpen(false);
-                        openAfterIconsReady(() => setPixOpen(true));
-                      }}
-                      className="flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110"
-                      style={{
-                        background: "linear-gradient(135deg,#660099,#7a00b3)",
-                      }}
-                    >
-                      <CreditCard className="h-4 w-4" /> Pagar fatura
-                    </button>
-                    <p className="rounded-lg bg-[#fff7ed] px-3 py-2 text-xs text-[#b45309]">
-                      Após o pagamento, a regularização pode ocorrer em até 24
-                      horas.
-                    </p>
-                  </>
-                )}
-                {currentStatus === "bloqueada_pagamento" && (
-                  <>
-                    <button
-                      onClick={() => {
-                        setStatusOpen(false);
-                        setToast("Solicitação de desbloqueio enviada");
-                        setTimeout(() => setToast(null), 2500);
-                      }}
-                      className="w-full rounded-xl px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110"
-                      style={{
-                        background: "linear-gradient(135deg,#660099,#7a00b3)",
-                      }}
-                    >
-                      Desbloquear linha
-                    </button>
-                    <p className="rounded-lg bg-[#fff7ed] px-3 py-2 text-xs text-[#b45309]">
-                      Caso a linha não normalize automaticamente, prossiga com
-                      a solicitação acima.
-                    </p>
-                  </>
-                )}
                 {currentStatus === "reduzida" && (
                   <div className="flex gap-2">
                     <button
