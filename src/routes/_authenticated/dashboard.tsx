@@ -594,6 +594,16 @@ function ResumoConsumo() {
   const availPctExact = (Math.round((100 - pct) * 100) / 100).toFixed(2);
   const color = ringColor(pct);
 
+  // Rise-from-zero intro for the mini bars, coordinated with the gauge needle.
+  const [barsIntro, setBarsIntro] = useState(false);
+  useEffect(() => {
+    setBarsIntro(false);
+    const id = window.setTimeout(() => setBarsIntro(true), 80);
+    return () => window.clearTimeout(id);
+  }, [pct]);
+  const usedPctAnim = barsIntro ? usedPct : 0;
+  const availPctAnim = barsIntro ? availPct : 0;
+
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
     const scheduleMidnight = () => {
