@@ -1904,6 +1904,31 @@ function ResumoConsumo() {
                   </button>
                 )}
 
+                {(currentStatus === "bloqueada_fatura" ||
+                  currentStatus === "bloqueada_pagamento") && (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        setPixOpen(true);
+                      }}
+                      className="flex-1 rounded-xl px-3 py-3 text-sm font-semibold text-white transition hover:brightness-110"
+                      style={{ background: "linear-gradient(135deg,#DC2626,#b91c1c)" }}
+                    >
+                      Pagar fatura
+                    </button>
+                    <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        openAfterIconsReady(() => setUpgradeOpen(true));
+                      }}
+                      className="flex-1 rounded-xl border border-[#660099] px-3 py-3 text-sm font-semibold text-[#660099] transition hover:bg-[#f5ebfa]"
+                    >
+                      Fazer upgrade
+                    </button>
+                  </div>
+                )}
+
 
               </div>
 
