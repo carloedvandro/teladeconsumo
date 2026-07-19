@@ -679,17 +679,10 @@ function ResumoConsumo() {
                       : currentStatus === "reduzida"
                         ? "Velocidade reduzida"
                         : "Bloqueada";
-                  const statusTone =
-                    currentStatus === "ativa"
-                      ? "#660099"
-                      : currentStatus === "reduzida"
-                        ? "#b34e00"
-                        : "#b91c1c";
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                      className="mt-3 flex w-full items-center gap-2 text-left text-sm font-semibold hover:underline"
-                      style={{ color: statusTone }}
+                      className="mt-3 flex w-full items-center gap-2 text-left text-sm font-semibold text-[#6D28D9] transition hover:text-[#5B21B6] hover:underline"
                     >
                       <StatusIcon className="h-4 w-4" strokeWidth={2.4} />
                       <span>Status da linha: {statusLabel}</span>
