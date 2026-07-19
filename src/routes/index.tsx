@@ -883,7 +883,7 @@ function ResumoConsumo() {
                     simStatus ?? (usedPct >= 100 ? "reduzida" : "ativa");
                   const map = {
                     ativa: { icon: statusAtivaIcon, label: "Ativa", tone: "#16A34A" },
-                    reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", tone: "#C96A05" },
+                    reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", tone: "#F97316" },
                     bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", tone: "#DC2626" },
                     bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", tone: "#DC2626" },
                   } as const;
@@ -891,22 +891,23 @@ function ResumoConsumo() {
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                      className="mt-3 flex w-full flex-wrap items-center gap-x-2 gap-y-1 text-left text-[13px] font-semibold transition hover:underline md:-ml-2 md:mt-5 md:text-sm"
+                      className="mt-3 flex w-full items-start gap-x-2 text-left text-[13px] font-semibold transition hover:underline md:-ml-2 md:mt-5 md:text-sm"
                       style={{ color: s.tone }}
                     >
                       <img
                         src={s.icon}
                         alt={s.label}
-                        className="h-5 w-5 shrink-0 object-contain"
+                        className="mt-0.5 h-5 w-5 shrink-0 object-contain"
                       />
-                      <span className="min-w-0 flex-1 truncate whitespace-nowrap">
-                        Status da linha: {s.label}
-                      </span>
-                      {effective === "reduzida" && (
-                        <span className="shrink-0 whitespace-nowrap text-xs font-bold md:basis-full md:pl-7">
-                          256 Kbps
+                      <span className="flex min-w-0 flex-col">
+                        <span className="truncate whitespace-nowrap">Status da linha:</span>
+                        <span className="truncate whitespace-nowrap">
+                          {s.label}
+                          {effective === "reduzida" && (
+                            <span className="ml-1.5 text-xs font-bold">256 Kbps</span>
+                          )}
                         </span>
-                      )}
+                      </span>
                     </button>
                   );
                 })()}
