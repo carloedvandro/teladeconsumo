@@ -1776,7 +1776,7 @@ function ResumoConsumo() {
             tone: "#C96A05",
             fatura: "Em dia",
             message:
-              "Sua franquia foi consumida e a navegação segue em velocidade reduzida até a próxima renovação. O ciclo não pode ser adiantado. Para voltar à velocidade total, contrate um plano maior: seu consumo atual é preservado, os novos GB são somados na hora e você paga apenas a diferença proporcional dos dias restantes. No próximo ciclo, o plano já entra atualizado com a franquia cheia.",
+              "Sua franquia foi totalmente consumida, e a navegação seguirá em velocidade reduzida até a próxima renovação do ciclo. Para voltar à velocidade máxima, você pode contratar um plano superior. Nesse caso, seu consumo atual é preservado, os novos GB são liberados imediatamente e você paga apenas a diferença proporcional aos dias restantes do ciclo. Na próxima renovação, o novo plano já será ativado com a franquia completa.",
           },
           bloqueada_fatura: {
             label: "Bloqueada por fatura",
