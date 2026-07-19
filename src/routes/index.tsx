@@ -202,7 +202,12 @@ function ConsumoRing({
   // we can animate the rotation smoothly with a CSS transition.
   const needleAngle = angleAt(pct);
   const needleTipY = cy - (r - 8);
-  const needlePath = `M ${cx - 5} ${cy} L ${cx} ${needleTipY} L ${cx + 5} ${cy} Z`;
+  // 3D needle geometry — a slim triangular blade with a separate left/right
+  // face so we can shade each side to fake volume.
+  const nBaseHalf = 5;
+  const needleLeftPath = `M ${cx - nBaseHalf} ${cy} L ${cx} ${needleTipY} L ${cx} ${cy} Z`;
+  const needleRightPath = `M ${cx} ${cy} L ${cx} ${needleTipY} L ${cx + nBaseHalf} ${cy} Z`;
+  const needleGlossPath = `M ${cx - 1.2} ${cy - 4} L ${cx} ${needleTipY + 6} L ${cx + 1.2} ${cy - 4} Z`;
 
   // Consumed tip dot at the end of the actual consumption (also rotated)
   const tipX = cx;
@@ -224,10 +229,24 @@ function ConsumoRing({
             <stop offset="55%" stopColor="#7b1fa2" />
             <stop offset="100%" stopColor="#4a0072" />
           </radialGradient>
-          <linearGradient id={`needle-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#a855f7" />
-            <stop offset="100%" stopColor="#4a0072" />
+          <linearGradient id={`needleLeft-${gid}`} x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#2a0140" />
+            <stop offset="60%" stopColor="#4a0072" />
+            <stop offset="100%" stopColor="#7a1fb8" />
           </linearGradient>
+          <linearGradient id={`needleRight-${gid}`} x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#a855f7" />
+            <stop offset="55%" stopColor="#7b1fa2" />
+            <stop offset="100%" stopColor="#3a005c" />
+          </linearGradient>
+          <linearGradient id={`needleGloss-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.85" />
+            <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+          </linearGradient>
+          <radialGradient id={`hubHi-${gid}`} cx="35%" cy="30%" r="60%">
+            <stop offset="0%" stopColor="#e9d5ff" stopOpacity="0.95" />
+            <stop offset="60%" stopColor="#a855f7" stopOpacity="0" />
+          </radialGradient>
           <filter id={`gaugeShadow-${gid}`} x="-50%" y="-50%" width="200%" height="200%">
             <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" floodColor="#000" floodOpacity="0.35" />
           </filter>
@@ -343,14 +362,32 @@ function ConsumoRing({
             </>
           )}
 
-          {/* Needle */}
-          <path d={needlePath} fill={`url(#needle-${gid})`} filter={`url(#gaugeShadow-${gid})`} />
+          {/* 3D Needle — two shaded faces + glossy specular strip */}
+          <g filter={`url(#gaugeShadow-${gid})`}>
+            <path d={needleLeftPath} fill={`url(#needleLeft-${gid})`} />
+            <path d={needleRightPath} fill={`url(#needleRight-${gid})`} />
+            {/* central seam highlight to sell the ridge */}
+            <line
+              x1={cx}
+              y1={cy}
+              x2={cx}
+              y2={needleTipY}
+              stroke="#e9d5ff"
+              strokeWidth={0.7}
+              opacity={0.85}
+            />
+            {/* glossy specular on the right face */}
+            <path d={needleGlossPath} fill={`url(#needleGloss-${gid})`} opacity={0.55} />
+          </g>
         </g>
 
-        {/* Hub (3D pivot) */}
-        <circle cx={cx} cy={cy} r={13} fill={`url(#hub-${gid})`} filter={`url(#gaugeShadow-${gid})`} />
-        <circle cx={cx} cy={cy} r={5} fill="#3b0764" />
-        <circle cx={cx - 2} cy={cy - 2} r={2} fill="#c8a2ff" opacity={0.9} />
+        {/* Hub (3D pivot) — layered for depth */}
+        <circle cx={cx} cy={cy} r={15} fill="#1a0033" opacity={0.35} filter={`url(#gaugeShadow-${gid})`} />
+        <circle cx={cx} cy={cy} r={13} fill={`url(#hub-${gid})`} />
+        <circle cx={cx} cy={cy} r={13} fill={`url(#hubHi-${gid})`} />
+        <circle cx={cx} cy={cy} r={6} fill="#2a0140" />
+        <circle cx={cx - 1.5} cy={cy - 1.5} r={1.8} fill="#e9d5ff" opacity={0.95} />
+        <circle cx={cx + 3} cy={cy + 3} r={1.2} fill="#000" opacity={0.35} />
       </svg>
 
       {/* Big value + subtitle — pushed up a bit so it sits above the arc tips. */}
