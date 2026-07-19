@@ -1761,33 +1761,39 @@ function ResumoConsumo() {
       {/* Status da linha modal */}
       {(() => {
         const currentStatus: LineStatus =
-          usedPct >= 100 ? "reduzida" : "ativa";
+          simStatus ?? (usedPct >= 100 ? "reduzida" : "ativa");
         const cfg = {
           ativa: {
-            title: "Situação da linha",
             label: "Ativa",
-            icon: Unlock,
             image: statusAtivaIcon,
             tone: "#16A34A",
-            iconBg: "#16A34A",
-            bg: "#EAF7EE",
-            border: "#CFEBD8",
+            fatura: "Em dia",
             message: "Você pode usar sua linha normalmente.",
           },
           reduzida: {
-            title: "Situação da linha",
             label: "Velocidade reduzida",
-            icon: Gauge,
             image: statusReduzidaIcon,
             tone: "#C96A05",
-            iconBg: "#C96A05",
-            bg: "#F6EEE7",
-            border: "#EADBCB",
+            fatura: "Em dia",
             message:
               "Sua franquia foi consumida e a navegação segue em velocidade reduzida até a próxima renovação. O ciclo não pode ser adiantado. Para voltar à velocidade total, contrate um plano maior: seu consumo atual é preservado, os novos GB são somados na hora e você paga apenas a diferença proporcional dos dias restantes. No próximo ciclo, o plano já entra atualizado com a franquia cheia.",
-
           },
-
+          bloqueada_fatura: {
+            label: "Bloqueada por fatura",
+            image: statusBloqueadaIcon,
+            tone: "#DC2626",
+            fatura: "Em aberto",
+            message:
+              "Sua linha está bloqueada devido a uma fatura em aberto. Regularize o pagamento via Pix para reativar o serviço em até 24 horas.",
+          },
+          bloqueada_pagamento: {
+            label: "Bloqueada por pagamento",
+            image: statusBloqueadaIcon,
+            tone: "#DC2626",
+            fatura: "Pendente",
+            message:
+              "Não conseguimos processar o pagamento da sua última fatura. Regularize via Pix para desbloquear a linha.",
+          },
         }[currentStatus];
         return (
           <Modal
