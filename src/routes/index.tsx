@@ -680,7 +680,7 @@ function ResumoConsumo() {
                       ? statusAtivaIcon
                       : currentStatus === "reduzida"
                         ? statusReduzidaIcon
-                        : currentStatus === "aguardando"
+                        : currentStatus === "bloqueada_pagamento"
                           ? statusAguardandoIcon
                           : statusBloqueadaIcon;
                   const statusLabel =
@@ -688,7 +688,7 @@ function ResumoConsumo() {
                       ? "Ativa"
                       : currentStatus === "reduzida"
                         ? "Velocidade reduzida"
-                        : currentStatus === "aguardando"
+                        : currentStatus === "bloqueada_pagamento"
                           ? "Aguardando pagamento"
                           : "Bloqueada";
                   return (
