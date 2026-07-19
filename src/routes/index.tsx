@@ -198,8 +198,19 @@ function ConsumoRing({
   // gauge feels like it's "spinning up" every time the user lands on the page.
   const [animPct, setAnimPct] = useState(0);
   useEffect(() => {
-    const id = window.setTimeout(() => setAnimPct(pct), 80);
-    return () => window.clearTimeout(id);
+    setAnimPct(0);
+    const duration = 1800;
+    const start = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      // easeOutCubic for a smooth spin-up
+      const eased = 1 - Math.pow(1 - t, 3);
+      setAnimPct(pct * eased);
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, [pct]);
   const needleAngle = angleAt(animPct);
   const needleTipY = cy - (r - 8);
@@ -394,9 +405,7 @@ function ConsumoRing({
       {/* Big value + subtitle — pushed up a bit so it sits above the arc tips. */}
       <div className="pointer-events-none absolute inset-x-0 bottom-2 flex flex-col items-center">
         <div className="text-[30px] font-bold leading-none text-[#1a1a1a]">
-          {line.used === 0
-            ? "0.00"
-            : line.used.toFixed(2)}
+          {((animPct / 100) * line.total).toFixed(2)}
           <span className="ml-1 text-base font-semibold text-[#1a1a1a]">GB</span>
         </div>
         <div className="mt-1 text-[11px] text-[#6b6b6b]">
