@@ -1563,35 +1563,42 @@ function ResumoConsumo() {
             title: "Situação da linha",
             label: "Ativa",
             icon: Unlock,
-            tone: "#16a34a",
-            bg: "rgba(22,163,74,0.10)",
-            message: "Sua linha está ativa e funcionando normalmente.",
+            tone: "#16A34A",
+            iconBg: "#16A34A",
+            bg: "#EAF7EE",
+            border: "#CFEBD8",
+            message: "Você pode usar sua linha normalmente.",
           },
           bloqueada_fatura: {
             title: "Situação da linha",
             label: "Bloqueada por fatura",
             icon: Lock,
-            tone: "#b91c1c",
-            bg: "rgba(185,28,28,0.10)",
-            message: "Sua linha está bloqueada por falta de pagamento.",
+            tone: "#DC2626",
+            iconBg: "#C81E1E",
+            bg: "#FCECEC",
+            border: "#F4CACA",
+            message: "Existe uma fatura em aberto vinculada a esta linha.",
           },
           bloqueada_pagamento: {
             title: "Situação da linha",
             label: "Aguardando desbloqueio",
             icon: Lock,
-            tone: "#b45309",
-            bg: "rgba(180,83,9,0.10)",
-            message:
-              "Pagamento identificado. Você já pode solicitar o desbloqueio.",
+            tone: "#D97706",
+            iconBg: "#C96A05",
+            bg: "#F8EFE6",
+            border: "#EFDCC9",
+            message: "Estamos aguardando a normalização da linha.",
           },
           reduzida: {
             title: "Situação da linha",
             label: "Velocidade reduzida",
             icon: Gauge,
-            tone: "#b34e00",
-            bg: "rgba(179,78,0,0.10)",
+            tone: "#C96A05",
+            iconBg: "#C96A05",
+            bg: "#F6EEE7",
+            border: "#EADBCB",
             message:
-              "Sua franquia foi totalmente consumida. A velocidade foi reduzida até a próxima renovação.",
+              "Sua franquia foi consumida e a navegação segue com velocidade reduzida.",
           },
         }[currentStatus];
         const Icon = cfg.icon;
@@ -1604,21 +1611,21 @@ function ResumoConsumo() {
             <div className="space-y-5">
               {/* Situação */}
               <div
-                className="flex items-center gap-3 rounded-xl px-4 py-3"
-                style={{ background: cfg.bg }}
+                className="flex items-center gap-3 rounded-xl px-4 py-3.5 border"
+                style={{ background: cfg.bg, borderColor: cfg.border }}
               >
                 <div
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
-                  style={{ background: cfg.tone, color: "white" }}
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
+                  style={{ background: cfg.iconBg, color: "white" }}
                 >
                   <Icon className="h-5 w-5" strokeWidth={2.4} />
                 </div>
                 <div className="min-w-0">
-                  <div className="text-[11px] font-semibold uppercase tracking-wider text-[#666]">
+                  <div className="text-[11px] font-semibold uppercase tracking-wider text-[#6B7280]">
                     Situação atual
                   </div>
                   <div
-                    className="text-base font-semibold"
+                    className="text-base font-semibold leading-tight"
                     style={{ color: cfg.tone }}
                   >
                     {cfg.label}
