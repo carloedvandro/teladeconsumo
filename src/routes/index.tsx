@@ -42,6 +42,8 @@ import icon3dSms from "@/assets/icon-3d-sms.png";
 import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
 import icon3dBonus from "@/assets/icon-3d-bonus.png";
 import icon3dAlert from "@/assets/icon-3d-alert.png";
+import icon3dPie from "@/assets/icon-3d-pie.png";
+import icon3dDisk from "@/assets/icon-3d-disk.png";
 const familyImg = familyImgAsset.url;
 
 const PRELOAD_ICONS = [
@@ -157,106 +159,165 @@ function ConsumoRing({
   line: Line;
 }) {
   const pct = Math.min(100, (line.used / line.total) * 100);
-  const p = Math.max(0.0001, pct);
-  const tip = tipColor(pct);
 
-  // SVG-based ring for crisp rendering at any zoom level.
-  const size = 220;
+  // Gauge geometry — semicircular speedometer, 240° sweep
+  const size = 260;
   const cx = size / 2;
-  const cy = size / 2;
-  const r = 90;
-  const strokeW = 10;
-  const circ = 2 * Math.PI * r;
+  const cy = 150;
+  const r = 105;
+  const strokeW = 14;
+  // Sweep from -120° (left-bottom) through 0° (top) to +120° (right-bottom)
+  const SWEEP = 240;
+  const START = -120; // degrees
+  const angleAt = (percent: number) => START + (percent / 100) * SWEEP;
 
-  // Smooth gradient arc: split the consumed portion into many tiny segments,
-  // each painted with the interpolated color at its midpoint (green→yellow→
-  // orange→red). Produces a seamless rastro of tones along the path.
-  const STEPS = 80;
+  // Convert gauge angle (0° = up, clockwise) to xy
+  const polar = (deg: number, radius: number) => {
+    const rad = (deg * Math.PI) / 180;
+    return { x: cx + radius * Math.sin(rad), y: cy - radius * Math.cos(rad) };
+  };
+  const arcPath = (fromDeg: number, toDeg: number, radius: number) => {
+    const a = polar(fromDeg, radius);
+    const b = polar(toDeg, radius);
+    const large = Math.abs(toDeg - fromDeg) > 180 ? 1 : 0;
+    return `M ${a.x} ${a.y} A ${radius} ${radius} 0 ${large} 1 ${b.x} ${b.y}`;
+  };
+
+  // Full colored arc: green→yellow→orange→red split into many tiny segments
+  const STEPS = 100;
   const segments = Array.from({ length: STEPS }, (_, i) => {
-    const from = (i / STEPS) * p;
-    const to = ((i + 1) / STEPS) * p;
-    const mid = (from + to) / 2;
-    return { from, to, color: tipColor(mid) };
+    const fromPct = (i / STEPS) * 100;
+    const toPct = ((i + 1) / STEPS) * 100;
+    return {
+      d: arcPath(angleAt(fromPct), angleAt(toPct) + 0.6, r),
+      color: tipColor((fromPct + toPct) / 2),
+    };
   });
 
+  // Ticks
+  const majorTicks = 11; // at 0, 10, 20 ... 100
+  const minorTicks = 41; // between majors
 
-  // Tip dot angle (0° = top, clockwise).
-  const angle = (p / 100) * 360;
-  const tipX = cx + r * Math.sin((angle * Math.PI) / 180);
-  const tipY = cy - r * Math.cos((angle * Math.PI) / 180);
+  // Needle
+  const needleAngle = angleAt(pct);
+  const needleTip = polar(needleAngle, r - 8);
+  const needleBase1 = polar(needleAngle + 90, 8);
+  const needleBase2 = polar(needleAngle - 90, 8);
+  const needlePath = `M ${needleBase1.x} ${needleBase1.y} L ${needleTip.x} ${needleTip.y} L ${needleBase2.x} ${needleBase2.y} Z`;
+
+  // Consumed tip dot at the end of the actual consumption
+  const tipPoint = polar(needleAngle, r);
+  const tipCol = tipColor(pct);
+
+  const gid = line.number.replace(/\D/g, "");
 
   return (
-    <div className="relative h-[220px] w-[220px] shrink-0">
+    <div className="relative h-[210px] w-[260px] shrink-0">
       <svg
-        viewBox={`0 0 ${size} ${size}`}
+        viewBox={`0 0 ${size} 210`}
         className="absolute inset-0 h-full w-full"
         style={{ shapeRendering: "geometricPrecision" }}
       >
-        {/* Purple base track (thin) */}
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke="#7b1fa2" strokeWidth={3} />
+        <defs>
+          <radialGradient id={`hub-${gid}`} cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#a855f7" />
+            <stop offset="55%" stopColor="#7b1fa2" />
+            <stop offset="100%" stopColor="#4a0072" />
+          </radialGradient>
+          <linearGradient id={`needle-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#a855f7" />
+            <stop offset="100%" stopColor="#4a0072" />
+          </linearGradient>
+          <filter id={`gaugeShadow-${gid}`} x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" floodColor="#000" floodOpacity="0.35" />
+          </filter>
+        </defs>
 
-        {/* Colored consumed arc — rotate -90° so 0% sits at top */}
-        <g transform={`rotate(-90 ${cx} ${cy})`}>
-          {segments.map((s, i) => {
-            const isFirst = i === 0;
-            const isLast = i === segments.length - 1;
-            const segLen = ((s.to - s.from) / 100) * circ + (isLast ? 0 : 0.6);
+        {/* Background track */}
+        <path
+          d={arcPath(START, START + SWEEP, r)}
+          fill="none"
+          stroke="#e9e9ec"
+          strokeWidth={strokeW}
+          strokeLinecap="round"
+        />
 
-            const segOffset = (s.from / 100) * circ;
-            return (
-              <circle
-                key={i}
-                cx={cx}
-                cy={cy}
-                r={r}
-                fill="none"
-                stroke={s.color}
-                strokeWidth={strokeW}
-                strokeLinecap={isFirst || isLast ? "round" : "butt"}
-                strokeDasharray={`${segLen} ${circ}`}
-                strokeDashoffset={-segOffset}
-              />
-            );
-          })}
+        {/* Colored arc (full) */}
+        {segments.map((s, i) => (
+          <path
+            key={i}
+            d={s.d}
+            fill="none"
+            stroke={s.color}
+            strokeWidth={strokeW}
+            strokeLinecap={i === 0 || i === segments.length - 1 ? "round" : "butt"}
+          />
+        ))}
 
-        </g>
+        {/* Ticks */}
+        {Array.from({ length: minorTicks }).map((_, i) => {
+          const deg = START + (i / (minorTicks - 1)) * SWEEP;
+          const p1 = polar(deg, r - strokeW / 2 - 3);
+          const p2 = polar(deg, r - strokeW / 2 - 9);
+          return (
+            <line
+              key={`m-${i}`}
+              x1={p1.x}
+              y1={p1.y}
+              x2={p2.x}
+              y2={p2.y}
+              stroke="#bdbdc4"
+              strokeWidth={1}
+            />
+          );
+        })}
+        {Array.from({ length: majorTicks }).map((_, i) => {
+          const deg = START + (i / (majorTicks - 1)) * SWEEP;
+          const p1 = polar(deg, r - strokeW / 2 - 2);
+          const p2 = polar(deg, r - strokeW / 2 - 13);
+          return (
+            <line
+              key={`M-${i}`}
+              x1={p1.x}
+              y1={p1.y}
+              x2={p2.x}
+              y2={p2.y}
+              stroke="#8a8a90"
+              strokeWidth={2}
+            />
+          );
+        })}
 
-        {/* Tip marker — colored cap matching bar tone with soft shadow + tiny white dot */}
+        {/* Consumed tip cap (small dot at needle position on arc) */}
         {pct > 0 && (
           <>
-            <defs>
-              <filter id={`tipShadow-${line.number.replace(/\D/g,"")}`} x="-50%" y="-50%" width="200%" height="200%">
-                <feDropShadow dx="0" dy="0" stdDeviation="2.5" floodColor="#000" floodOpacity="0.55" />
-              </filter>
-            </defs>
-            <circle
-              cx={tipX}
-              cy={tipY}
-              r={strokeW / 2}
-              fill={tip}
-              filter={`url(#tipShadow-${line.number.replace(/\D/g,"")})`}
-            />
-
-
-            <circle cx={tipX} cy={tipY} r={1.6} fill="white" />
+            <circle cx={tipPoint.x} cy={tipPoint.y} r={strokeW / 2 + 1} fill={tipCol} filter={`url(#gaugeShadow-${gid})`} />
+            <circle cx={tipPoint.x} cy={tipPoint.y} r={2} fill="#fff" />
           </>
         )}
+
+        {/* Needle */}
+        <path d={needlePath} fill={`url(#needle-${gid})`} filter={`url(#gaugeShadow-${gid})`} />
+
+        {/* Hub (3D pivot) */}
+        <circle cx={cx} cy={cy} r={13} fill={`url(#hub-${gid})`} filter={`url(#gaugeShadow-${gid})`} />
+        <circle cx={cx} cy={cy} r={5} fill="#3b0764" />
+        <circle cx={cx - 2} cy={cy - 2} r={2} fill="#c8a2ff" opacity={0.9} />
       </svg>
 
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <div className="text-[40px] font-semibold leading-none text-[#1a1a1a]">
+      {/* Big value + subtitle centered in the lower area of the gauge */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center">
+        <div className="text-[34px] font-bold leading-none text-[#1a1a1a]">
           {line.used === 0
             ? 0
             : line.used < 1
               ? line.used.toFixed(2)
               : line.used.toFixed(1)}
-          <span className="ml-1 text-lg font-semibold text-[#1a1a1a]">GB</span>
+          <span className="ml-1 text-base font-semibold text-[#1a1a1a]">GB</span>
         </div>
-        <div className="mt-2 text-xs text-[#6b6b6b]">
+        <div className="mt-1 text-[11px] text-[#6b6b6b]">
           consumidos de{" "}
-          <span className="font-bold text-[#1a1a1a]">
-            {line.total} GB
-          </span>
+          <span className="font-bold text-[#660099]">{line.total} GB</span>
         </div>
       </div>
     </div>
@@ -601,31 +662,67 @@ function ResumoConsumo() {
                   <span className="font-semibold text-[#1a1a1a]">{renewalDateLabel}</span>
                 </p>
 
-                <ul className="mt-5 text-sm">
-                  <li className="flex items-center justify-between gap-3 border-b border-[#a8a8a8] py-3">
-                    <span className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[#5a5a5a]">
-
-                      <span
-                        className="inline-block h-3 w-3 rounded-full border-[3px]"
-                        style={{ borderColor: color }}
+                <ul className="mt-5 space-y-2.5 text-sm">
+                  <li>
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={icon3dPie}
+                        alt=""
+                        loading="eager"
+                        decoding="sync"
+                        className="h-10 w-10 shrink-0 object-contain"
                       />
-                      Meu Consumo
-                    </span>
-                    <span className="whitespace-nowrap text-right font-semibold text-[#1a1a1a]">
-                      {usedPct}% - {formatGB(line.used)}
-                    </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
+                          <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
+                          <span>
+                            <span className="font-bold" style={{ color }}>{usedPct}%</span>
+                            <span className="text-[#8a8a90]"> - </span>
+                            <span className="font-bold text-[#1a1a1a]">{formatGB(line.used)}</span>
+                          </span>
+                        </div>
+                        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#ececef]">
+                          <div
+                            className="h-full rounded-full transition-[width] duration-500"
+                            style={{
+                              width: `${usedPct}%`,
+                              background:
+                                "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </li>
-                  <li className="flex items-center justify-between gap-3 border-b border-[#a8a8a8] py-3">
-                    <span className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[#5a5a5a]">
-                      <span className="inline-block h-3 w-3 rounded-full border-[3px] border-[#660099]" />
-                      Disponíveis
-                    </span>
-                    <span className="whitespace-nowrap text-right font-semibold text-[#1a1a1a]">
-                      {availPct}% - {formatGB(available)}
-                    </span>
+                  <li>
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={icon3dDisk}
+                        alt=""
+                        loading="eager"
+                        decoding="sync"
+                        className="h-10 w-10 shrink-0 object-contain"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
+                          <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
+                          <span>
+                            <span className="font-bold text-[#660099]">{availPct}%</span>
+                            <span className="text-[#8a8a90]"> - </span>
+                            <span className="font-bold text-[#1a1a1a]">{formatGB(available)}</span>
+                          </span>
+                        </div>
+                        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#ececef]">
+                          <div
+                            className="h-full rounded-full bg-[#660099] transition-[width] duration-500"
+                            style={{ width: `${availPct}%` }}
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </li>
-
                 </ul>
+
 
                 {/* Renovação automática (integrada, sem card) */}
                 <div className="mt-4 flex items-start justify-between gap-4">
@@ -718,7 +815,56 @@ function ResumoConsumo() {
                 })()}
               </div>
             </div>
+
+            {/* Full-width consumption progress bar */}
+            <div
+              className="mt-5 flex items-center gap-3 rounded-2xl px-3 py-3 md:gap-4 md:px-4"
+              style={{
+                background: "rgba(255,255,255,0.55)",
+                boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.5)",
+              }}
+            >
+              <div className="min-w-0 shrink-0">
+                <div className="text-sm font-semibold text-[#1a1a1a] leading-tight">Consumo</div>
+                <div className="text-[11px] whitespace-nowrap leading-tight">
+                  <span className="font-bold text-[#660099]">{formatGB(line.used)}</span>
+                  <span className="text-[#6b6b6b]"> de </span>
+                  <span className="font-semibold text-[#1a1a1a]">{line.total} GB</span>
+                </div>
+              </div>
+              <div className="relative h-2.5 flex-1 overflow-visible rounded-full bg-[#ececef]">
+                <div
+                  className="h-full rounded-full transition-[width] duration-500"
+                  style={{
+                    width: `${usedPct}%`,
+                    background:
+                      "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
+                  }}
+                />
+                <div
+                  className="absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-white shadow"
+                  style={{
+                    left: `calc(${Math.max(0, Math.min(100, usedPct))}% - 8px)`,
+                    boxShadow: "0 1px 4px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(0,0,0,0.06)",
+                  }}
+                />
+              </div>
+              <div className="shrink-0 text-right">
+                <div className="text-lg font-bold leading-none text-[#660099]">{usedPct}%</div>
+                <div className="text-[10px] text-[#6b6b6b]">utilizado</div>
+              </div>
+            </div>
+
+            {/* Realtime footer */}
+            <div className="mt-2 flex items-center justify-center gap-1.5 text-[11px] text-[#6b6b6b]">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#660099" opacity="0.85" />
+                <path d="m9 12 2 2 4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              Os dados são atualizados em tempo real.
+            </div>
           </div>
+
 
           {/* Upgrade card - inside hero art, below consumption card */}
           <button
