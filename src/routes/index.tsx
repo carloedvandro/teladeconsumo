@@ -689,9 +689,9 @@ function ResumoConsumo() {
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
                           <span>
-                            <span className="font-bold" style={{ color }}>{usedPct}%</span>
+                            <span className="font-bold text-[#660099]">{usedPctExact}%</span>
                             <span className="text-[#8a8a90]"> - </span>
-                            <span className="font-bold text-[#1a1a1a]">{formatGB(line.used)}</span>
+                            <span className="font-bold text-[#1a1a1a]">{line.used.toFixed(2)} GB</span>
                           </span>
                         </div>
                         <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#ececef]">
