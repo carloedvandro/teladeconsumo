@@ -17,9 +17,7 @@ import {
   Sparkles,
   AlertTriangle,
   Mail,
-  Lock,
-  Unlock,
-  CheckCircle2,
+
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
@@ -337,7 +335,7 @@ function ResumoConsumo() {
   const [open, setOpen] = useState(false);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
-  const [upgradeCardVisible, setUpgradeCardVisible] = useState(false);
+  const [expandOpen, setExpandOpen] = useState(false);
   const [iconsReady, setIconsReady] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
@@ -348,32 +346,6 @@ function ResumoConsumo() {
   const [notifySms, setNotifySms] = useState(true);
   const [autoDebit, setAutoDebit] = useState(true);
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
-  const [unlockOpen, setUnlockOpen] = useState(false);
-  const [lineBlocked, setLineBlocked] = useState(true);
-  const [hasOverdueInvoice, setHasOverdueInvoice] = useState(true);
-  const [lineReduced, setLineReduced] = useState(false);
-  const [unlockRequested, setUnlockRequested] = useState(false);
-  const [payInvoiceOpen, setPayInvoiceOpen] = useState(false);
-  const [paymentCheckOpen, setPaymentCheckOpen] = useState(false);
-  const lineStatus: "ativa" | "reduzida" | "bloqueada" = lineBlocked
-    ? "bloqueada"
-    : lineReduced
-      ? "reduzida"
-      : "ativa";
-  const invoiceStatus: "em_dia" | "vencida" | "paga" = hasOverdueInvoice
-    ? "vencida"
-    : lineBlocked
-      ? "paga"
-      : "em_dia";
-  // Mock invoice data (Asaas-style)
-  const invoice = {
-    valor: "R$ 89,90",
-    vencimento: "10/07/2025",
-    pixCode:
-      "00020126360014BR.GOV.BCB.PIX0114+5511999999999520400005303986540589.905802BR5913VIVO TELEFONICA6009SAO PAULO62070503***6304ABCD",
-    boletoUrl: "https://cobranca.exemplo.com/boleto/123",
-    checkoutUrl: "https://cobranca.exemplo.com/checkout/123",
-  };
 
   useEffect(() => {
     let mounted = true;
@@ -495,176 +467,6 @@ function ResumoConsumo() {
       : `em ${cycleDaysLeft} ${cycleDaysLeft === 1 ? "dia" : "dias"}`;
   const renewalDateLabel = nextRenewalDate(2, now);
 
-  const statusBlock = (
-    <div className="min-w-0">
-      {lineStatus === "ativa" && (
-        <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-green-100 bg-white shadow-[0_4px_16px_rgba(0,0,0,0.05)]">
-          <div className="flex items-center gap-3 bg-gradient-to-r from-[#15803d] to-[#22c55e] px-4 py-3 text-white">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur">
-              <CheckCircle2 size={18} />
-            </div>
-            <div className="min-w-0">
-              <p className="text-[10px] uppercase tracking-wider text-white/85">Status da linha</p>
-              <p className="text-base font-bold leading-tight">Linha ativa</p>
-            </div>
-          </div>
-          <div className="flex flex-1 flex-col px-4 py-4">
-            <p className="text-sm text-[#444]">Você pode usar sua linha normalmente.</p>
-            <div className="mt-3 space-y-1 text-xs">
-              <div className="flex items-center justify-between">
-                <span className="text-[#888]">Linha</span>
-                <span className="font-semibold text-[#333]">{line.number}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-[#888]">Plano</span>
-                <span className="font-semibold text-[#333]">{line.plan}</span>
-              </div>
-            </div>
-            <div className="mt-auto flex flex-col gap-2 pt-4 sm:flex-row">
-              <button
-                onClick={() => showToast("Abrindo faturas...")}
-                className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-3 py-2.5 text-sm font-semibold text-[#660099] hover:bg-[#faf5ff]"
-              >
-                Ver faturas
-              </button>
-              <button
-                onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
-                className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-3 py-2.5 text-sm font-semibold text-[#660099] hover:bg-[#faf5ff]"
-              >
-                Ver consumo
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {lineStatus === "reduzida" && (
-        <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-orange-100 bg-white shadow-[0_4px_16px_rgba(0,0,0,0.05)]">
-          <div className="flex items-center gap-3 bg-gradient-to-r from-[#c2410c] to-[#f59e0b] px-4 py-3 text-white">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur">
-              <AlertTriangle size={18} />
-            </div>
-            <div className="min-w-0">
-              <p className="text-[10px] uppercase tracking-wider text-white/85">Status da linha</p>
-              <p className="text-base font-bold leading-tight">Velocidade reduzida</p>
-            </div>
-          </div>
-          <div className="flex flex-1 flex-col px-4 py-4">
-            <p className="text-sm leading-relaxed text-[#444]">
-              Sua franquia foi consumida. A navegação continua com velocidade reduzida até a
-              renovação do ciclo ou contratação adicional.
-            </p>
-            <div className="mt-auto flex flex-col gap-2 pt-4">
-              <button
-                onClick={() => openAfterIconsReady(() => setUpgradeOpen(true))}
-                className="w-full rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-3 py-2.5 text-sm font-semibold text-white shadow-[0_6px_18px_rgba(102,0,153,0.30)]"
-              >
-                Contratar adicional
-              </button>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
-                  className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-3 py-2 text-xs font-semibold text-[#660099] hover:bg-[#faf5ff]"
-                >
-                  Ver detalhes
-                </button>
-                <button
-                  onClick={() => showToast("Abrindo faturas...")}
-                  className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-3 py-2 text-xs font-semibold text-[#660099] hover:bg-[#faf5ff]"
-                >
-                  Ver faturas
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {lineStatus === "bloqueada" && invoiceStatus === "vencida" && (
-        <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-red-100 bg-white shadow-[0_4px_16px_rgba(0,0,0,0.05)]">
-          <div className="flex items-start gap-3 bg-gradient-to-r from-[#b91c1c] to-[#ef4444] px-4 py-3 text-white">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur">
-              <Lock size={18} />
-            </div>
-            <div className="min-w-0">
-              <p className="text-[10px] uppercase tracking-wider text-white/85">Status da linha</p>
-              <p className="text-base font-bold leading-tight">Linha bloqueada</p>
-              <p className="text-[11px] text-white/90">Bloqueada por fatura em aberto</p>
-            </div>
-          </div>
-          <div className="flex flex-1 flex-col px-4 py-4">
-            <div className="space-y-1 text-xs">
-              <div className="flex items-center justify-between">
-                <span className="text-[#888]">Linha</span>
-                <span className="font-semibold text-[#333]">{line.number}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-[#888]">Plano</span>
-                <span className="font-semibold text-[#333]">{line.plan}</span>
-              </div>
-            </div>
-            <div className="mt-auto flex flex-col gap-2 pt-4">
-              <button
-                onClick={() => openAfterIconsReady(() => setPayInvoiceOpen(true))}
-                className="w-full rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-3 py-2.5 text-sm font-semibold text-white shadow-[0_6px_18px_rgba(102,0,153,0.30)]"
-              >
-                Pagar fatura
-              </button>
-              <button
-                onClick={() => openAfterIconsReady(() => setPaymentCheckOpen(true))}
-                className="w-full rounded-xl border border-[#e5e5e5] bg-white px-3 py-2.5 text-sm font-semibold text-[#660099] hover:bg-[#faf5ff]"
-              >
-                Já efetuei o pagamento
-              </button>
-              <p className="text-[11px] leading-relaxed text-[#666]">
-                Após a confirmação, a linha será normalizada automaticamente em até 24 horas.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {lineStatus === "bloqueada" && invoiceStatus === "paga" && (
-        <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-[#e5d4f5] bg-white shadow-[0_4px_16px_rgba(0,0,0,0.05)]">
-          <div className="flex items-center gap-3 bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-3 text-white">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur">
-              <CheckCircle2 size={18} />
-            </div>
-            <div className="min-w-0">
-              <p className="text-[10px] uppercase tracking-wider text-white/85">Status da linha</p>
-              <p className="text-base font-bold leading-tight">Fatura em dia</p>
-            </div>
-          </div>
-          <div className="flex flex-1 flex-col px-4 py-4">
-            <p className="text-sm text-[#444]">
-              Você pode solicitar o desbloqueio da sua linha.
-            </p>
-            <div className="mt-3 space-y-1 text-xs">
-              <div className="flex items-center justify-between">
-                <span className="text-[#888]">Linha</span>
-                <span className="font-semibold text-[#333]">{line.number}</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-[#888]">Plano</span>
-                <span className="font-semibold text-[#333]">{line.plan}</span>
-              </div>
-            </div>
-            <div className="mt-auto pt-4">
-              <button
-                onClick={() => {
-                  setUnlockRequested(false);
-                  openAfterIconsReady(() => setUnlockOpen(true));
-                }}
-                className="w-full rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-3 py-2.5 text-sm font-semibold text-white shadow-[0_6px_18px_rgba(102,0,153,0.30)]"
-              >
-                Desbloquear agora
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
 
   function showToast(msg: string) {
     setToast(msg);
@@ -732,29 +534,34 @@ function ResumoConsumo() {
 
           {/* Consumption panel overlay - centered/right like reference */}
           <div
-            className="relative -mt-24 overflow-hidden rounded-md p-5 pb-8 md:absolute md:right-6 md:top-4 md:mx-0 md:mt-0 md:w-[860px] md:max-w-[calc(100%-3rem)] md:translate-y-0 md:p-6"
+            className="relative -mt-24 overflow-hidden rounded-md p-5 pb-10 md:absolute md:right-8 md:top-4 md:mx-0 md:mt-0 md:w-[520px] md:translate-y-0 md:p-5 md:pb-8"
             style={{
-              background: "rgba(255,255,255,0.78)",
+              background: "rgba(255,255,255,0.74)",
               backdropFilter: "blur(6px)",
               boxShadow:
                 "0 8px 32px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.45)",
             }}
           >
+            {/* Gray diagonal triangle in the corner with + near the tip */}
             <button
-              aria-label={upgradeCardVisible ? "Ocultar oferta de upgrade" : "Mostrar oferta de upgrade"}
-              onClick={() => setUpgradeCardVisible((v) => !v)}
-              className="group absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-[#660099] text-white shadow-[0_4px_14px_rgba(102,0,153,0.35)] transition-all duration-200 hover:scale-105 hover:bg-[#7a1ab8] hover:shadow-[0_6px_18px_rgba(102,0,153,0.45)] md:bottom-4 md:right-4 md:h-10 md:w-10"
+              aria-label="Ver histórico de consumo"
+              onClick={() => openAfterIconsReady(() => setExpandOpen(true))}
+              className="group absolute bottom-0 right-0 h-10 w-10 text-[#660099] md:h-12 md:w-12"
+              style={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
             >
+              <span className="absolute inset-0 bg-[#d9d9d9] transition-colors duration-200 group-hover:bg-[#e8e8e8]" />
               <Plus
-                className={`h-5 w-5 transition-transform duration-200 ${upgradeCardVisible ? "rotate-45" : ""}`}
-                strokeWidth={2.5}
+                className="absolute bottom-1 right-1 h-4 w-4 transition-transform duration-200 group-hover:scale-110"
+                strokeWidth={2.75}
               />
             </button>
+            <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-4">
+              <div className="self-center md:-ml-6 md:self-auto"><ConsumoRing line={line} /></div>
 
-            <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:gap-4">
-              <div className="self-center md:self-auto"><ConsumoRing line={line} /></div>
+              <div className="w-full md:w-[220px]">
 
-              <div className="w-full md:flex-1 md:min-w-0">
+
+
                 <div className="flex flex-wrap items-center gap-2">
                   <h2 className="text-[15px] font-semibold tracking-wide text-[#1a1a1a]">
                     {baseLine.plan}
@@ -774,9 +581,10 @@ function ResumoConsumo() {
                   <span className="font-semibold text-[#1a1a1a]">{renewalDateLabel}</span>
                 </p>
 
-                <ul className="mt-4 text-sm">
-                  <li className="flex items-center justify-between gap-3 border-b border-[#a8a8a8] py-2.5">
+                <ul className="mt-5 text-sm">
+                  <li className="flex items-center justify-between gap-3 border-b border-[#a8a8a8] py-3">
                     <span className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[#5a5a5a]">
+
                       <span
                         className="inline-block h-3 w-3 rounded-full border-[3px]"
                         style={{ borderColor: color }}
@@ -787,7 +595,7 @@ function ResumoConsumo() {
                       {usedPct}% - {formatGB(line.used)}
                     </span>
                   </li>
-                  <li className="flex items-center justify-between gap-3 border-b border-[#a8a8a8] py-2.5">
+                  <li className="flex items-center justify-between gap-3 border-b border-[#a8a8a8] py-3">
                     <span className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[#5a5a5a]">
                       <span className="inline-block h-3 w-3 rounded-full border-[3px] border-[#660099]" />
                       Disponíveis
@@ -796,21 +604,27 @@ function ResumoConsumo() {
                       {availPct}% - {formatGB(available)}
                     </span>
                   </li>
+
                 </ul>
 
-                <div className="mt-3 flex items-start justify-between gap-4">
+                {/* Renovação automática (integrada, sem card) */}
+                <div className="mt-4 flex items-start justify-between gap-4">
                   <div className="min-w-0 pt-0.5">
                     <span className="text-sm font-semibold text-[#1a1a1a]">Renovação automática</span>
-                    <div className="mt-2 space-y-0.5">
+                    <div className="mt-2.5 space-y-0.5">
                       {autoDebit ? (
-                        <div className="text-[11px] font-semibold text-[#660099]">
+                        <div
+                          className="text-[11px] font-semibold text-[#660099] transition-all duration-500"
+                          style={{ opacity: 1, transform: 'translateY(0)' }}
+                        >
                           Débito automático ativo
                         </div>
                       ) : (
-                        <div className="text-[11px] font-medium text-[#666]">
+                        <div className="text-[11px] font-medium text-[#666] transition-all duration-500">
                           Ative e ganhe +25GB de bônus
                         </div>
                       )}
+
                     </div>
                   </div>
                   <button
@@ -832,79 +646,46 @@ function ResumoConsumo() {
                   </button>
                 </div>
 
+
                 <button
                   onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
-                  className="mt-3 text-sm font-semibold text-[#660099] hover:underline"
+                  className="mt-4 text-sm font-semibold text-[#660099] hover:underline"
                 >
                   Ver detalhes do seu consumo &gt;
                 </button>
               </div>
             </div>
-
-            {/* QA Simulator — hidden by default */}
-            <details className="mt-4 rounded-lg border border-dashed border-[#e5d4f5] bg-[#faf5ff]/50">
-              <summary className="cursor-pointer select-none px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-[#660099]">
-                Simulação / testes internos
-              </summary>
-              <div className="grid grid-cols-2 gap-1.5 p-2 sm:grid-cols-4">
-                <button
-                  onClick={() => { setLineBlocked(false); setLineReduced(false); setHasOverdueInvoice(false); }}
-                  className={`rounded-md px-2 py-1.5 text-[11px] font-semibold ${lineStatus === "ativa" ? "bg-green-600 text-white" : "border border-[#e5e5e5] bg-white text-[#666]"}`}
-                >Ativa</button>
-                <button
-                  onClick={() => { setLineBlocked(false); setLineReduced(true); setHasOverdueInvoice(false); }}
-                  className={`rounded-md px-2 py-1.5 text-[11px] font-semibold ${lineStatus === "reduzida" ? "bg-orange-500 text-white" : "border border-[#e5e5e5] bg-white text-[#666]"}`}
-                >Reduzida</button>
-                <button
-                  onClick={() => { setLineBlocked(true); setLineReduced(false); setHasOverdueInvoice(true); }}
-                  className={`rounded-md px-2 py-1.5 text-[11px] font-semibold ${lineStatus === "bloqueada" && invoiceStatus === "vencida" ? "bg-red-600 text-white" : "border border-[#e5e5e5] bg-white text-[#666]"}`}
-                >Bloq. + fatura</button>
-                <button
-                  onClick={() => { setLineBlocked(true); setLineReduced(false); setHasOverdueInvoice(false); }}
-                  className={`rounded-md px-2 py-1.5 text-[11px] font-semibold ${lineStatus === "bloqueada" && invoiceStatus === "paga" ? "bg-[#660099] text-white" : "border border-[#e5e5e5] bg-white text-[#666]"}`}
-                >Bloq. + paga</button>
-              </div>
-            </details>
           </div>
 
-        </section>
-
-        {/* Upgrade offer — revealed by the + button */}
-        {upgradeCardVisible && (
-          <section className="mt-4 w-full px-4 md:px-6 animate-fade-in-up">
-            <button
-              onClick={() => openAfterIconsReady(() => setUpgradeOpen(true))}
-              className="flex w-full items-center justify-between gap-4 rounded-md bg-white/90 px-5 py-4 shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition hover:shadow-[0_6px_24px_rgba(0,0,0,0.10)] md:ml-auto md:mr-6 md:w-[860px] md:max-w-[calc(100%-3rem)]"
-              style={{ backdropFilter: "blur(4px)" }}
-            >
-              <div className="flex min-w-0 items-center gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#660099]/10">
-                  <ArrowUpCircle className="h-5 w-5 text-[#660099]" />
+          {/* Upgrade card - inside hero art, below consumption card */}
+          <button
+            onClick={() => openAfterIconsReady(() => setUpgradeOpen(true))}
+            className="relative mt-6 flex w-full items-center justify-between rounded-md px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:bottom-16 md:right-8 md:mx-0 md:mt-0 md:w-[520px]"
+            style={{
+              background: "rgba(255,255,255,0.74)",
+              backdropFilter: "blur(6px)",
+              boxShadow:
+                "0 8px 32px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.45)",
+            }}
+          >
+            <div className="flex items-center gap-4">
+              <FileText className="h-7 w-7 text-[#660099]" />
+              <div className="text-left">
+                <div className="text-[15px] font-semibold text-[#333]">
+                  Quer falar e navegar ainda mais?
                 </div>
-              <div className="min-w-0 text-left">
-                <div className="truncate text-[15px] font-semibold text-[#333]">
-                  Precisa de mais internet?
-                </div>
-                <div className="truncate text-sm text-[#666]">
-                  Faça upgrade do seu plano e continue navegando com mais liberdade.
+                <div className="text-sm text-[#666]">
+                  Faça um upgrade no seu plano agora
                 </div>
               </div>
             </div>
-            <div className="flex shrink-0 items-center gap-2 text-sm font-medium text-[#660099]">
-              <span className="hidden sm:inline">Ver opções</span>
-              <ChevronRight className="h-5 w-5" />
-              </div>
+            <ChevronRight className="h-5 w-5 text-[#660099]" />
+          </button>
 
-            </button>
-          </section>
-        )}
-
-        {/* Status da linha */}
-        <section className="mt-4 w-full px-4 md:px-6">
-          <div className="md:ml-auto md:mr-6 md:w-[860px] md:max-w-[calc(100%-3rem)]">
-            {statusBlock}
-          </div>
         </section>
+
+
+        
       </main>
 
       {/* Details modal */}
@@ -1525,257 +1306,45 @@ function ResumoConsumo() {
         </div>
       )}
 
-      {/* Unlock Line Modal */}
+
+      {/* Expanded view modal */}
       <Modal
-        open={unlockOpen}
-        onClose={() => setUnlockOpen(false)}
-        title="Desbloqueio de linha"
+        open={expandOpen}
+        onClose={() => setExpandOpen(false)}
+        title="Consumo detalhado"
       >
-        {!lineBlocked ? (
-          <div className="flex flex-col items-center gap-4 py-4 text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-              <CheckCircle2 size={40} className="text-green-600" />
+        <div className="flex flex-col items-center gap-4">
+          <ConsumoRing line={line} />
+          <div className="w-full space-y-2 text-sm">
+            <div className="flex justify-between border-b border-[#eee] pb-2">
+              <span className="text-[#666]">Plano</span>
+              <span className="font-semibold text-[#660099]">{line.plan}</span>
             </div>
-            <h3 className="text-lg font-bold text-[#660099]">Sua linha está ativa</h3>
-            <p className="text-sm text-[#666]">
-              Nenhum bloqueio identificado. Você pode usar sua linha normalmente.
-            </p>
-            <button
-              onClick={() => setUnlockOpen(false)}
-              className="mt-2 w-full rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-3 text-sm font-semibold text-white shadow-[0_6px_20px_rgba(102,0,153,0.35)]"
-            >
-              Entendi
-            </button>
-          </div>
-        ) : hasOverdueInvoice ? (
-          <div className="flex flex-col items-center gap-4 py-2 text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
-              <AlertTriangle size={36} className="text-red-600" />
+            <div className="flex justify-between border-b border-[#eee] pb-2">
+              <span className="text-[#666]">Linha</span>
+              <span className="font-semibold text-[#660099]">{line.number}</span>
             </div>
-            <h3 className="text-lg font-bold text-[#b91c1c]">Fatura em aberto</h3>
-            <p className="text-sm text-[#444]">
-              Identificamos uma <strong>fatura vencida</strong> na sua conta. Para solicitar o
-              desbloqueio da linha, é necessário efetuar o pagamento.
-            </p>
-            <div className="w-full rounded-xl border border-red-200 bg-red-50 p-3 text-left text-xs text-[#7f1d1d]">
-              <p className="font-semibold">Como funciona:</p>
-              <ul className="mt-1 list-disc space-y-1 pl-4">
-                <li>Efetue o pagamento da fatura em aberto</li>
-                <li>Assim que a baixa bancária for confirmada, o desbloqueio é automático</li>
-                <li>Sem necessidade de solicitação manual</li>
-              </ul>
+            <div className="flex justify-between border-b border-[#eee] pb-2">
+              <span className="text-[#666]">Consumido</span>
+              <span className="font-semibold text-[#660099]">{formatGB(line.used)}</span>
             </div>
-            <div className="flex w-full gap-2">
-              <button
-                onClick={() => setUnlockOpen(false)}
-                className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-4 py-3 text-sm font-semibold text-[#666]"
-              >
-                Fechar
-              </button>
-              <button
-                onClick={() => {
-                  // Simulate payment → clear overdue
-                  setHasOverdueInvoice(false);
-                }}
-                className="flex-1 rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-3 text-sm font-semibold text-white shadow-[0_6px_20px_rgba(102,0,153,0.35)]"
-              >
-                Pagar fatura
-              </button>
+            <div className="flex justify-between border-b border-[#eee] pb-2">
+              <span className="text-[#666]">Disponível</span>
+              <span className="font-semibold text-[#660099]">{formatGB(available)}</span>
+            </div>
+            <div className="flex justify-between border-b border-[#eee] pb-2">
+              <span className="text-[#666]">Fim do ciclo</span>
+              <span className="font-semibold text-[#660099]">{cycleLabel}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-[#666]">Próxima renovação</span>
+              <span className="font-semibold text-[#660099]">{renewalDateLabel}</span>
             </div>
           </div>
-        ) : unlockRequested ? (
-          <div className="flex flex-col items-center gap-4 py-4 text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-              <CheckCircle2 size={40} className="text-green-600" />
-            </div>
-            <h3 className="text-lg font-bold text-green-700">Desbloqueio solicitado!</h3>
-            <p className="text-sm text-[#444]">
-              Sua linha será reativada em instantes. Você receberá uma confirmação por e-mail.
-            </p>
-            <button
-              onClick={() => {
-                setLineBlocked(false);
-                setUnlockOpen(false);
-              }}
-              className="mt-2 w-full rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-3 text-sm font-semibold text-white shadow-[0_6px_20px_rgba(102,0,153,0.35)]"
-            >
-              Concluir
-            </button>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center gap-4 py-2 text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#f3e8ff]">
-              <Unlock size={36} className="text-[#660099]" />
-            </div>
-            <h3 className="text-lg font-bold text-[#660099]">Solicitar desbloqueio</h3>
-            <p className="text-sm text-[#444]">
-              Sua fatura está <strong>em dia</strong>. Você pode solicitar o desbloqueio da sua
-              linha agora mesmo.
-            </p>
-            <div className="w-full rounded-xl border border-[#e9d5ff] bg-[#faf5ff] p-3 text-left text-xs text-[#4b1478]">
-              Normalmente, o desbloqueio ocorre de forma automática assim que a baixa bancária do
-              pagamento é confirmada. Caso ainda não tenha sido reativada, prossiga abaixo.
-            </div>
-            <div className="flex w-full gap-2">
-              <button
-                onClick={() => setUnlockOpen(false)}
-                className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-4 py-3 text-sm font-semibold text-[#666]"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={() => setUnlockRequested(true)}
-                className="flex-1 rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-3 text-sm font-semibold text-white shadow-[0_6px_20px_rgba(102,0,153,0.35)]"
-              >
-                Desbloquear agora
-              </button>
-            </div>
-          </div>
-        )}
-      </Modal>
-
-      {/* Pay Invoice Modal */}
-      <Modal open={payInvoiceOpen} onClose={() => setPayInvoiceOpen(false)} title="Pagar fatura">
-        <div className="flex flex-col gap-4">
-          <div className="rounded-2xl border border-[#eee] bg-white p-4">
-            <div className="flex items-center justify-between">
-              <span className="text-xs uppercase tracking-wider text-[#888]">Valor</span>
-              <span className="text-lg font-bold text-[#660099]">{invoice.valor}</span>
-            </div>
-            <div className="my-2 h-px bg-[#f0f0f0]" />
-            <div className="flex items-center justify-between">
-              <span className="text-xs uppercase tracking-wider text-[#888]">Vencimento</span>
-              <span className="text-sm font-semibold text-[#b91c1c]">{invoice.vencimento}</span>
-            </div>
-            <div className="my-2 h-px bg-[#f0f0f0]" />
-            <div className="flex items-center justify-between">
-              <span className="text-xs uppercase tracking-wider text-[#888]">Status</span>
-              <span className="rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-semibold text-red-700">
-                Vencida
-              </span>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-[#eee] bg-white p-4">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-[#888]">
-              Pix copia e cola
-            </p>
-            <div className="mt-2 break-all rounded-lg bg-[#f7f7f7] p-2 font-mono text-[11px] text-[#333]">
-              {invoice.pixCode}
-            </div>
-            <div className="mt-3 flex flex-col gap-2 sm:flex-row">
-              <button
-                onClick={() => {
-                  if (typeof navigator !== "undefined" && navigator.clipboard) {
-                    navigator.clipboard.writeText(invoice.pixCode);
-                  }
-                  showToast("Código Pix copiado");
-                }}
-                className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-4 py-2.5 text-sm font-semibold text-[#660099] hover:bg-[#faf5ff]"
-              >
-                Copiar código
-              </button>
-              <a
-                href={invoice.checkoutUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="flex-1 rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-2.5 text-center text-sm font-semibold text-white shadow-[0_6px_18px_rgba(102,0,153,0.30)]"
-              >
-                Abrir cobrança
-              </a>
-            </div>
-          </div>
-
-          <div className="rounded-xl border border-[#e9d5ff] bg-[#faf5ff] p-3 text-xs text-[#4b1478]">
-            Efetue o pagamento da fatura para que a regularização da linha ocorra automaticamente
-            após a confirmação bancária.
-          </div>
-          <div className="rounded-xl border border-orange-200 bg-orange-50 p-3 text-xs text-[#7c2d12]">
-            <strong>Atenção:</strong> o pagamento não desbloqueia a linha no mesmo clique. A
-            normalização ocorrerá automaticamente após a confirmação do pagamento, em até 24 horas.
-          </div>
-
-          <button
-            onClick={() => setPayInvoiceOpen(false)}
-            className="w-full rounded-xl border border-[#e5e5e5] bg-white px-4 py-3 text-sm font-semibold text-[#666]"
-          >
-            Fechar
-          </button>
         </div>
       </Modal>
 
-      {/* Payment Check Modal (Já efetuei o pagamento) */}
-      <Modal
-        open={paymentCheckOpen}
-        onClose={() => setPaymentCheckOpen(false)}
-        title={invoiceStatus === "paga" ? "Solicitar desbloqueio" : "Pagamento em análise"}
-      >
-        {invoiceStatus === "paga" ? (
-          <div className="flex flex-col items-center gap-4 py-2 text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#f3e8ff]">
-              <Unlock size={36} className="text-[#660099]" />
-            </div>
-            <h3 className="text-lg font-bold text-[#660099]">Solicitar desbloqueio</h3>
-            <p className="text-sm text-[#444]">
-              Sua fatura está <strong>em dia</strong>. Você pode solicitar o desbloqueio da sua
-              linha agora mesmo.
-            </p>
-            <div className="w-full rounded-xl border border-[#e9d5ff] bg-[#faf5ff] p-3 text-left text-xs text-[#4b1478]">
-              Normalmente, o desbloqueio ocorre de forma automática assim que a baixa bancária do
-              pagamento é confirmada. Caso ainda não tenha sido reativada, prossiga abaixo.
-            </div>
-            <div className="flex w-full gap-2">
-              <button
-                onClick={() => setPaymentCheckOpen(false)}
-                className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-4 py-3 text-sm font-semibold text-[#666]"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={() => {
-                  setPaymentCheckOpen(false);
-                  setUnlockRequested(true);
-                  setUnlockOpen(true);
-                }}
-                className="flex-1 rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-3 text-sm font-semibold text-white shadow-[0_6px_20px_rgba(102,0,153,0.35)]"
-              >
-                Desbloquear agora
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center gap-4 py-2 text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-orange-100">
-              <AlertTriangle size={36} className="text-orange-600" />
-            </div>
-            <h3 className="text-lg font-bold text-[#c2410c]">Pagamento em análise</h3>
-            <p className="text-sm text-[#444]">
-              Ainda não identificamos a confirmação bancária do pagamento. Assim que a baixa for
-              confirmada, sua linha será normalizada automaticamente.
-            </p>
-            <div className="flex w-full gap-2">
-              <button
-                onClick={() => setPaymentCheckOpen(false)}
-                className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-4 py-3 text-sm font-semibold text-[#666]"
-              >
-                Fechar
-              </button>
-              <button
-                onClick={() => {
-                  setPaymentCheckOpen(false);
-                  setPayInvoiceOpen(true);
-                }}
-                className="flex-1 rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-3 text-sm font-semibold text-white shadow-[0_6px_20px_rgba(102,0,153,0.35)]"
-              >
-                Ver fatura
-              </button>
-            </div>
-          </div>
-        )}
-      </Modal>
-
       {/* Confirm Auto-Renewal Modal */}
-
       {confirmAutoDebit && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 animate-fade-in"
