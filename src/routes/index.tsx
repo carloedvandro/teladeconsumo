@@ -17,10 +17,8 @@ import {
   Sparkles,
   AlertTriangle,
   Mail,
-  Lock,
   Unlock,
   Gauge,
-  CreditCard,
   Copy,
   QrCode,
 } from "lucide-react";
@@ -29,13 +27,9 @@ import familyImgAsset from "@/assets/woman-phone.png.asset.json";
 import icon3dData from "@/assets/icon-3d-data.png";
 import icon3dPhone from "@/assets/icon-3d-phone.png";
 import statusAtivaAsset from "@/assets/status-ativa-v2.png.asset.json";
-import statusBloqueadaAsset from "@/assets/status-bloqueada-v2.png.asset.json";
-import statusAguardandoAsset from "@/assets/status-aguardando-v2.png.asset.json";
 import statusReduzidaAsset from "@/assets/status-reduzida-v2.png.asset.json";
 import upgradeArrowAsset from "@/assets/upgrade-arrow-3d.png.asset.json";
 const statusAtivaIcon = statusAtivaAsset.url;
-const statusBloqueadaIcon = statusBloqueadaAsset.url;
-const statusAguardandoIcon = statusAguardandoAsset.url;
 const statusReduzidaIcon = statusReduzidaAsset.url;
 const upgradeArrowIcon = upgradeArrowAsset.url;
 import icon3dSms from "@/assets/icon-3d-sms.png";
@@ -77,6 +71,8 @@ type Line = {
   plan: string;
   cycleDays: number;
 };
+
+type LineStatus = "ativa" | "bloqueada_fatura" | "bloqueada_pagamento" | "reduzida";
 
 const LINES: Line[] = [
   {
@@ -510,8 +506,6 @@ function ResumoConsumo() {
   const [notifySms, setNotifySms] = useState(true);
   const [autoDebit, setAutoDebit] = useState(true);
   const [statusOpen, setStatusOpen] = useState(false);
-  type LineStatus = "ativa" | "bloqueada_fatura" | "bloqueada_pagamento" | "reduzida";
-  const [statusOverride, setStatusOverride] = useState<LineStatus | null>(null);
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
   const [pixOpen, setPixOpen] = useState(false);
   const pixCode = "00020126580014BR.GOV.BCB.PIX0136vivo-fatura-8f2a-4c11-9e0b520400005303986540589.905802BR5915VIVO TELEFONICA6008SAO PAULO62070503***6304A1B2";
@@ -884,32 +878,10 @@ function ResumoConsumo() {
                 </button>
 
                 {(() => {
-                  const currentStatus: LineStatus =
-                    statusOverride ?? (usedPct >= 100 ? "reduzida" : "ativa");
-                  const statusIconSrc =
-                    currentStatus === "ativa"
-                      ? statusAtivaIcon
-                      : currentStatus === "reduzida"
-                        ? statusReduzidaIcon
-                        : currentStatus === "bloqueada_pagamento"
-                          ? statusAguardandoIcon
-                          : statusBloqueadaIcon;
-                  const statusLabel =
-                    currentStatus === "ativa"
-                      ? "Ativa"
-                      : currentStatus === "reduzida"
-                        ? "Velocidade reduzida"
-                        : currentStatus === "bloqueada_pagamento"
-                          ? "Aguardando pagamento"
-                          : "Bloqueada";
-                  const statusTone =
-                    currentStatus === "ativa"
-                      ? "#16A34A"
-                      : currentStatus === "reduzida"
-                        ? "#C96A05"
-                        : currentStatus === "bloqueada_pagamento"
-                          ? "#D97706"
-                          : "#DC2626";
+                  const isReduced = usedPct >= 100;
+                  const statusIconSrc = isReduced ? statusReduzidaIcon : statusAtivaIcon;
+                  const statusLabel = isReduced ? "Velocidade reduzida" : "Ativa";
+                  const statusTone = isReduced ? "#C96A05" : "#16A34A";
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
@@ -1777,7 +1749,7 @@ function ResumoConsumo() {
       {/* Status da linha modal */}
       {(() => {
         const currentStatus: LineStatus =
-          statusOverride ?? (usedPct >= 100 ? "reduzida" : "ativa");
+          usedPct >= 100 ? "reduzida" : "ativa";
         const cfg = {
           ativa: {
             title: "Situação da linha",
@@ -1789,28 +1761,6 @@ function ResumoConsumo() {
             bg: "#EAF7EE",
             border: "#CFEBD8",
             message: "Você pode usar sua linha normalmente.",
-          },
-          bloqueada_fatura: {
-            title: "Situação da linha",
-            label: "Bloqueada por fatura",
-            icon: Lock,
-            image: statusBloqueadaIcon,
-            tone: "#DC2626",
-            iconBg: "#C81E1E",
-            bg: "#FCECEC",
-            border: "#F4CACA",
-            message: "Existe uma fatura em aberto vinculada a esta linha.",
-          },
-          bloqueada_pagamento: {
-            title: "Situação da linha",
-            label: "Aguardando desbloqueio",
-            icon: Lock,
-            image: statusAguardandoIcon,
-            tone: "#D97706",
-            iconBg: "#C96A05",
-            bg: "#F8EFE6",
-            border: "#EFDCC9",
-            message: "Estamos aguardando a normalização da linha.",
           },
           reduzida: {
             title: "Situação da linha",
@@ -1884,11 +1834,7 @@ function ResumoConsumo() {
                     className="font-semibold"
                     style={{ color: cfg.tone }}
                   >
-                    {currentStatus === "bloqueada_fatura"
-                      ? "Em aberto"
-                      : currentStatus === "bloqueada_pagamento"
-                        ? "Paga · em compensação"
-                        : "Em dia"}
+                    Em dia
                   </span>
                 </div>
               </div>
@@ -1923,49 +1869,6 @@ function ResumoConsumo() {
                   </div>
                 )}
 
-
-
-                {currentStatus === "bloqueada_fatura" && (
-                  <>
-                    <button
-                      onClick={() => {
-                        setStatusOpen(false);
-                        openAfterIconsReady(() => setPixOpen(true));
-                      }}
-                      className="flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110"
-                      style={{
-                        background: "linear-gradient(135deg,#660099,#7a00b3)",
-                      }}
-                    >
-                      <CreditCard className="h-4 w-4" /> Pagar fatura
-                    </button>
-                    <p className="rounded-lg bg-[#fff7ed] px-3 py-2 text-xs text-[#b45309]">
-                      Após o pagamento, a regularização pode ocorrer em até 24
-                      horas.
-                    </p>
-                  </>
-                )}
-                {currentStatus === "bloqueada_pagamento" && (
-                  <>
-                    <button
-                      onClick={() => {
-                        setStatusOpen(false);
-                        setToast("Solicitação de desbloqueio enviada");
-                        setTimeout(() => setToast(null), 2500);
-                      }}
-                      className="w-full rounded-xl px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110"
-                      style={{
-                        background: "linear-gradient(135deg,#660099,#7a00b3)",
-                      }}
-                    >
-                      Desbloquear linha
-                    </button>
-                    <p className="rounded-lg bg-[#fff7ed] px-3 py-2 text-xs text-[#b45309]">
-                      Caso a linha não normalize automaticamente, prossiga com
-                      a solicitação acima.
-                    </p>
-                  </>
-                )}
                 {currentStatus === "reduzida" && (
                   <div className="flex gap-2">
                     <button
@@ -1995,40 +1898,6 @@ function ResumoConsumo() {
 
               </div>
 
-              {/* Simulação (dev) */}
-              <div className="rounded-xl border border-dashed border-[#e5d3f0] px-3 py-2.5">
-                <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-[#888]">
-                  Simular status
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {(
-                    [
-                      ["ativa", "Ativa"],
-                      ["bloqueada_fatura", "Bloq. fatura"],
-                      ["bloqueada_pagamento", "Aguard. desbl."],
-                      ["reduzida", "Reduzida"],
-                    ] as [LineStatus, string][]
-                  ).map(([key, label]) => (
-                    <button
-                      key={key}
-                      onClick={() => setStatusOverride(key)}
-                      className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition ${
-                        statusOverride === key
-                          ? "bg-[#660099] text-white"
-                          : "bg-[#f3eaf7] text-[#660099] hover:bg-[#e7d4f0]"
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                  <button
-                    onClick={() => setStatusOverride(null)}
-                    className="rounded-full px-2.5 py-1 text-[11px] font-medium text-[#888] hover:text-[#660099]"
-                  >
-                    Auto
-                  </button>
-                </div>
-              </div>
             </div>
           </Modal>
         );
