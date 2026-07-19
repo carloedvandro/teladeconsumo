@@ -660,6 +660,39 @@ function ResumoConsumo() {
                 >
                   Ver detalhes do seu consumo &gt;
                 </button>
+
+                {(() => {
+                  const currentStatus: LineStatus =
+                    statusOverride ?? (usedPct >= 100 ? "reduzida" : "ativa");
+                  const StatusIcon =
+                    currentStatus === "ativa"
+                      ? Unlock
+                      : currentStatus === "reduzida"
+                        ? Gauge
+                        : Lock;
+                  const statusLabel =
+                    currentStatus === "ativa"
+                      ? "Ativa"
+                      : currentStatus === "reduzida"
+                        ? "Velocidade reduzida"
+                        : "Bloqueada";
+                  const statusTone =
+                    currentStatus === "ativa"
+                      ? "#660099"
+                      : currentStatus === "reduzida"
+                        ? "#b34e00"
+                        : "#b91c1c";
+                  return (
+                    <button
+                      onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
+                      className="mt-3 flex w-full items-center gap-2 text-left text-sm font-semibold hover:underline"
+                      style={{ color: statusTone }}
+                    >
+                      <StatusIcon className="h-4 w-4" strokeWidth={2.4} />
+                      <span>Status da linha: {statusLabel}</span>
+                    </button>
+                  );
+                })()}
               </div>
             </div>
           </div>
