@@ -1803,7 +1803,7 @@ function ResumoConsumo() {
       })()}
 
       {pixOpen && (
-        <Modal onClose={() => setPixOpen(false)} title="Pagar fatura com Pix">
+        <Modal open={pixOpen} onClose={() => setPixOpen(false)} title="Pagar fatura com Pix">
           <div className="space-y-4 px-4 py-4 sm:px-6">
             <div className="flex items-center justify-between rounded-xl bg-[#f7f0fb] px-4 py-3">
               <div>
