@@ -1714,6 +1714,11 @@ function ResumoConsumo() {
                 {currentStatus === "bloqueada_pagamento" && (
                   <>
                     <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        setToast("Solicitação de desbloqueio enviada");
+                        setTimeout(() => setToast(null), 2500);
+                      }}
                       className="w-full rounded-xl px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110"
                       style={{
                         background: "linear-gradient(135deg,#660099,#7a00b3)",
