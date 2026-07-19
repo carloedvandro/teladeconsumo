@@ -747,7 +747,7 @@ function ResumoConsumo() {
                   <span className="font-semibold text-[#1a1a1a]">{renewalDateLabel}</span>
                 </p>
 
-                <ul className="mt-5 space-y-2.5 text-sm md:-ml-2">
+                <ul className="mt-5 -ml-2 space-y-2.5 text-sm">
                   <li>
                     <div className="flex items-center gap-2">
                       <img
@@ -891,7 +891,7 @@ function ResumoConsumo() {
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                      className="mt-3 flex w-full items-center gap-2 text-left text-[13px] font-semibold transition hover:underline md:-ml-2 md:mt-5 md:text-sm"
+                      className="mt-3 flex w-full flex-wrap items-center gap-x-2 gap-y-1 text-left text-[13px] font-semibold transition hover:underline md:-ml-2 md:mt-5 md:text-sm"
                       style={{ color: s.tone }}
                     >
                       <img
@@ -903,7 +903,7 @@ function ResumoConsumo() {
                         Status da linha: {s.label}
                       </span>
                       {effective === "reduzida" && (
-                        <span className="shrink-0 whitespace-nowrap text-xs font-bold">
+                        <span className="shrink-0 whitespace-nowrap text-xs font-bold md:basis-full md:pl-7">
                           256 Kbps
                         </span>
                       )}
@@ -1861,7 +1861,7 @@ function ResumoConsumo() {
               </div>
 
               {/* Mensagem */}
-              <p className="text-sm text-[#444]">{cfg.message}</p>
+              <p className="px-4 text-sm text-[#444]">{cfg.message}</p>
 
               {/* Ações */}
               <div className="space-y-2">
