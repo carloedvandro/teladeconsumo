@@ -198,9 +198,14 @@ function ConsumoRing({
   const majorTicks = 11; // at 0, 10, 20 ... 100
   const minorTicks = 41; // between majors
 
-  // Needle — drawn pointing straight up; the group rotates by needleAngle so
-  // we can animate the rotation smoothly with a CSS transition.
-  const needleAngle = angleAt(pct);
+  // Needle — starts at 0% and animates up to the real value on mount so the
+  // gauge feels like it's "spinning up" every time the user lands on the page.
+  const [animPct, setAnimPct] = useState(0);
+  useEffect(() => {
+    const id = window.setTimeout(() => setAnimPct(pct), 80);
+    return () => window.clearTimeout(id);
+  }, [pct]);
+  const needleAngle = angleAt(animPct);
   const needleTipY = cy - (r - 8);
   // 3D needle geometry — a slim triangular blade with a separate left/right
   // face so we can shade each side to fake volume.
@@ -350,7 +355,7 @@ function ConsumoRing({
             transform: `rotate(${needleAngle}deg)`,
             transformOrigin: `${cx}px ${cy}px`,
             transformBox: "view-box",
-            transition: "transform 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+            transition: "transform 1800ms cubic-bezier(0.22, 1, 0.36, 1)",
             willChange: "transform",
           }}
         >
