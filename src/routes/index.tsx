@@ -355,7 +355,7 @@ function ConsumoRing({
             transform: `rotate(${needleAngle}deg)`,
             transformOrigin: `${cx}px ${cy}px`,
             transformBox: "view-box",
-            transition: "transform 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+            transition: "transform 1800ms cubic-bezier(0.22, 1, 0.36, 1)",
             willChange: "transform",
           }}
         >
