@@ -700,7 +700,7 @@ function ResumoConsumo() {
             alt="Família usando tablet"
             width={1280}
             height={768}
-            className="h-[340px] w-full object-cover md:h-[520px]"
+            className="h-[340px] w-full object-cover object-[60%_70%] md:h-[520px]"
           />
 
           {/* Consumption panel overlay - centered/right like reference */}
