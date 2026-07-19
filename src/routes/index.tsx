@@ -1357,6 +1357,28 @@ function ResumoConsumo() {
                 </ul>
               </>
             )}
+
+            {/* Upgrade CTA - inside details modal */}
+            <button
+              onClick={() => {
+                setDetailsOpen(false);
+                openAfterIconsReady(() => setUpgradeOpen(true));
+              }}
+              className="mt-4 flex w-full items-center justify-between rounded-lg border border-[#e5e5ea] bg-white px-4 py-3.5 text-left transition hover:border-[#660099]/40 hover:shadow-sm"
+            >
+              <div className="flex items-center gap-3">
+                <FileText className="h-6 w-6 text-[#660099]" />
+                <div>
+                  <div className="text-[14px] font-semibold text-[#1a1a1a]">
+                    Quer falar e navegar ainda mais?
+                  </div>
+                  <div className="text-[12px] text-[#666]">
+                    Faça um upgrade no seu plano agora
+                  </div>
+                </div>
+              </div>
+              <ChevronRight className="h-5 w-5 text-[#660099]" />
+            </button>
           </div>
         </div>
       </Modal>
