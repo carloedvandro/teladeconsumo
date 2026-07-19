@@ -202,7 +202,7 @@ function ConsumoRing({
   // we can animate the rotation smoothly with a CSS transition.
   const needleAngle = angleAt(pct);
   const needleTipY = cy - (r - 8);
-  const needlePath = `M ${cx - 8} ${cy} L ${cx} ${needleTipY} L ${cx + 8} ${cy} Z`;
+  const needlePath = `M ${cx - 5} ${cy} L ${cx} ${needleTipY} L ${cx + 5} ${cy} Z`;
 
   // Consumed tip dot at the end of the actual consumption (also rotated)
   const tipX = cx;
