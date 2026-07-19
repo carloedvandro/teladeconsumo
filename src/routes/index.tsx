@@ -889,6 +889,12 @@ function ResumoConsumo() {
                         className="h-5 w-5 object-contain"
                       />
                       <span>Status da linha: {statusLabel}</span>
+                      {isReduced && (
+                        <>
+                          <span className="text-[10px] opacity-60">•</span>
+                          <span className="text-xs font-bold">256 Kbps</span>
+                        </>
+                      )}
                     </button>
                   );
                 })()}
