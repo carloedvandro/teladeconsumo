@@ -1775,7 +1775,7 @@ function ResumoConsumo() {
           reduzida: {
             label: "Velocidade reduzida",
             image: statusReduzidaIcon,
-            tone: "#C96A05",
+            tone: "#F97316",
             fatura: "Em dia",
             message:
               "Sua franquia foi totalmente consumida, e a navegação seguirá em velocidade reduzida até a próxima renovação do ciclo. Para voltar à velocidade máxima, você pode contratar um plano superior. Nesse caso, seu consumo atual é preservado, os novos GB são liberados imediatamente e você paga apenas a diferença proporcional aos dias restantes do ciclo. Na próxima renovação, o novo plano já será ativado com a franquia completa.",
@@ -2018,7 +2018,7 @@ function ResumoConsumo() {
               {[
                 { key: null, label: "Automático (real)", tone: "#660099", icon: null },
                 { key: "ativa" as LineStatus, label: "Ativa", tone: "#16A34A", icon: statusAtivaIcon },
-                { key: "reduzida" as LineStatus, label: "Velocidade reduzida", tone: "#C96A05", icon: statusReduzidaIcon },
+                { key: "reduzida" as LineStatus, label: "Velocidade reduzida", tone: "#F97316", icon: statusReduzidaIcon },
                 { key: "bloqueada_fatura" as LineStatus, label: "Bloqueada — fatura", tone: "#DC2626", icon: statusBloqueadaIcon },
                 { key: "bloqueada_pagamento" as LineStatus, label: "Bloqueada — pagamento", tone: "#DC2626", icon: statusBloqueadaIcon },
               ].map((opt) => {
