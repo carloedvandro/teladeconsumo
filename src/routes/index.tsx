@@ -887,14 +887,18 @@ function ResumoConsumo() {
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#660099]/10">
                   <ArrowUpCircle className="h-5 w-5 text-[#660099]" />
                 </div>
-                <div className="min-w-0 text-left">
-                  <div className="truncate text-[15px] font-semibold text-[#333]">
-                    Quer falar e navegar ainda mais?
-                  </div>
-                  <div className="truncate text-sm text-[#666]">
-                    Faça um upgrade no seu plano agora
-                  </div>
+              <div className="min-w-0 text-left">
+                <div className="truncate text-[15px] font-semibold text-[#333]">
+                  Precisa de mais internet?
                 </div>
+                <div className="truncate text-sm text-[#666]">
+                  Faça upgrade do seu plano e continue navegando com mais liberdade.
+                </div>
+              </div>
+            </div>
+            <div className="flex shrink-0 items-center gap-2 text-sm font-medium text-[#660099]">
+              <span className="hidden sm:inline">Ver opções</span>
+              <ChevronRight className="h-5 w-5" />
               </div>
               <ChevronRight className="h-5 w-5 shrink-0 text-[#660099]" />
             </button>
