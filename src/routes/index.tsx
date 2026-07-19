@@ -876,12 +876,6 @@ function ResumoConsumo() {
                 </div>
 
 
-                <button
-                  onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
-                  className="mt-4 text-sm font-semibold text-[#660099] hover:underline md:mt-8"
-                >
-                  Ver detalhes do seu consumo &gt;
-                </button>
 
                 {(() => {
                   const currentStatus: LineStatus =
