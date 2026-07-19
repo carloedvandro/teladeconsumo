@@ -317,14 +317,13 @@ function ConsumoRing({
         <circle cx={cx - 2} cy={cy - 2} r={2} fill="#c8a2ff" opacity={0.9} />
       </svg>
 
-      {/* Big value + subtitle centered in the lower area of the gauge */}
+      {/* Big value + subtitle — pushed down toward the arc tips so it does
+          not overlap the needle base. */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center">
-        <div className="text-[34px] font-bold leading-none text-[#1a1a1a]">
+        <div className="text-[30px] font-bold leading-none text-[#1a1a1a]">
           {line.used === 0
-            ? 0
-            : line.used < 1
-              ? line.used.toFixed(2)
-              : line.used.toFixed(1)}
+            ? "0.00"
+            : line.used.toFixed(2)}
           <span className="ml-1 text-base font-semibold text-[#1a1a1a]">GB</span>
         </div>
         <div className="mt-1 text-[11px] text-[#6b6b6b]">
