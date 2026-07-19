@@ -1872,30 +1872,20 @@ function ResumoConsumo() {
                 )}
 
                 {currentStatus === "reduzida" && (
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => {
-                        setStatusOpen(false);
-                        openAfterIconsReady(() => setUpgradeOpen(true));
-                      }}
-                      className="flex-1 rounded-xl px-3 py-3 text-sm font-semibold text-white transition hover:brightness-110"
-                      style={{
-                        background: "linear-gradient(135deg,#660099,#7a00b3)",
-                      }}
-                    >
-                      Fazer upgrade
-                    </button>
-                    <button
-                      onClick={() => {
-                        setStatusOpen(false);
-                        setPixOpen(true);
-                      }}
-                      className="flex-1 rounded-xl border border-[#660099] px-3 py-3 text-sm font-semibold text-[#660099] transition hover:bg-[#f5ebfa]"
-                    >
-                      Pagar fatura
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => {
+                      setStatusOpen(false);
+                      openAfterIconsReady(() => setUpgradeOpen(true));
+                    }}
+                    className="w-full rounded-xl px-3 py-3 text-sm font-semibold text-white transition hover:brightness-110"
+                    style={{
+                      background: "linear-gradient(135deg,#660099,#7a00b3)",
+                    }}
+                  >
+                    Fazer upgrade
+                  </button>
                 )}
+
 
               </div>
 
