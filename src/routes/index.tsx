@@ -885,7 +885,7 @@ function ResumoConsumo() {
 
                 {(() => {
                   const currentStatus: LineStatus =
-                    statusOverride ?? (usedPct >= 100 ? "reduzida" : "ativa");
+                    usedPct >= 100 ? "reduzida" : "ativa";
                   const statusIconSrc =
                     currentStatus === "ativa"
                       ? statusAtivaIcon
