@@ -869,7 +869,7 @@ function ResumoConsumo() {
                 />
               </div>
               <div className="shrink-0 text-right">
-                <div className="text-lg font-bold leading-none text-[#660099]">{usedPct}%</div>
+                <div className="text-lg font-bold leading-none text-[#660099]">{usedPctExact}%</div>
                 <div className="text-[10px] text-[#6b6b6b]">utilizado</div>
               </div>
             </div>
