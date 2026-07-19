@@ -710,9 +710,9 @@ function ResumoConsumo() {
                   <span className="font-semibold text-[#1a1a1a]">{renewalDateLabel}</span>
                 </p>
 
-                <ul className="mt-5 space-y-2.5 text-sm">
+                <ul className="mt-5 space-y-2.5 text-sm md:-ml-2">
                   <li>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
                       <img
                         src={icon3dPie}
                         alt=""
