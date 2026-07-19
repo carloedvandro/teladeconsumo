@@ -753,7 +753,7 @@ function ResumoConsumo() {
                     </div>
                   </li>
                   <li>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
                       <img
                         src={icon3dDisk}
                         alt=""
