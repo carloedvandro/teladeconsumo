@@ -727,8 +727,11 @@ function ResumoConsumo() {
                         </div>
                         <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#ececef]">
                           <div
-                            className="h-full rounded-full bg-[#660099] transition-[width] duration-500"
-                            style={{ width: `${availPct}%` }}
+                            className="h-full rounded-full bg-[#660099]"
+                            style={{
+                              width: `${availPct}%`,
+                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+                            }}
                           />
                         </div>
                       </div>
