@@ -1777,7 +1777,7 @@ function ResumoConsumo() {
       {/* Status da linha modal */}
       {(() => {
         const currentStatus: LineStatus =
-          statusOverride ?? (usedPct >= 100 ? "reduzida" : "ativa");
+          usedPct >= 100 ? "reduzida" : "ativa";
         const cfg = {
           ativa: {
             title: "Situação da linha",
