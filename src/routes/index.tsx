@@ -513,6 +513,8 @@ function ResumoConsumo() {
   const available = +(line.total - line.used).toFixed(2);
   const availPct = Math.round(100 - pct);
   const usedPct = Math.round(pct);
+  const usedPctExact = (Math.round(pct * 100) / 100).toFixed(2);
+  const availPctExact = (Math.round((100 - pct) * 100) / 100).toFixed(2);
   const color = ringColor(pct);
 
   const [now, setNow] = useState(() => new Date());
