@@ -198,8 +198,19 @@ function ConsumoRing({
   // gauge feels like it's "spinning up" every time the user lands on the page.
   const [animPct, setAnimPct] = useState(0);
   useEffect(() => {
-    const id = window.setTimeout(() => setAnimPct(pct), 80);
-    return () => window.clearTimeout(id);
+    setAnimPct(0);
+    const duration = 1800;
+    const start = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      // easeOutCubic for a smooth spin-up
+      const eased = 1 - Math.pow(1 - t, 3);
+      setAnimPct(pct * eased);
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, [pct]);
   const needleAngle = angleAt(animPct);
   const needleTipY = cy - (r - 8);
