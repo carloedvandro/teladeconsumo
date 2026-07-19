@@ -662,31 +662,67 @@ function ResumoConsumo() {
                   <span className="font-semibold text-[#1a1a1a]">{renewalDateLabel}</span>
                 </p>
 
-                <ul className="mt-5 text-sm">
-                  <li className="flex items-center justify-between gap-3 border-b border-[#a8a8a8] py-3">
-                    <span className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[#5a5a5a]">
-
-                      <span
-                        className="inline-block h-3 w-3 rounded-full border-[3px]"
-                        style={{ borderColor: color }}
+                <ul className="mt-5 space-y-2.5 text-sm">
+                  <li>
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={icon3dPie}
+                        alt=""
+                        loading="eager"
+                        decoding="sync"
+                        className="h-10 w-10 shrink-0 object-contain"
                       />
-                      Meu Consumo
-                    </span>
-                    <span className="whitespace-nowrap text-right font-semibold text-[#1a1a1a]">
-                      {usedPct}% - {formatGB(line.used)}
-                    </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
+                          <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
+                          <span>
+                            <span className="font-bold" style={{ color }}>{usedPct}%</span>
+                            <span className="text-[#8a8a90]"> - </span>
+                            <span className="font-bold text-[#1a1a1a]">{formatGB(line.used)}</span>
+                          </span>
+                        </div>
+                        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#ececef]">
+                          <div
+                            className="h-full rounded-full transition-[width] duration-500"
+                            style={{
+                              width: `${usedPct}%`,
+                              background:
+                                "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </li>
-                  <li className="flex items-center justify-between gap-3 border-b border-[#a8a8a8] py-3">
-                    <span className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[#5a5a5a]">
-                      <span className="inline-block h-3 w-3 rounded-full border-[3px] border-[#660099]" />
-                      Disponíveis
-                    </span>
-                    <span className="whitespace-nowrap text-right font-semibold text-[#1a1a1a]">
-                      {availPct}% - {formatGB(available)}
-                    </span>
+                  <li>
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={icon3dDisk}
+                        alt=""
+                        loading="eager"
+                        decoding="sync"
+                        className="h-10 w-10 shrink-0 object-contain"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
+                          <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
+                          <span>
+                            <span className="font-bold text-[#660099]">{availPct}%</span>
+                            <span className="text-[#8a8a90]"> - </span>
+                            <span className="font-bold text-[#1a1a1a]">{formatGB(available)}</span>
+                          </span>
+                        </div>
+                        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#ececef]">
+                          <div
+                            className="h-full rounded-full bg-[#660099] transition-[width] duration-500"
+                            style={{ width: `${availPct}%` }}
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </li>
-
                 </ul>
+
 
                 {/* Renovação automática (integrada, sem card) */}
                 <div className="mt-4 flex items-start justify-between gap-4">
