@@ -879,23 +879,28 @@ function ResumoConsumo() {
                 </button>
 
                 {(() => {
-                  const isReduced = usedPct >= 100;
-                  const statusIconSrc = isReduced ? statusReduzidaIcon : statusAtivaIcon;
-                  const statusLabel = isReduced ? "Velocidade reduzida" : "Ativa";
-                  const statusTone = isReduced ? "#C96A05" : "#16A34A";
+                  const effective: LineStatus =
+                    simStatus ?? (usedPct >= 100 ? "reduzida" : "ativa");
+                  const map = {
+                    ativa: { icon: statusAtivaIcon, label: "Ativa", tone: "#16A34A" },
+                    reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", tone: "#C96A05" },
+                    bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", tone: "#DC2626" },
+                    bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", tone: "#DC2626" },
+                  } as const;
+                  const s = map[effective];
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
                       className="mt-3 flex w-full items-center gap-2 text-left text-sm font-semibold transition hover:underline md:-ml-2 md:mt-5"
-                      style={{ color: statusTone }}
+                      style={{ color: s.tone }}
                     >
                       <img
-                        src={statusIconSrc}
-                        alt={statusLabel}
+                        src={s.icon}
+                        alt={s.label}
                         className="h-5 w-5 object-contain"
                       />
-                      <span>Status da linha: {statusLabel}</span>
-                      {isReduced && (
+                      <span>Status da linha: {s.label}</span>
+                      {effective === "reduzida" && (
                         <>
                           <span className="text-[10px] opacity-60">•</span>
                           <span className="text-xs font-bold">256 Kbps</span>
