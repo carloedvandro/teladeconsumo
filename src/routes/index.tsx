@@ -1773,8 +1773,9 @@ function ResumoConsumo() {
             bg: "#F6EEE7",
             border: "#EADBCB",
             message:
-              "Sua franquia foi consumida e a navegação segue com velocidade reduzida.",
+              "Sua franquia foi consumida e a navegação segue reduzida até a próxima renovação. Não é possível antecipar o ciclo — para voltar à velocidade total, faça upgrade: seu consumo atual é preservado, novos GB são adicionados e você paga apenas a diferença proporcional.",
           },
+
         }[currentStatus];
         return (
           <Modal
