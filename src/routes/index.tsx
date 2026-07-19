@@ -512,8 +512,6 @@ function ResumoConsumo() {
   const [notifySms, setNotifySms] = useState(true);
   const [autoDebit, setAutoDebit] = useState(true);
   const [statusOpen, setStatusOpen] = useState(false);
-  type LineStatus = "ativa" | "bloqueada_fatura" | "bloqueada_pagamento" | "reduzida";
-  const [statusOverride, setStatusOverride] = useState<LineStatus | null>(null);
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
   const [pixOpen, setPixOpen] = useState(false);
   const pixCode = "00020126580014BR.GOV.BCB.PIX0136vivo-fatura-8f2a-4c11-9e0b520400005303986540589.905802BR5915VIVO TELEFONICA6008SAO PAULO62070503***6304A1B2";
