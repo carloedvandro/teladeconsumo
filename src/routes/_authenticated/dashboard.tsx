@@ -56,7 +56,7 @@ const PRELOAD_ICONS = [
 ];
 
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
       { title: "Resumo de Consumo | Vivo" },
