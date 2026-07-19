@@ -198,15 +198,15 @@ function ConsumoRing({
   const majorTicks = 11; // at 0, 10, 20 ... 100
   const minorTicks = 41; // between majors
 
-  // Needle
+  // Needle — drawn pointing straight up; the group rotates by needleAngle so
+  // we can animate the rotation smoothly with a CSS transition.
   const needleAngle = angleAt(pct);
-  const needleTip = polar(needleAngle, r - 8);
-  const needleBase1 = polar(needleAngle + 90, 8);
-  const needleBase2 = polar(needleAngle - 90, 8);
-  const needlePath = `M ${needleBase1.x} ${needleBase1.y} L ${needleTip.x} ${needleTip.y} L ${needleBase2.x} ${needleBase2.y} Z`;
+  const needleTipY = cy - (r - 8);
+  const needlePath = `M ${cx - 8} ${cy} L ${cx} ${needleTipY} L ${cx + 8} ${cy} Z`;
 
-  // Consumed tip dot at the end of the actual consumption
-  const tipPoint = polar(needleAngle, r);
+  // Consumed tip dot at the end of the actual consumption (also rotated)
+  const tipX = cx;
+  const tipY = cy - r;
   const tipCol = tipColor(pct);
 
   const gid = line.number.replace(/\D/g, "");
@@ -288,16 +288,28 @@ function ConsumoRing({
           );
         })}
 
-        {/* Consumed tip cap (small dot at needle position on arc) */}
-        {pct > 0 && (
-          <>
-            <circle cx={tipPoint.x} cy={tipPoint.y} r={strokeW / 2 + 1} fill={tipCol} filter={`url(#gaugeShadow-${gid})`} />
-            <circle cx={tipPoint.x} cy={tipPoint.y} r={2} fill="#fff" />
-          </>
-        )}
+        {/* Rotating group: needle + consumed tip dot. Animates smoothly
+            when the consumption percentage changes. */}
+        <g
+          style={{
+            transform: `rotate(${needleAngle}deg)`,
+            transformOrigin: `${cx}px ${cy}px`,
+            transformBox: "view-box",
+            transition: "transform 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+            willChange: "transform",
+          }}
+        >
+          {/* Consumed tip cap (small dot at needle position on arc) */}
+          {pct > 0 && (
+            <>
+              <circle cx={tipX} cy={tipY} r={strokeW / 2 + 1} fill={tipCol} filter={`url(#gaugeShadow-${gid})`} />
+              <circle cx={tipX} cy={tipY} r={2} fill="#fff" />
+            </>
+          )}
 
-        {/* Needle */}
-        <path d={needlePath} fill={`url(#needle-${gid})`} filter={`url(#gaugeShadow-${gid})`} />
+          {/* Needle */}
+          <path d={needlePath} fill={`url(#needle-${gid})`} filter={`url(#gaugeShadow-${gid})`} />
+        </g>
 
         {/* Hub (3D pivot) */}
         <circle cx={cx} cy={cy} r={13} fill={`url(#hub-${gid})`} filter={`url(#gaugeShadow-${gid})`} />
@@ -683,11 +695,12 @@ function ResumoConsumo() {
                         </div>
                         <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#ececef]">
                           <div
-                            className="h-full rounded-full transition-[width] duration-500"
+                            className="h-full rounded-full"
                             style={{
                               width: `${usedPct}%`,
                               background:
                                 "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
+                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
                           />
                         </div>
@@ -714,8 +727,11 @@ function ResumoConsumo() {
                         </div>
                         <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#ececef]">
                           <div
-                            className="h-full rounded-full bg-[#660099] transition-[width] duration-500"
-                            style={{ width: `${availPct}%` }}
+                            className="h-full rounded-full bg-[#660099]"
+                            style={{
+                              width: `${availPct}%`,
+                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+                            }}
                           />
                         </div>
                       </div>
@@ -834,11 +850,12 @@ function ResumoConsumo() {
               </div>
               <div className="relative h-2.5 flex-1 overflow-visible rounded-full bg-[#ececef]">
                 <div
-                  className="h-full rounded-full transition-[width] duration-500"
+                  className="h-full rounded-full"
                   style={{
                     width: `${usedPct}%`,
                     background:
                       "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
+                    transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                   }}
                 />
                 <div
@@ -846,6 +863,7 @@ function ResumoConsumo() {
                   style={{
                     left: `calc(${Math.max(0, Math.min(100, usedPct))}% - 8px)`,
                     boxShadow: "0 1px 4px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(0,0,0,0.06)",
+                    transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                   }}
                 />
               </div>
