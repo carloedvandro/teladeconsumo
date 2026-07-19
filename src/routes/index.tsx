@@ -28,10 +28,10 @@ import {
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
 import icon3dData from "@/assets/icon-3d-data.png";
 import icon3dPhone from "@/assets/icon-3d-phone.png";
-import statusAtivaAsset from "@/assets/status-ativa.png.asset.json";
-import statusBloqueadaAsset from "@/assets/status-bloqueada.png.asset.json";
-import statusAguardandoAsset from "@/assets/status-aguardando.png.asset.json";
-import statusReduzidaAsset from "@/assets/status-reduzida.png.asset.json";
+import statusAtivaAsset from "@/assets/status-ativa-v2.png.asset.json";
+import statusBloqueadaAsset from "@/assets/status-bloqueada-v2.png.asset.json";
+import statusAguardandoAsset from "@/assets/status-aguardando-v2.png.asset.json";
+import statusReduzidaAsset from "@/assets/status-reduzida-v2.png.asset.json";
 const statusAtivaIcon = statusAtivaAsset.url;
 const statusBloqueadaIcon = statusBloqueadaAsset.url;
 const statusAguardandoIcon = statusAguardandoAsset.url;
