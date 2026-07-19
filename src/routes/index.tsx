@@ -844,7 +844,7 @@ function ResumoConsumo() {
               <div className="min-w-0 shrink-0">
                 <div className="text-sm font-semibold text-[#1a1a1a] leading-tight">Consumo</div>
                 <div className="text-[11px] whitespace-nowrap leading-tight">
-                  <span className="font-bold text-[#660099]">{formatGB(line.used)}</span>
+                  <span className="font-bold text-[#660099]">{line.used.toFixed(2)} GB</span>
                   <span className="text-[#6b6b6b]"> de </span>
                   <span className="font-semibold text-[#1a1a1a]">{line.total} GB</span>
                 </div>
