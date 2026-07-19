@@ -728,12 +728,13 @@ function ResumoConsumo() {
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
-                          <span>
+                          <span className="text-[13px]">
                             <span className="font-bold text-[#660099]">{availPctExact}%</span>
                             <span className="text-[#8a8a90]"> - </span>
                             <span className="font-bold text-[#1a1a1a]">{available.toFixed(2)} GB</span>
                           </span>
                         </div>
+
                         <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
                           <div
                             className="h-full rounded-full bg-[#660099]"
