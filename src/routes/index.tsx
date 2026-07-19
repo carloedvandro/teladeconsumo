@@ -32,10 +32,12 @@ import statusAtivaAsset from "@/assets/status-ativa-v2.png.asset.json";
 import statusBloqueadaAsset from "@/assets/status-bloqueada-v2.png.asset.json";
 import statusAguardandoAsset from "@/assets/status-aguardando-v2.png.asset.json";
 import statusReduzidaAsset from "@/assets/status-reduzida-v2.png.asset.json";
+import upgradeArrowAsset from "@/assets/upgrade-arrow-3d.png.asset.json";
 const statusAtivaIcon = statusAtivaAsset.url;
 const statusBloqueadaIcon = statusBloqueadaAsset.url;
 const statusAguardandoIcon = statusAguardandoAsset.url;
 const statusReduzidaIcon = statusReduzidaAsset.url;
+const upgradeArrowIcon = upgradeArrowAsset.url;
 import icon3dSms from "@/assets/icon-3d-sms.png";
 import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
 import icon3dBonus from "@/assets/icon-3d-bonus.png";
@@ -691,10 +693,19 @@ function ResumoConsumo() {
                         : currentStatus === "bloqueada_pagamento"
                           ? "Aguardando pagamento"
                           : "Bloqueada";
+                  const statusTone =
+                    currentStatus === "ativa"
+                      ? "#16A34A"
+                      : currentStatus === "reduzida"
+                        ? "#C96A05"
+                        : currentStatus === "bloqueada_pagamento"
+                          ? "#D97706"
+                          : "#DC2626";
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                      className="mt-3 flex w-full items-center gap-2 text-left text-sm font-semibold text-[#6D28D9] transition hover:text-[#5B21B6] hover:underline"
+                      className="mt-3 flex w-full items-center gap-2 text-left text-sm font-semibold transition hover:underline"
+                      style={{ color: statusTone }}
                     >
                       <img
                         src={statusIconSrc}
@@ -1236,9 +1247,11 @@ function ResumoConsumo() {
             {/* Header */}
             <div className="flex shrink-0 items-center justify-between border-b border-[#660099]/10 px-6 py-4">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#660099] to-[#7a00b3] shadow-md">
-                  <ArrowUpCircle className="h-4.5 w-4.5 text-white" strokeWidth={2.4} />
-                </div>
+                <img
+                  src={upgradeArrowIcon}
+                  alt="Upgrade"
+                  className="h-9 w-9 shrink-0 object-contain drop-shadow-sm"
+                />
                 <h3 className="text-lg font-semibold text-[#660099]">Upgrade de plano</h3>
               </div>
               <button
@@ -1632,7 +1645,10 @@ function ResumoConsumo() {
                   className="h-14 w-14 shrink-0 object-contain drop-shadow-sm"
                 />
                 <div className="min-w-0">
-                  <div className="text-[11px] font-semibold uppercase tracking-wider text-[#6B7280]">
+                  <div
+                    className="text-[11px] font-semibold uppercase tracking-wider"
+                    style={{ color: cfg.tone, opacity: 0.75 }}
+                  >
                     Situação atual
                   </div>
                   <div
