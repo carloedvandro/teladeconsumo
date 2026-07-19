@@ -1995,6 +1995,91 @@ function ResumoConsumo() {
           {toast}
         </div>
       )}
+
+      {/* Simulador de status (dev) */}
+      <div className="fixed bottom-4 right-4 z-40">
+        {simOpen ? (
+          <div className="w-64 rounded-2xl border border-[#eee] bg-white p-3 shadow-2xl">
+            <div className="mb-2 flex items-center justify-between">
+              <div className="text-[11px] font-bold uppercase tracking-wider text-[#660099]">
+                Simulador
+              </div>
+              <button
+                onClick={() => setSimOpen(false)}
+                className="text-[#999] hover:text-[#333]"
+                aria-label="Fechar simulador"
+              >
+                ×
+              </button>
+            </div>
+            <div className="grid grid-cols-1 gap-1.5">
+              {[
+                { key: null, label: "Automático (real)", tone: "#660099", icon: null },
+                { key: "ativa" as LineStatus, label: "Ativa", tone: "#16A34A", icon: statusAtivaIcon },
+                { key: "reduzida" as LineStatus, label: "Velocidade reduzida", tone: "#C96A05", icon: statusReduzidaIcon },
+                { key: "bloqueada_fatura" as LineStatus, label: "Bloqueada — fatura", tone: "#DC2626", icon: statusBloqueadaIcon },
+                { key: "bloqueada_pagamento" as LineStatus, label: "Bloqueada — pagamento", tone: "#DC2626", icon: statusBloqueadaIcon },
+              ].map((opt) => {
+                const active = simStatus === opt.key;
+                return (
+                  <button
+                    key={String(opt.key)}
+                    onClick={() => setSimStatus(opt.key)}
+                    className="flex items-center gap-2 rounded-lg border px-2.5 py-2 text-left text-xs font-semibold transition"
+                    style={{
+                      borderColor: active ? opt.tone : "#eee",
+                      background: active ? `${opt.tone}14` : "#fff",
+                      color: opt.tone,
+                    }}
+                  >
+                    {opt.icon ? (
+                      <img src={opt.icon} alt="" className="h-4 w-4 object-contain" />
+                    ) : (
+                      <span className="inline-block h-4 w-4 rounded-full" style={{ background: opt.tone }} />
+                    )}
+                    <span className="flex-1">{opt.label}</span>
+                    {active && <span>✓</span>}
+                  </button>
+                );
+              })}
+              <button
+                onClick={() => {
+                  setSimOpen(false);
+                  openAfterIconsReady(() => setUpgradeOpen(true));
+                }}
+                className="mt-1 rounded-lg px-2.5 py-2 text-xs font-semibold text-white"
+                style={{ background: "linear-gradient(135deg,#660099,#7a00b3)" }}
+              >
+                Abrir fluxo de upgrade
+              </button>
+              <button
+                onClick={() => {
+                  setSimOpen(false);
+                  openAfterIconsReady(() => setStatusOpen(true));
+                }}
+                className="rounded-lg border border-[#660099] px-2.5 py-2 text-xs font-semibold text-[#660099]"
+              >
+                Abrir modal de status
+              </button>
+            </div>
+            {simStatus && (
+              <p className="mt-2 text-[10px] text-[#999]">
+                Simulando: <span className="font-semibold">{simStatus}</span>
+              </p>
+            )}
+          </div>
+        ) : (
+          <button
+            onClick={() => setSimOpen(true)}
+            className="flex items-center gap-2 rounded-full px-3 py-2 text-xs font-bold text-white shadow-lg transition hover:brightness-110"
+            style={{ background: "linear-gradient(135deg,#660099,#7a00b3)" }}
+            aria-label="Abrir simulador de status"
+          >
+            <span className="inline-block h-2 w-2 rounded-full bg-white" />
+            Simulador
+          </button>
+        )}
+      </div>
     </div>
   );
 }
