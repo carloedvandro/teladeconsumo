@@ -1747,6 +1747,11 @@ function ResumoConsumo() {
                       Fazer upgrade
                     </button>
                     <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        setToast("Solicitação de antecipação enviada");
+                        setTimeout(() => setToast(null), 2500);
+                      }}
                       className="flex-1 rounded-xl border border-[#660099] px-3 py-3 text-sm font-semibold text-[#660099] transition hover:bg-[#f5ebfa]"
                     >
                       Antecipar renovação
