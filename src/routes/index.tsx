@@ -884,32 +884,10 @@ function ResumoConsumo() {
                 </button>
 
                 {(() => {
-                  const currentStatus: LineStatus =
-                    usedPct >= 100 ? "reduzida" : "ativa";
-                  const statusIconSrc =
-                    currentStatus === "ativa"
-                      ? statusAtivaIcon
-                      : currentStatus === "reduzida"
-                        ? statusReduzidaIcon
-                        : currentStatus === "bloqueada_pagamento"
-                          ? statusAguardandoIcon
-                          : statusBloqueadaIcon;
-                  const statusLabel =
-                    currentStatus === "ativa"
-                      ? "Ativa"
-                      : currentStatus === "reduzida"
-                        ? "Velocidade reduzida"
-                        : currentStatus === "bloqueada_pagamento"
-                          ? "Aguardando pagamento"
-                          : "Bloqueada";
-                  const statusTone =
-                    currentStatus === "ativa"
-                      ? "#16A34A"
-                      : currentStatus === "reduzida"
-                        ? "#C96A05"
-                        : currentStatus === "bloqueada_pagamento"
-                          ? "#D97706"
-                          : "#DC2626";
+                  const isReduced = usedPct >= 100;
+                  const statusIconSrc = isReduced ? statusReduzidaIcon : statusAtivaIcon;
+                  const statusLabel = isReduced ? "Velocidade reduzida" : "Ativa";
+                  const statusTone = isReduced ? "#C96A05" : "#16A34A";
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
