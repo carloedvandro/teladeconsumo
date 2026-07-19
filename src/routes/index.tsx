@@ -21,7 +21,8 @@ import {
   Unlock,
   Gauge,
   CreditCard,
-
+  Copy,
+  QrCode,
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
