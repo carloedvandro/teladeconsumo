@@ -1678,6 +1678,11 @@ function ResumoConsumo() {
                       Ver consumo
                     </button>
                     <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        setToast("Abrindo suas faturas...");
+                        setTimeout(() => setToast(null), 2200);
+                      }}
                       className="flex-1 rounded-xl border border-[#660099] px-3 py-3 text-sm font-semibold text-[#660099] transition hover:bg-[#f5ebfa]"
                     >
                       Ver faturas
@@ -1688,6 +1693,11 @@ function ResumoConsumo() {
                 {currentStatus === "bloqueada_fatura" && (
                   <>
                     <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        setToast("Redirecionando para pagamento...");
+                        setTimeout(() => setToast(null), 2200);
+                      }}
                       className="flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110"
                       style={{
                         background: "linear-gradient(135deg,#660099,#7a00b3)",
@@ -1704,6 +1714,11 @@ function ResumoConsumo() {
                 {currentStatus === "bloqueada_pagamento" && (
                   <>
                     <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        setToast("Solicitação de desbloqueio enviada");
+                        setTimeout(() => setToast(null), 2500);
+                      }}
                       className="w-full rounded-xl px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110"
                       style={{
                         background: "linear-gradient(135deg,#660099,#7a00b3)",
@@ -1732,6 +1747,11 @@ function ResumoConsumo() {
                       Fazer upgrade
                     </button>
                     <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        setToast("Solicitação de antecipação enviada");
+                        setTimeout(() => setToast(null), 2500);
+                      }}
                       className="flex-1 rounded-xl border border-[#660099] px-3 py-3 text-sm font-semibold text-[#660099] transition hover:bg-[#f5ebfa]"
                     >
                       Antecipar renovação
