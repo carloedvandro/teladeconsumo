@@ -876,29 +876,31 @@ function ResumoConsumo() {
 
         </section>
 
-        {/* Upgrade offer — secondary horizontal card below main card */}
-        <section className="mt-4 w-full px-4 md:px-6">
-          <button
-            onClick={() => openAfterIconsReady(() => setUpgradeOpen(true))}
-            className="flex w-full items-center justify-between gap-4 rounded-md bg-white/90 px-5 py-4 shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition hover:shadow-[0_6px_24px_rgba(0,0,0,0.10)] md:ml-auto md:mr-6 md:w-[860px] md:max-w-[calc(100%-3rem)]"
-            style={{ backdropFilter: "blur(4px)" }}
-          >
-            <div className="flex min-w-0 items-center gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#660099]/10">
-                <ArrowUpCircle className="h-5 w-5 text-[#660099]" />
-              </div>
-              <div className="min-w-0 text-left">
-                <div className="truncate text-[15px] font-semibold text-[#333]">
-                  Quer falar e navegar ainda mais?
+        {/* Upgrade offer — revealed by the + button */}
+        {upgradeCardVisible && (
+          <section className="mt-4 w-full px-4 md:px-6 animate-fade-in-up">
+            <button
+              onClick={() => openAfterIconsReady(() => setUpgradeOpen(true))}
+              className="flex w-full items-center justify-between gap-4 rounded-md bg-white/90 px-5 py-4 shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition hover:shadow-[0_6px_24px_rgba(0,0,0,0.10)] md:ml-auto md:mr-6 md:w-[860px] md:max-w-[calc(100%-3rem)]"
+              style={{ backdropFilter: "blur(4px)" }}
+            >
+              <div className="flex min-w-0 items-center gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#660099]/10">
+                  <ArrowUpCircle className="h-5 w-5 text-[#660099]" />
                 </div>
-                <div className="truncate text-sm text-[#666]">
-                  Faça um upgrade no seu plano agora
+                <div className="min-w-0 text-left">
+                  <div className="truncate text-[15px] font-semibold text-[#333]">
+                    Quer falar e navegar ainda mais?
+                  </div>
+                  <div className="truncate text-sm text-[#666]">
+                    Faça um upgrade no seu plano agora
+                  </div>
                 </div>
               </div>
-            </div>
-            <ChevronRight className="h-5 w-5 shrink-0 text-[#660099]" />
-          </button>
-        </section>
+              <ChevronRight className="h-5 w-5 shrink-0 text-[#660099]" />
+            </button>
+          </section>
+        )}
 
 
         
