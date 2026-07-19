@@ -212,10 +212,10 @@ function ConsumoRing({
   const gid = line.number.replace(/\D/g, "");
 
   return (
-    <div className="relative h-[210px] w-[260px] shrink-0">
+    <div className="relative h-[240px] w-[260px] shrink-0">
       <svg
         viewBox={`0 0 ${size} 210`}
-        className="absolute inset-0 h-full w-full"
+        className="absolute left-0 top-0 h-[210px] w-full"
         style={{ shapeRendering: "geometricPrecision" }}
       >
         <defs>
