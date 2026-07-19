@@ -695,11 +695,12 @@ function ResumoConsumo() {
                         </div>
                         <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#ececef]">
                           <div
-                            className="h-full rounded-full transition-[width] duration-500"
+                            className="h-full rounded-full"
                             style={{
                               width: `${usedPct}%`,
                               background:
                                 "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
+                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
                           />
                         </div>
