@@ -28,6 +28,10 @@ import {
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
 import icon3dData from "@/assets/icon-3d-data.png";
 import icon3dPhone from "@/assets/icon-3d-phone.png";
+import statusAtivaIcon from "@/assets/status-ativa.png";
+import statusBloqueadaIcon from "@/assets/status-bloqueada.png";
+import statusAguardandoIcon from "@/assets/status-aguardando.png";
+import statusReduzidaIcon from "@/assets/status-reduzida.png";
 import icon3dSms from "@/assets/icon-3d-sms.png";
 import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
 import icon3dBonus from "@/assets/icon-3d-bonus.png";
@@ -1556,6 +1560,7 @@ function ResumoConsumo() {
             title: "Situação da linha",
             label: "Ativa",
             icon: Unlock,
+            image: statusAtivaIcon,
             tone: "#16A34A",
             iconBg: "#16A34A",
             bg: "#EAF7EE",
@@ -1566,6 +1571,7 @@ function ResumoConsumo() {
             title: "Situação da linha",
             label: "Bloqueada por fatura",
             icon: Lock,
+            image: statusBloqueadaIcon,
             tone: "#DC2626",
             iconBg: "#C81E1E",
             bg: "#FCECEC",
@@ -1576,6 +1582,7 @@ function ResumoConsumo() {
             title: "Situação da linha",
             label: "Aguardando desbloqueio",
             icon: Lock,
+            image: statusAguardandoIcon,
             tone: "#D97706",
             iconBg: "#C96A05",
             bg: "#F8EFE6",
@@ -1586,6 +1593,7 @@ function ResumoConsumo() {
             title: "Situação da linha",
             label: "Velocidade reduzida",
             icon: Gauge,
+            image: statusReduzidaIcon,
             tone: "#C96A05",
             iconBg: "#C96A05",
             bg: "#F6EEE7",
@@ -1594,7 +1602,6 @@ function ResumoConsumo() {
               "Sua franquia foi consumida e a navegação segue com velocidade reduzida.",
           },
         }[currentStatus];
-        const Icon = cfg.icon;
         return (
           <Modal
             open={statusOpen}
@@ -1607,12 +1614,14 @@ function ResumoConsumo() {
                 className="flex items-center gap-3 rounded-xl px-4 py-3.5 border"
                 style={{ background: cfg.bg, borderColor: cfg.border }}
               >
-                <div
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
-                  style={{ background: cfg.iconBg, color: "white" }}
-                >
-                  <Icon className="h-5 w-5" strokeWidth={2.4} />
-                </div>
+                <img
+                  src={cfg.image}
+                  alt={cfg.label}
+                  width={56}
+                  height={56}
+                  loading="lazy"
+                  className="h-14 w-14 shrink-0 object-contain drop-shadow-sm"
+                />
                 <div className="min-w-0">
                   <div className="text-[11px] font-semibold uppercase tracking-wider text-[#6B7280]">
                     Situação atual
