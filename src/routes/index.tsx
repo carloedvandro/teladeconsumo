@@ -875,31 +875,30 @@ function ResumoConsumo() {
             </details>
           </div>
 
-          {/* Upgrade card */}
+        </section>
+
+        {/* Upgrade offer — secondary horizontal card below main card */}
+        <section className="mt-4 w-full px-4 md:px-6">
           <button
             onClick={() => openAfterIconsReady(() => setUpgradeOpen(true))}
-            className="relative mt-6 flex w-full items-center justify-between rounded-md px-6 py-5 shadow-sm transition hover:shadow-md md:absolute md:bottom-8 md:right-6 md:mx-0 md:mt-0 md:w-[860px] md:max-w-[calc(100%-3rem)]"
-            style={{
-              background: "rgba(255,255,255,0.74)",
-              backdropFilter: "blur(6px)",
-              boxShadow:
-                "0 8px 32px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.45)",
-            }}
+            className="flex w-full items-center justify-between gap-4 rounded-md bg-white/90 px-5 py-4 shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition hover:shadow-[0_6px_24px_rgba(0,0,0,0.10)] md:ml-auto md:mr-6 md:w-[860px] md:max-w-[calc(100%-3rem)]"
+            style={{ backdropFilter: "blur(4px)" }}
           >
-            <div className="flex items-center gap-4">
-              <FileText className="h-7 w-7 text-[#660099]" />
-              <div className="text-left">
-                <div className="text-[15px] font-semibold text-[#333]">
+            <div className="flex min-w-0 items-center gap-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#660099]/10">
+                <ArrowUpCircle className="h-5 w-5 text-[#660099]" />
+              </div>
+              <div className="min-w-0 text-left">
+                <div className="truncate text-[15px] font-semibold text-[#333]">
                   Quer falar e navegar ainda mais?
                 </div>
-                <div className="text-sm text-[#666]">
+                <div className="truncate text-sm text-[#666]">
                   Faça um upgrade no seu plano agora
                 </div>
               </div>
             </div>
-            <ChevronRight className="h-5 w-5 text-[#660099]" />
+            <ChevronRight className="h-5 w-5 shrink-0 text-[#660099]" />
           </button>
-
         </section>
 
 
