@@ -682,9 +682,20 @@ function ResumoConsumo() {
     <div className="min-h-screen bg-[#f3f3f3]">
 
       <main className="mx-auto max-w-[1400px] px-4 pt-6 pb-16 md:px-6 md:pt-8">
-        <h1 className="text-[32px] font-semibold leading-tight text-[#660099] md:text-[42px]">
-          Resumo de Consumo
-        </h1>
+        <div className="flex items-start justify-between gap-4">
+          <h1 className="text-[32px] font-semibold leading-tight text-[#660099] md:text-[42px]">
+            Resumo de Consumo
+          </h1>
+          <button
+            onClick={async () => {
+              await supabase.auth.signOut();
+              window.location.href = "/auth";
+            }}
+            className="mt-2 shrink-0 rounded-full border border-[#660099]/30 px-4 py-1.5 text-xs font-semibold text-[#660099] transition hover:bg-[#660099] hover:text-white"
+          >
+            Sair
+          </button>
+        </div>
         <p className="mt-1 text-sm text-[#666]">
           Informação atualizada em{" "}
           <span suppressHydrationWarning className="font-semibold text-[#333]">{lastUpdatedDate}</span> às{" "}
