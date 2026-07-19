@@ -1802,6 +1802,58 @@ function ResumoConsumo() {
         );
       })()}
 
+      {pixOpen && (
+        <Modal onClose={() => setPixOpen(false)} title="Pagar fatura com Pix">
+          <div className="space-y-4 px-4 py-4 sm:px-6">
+            <div className="flex items-center justify-between rounded-xl bg-[#f7f0fb] px-4 py-3">
+              <div>
+                <div className="text-[11px] uppercase tracking-wider text-[#888]">Valor da fatura</div>
+                <div className="text-lg font-bold text-[#660099]">R$ 89,90</div>
+              </div>
+              <div className="text-right">
+                <div className="text-[11px] uppercase tracking-wider text-[#888]">Vencimento</div>
+                <div className="text-sm font-semibold text-[#333]">10/08</div>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center gap-2 rounded-xl border border-[#eee] px-4 py-5">
+              <div className="flex h-40 w-40 items-center justify-center rounded-lg bg-white ring-1 ring-[#eee]">
+                <QrCode className="h-32 w-32 text-[#222]" strokeWidth={1.2} />
+              </div>
+              <p className="text-center text-xs text-[#666]">Aponte a câmera do seu banco para o QR Code</p>
+            </div>
+
+            <div className="space-y-2">
+              <div className="text-[11px] font-semibold uppercase tracking-wider text-[#888]">
+                Pix Copia e Cola
+              </div>
+              <div className="break-all rounded-lg bg-[#fafafa] px-3 py-2.5 text-[11px] text-[#444] ring-1 ring-[#eee]">
+                {pixCode}
+              </div>
+              <button
+                onClick={() => {
+                  if (typeof navigator !== "undefined" && navigator.clipboard) {
+                    navigator.clipboard.writeText(pixCode).catch(() => {});
+                  }
+                  setToast("Código Pix copiado!");
+                  setTimeout(() => setToast(null), 2200);
+                }}
+                className="flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110"
+                style={{ background: "linear-gradient(135deg,#660099,#7a00b3)" }}
+              >
+                <Copy className="h-4 w-4" /> Copiar código Pix
+              </button>
+            </div>
+
+            <p className="rounded-lg bg-[#fff7ed] px-3 py-2 text-xs text-[#b45309]">
+              Após o pagamento, a regularização da linha pode ocorrer em até 24 horas.
+            </p>
+          </div>
+        </Modal>
+      )}
+
+
+
 
       {toast && (
         <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-md bg-[#333] px-5 py-3 text-sm text-white shadow-lg">
