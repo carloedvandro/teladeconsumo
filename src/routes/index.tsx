@@ -17,10 +17,8 @@ import {
   Sparkles,
   AlertTriangle,
   Mail,
-  Lock,
   Unlock,
   Gauge,
-  CreditCard,
   Copy,
   QrCode,
 } from "lucide-react";
