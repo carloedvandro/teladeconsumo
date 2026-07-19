@@ -318,7 +318,7 @@ function ConsumoRing({
       </svg>
 
       {/* Big value + subtitle — pushed up a bit so it sits above the arc tips. */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-8 flex flex-col items-center">
+      <div className="pointer-events-none absolute inset-x-0 bottom-2 flex flex-col items-center">
         <div className="text-[30px] font-bold leading-none text-[#1a1a1a]">
           {line.used === 0
             ? "0.00"
@@ -693,7 +693,7 @@ function ResumoConsumo() {
                             <span className="font-bold text-[#1a1a1a]">{line.used.toFixed(2)} GB</span>
                           </span>
                         </div>
-                        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#ececef]">
+                        <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
                           <div
                             className="h-full rounded-full"
                             style={{
@@ -701,6 +701,14 @@ function ResumoConsumo() {
                               background:
                                 "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
                               transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+                            }}
+                          />
+                          <div
+                            className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
+                            style={{
+                              left: `calc(${Math.max(0, Math.min(100, usedPct))}% - 6px)`,
+                              boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
+                              transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
                           />
                         </div>
@@ -725,12 +733,20 @@ function ResumoConsumo() {
                             <span className="font-bold text-[#1a1a1a]">{available.toFixed(2)} GB</span>
                           </span>
                         </div>
-                        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#ececef]">
+                        <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
                           <div
                             className="h-full rounded-full bg-[#660099]"
                             style={{
                               width: `${availPct}%`,
                               transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+                            }}
+                          />
+                          <div
+                            className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
+                            style={{
+                              left: `calc(${Math.max(0, Math.min(100, availPct))}% - 6px)`,
+                              boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
+                              transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
                           />
                         </div>
@@ -832,46 +848,6 @@ function ResumoConsumo() {
               </div>
             </div>
 
-            {/* Full-width consumption progress bar */}
-            <div
-              className="mt-5 flex items-center gap-3 rounded-2xl px-3 py-3 md:gap-4 md:px-4"
-              style={{
-                background: "rgba(255,255,255,0.55)",
-                boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.5)",
-              }}
-            >
-              <div className="min-w-0 shrink-0">
-                <div className="text-sm font-semibold text-[#1a1a1a] leading-tight">Consumo</div>
-                <div className="text-[11px] whitespace-nowrap leading-tight">
-                  <span className="font-bold text-[#660099]">{line.used.toFixed(2)} GB</span>
-                  <span className="text-[#6b6b6b]"> de </span>
-                  <span className="font-semibold text-[#1a1a1a]">{line.total} GB</span>
-                </div>
-              </div>
-              <div className="relative h-2.5 flex-1 overflow-visible rounded-full bg-[#ececef]">
-                <div
-                  className="h-full rounded-full"
-                  style={{
-                    width: `${usedPct}%`,
-                    background:
-                      "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
-                    transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                  }}
-                />
-                <div
-                  className="absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-white shadow"
-                  style={{
-                    left: `calc(${Math.max(0, Math.min(100, usedPct))}% - 8px)`,
-                    boxShadow: "0 1px 4px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(0,0,0,0.06)",
-                    transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                  }}
-                />
-              </div>
-              <div className="shrink-0 text-right">
-                <div className="text-lg font-bold leading-none text-[#660099]">{usedPctExact}%</div>
-                <div className="text-[10px] text-[#6b6b6b]">utilizado</div>
-              </div>
-            </div>
 
             {/* Realtime footer */}
             <div className="mt-2 flex items-center justify-center gap-1.5 text-[11px] text-[#6b6b6b]">
