@@ -394,9 +394,7 @@ function ConsumoRing({
       {/* Big value + subtitle — pushed up a bit so it sits above the arc tips. */}
       <div className="pointer-events-none absolute inset-x-0 bottom-2 flex flex-col items-center">
         <div className="text-[30px] font-bold leading-none text-[#1a1a1a]">
-          {line.used === 0
-            ? "0.00"
-            : line.used.toFixed(2)}
+          {((animPct / 100) * line.total).toFixed(2)}
           <span className="ml-1 text-base font-semibold text-[#1a1a1a]">GB</span>
         </div>
         <div className="mt-1 text-[11px] text-[#6b6b6b]">
