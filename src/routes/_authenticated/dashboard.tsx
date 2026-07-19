@@ -594,6 +594,16 @@ function ResumoConsumo() {
   const availPctExact = (Math.round((100 - pct) * 100) / 100).toFixed(2);
   const color = ringColor(pct);
 
+  // Rise-from-zero intro for the mini bars, coordinated with the gauge needle.
+  const [barsIntro, setBarsIntro] = useState(false);
+  useEffect(() => {
+    setBarsIntro(false);
+    const id = window.setTimeout(() => setBarsIntro(true), 80);
+    return () => window.clearTimeout(id);
+  }, [pct]);
+  const usedPctAnim = barsIntro ? usedPct : 0;
+  const availPctAnim = barsIntro ? availPct : 0;
+
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
     const scheduleMidnight = () => {
@@ -788,18 +798,18 @@ function ResumoConsumo() {
                           <div
                             className="h-full rounded-full"
                             style={{
-                              width: `${usedPct}%`,
+                              width: `${usedPctAnim}%`,
                               background:
                                 "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
-                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+                              transition: "width 1600ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
                           />
                           <div
                             className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
                             style={{
-                              left: `calc(${Math.max(0, Math.min(100, usedPct))}% - 6px)`,
+                              left: `calc(${Math.max(0, Math.min(100, usedPctAnim))}% - 6px)`,
                               boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
-                              transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+                              transition: "left 1600ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
                           />
                         </div>
@@ -829,16 +839,16 @@ function ResumoConsumo() {
                           <div
                             className="h-full rounded-full bg-[#660099]"
                             style={{
-                              width: `${availPct}%`,
-                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+                              width: `${availPctAnim}%`,
+                              transition: "width 1600ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
                           />
                           <div
                             className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
                             style={{
-                              left: `calc(${Math.max(0, Math.min(100, availPct))}% - 6px)`,
+                              left: `calc(${Math.max(0, Math.min(100, availPctAnim))}% - 6px)`,
                               boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
-                              transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+                              transition: "left 1600ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
                           />
                         </div>
