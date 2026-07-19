@@ -1614,10 +1614,7 @@ function ResumoConsumo() {
           >
             <div className="space-y-5">
               {/* Situação */}
-              <div
-                className="flex items-center gap-3 rounded-xl px-4 py-3.5 border"
-                style={{ background: cfg.bg, borderColor: cfg.border }}
-              >
+              <div className="flex items-center gap-3">
                 <img
                   src={cfg.image}
                   alt={cfg.label}
