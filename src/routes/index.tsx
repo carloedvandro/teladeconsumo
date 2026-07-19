@@ -523,6 +523,8 @@ function ResumoConsumo() {
   const [statusOpen, setStatusOpen] = useState(false);
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
   const [pixOpen, setPixOpen] = useState(false);
+  const [simStatus, setSimStatus] = useState<LineStatus | null>(null);
+  const [simOpen, setSimOpen] = useState(false);
   const pixCode = "00020126580014BR.GOV.BCB.PIX0136vivo-fatura-8f2a-4c11-9e0b520400005303986540589.905802BR5915VIVO TELEFONICA6008SAO PAULO62070503***6304A1B2";
 
   useEffect(() => {
