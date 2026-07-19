@@ -362,14 +362,32 @@ function ConsumoRing({
             </>
           )}
 
-          {/* Needle */}
-          <path d={needlePath} fill={`url(#needle-${gid})`} filter={`url(#gaugeShadow-${gid})`} />
+          {/* 3D Needle — two shaded faces + glossy specular strip */}
+          <g filter={`url(#gaugeShadow-${gid})`}>
+            <path d={needleLeftPath} fill={`url(#needleLeft-${gid})`} />
+            <path d={needleRightPath} fill={`url(#needleRight-${gid})`} />
+            {/* central seam highlight to sell the ridge */}
+            <line
+              x1={cx}
+              y1={cy}
+              x2={cx}
+              y2={needleTipY}
+              stroke="#e9d5ff"
+              strokeWidth={0.7}
+              opacity={0.85}
+            />
+            {/* glossy specular on the right face */}
+            <path d={needleGlossPath} fill={`url(#needleGloss-${gid})`} opacity={0.55} />
+          </g>
         </g>
 
-        {/* Hub (3D pivot) */}
-        <circle cx={cx} cy={cy} r={13} fill={`url(#hub-${gid})`} filter={`url(#gaugeShadow-${gid})`} />
-        <circle cx={cx} cy={cy} r={5} fill="#3b0764" />
-        <circle cx={cx - 2} cy={cy - 2} r={2} fill="#c8a2ff" opacity={0.9} />
+        {/* Hub (3D pivot) — layered for depth */}
+        <circle cx={cx} cy={cy} r={15} fill="#1a0033" opacity={0.35} filter={`url(#gaugeShadow-${gid})`} />
+        <circle cx={cx} cy={cy} r={13} fill={`url(#hub-${gid})`} />
+        <circle cx={cx} cy={cy} r={13} fill={`url(#hubHi-${gid})`} />
+        <circle cx={cx} cy={cy} r={6} fill="#2a0140" />
+        <circle cx={cx - 1.5} cy={cy - 1.5} r={1.8} fill="#e9d5ff" opacity={0.95} />
+        <circle cx={cx + 3} cy={cy + 3} r={1.2} fill="#000" opacity={0.35} />
       </svg>
 
       {/* Big value + subtitle — pushed up a bit so it sits above the arc tips. */}
