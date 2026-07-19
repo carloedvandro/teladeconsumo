@@ -899,8 +899,12 @@ function ResumoConsumo() {
           </section>
         )}
 
-
-        
+        {/* Status da linha */}
+        <section className="mt-4 w-full px-4 md:px-6">
+          <div className="md:ml-auto md:mr-6 md:w-[860px] md:max-w-[calc(100%-3rem)]">
+            {statusBlock}
+          </div>
+        </section>
       </main>
 
       {/* Details modal */}
