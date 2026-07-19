@@ -1862,11 +1862,7 @@ function ResumoConsumo() {
                     className="font-semibold"
                     style={{ color: cfg.tone }}
                   >
-                    {currentStatus === "bloqueada_fatura"
-                      ? "Em aberto"
-                      : currentStatus === "bloqueada_pagamento"
-                        ? "Paga · em compensação"
-                        : "Em dia"}
+                    Em dia
                   </span>
                 </div>
               </div>
