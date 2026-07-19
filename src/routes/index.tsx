@@ -1551,7 +1551,234 @@ function ResumoConsumo() {
       )}
 
 
-      {/* Toast */}
+      {/* Status da linha modal */}
+      {(() => {
+        const currentStatus: LineStatus =
+          statusOverride ?? (usedPct >= 100 ? "reduzida" : "ativa");
+        const cfg = {
+          ativa: {
+            title: "Situação da linha",
+            label: "Ativa",
+            icon: Unlock,
+            tone: "#16a34a",
+            bg: "rgba(22,163,74,0.10)",
+            message: "Sua linha está ativa e funcionando normalmente.",
+          },
+          bloqueada_fatura: {
+            title: "Situação da linha",
+            label: "Bloqueada por fatura",
+            icon: Lock,
+            tone: "#b91c1c",
+            bg: "rgba(185,28,28,0.10)",
+            message: "Sua linha está bloqueada por falta de pagamento.",
+          },
+          bloqueada_pagamento: {
+            title: "Situação da linha",
+            label: "Aguardando desbloqueio",
+            icon: Lock,
+            tone: "#b45309",
+            bg: "rgba(180,83,9,0.10)",
+            message:
+              "Pagamento identificado. Você já pode solicitar o desbloqueio.",
+          },
+          reduzida: {
+            title: "Situação da linha",
+            label: "Velocidade reduzida",
+            icon: Gauge,
+            tone: "#b34e00",
+            bg: "rgba(179,78,0,0.10)",
+            message:
+              "Sua franquia foi totalmente consumida. A velocidade foi reduzida até a próxima renovação.",
+          },
+        }[currentStatus];
+        const Icon = cfg.icon;
+        return (
+          <Modal
+            open={statusOpen}
+            onClose={() => setStatusOpen(false)}
+            title="Status da linha"
+          >
+            <div className="space-y-5">
+              {/* Situação */}
+              <div
+                className="flex items-center gap-3 rounded-xl px-4 py-3"
+                style={{ background: cfg.bg }}
+              >
+                <div
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
+                  style={{ background: cfg.tone, color: "white" }}
+                >
+                  <Icon className="h-5 w-5" strokeWidth={2.4} />
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11px] font-semibold uppercase tracking-wider text-[#666]">
+                    Situação atual
+                  </div>
+                  <div
+                    className="text-base font-semibold"
+                    style={{ color: cfg.tone }}
+                  >
+                    {cfg.label}
+                  </div>
+                </div>
+              </div>
+
+              {/* Dados */}
+              <div className="rounded-xl border border-[#eee] px-4 py-3 text-sm">
+                <div className="flex justify-between py-1.5">
+                  <span className="text-[#666]">Número</span>
+                  <span className="font-semibold text-[#1a1a1a]">
+                    {baseLine.number}
+                  </span>
+                </div>
+                <div className="flex justify-between border-t border-[#f0f0f0] py-1.5">
+                  <span className="text-[#666]">Plano</span>
+                  <span className="font-semibold text-[#1a1a1a]">
+                    {baseLine.plan}
+                  </span>
+                </div>
+                <div className="flex justify-between border-t border-[#f0f0f0] py-1.5">
+                  <span className="text-[#666]">Vencimento</span>
+                  <span className="font-semibold text-[#1a1a1a]">
+                    Todo dia 10
+                  </span>
+                </div>
+                <div className="flex justify-between border-t border-[#f0f0f0] py-1.5">
+                  <span className="text-[#666]">Fatura</span>
+                  <span
+                    className="font-semibold"
+                    style={{ color: cfg.tone }}
+                  >
+                    {currentStatus === "bloqueada_fatura"
+                      ? "Em aberto"
+                      : currentStatus === "bloqueada_pagamento"
+                        ? "Paga · em compensação"
+                        : "Em dia"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Mensagem */}
+              <p className="text-sm text-[#444]">{cfg.message}</p>
+
+              {/* Ações */}
+              <div className="space-y-2">
+                {currentStatus === "ativa" && (
+                  <>
+                    <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        openAfterIconsReady(() => setDetailsOpen(true));
+                      }}
+                      className="w-full rounded-xl px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110"
+                      style={{
+                        background: "linear-gradient(135deg,#660099,#7a00b3)",
+                      }}
+                    >
+                      Ver consumo
+                    </button>
+                    <button
+                      className="w-full rounded-xl border border-[#660099] px-4 py-3 text-sm font-semibold text-[#660099] transition hover:bg-[#f5ebfa]"
+                    >
+                      Ver faturas
+                    </button>
+                  </>
+                )}
+                {currentStatus === "bloqueada_fatura" && (
+                  <>
+                    <button
+                      className="flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110"
+                      style={{
+                        background: "linear-gradient(135deg,#660099,#7a00b3)",
+                      }}
+                    >
+                      <CreditCard className="h-4 w-4" /> Pagar fatura
+                    </button>
+                    <p className="rounded-lg bg-[#fff7ed] px-3 py-2 text-xs text-[#b45309]">
+                      Após o pagamento, a regularização pode ocorrer em até 24
+                      horas.
+                    </p>
+                  </>
+                )}
+                {currentStatus === "bloqueada_pagamento" && (
+                  <>
+                    <button
+                      className="w-full rounded-xl px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110"
+                      style={{
+                        background: "linear-gradient(135deg,#660099,#7a00b3)",
+                      }}
+                    >
+                      Desbloquear linha
+                    </button>
+                    <p className="rounded-lg bg-[#fff7ed] px-3 py-2 text-xs text-[#b45309]">
+                      Caso a linha não normalize automaticamente, prossiga com
+                      a solicitação acima.
+                    </p>
+                  </>
+                )}
+                {currentStatus === "reduzida" && (
+                  <>
+                    <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        openAfterIconsReady(() => setUpgradeOpen(true));
+                      }}
+                      className="w-full rounded-xl px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110"
+                      style={{
+                        background: "linear-gradient(135deg,#660099,#7a00b3)",
+                      }}
+                    >
+                      Fazer upgrade
+                    </button>
+                    <button
+                      className="w-full rounded-xl border border-[#660099] px-4 py-3 text-sm font-semibold text-[#660099] transition hover:bg-[#f5ebfa]"
+                    >
+                      Antecipar renovação
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Simulação (dev) */}
+              <div className="rounded-xl border border-dashed border-[#e5d3f0] px-3 py-2.5">
+                <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-[#888]">
+                  Simular status
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {(
+                    [
+                      ["ativa", "Ativa"],
+                      ["bloqueada_fatura", "Bloq. fatura"],
+                      ["bloqueada_pagamento", "Aguard. desbl."],
+                      ["reduzida", "Reduzida"],
+                    ] as [LineStatus, string][]
+                  ).map(([key, label]) => (
+                    <button
+                      key={key}
+                      onClick={() => setStatusOverride(key)}
+                      className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition ${
+                        statusOverride === key
+                          ? "bg-[#660099] text-white"
+                          : "bg-[#f3eaf7] text-[#660099] hover:bg-[#e7d4f0]"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => setStatusOverride(null)}
+                    className="rounded-full px-2.5 py-1 text-[11px] font-medium text-[#888] hover:text-[#660099]"
+                  >
+                    Auto
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Modal>
+        );
+      })()}
+
+
       {toast && (
         <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-md bg-[#333] px-5 py-3 text-sm text-white shadow-lg">
           {toast}
