@@ -28,6 +28,10 @@ import {
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
 import icon3dData from "@/assets/icon-3d-data.png";
 import icon3dPhone from "@/assets/icon-3d-phone.png";
+import statusAtivaIcon from "@/assets/status-ativa.png";
+import statusBloqueadaIcon from "@/assets/status-bloqueada.png";
+import statusAguardandoIcon from "@/assets/status-aguardando.png";
+import statusReduzidaIcon from "@/assets/status-reduzida.png";
 import icon3dSms from "@/assets/icon-3d-sms.png";
 import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
 import icon3dBonus from "@/assets/icon-3d-bonus.png";
