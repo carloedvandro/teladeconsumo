@@ -78,6 +78,8 @@ type Line = {
   cycleDays: number;
 };
 
+type LineStatus = "ativa" | "bloqueada_fatura" | "bloqueada_pagamento" | "reduzida";
+
 const LINES: Line[] = [
   {
     number: "(31) 97115-7584",
