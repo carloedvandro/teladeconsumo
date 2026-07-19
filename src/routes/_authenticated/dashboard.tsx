@@ -839,16 +839,16 @@ function ResumoConsumo() {
                           <div
                             className="h-full rounded-full bg-[#660099]"
                             style={{
-                              width: `${availPct}%`,
-                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+                              width: `${availPctAnim}%`,
+                              transition: "width 1600ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
                           />
                           <div
                             className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
                             style={{
-                              left: `calc(${Math.max(0, Math.min(100, availPct))}% - 6px)`,
+                              left: `calc(${Math.max(0, Math.min(100, availPctAnim))}% - 6px)`,
                               boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
-                              transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+                              transition: "left 1600ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
                           />
                         </div>
