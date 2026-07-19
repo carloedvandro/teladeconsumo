@@ -28,7 +28,7 @@ import icon3dData from "@/assets/icon-3d-data.png";
 import icon3dPhone from "@/assets/icon-3d-phone.png";
 import statusAtivaAsset from "@/assets/status-ativa-v2.png.asset.json";
 import statusReduzidaAsset from "@/assets/status-reduzida-v2.png.asset.json";
-import upgradeArrowAsset from "@/assets/upgrade-arrow-3d.png.asset.json";
+
 import upgradeArrowTransparent from "@/assets/upgrade-arrow-3d-transparent.png";
 
 const statusAtivaIcon = statusAtivaAsset.url;
