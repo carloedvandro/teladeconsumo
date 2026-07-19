@@ -495,6 +495,176 @@ function ResumoConsumo() {
       : `em ${cycleDaysLeft} ${cycleDaysLeft === 1 ? "dia" : "dias"}`;
   const renewalDateLabel = nextRenewalDate(2, now);
 
+  const statusBlock = (
+    <div className="min-w-0">
+      {lineStatus === "ativa" && (
+        <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-green-100 bg-white shadow-[0_4px_16px_rgba(0,0,0,0.05)]">
+          <div className="flex items-center gap-3 bg-gradient-to-r from-[#15803d] to-[#22c55e] px-4 py-3 text-white">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur">
+              <CheckCircle2 size={18} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-wider text-white/85">Status da linha</p>
+              <p className="text-base font-bold leading-tight">Linha ativa</p>
+            </div>
+          </div>
+          <div className="flex flex-1 flex-col px-4 py-4">
+            <p className="text-sm text-[#444]">Você pode usar sua linha normalmente.</p>
+            <div className="mt-3 space-y-1 text-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-[#888]">Linha</span>
+                <span className="font-semibold text-[#333]">{line.number}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-[#888]">Plano</span>
+                <span className="font-semibold text-[#333]">{line.plan}</span>
+              </div>
+            </div>
+            <div className="mt-auto flex flex-col gap-2 pt-4 sm:flex-row">
+              <button
+                onClick={() => showToast("Abrindo faturas...")}
+                className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-3 py-2.5 text-sm font-semibold text-[#660099] hover:bg-[#faf5ff]"
+              >
+                Ver faturas
+              </button>
+              <button
+                onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
+                className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-3 py-2.5 text-sm font-semibold text-[#660099] hover:bg-[#faf5ff]"
+              >
+                Ver consumo
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {lineStatus === "reduzida" && (
+        <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-orange-100 bg-white shadow-[0_4px_16px_rgba(0,0,0,0.05)]">
+          <div className="flex items-center gap-3 bg-gradient-to-r from-[#c2410c] to-[#f59e0b] px-4 py-3 text-white">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur">
+              <AlertTriangle size={18} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-wider text-white/85">Status da linha</p>
+              <p className="text-base font-bold leading-tight">Velocidade reduzida</p>
+            </div>
+          </div>
+          <div className="flex flex-1 flex-col px-4 py-4">
+            <p className="text-sm leading-relaxed text-[#444]">
+              Sua franquia foi consumida. A navegação continua com velocidade reduzida até a
+              renovação do ciclo ou contratação adicional.
+            </p>
+            <div className="mt-auto flex flex-col gap-2 pt-4">
+              <button
+                onClick={() => openAfterIconsReady(() => setUpgradeOpen(true))}
+                className="w-full rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-3 py-2.5 text-sm font-semibold text-white shadow-[0_6px_18px_rgba(102,0,153,0.30)]"
+              >
+                Contratar adicional
+              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
+                  className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-3 py-2 text-xs font-semibold text-[#660099] hover:bg-[#faf5ff]"
+                >
+                  Ver detalhes
+                </button>
+                <button
+                  onClick={() => showToast("Abrindo faturas...")}
+                  className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-3 py-2 text-xs font-semibold text-[#660099] hover:bg-[#faf5ff]"
+                >
+                  Ver faturas
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {lineStatus === "bloqueada" && invoiceStatus === "vencida" && (
+        <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-red-100 bg-white shadow-[0_4px_16px_rgba(0,0,0,0.05)]">
+          <div className="flex items-start gap-3 bg-gradient-to-r from-[#b91c1c] to-[#ef4444] px-4 py-3 text-white">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur">
+              <Lock size={18} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-wider text-white/85">Status da linha</p>
+              <p className="text-base font-bold leading-tight">Linha bloqueada</p>
+              <p className="text-[11px] text-white/90">Bloqueada por fatura em aberto</p>
+            </div>
+          </div>
+          <div className="flex flex-1 flex-col px-4 py-4">
+            <div className="space-y-1 text-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-[#888]">Linha</span>
+                <span className="font-semibold text-[#333]">{line.number}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-[#888]">Plano</span>
+                <span className="font-semibold text-[#333]">{line.plan}</span>
+              </div>
+            </div>
+            <div className="mt-auto flex flex-col gap-2 pt-4">
+              <button
+                onClick={() => openAfterIconsReady(() => setPayInvoiceOpen(true))}
+                className="w-full rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-3 py-2.5 text-sm font-semibold text-white shadow-[0_6px_18px_rgba(102,0,153,0.30)]"
+              >
+                Pagar fatura
+              </button>
+              <button
+                onClick={() => openAfterIconsReady(() => setPaymentCheckOpen(true))}
+                className="w-full rounded-xl border border-[#e5e5e5] bg-white px-3 py-2.5 text-sm font-semibold text-[#660099] hover:bg-[#faf5ff]"
+              >
+                Já efetuei o pagamento
+              </button>
+              <p className="text-[11px] leading-relaxed text-[#666]">
+                Após a confirmação, a linha será normalizada automaticamente em até 24 horas.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {lineStatus === "bloqueada" && invoiceStatus === "paga" && (
+        <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-[#e5d4f5] bg-white shadow-[0_4px_16px_rgba(0,0,0,0.05)]">
+          <div className="flex items-center gap-3 bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-3 text-white">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur">
+              <CheckCircle2 size={18} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-wider text-white/85">Status da linha</p>
+              <p className="text-base font-bold leading-tight">Fatura em dia</p>
+            </div>
+          </div>
+          <div className="flex flex-1 flex-col px-4 py-4">
+            <p className="text-sm text-[#444]">
+              Você pode solicitar o desbloqueio da sua linha.
+            </p>
+            <div className="mt-3 space-y-1 text-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-[#888]">Linha</span>
+                <span className="font-semibold text-[#333]">{line.number}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-[#888]">Plano</span>
+                <span className="font-semibold text-[#333]">{line.plan}</span>
+              </div>
+            </div>
+            <div className="mt-auto pt-4">
+              <button
+                onClick={() => {
+                  setUnlockRequested(false);
+                  openAfterIconsReady(() => setUnlockOpen(true));
+                }}
+                className="w-full rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-3 py-2.5 text-sm font-semibold text-white shadow-[0_6px_18px_rgba(102,0,153,0.30)]"
+              >
+                Desbloquear agora
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 
   function showToast(msg: string) {
     setToast(msg);
@@ -581,269 +751,93 @@ function ResumoConsumo() {
               />
             </button>
 
-            <div className="grid gap-6 md:grid-cols-[1fr_1px_1fr]">
-              {/* LEFT COLUMN: Consumption */}
-              <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:gap-4">
-                <div className="self-center md:self-auto"><ConsumoRing line={line} /></div>
+            <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:gap-4">
+              <div className="self-center md:self-auto"><ConsumoRing line={line} /></div>
 
-                <div className="w-full md:flex-1 md:min-w-0">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h2 className="text-[15px] font-semibold tracking-wide text-[#1a1a1a]">
-                      {baseLine.plan}
-                    </h2>
-                    {bonusDebito > 0 && (
-                      <span className="inline-flex items-center rounded-full bg-[#16a34a]/15 px-2 py-0.5 text-[10px] font-semibold text-[#15803d] ring-1 ring-[#16a34a]/30 animate-fade-in">
-                        +{bonusDebito}GB liberado
-                      </span>
-                    )}
-                  </div>
-                  <p className="mt-1 text-sm text-[#5a5a5a]">
-                    Fim do ciclo{" "}
-                    <span className="font-semibold text-[#1a1a1a]">{cycleLabel}</span>
-                  </p>
-                  <p className="mt-0.5 text-sm text-[#5a5a5a]">
-                    Próxima renovação:{" "}
-                    <span className="font-semibold text-[#1a1a1a]">{renewalDateLabel}</span>
-                  </p>
+              <div className="w-full md:flex-1 md:min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h2 className="text-[15px] font-semibold tracking-wide text-[#1a1a1a]">
+                    {baseLine.plan}
+                  </h2>
+                  {bonusDebito > 0 && (
+                    <span className="inline-flex items-center rounded-full bg-[#16a34a]/15 px-2 py-0.5 text-[10px] font-semibold text-[#15803d] ring-1 ring-[#16a34a]/30 animate-fade-in">
+                      +{bonusDebito}GB liberado
+                    </span>
+                  )}
+                </div>
+                <p className="mt-1 text-sm text-[#5a5a5a]">
+                  Fim do ciclo{" "}
+                  <span className="font-semibold text-[#1a1a1a]">{cycleLabel}</span>
+                </p>
+                <p className="mt-0.5 text-sm text-[#5a5a5a]">
+                  Próxima renovação:{" "}
+                  <span className="font-semibold text-[#1a1a1a]">{renewalDateLabel}</span>
+                </p>
 
-                  <ul className="mt-4 text-sm">
-                    <li className="flex items-center justify-between gap-3 border-b border-[#a8a8a8] py-2.5">
-                      <span className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[#5a5a5a]">
-                        <span
-                          className="inline-block h-3 w-3 rounded-full border-[3px]"
-                          style={{ borderColor: color }}
-                        />
-                        Meu Consumo
-                      </span>
-                      <span className="whitespace-nowrap text-right font-semibold text-[#1a1a1a]">
-                        {usedPct}% - {formatGB(line.used)}
-                      </span>
-                    </li>
-                    <li className="flex items-center justify-between gap-3 border-b border-[#a8a8a8] py-2.5">
-                      <span className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[#5a5a5a]">
-                        <span className="inline-block h-3 w-3 rounded-full border-[3px] border-[#660099]" />
-                        Disponíveis
-                      </span>
-                      <span className="whitespace-nowrap text-right font-semibold text-[#1a1a1a]">
-                        {availPct}% - {formatGB(available)}
-                      </span>
-                    </li>
-                  </ul>
-
-                  <div className="mt-3 flex items-start justify-between gap-4">
-                    <div className="min-w-0 pt-0.5">
-                      <span className="text-sm font-semibold text-[#1a1a1a]">Renovação automática</span>
-                      <div className="mt-2 space-y-0.5">
-                        {autoDebit ? (
-                          <div className="text-[11px] font-semibold text-[#660099]">
-                            Débito automático ativo
-                          </div>
-                        ) : (
-                          <div className="text-[11px] font-medium text-[#666]">
-                            Ative e ganhe +25GB de bônus
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      role="switch"
-                      aria-checked={autoDebit}
-                      onClick={() => {
-                        openAfterIconsReady(() => setConfirmAutoDebit(true));
-                      }}
-                      className={`relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
-                        autoDebit ? "bg-[#16a34a]" : "bg-[#bfbfbf]"
-                      }`}
-                    >
+                <ul className="mt-4 text-sm">
+                  <li className="flex items-center justify-between gap-3 border-b border-[#a8a8a8] py-2.5">
+                    <span className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[#5a5a5a]">
                       <span
-                        className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-300 ${
-                          autoDebit ? "translate-x-[22px]" : "translate-x-[2px]"
-                        }`}
+                        className="inline-block h-3 w-3 rounded-full border-[3px]"
+                        style={{ borderColor: color }}
                       />
-                    </button>
-                  </div>
+                      Meu Consumo
+                    </span>
+                    <span className="whitespace-nowrap text-right font-semibold text-[#1a1a1a]">
+                      {usedPct}% - {formatGB(line.used)}
+                    </span>
+                  </li>
+                  <li className="flex items-center justify-between gap-3 border-b border-[#a8a8a8] py-2.5">
+                    <span className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[#5a5a5a]">
+                      <span className="inline-block h-3 w-3 rounded-full border-[3px] border-[#660099]" />
+                      Disponíveis
+                    </span>
+                    <span className="whitespace-nowrap text-right font-semibold text-[#1a1a1a]">
+                      {availPct}% - {formatGB(available)}
+                    </span>
+                  </li>
+                </ul>
 
+                <div className="mt-3 flex items-start justify-between gap-4">
+                  <div className="min-w-0 pt-0.5">
+                    <span className="text-sm font-semibold text-[#1a1a1a]">Renovação automática</span>
+                    <div className="mt-2 space-y-0.5">
+                      {autoDebit ? (
+                        <div className="text-[11px] font-semibold text-[#660099]">
+                          Débito automático ativo
+                        </div>
+                      ) : (
+                        <div className="text-[11px] font-medium text-[#666]">
+                          Ative e ganhe +25GB de bônus
+                        </div>
+                      )}
+                    </div>
+                  </div>
                   <button
-                    onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
-                    className="mt-3 text-sm font-semibold text-[#660099] hover:underline"
+                    type="button"
+                    role="switch"
+                    aria-checked={autoDebit}
+                    onClick={() => {
+                      openAfterIconsReady(() => setConfirmAutoDebit(true));
+                    }}
+                    className={`relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
+                      autoDebit ? "bg-[#16a34a]" : "bg-[#bfbfbf]"
+                    }`}
                   >
-                    Ver detalhes do seu consumo &gt;
+                    <span
+                      className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-300 ${
+                        autoDebit ? "translate-x-[22px]" : "translate-x-[2px]"
+                      }`}
+                    />
                   </button>
                 </div>
-              </div>
 
-              {/* Divider (desktop only) */}
-              <div className="hidden bg-gradient-to-b from-transparent via-[#e5d4f5] to-transparent md:block" aria-hidden />
-
-              {/* RIGHT COLUMN: Line status */}
-              <div className="min-w-0">
-                {lineStatus === "ativa" && (
-                  <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-green-100 bg-white shadow-[0_4px_16px_rgba(0,0,0,0.05)]">
-                    <div className="flex items-center gap-3 bg-gradient-to-r from-[#15803d] to-[#22c55e] px-4 py-3 text-white">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur">
-                        <CheckCircle2 size={18} />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-[10px] uppercase tracking-wider text-white/85">Status da linha</p>
-                        <p className="text-base font-bold leading-tight">Linha ativa</p>
-                      </div>
-                    </div>
-                    <div className="flex flex-1 flex-col px-4 py-4">
-                      <p className="text-sm text-[#444]">Você pode usar sua linha normalmente.</p>
-                      <div className="mt-3 space-y-1 text-xs">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[#888]">Linha</span>
-                          <span className="font-semibold text-[#333]">{line.number}</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[#888]">Plano</span>
-                          <span className="font-semibold text-[#333]">{line.plan}</span>
-                        </div>
-                      </div>
-                      <div className="mt-auto flex flex-col gap-2 pt-4 sm:flex-row">
-                        <button
-                          onClick={() => showToast("Abrindo faturas...")}
-                          className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-3 py-2.5 text-sm font-semibold text-[#660099] hover:bg-[#faf5ff]"
-                        >
-                          Ver faturas
-                        </button>
-                        <button
-                          onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
-                          className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-3 py-2.5 text-sm font-semibold text-[#660099] hover:bg-[#faf5ff]"
-                        >
-                          Ver consumo
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {lineStatus === "reduzida" && (
-                  <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-orange-100 bg-white shadow-[0_4px_16px_rgba(0,0,0,0.05)]">
-                    <div className="flex items-center gap-3 bg-gradient-to-r from-[#c2410c] to-[#f59e0b] px-4 py-3 text-white">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur">
-                        <AlertTriangle size={18} />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-[10px] uppercase tracking-wider text-white/85">Status da linha</p>
-                        <p className="text-base font-bold leading-tight">Velocidade reduzida</p>
-                      </div>
-                    </div>
-                    <div className="flex flex-1 flex-col px-4 py-4">
-                      <p className="text-sm leading-relaxed text-[#444]">
-                        Sua franquia foi consumida. A navegação continua com velocidade reduzida até a
-                        renovação do ciclo ou contratação adicional.
-                      </p>
-                      <div className="mt-auto flex flex-col gap-2 pt-4">
-                        <button
-                          onClick={() => openAfterIconsReady(() => setUpgradeOpen(true))}
-                          className="w-full rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-3 py-2.5 text-sm font-semibold text-white shadow-[0_6px_18px_rgba(102,0,153,0.30)]"
-                        >
-                          Contratar adicional
-                        </button>
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
-                            className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-3 py-2 text-xs font-semibold text-[#660099] hover:bg-[#faf5ff]"
-                          >
-                            Ver detalhes
-                          </button>
-                          <button
-                            onClick={() => showToast("Abrindo faturas...")}
-                            className="flex-1 rounded-xl border border-[#e5e5e5] bg-white px-3 py-2 text-xs font-semibold text-[#660099] hover:bg-[#faf5ff]"
-                          >
-                            Ver faturas
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {lineStatus === "bloqueada" && invoiceStatus === "vencida" && (
-                  <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-red-100 bg-white shadow-[0_4px_16px_rgba(0,0,0,0.05)]">
-                    <div className="flex items-start gap-3 bg-gradient-to-r from-[#b91c1c] to-[#ef4444] px-4 py-3 text-white">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur">
-                        <Lock size={18} />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-[10px] uppercase tracking-wider text-white/85">Status da linha</p>
-                        <p className="text-base font-bold leading-tight">Linha bloqueada</p>
-                        <p className="text-[11px] text-white/90">Bloqueada por fatura em aberto</p>
-                      </div>
-                    </div>
-                    <div className="flex flex-1 flex-col px-4 py-4">
-                      <div className="space-y-1 text-xs">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[#888]">Linha</span>
-                          <span className="font-semibold text-[#333]">{line.number}</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[#888]">Plano</span>
-                          <span className="font-semibold text-[#333]">{line.plan}</span>
-                        </div>
-                      </div>
-                      <div className="mt-auto flex flex-col gap-2 pt-4">
-                        <button
-                          onClick={() => openAfterIconsReady(() => setPayInvoiceOpen(true))}
-                          className="w-full rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-3 py-2.5 text-sm font-semibold text-white shadow-[0_6px_18px_rgba(102,0,153,0.30)]"
-                        >
-                          Pagar fatura
-                        </button>
-                        <button
-                          onClick={() => openAfterIconsReady(() => setPaymentCheckOpen(true))}
-                          className="w-full rounded-xl border border-[#e5e5e5] bg-white px-3 py-2.5 text-sm font-semibold text-[#660099] hover:bg-[#faf5ff]"
-                        >
-                          Já efetuei o pagamento
-                        </button>
-                        <p className="text-[11px] leading-relaxed text-[#666]">
-                          Após a confirmação, a linha será normalizada automaticamente em até 24 horas.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {lineStatus === "bloqueada" && invoiceStatus === "paga" && (
-                  <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-[#e5d4f5] bg-white shadow-[0_4px_16px_rgba(0,0,0,0.05)]">
-                    <div className="flex items-center gap-3 bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-4 py-3 text-white">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/20 backdrop-blur">
-                        <CheckCircle2 size={18} />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-[10px] uppercase tracking-wider text-white/85">Status da linha</p>
-                        <p className="text-base font-bold leading-tight">Fatura em dia</p>
-                      </div>
-                    </div>
-                    <div className="flex flex-1 flex-col px-4 py-4">
-                      <p className="text-sm text-[#444]">
-                        Você pode solicitar o desbloqueio da sua linha.
-                      </p>
-                      <div className="mt-3 space-y-1 text-xs">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[#888]">Linha</span>
-                          <span className="font-semibold text-[#333]">{line.number}</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[#888]">Plano</span>
-                          <span className="font-semibold text-[#333]">{line.plan}</span>
-                        </div>
-                      </div>
-                      <div className="mt-auto pt-4">
-                        <button
-                          onClick={() => {
-                            setUnlockRequested(false);
-                            openAfterIconsReady(() => setUnlockOpen(true));
-                          }}
-                          className="w-full rounded-xl bg-gradient-to-r from-[#660099] to-[#8b1fbf] px-3 py-2.5 text-sm font-semibold text-white shadow-[0_6px_18px_rgba(102,0,153,0.30)]"
-                        >
-                          Desbloquear agora
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <button
+                  onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
+                  className="mt-3 text-sm font-semibold text-[#660099] hover:underline"
+                >
+                  Ver detalhes do seu consumo &gt;
+                </button>
               </div>
             </div>
 
@@ -905,8 +899,12 @@ function ResumoConsumo() {
           </section>
         )}
 
-
-        
+        {/* Status da linha */}
+        <section className="mt-4 w-full px-4 md:px-6">
+          <div className="md:ml-auto md:mr-6 md:w-[860px] md:max-w-[calc(100%-3rem)]">
+            {statusBlock}
+          </div>
+        </section>
       </main>
 
       {/* Details modal */}
