@@ -288,16 +288,28 @@ function ConsumoRing({
           );
         })}
 
-        {/* Consumed tip cap (small dot at needle position on arc) */}
-        {pct > 0 && (
-          <>
-            <circle cx={tipPoint.x} cy={tipPoint.y} r={strokeW / 2 + 1} fill={tipCol} filter={`url(#gaugeShadow-${gid})`} />
-            <circle cx={tipPoint.x} cy={tipPoint.y} r={2} fill="#fff" />
-          </>
-        )}
+        {/* Rotating group: needle + consumed tip dot. Animates smoothly
+            when the consumption percentage changes. */}
+        <g
+          style={{
+            transform: `rotate(${needleAngle}deg)`,
+            transformOrigin: `${cx}px ${cy}px`,
+            transformBox: "view-box",
+            transition: "transform 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+            willChange: "transform",
+          }}
+        >
+          {/* Consumed tip cap (small dot at needle position on arc) */}
+          {pct > 0 && (
+            <>
+              <circle cx={tipX} cy={tipY} r={strokeW / 2 + 1} fill={tipCol} filter={`url(#gaugeShadow-${gid})`} />
+              <circle cx={tipX} cy={tipY} r={2} fill="#fff" />
+            </>
+          )}
 
-        {/* Needle */}
-        <path d={needlePath} fill={`url(#needle-${gid})`} filter={`url(#gaugeShadow-${gid})`} />
+          {/* Needle */}
+          <path d={needlePath} fill={`url(#needle-${gid})`} filter={`url(#gaugeShadow-${gid})`} />
+        </g>
 
         {/* Hub (3D pivot) */}
         <circle cx={cx} cy={cy} r={13} fill={`url(#hub-${gid})`} filter={`url(#gaugeShadow-${gid})`} />
