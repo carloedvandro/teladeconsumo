@@ -1840,17 +1840,30 @@ function ResumoConsumo() {
               {/* Ações */}
               <div className="space-y-2">
                 {currentStatus === "ativa" && (
-                  <button
-                    onClick={() => {
-                      setStatusOpen(false);
-                      setToast("Abrindo suas faturas...");
-                      setTimeout(() => setToast(null), 2200);
-                    }}
-                    className="w-full rounded-xl border border-[#660099] px-3 py-3 text-sm font-semibold text-[#660099] transition hover:bg-[#f5ebfa]"
-                  >
-                    Ver faturas
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        setToast("Abrindo suas faturas...");
+                        setTimeout(() => setToast(null), 2200);
+                      }}
+                      className="flex-1 rounded-xl border border-[#660099] px-3 py-3 text-sm font-semibold text-[#660099] transition hover:bg-[#f5ebfa]"
+                    >
+                      Ver faturas
+                    </button>
+                    <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        openAfterIconsReady(() => setUpgradeOpen(true));
+                      }}
+                      className="flex-1 rounded-xl px-3 py-3 text-sm font-semibold text-white transition hover:brightness-110"
+                      style={{ background: "linear-gradient(135deg,#660099,#7a00b3)" }}
+                    >
+                      Fazer upgrade
+                    </button>
+                  </div>
                 )}
+
 
 
                 {currentStatus === "bloqueada_fatura" && (
