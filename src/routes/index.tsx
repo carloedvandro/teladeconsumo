@@ -349,6 +349,9 @@ function ResumoConsumo() {
   const [notifyWhats, setNotifyWhats] = useState(true);
   const [notifySms, setNotifySms] = useState(true);
   const [autoDebit, setAutoDebit] = useState(true);
+  const [statusOpen, setStatusOpen] = useState(false);
+  type LineStatus = "ativa" | "bloqueada_fatura" | "bloqueada_pagamento" | "reduzida";
+  const [statusOverride, setStatusOverride] = useState<LineStatus | null>(null);
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
 
   useEffect(() => {
