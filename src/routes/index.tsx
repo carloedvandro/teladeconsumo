@@ -231,15 +231,41 @@ function ConsumoRing({
           <filter id={`gaugeShadow-${gid}`} x="-50%" y="-50%" width="200%" height="200%">
             <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" floodColor="#000" floodOpacity="0.35" />
           </filter>
+          <linearGradient id={`bezelOuter-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#b8b8bf" />
+            <stop offset="100%" stopColor="#f4f4f7" />
+          </linearGradient>
+          <linearGradient id={`bezelInner-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#5a5a62" />
+            <stop offset="100%" stopColor="#dcdce2" />
+          </linearGradient>
         </defs>
 
-        {/* Background track */}
+        {/* 3D bezel — outer highlight ring */}
+        <path
+          d={arcPath(START, START + SWEEP, r + strokeW / 2 + 2)}
+          fill="none"
+          stroke={`url(#bezelOuter-${gid})`}
+          strokeWidth={2}
+          strokeLinecap="round"
+        />
+
+        {/* Background track (recessed) */}
         <path
           d={arcPath(START, START + SWEEP, r)}
           fill="none"
-          stroke="#e9e9ec"
+          stroke="#d8d8de"
           strokeWidth={strokeW}
           strokeLinecap="round"
+        />
+        {/* Inner shadow rim inside the arc for depth */}
+        <path
+          d={arcPath(START, START + SWEEP, r - strokeW / 2 - 1)}
+          fill="none"
+          stroke={`url(#bezelInner-${gid})`}
+          strokeWidth={1.5}
+          strokeLinecap="round"
+          opacity={0.55}
         />
 
         {/* Colored arc (full) */}
@@ -253,6 +279,16 @@ function ConsumoRing({
             strokeLinecap={i === 0 || i === segments.length - 1 ? "round" : "butt"}
           />
         ))}
+
+        {/* Top gloss highlight over colored arc */}
+        <path
+          d={arcPath(START, START + SWEEP, r + strokeW / 2 - 2)}
+          fill="none"
+          stroke="#ffffff"
+          strokeWidth={1.5}
+          strokeLinecap="round"
+          opacity={0.35}
+        />
 
         {/* Ticks */}
         {Array.from({ length: minorTicks }).map((_, i) => {
