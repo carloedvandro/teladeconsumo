@@ -891,20 +891,21 @@ function ResumoConsumo() {
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                      className="mt-3 flex w-full items-center gap-2 text-left text-sm font-semibold transition hover:underline md:-ml-2 md:mt-5"
+                      className="mt-3 flex w-full items-center gap-2 text-left text-[13px] font-semibold transition hover:underline md:-ml-2 md:mt-5 md:text-sm"
                       style={{ color: s.tone }}
                     >
                       <img
                         src={s.icon}
                         alt={s.label}
-                        className="h-5 w-5 object-contain"
+                        className="h-5 w-5 shrink-0 object-contain"
                       />
-                      <span>Status da linha: {s.label}</span>
+                      <span className="min-w-0 flex-1 truncate whitespace-nowrap">
+                        Status da linha: {s.label}
+                      </span>
                       {effective === "reduzida" && (
-                        <>
-                          <span className="text-[10px] opacity-60">•</span>
-                          <span className="text-xs font-bold">256 Kbps</span>
-                        </>
+                        <span className="shrink-0 whitespace-nowrap text-xs font-bold">
+                          256 Kbps
+                        </span>
                       )}
                     </button>
                   );
