@@ -1854,7 +1854,7 @@ function ResumoConsumo() {
                     className="font-semibold"
                     style={{ color: cfg.tone }}
                   >
-                    Em dia
+                    {cfg.fatura}
                   </span>
                 </div>
               </div>
