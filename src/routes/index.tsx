@@ -33,7 +33,7 @@ import upgradeArrowTransparent from "@/assets/upgrade-arrow-3d-transparent.png";
 
 const statusAtivaIcon = statusAtivaAsset.url;
 const statusReduzidaIcon = statusReduzidaAsset.url;
-const upgradeArrowIcon = upgradeArrowAsset.url;
+const upgradeArrowIcon = upgradeArrowTransparent;
 import icon3dSms from "@/assets/icon-3d-sms.png";
 import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
 import icon3dBonus from "@/assets/icon-3d-bonus.png";
