@@ -1693,6 +1693,11 @@ function ResumoConsumo() {
                 {currentStatus === "bloqueada_fatura" && (
                   <>
                     <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        setToast("Redirecionando para pagamento...");
+                        setTimeout(() => setToast(null), 2200);
+                      }}
                       className="flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110"
                       style={{
                         background: "linear-gradient(135deg,#660099,#7a00b3)",
