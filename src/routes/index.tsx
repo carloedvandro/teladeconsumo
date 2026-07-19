@@ -28,11 +28,15 @@ import icon3dData from "@/assets/icon-3d-data.png";
 import icon3dPhone from "@/assets/icon-3d-phone.png";
 import statusAtivaAsset from "@/assets/status-ativa-v2.png.asset.json";
 import statusReduzidaAsset from "@/assets/status-reduzida-v2.png.asset.json";
+import statusBloqueadaAsset from "@/assets/status-bloqueada-v2.png.asset.json";
+import statusAguardandoAsset from "@/assets/status-aguardando-v2.png.asset.json";
 
 import upgradeArrowTransparent from "@/assets/upgrade-arrow-3d-transparent.png";
 
 const statusAtivaIcon = statusAtivaAsset.url;
 const statusReduzidaIcon = statusReduzidaAsset.url;
+const statusBloqueadaIcon = statusBloqueadaAsset.url;
+const statusAguardandoIcon = statusAguardandoAsset.url;
 const upgradeArrowIcon = upgradeArrowTransparent;
 import icon3dSms from "@/assets/icon-3d-sms.png";
 import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
@@ -519,6 +523,8 @@ function ResumoConsumo() {
   const [statusOpen, setStatusOpen] = useState(false);
   const [confirmAutoDebit, setConfirmAutoDebit] = useState(false);
   const [pixOpen, setPixOpen] = useState(false);
+  const [simStatus, setSimStatus] = useState<LineStatus | null>(null);
+  const [simOpen, setSimOpen] = useState(false);
   const pixCode = "00020126580014BR.GOV.BCB.PIX0136vivo-fatura-8f2a-4c11-9e0b520400005303986540589.905802BR5915VIVO TELEFONICA6008SAO PAULO62070503***6304A1B2";
 
   useEffect(() => {
@@ -873,23 +879,28 @@ function ResumoConsumo() {
                 </button>
 
                 {(() => {
-                  const isReduced = usedPct >= 100;
-                  const statusIconSrc = isReduced ? statusReduzidaIcon : statusAtivaIcon;
-                  const statusLabel = isReduced ? "Velocidade reduzida" : "Ativa";
-                  const statusTone = isReduced ? "#C96A05" : "#16A34A";
+                  const effective: LineStatus =
+                    simStatus ?? (usedPct >= 100 ? "reduzida" : "ativa");
+                  const map = {
+                    ativa: { icon: statusAtivaIcon, label: "Ativa", tone: "#16A34A" },
+                    reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", tone: "#C96A05" },
+                    bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", tone: "#DC2626" },
+                    bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", tone: "#DC2626" },
+                  } as const;
+                  const s = map[effective];
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
                       className="mt-3 flex w-full items-center gap-2 text-left text-sm font-semibold transition hover:underline md:-ml-2 md:mt-5"
-                      style={{ color: statusTone }}
+                      style={{ color: s.tone }}
                     >
                       <img
-                        src={statusIconSrc}
-                        alt={statusLabel}
+                        src={s.icon}
+                        alt={s.label}
                         className="h-5 w-5 object-contain"
                       />
-                      <span>Status da linha: {statusLabel}</span>
-                      {isReduced && (
+                      <span>Status da linha: {s.label}</span>
+                      {effective === "reduzida" && (
                         <>
                           <span className="text-[10px] opacity-60">•</span>
                           <span className="text-xs font-bold">256 Kbps</span>
@@ -1750,33 +1761,39 @@ function ResumoConsumo() {
       {/* Status da linha modal */}
       {(() => {
         const currentStatus: LineStatus =
-          usedPct >= 100 ? "reduzida" : "ativa";
+          simStatus ?? (usedPct >= 100 ? "reduzida" : "ativa");
         const cfg = {
           ativa: {
-            title: "Situação da linha",
             label: "Ativa",
-            icon: Unlock,
             image: statusAtivaIcon,
             tone: "#16A34A",
-            iconBg: "#16A34A",
-            bg: "#EAF7EE",
-            border: "#CFEBD8",
+            fatura: "Em dia",
             message: "Você pode usar sua linha normalmente.",
           },
           reduzida: {
-            title: "Situação da linha",
             label: "Velocidade reduzida",
-            icon: Gauge,
             image: statusReduzidaIcon,
             tone: "#C96A05",
-            iconBg: "#C96A05",
-            bg: "#F6EEE7",
-            border: "#EADBCB",
+            fatura: "Em dia",
             message:
               "Sua franquia foi consumida e a navegação segue em velocidade reduzida até a próxima renovação. O ciclo não pode ser adiantado. Para voltar à velocidade total, contrate um plano maior: seu consumo atual é preservado, os novos GB são somados na hora e você paga apenas a diferença proporcional dos dias restantes. No próximo ciclo, o plano já entra atualizado com a franquia cheia.",
-
           },
-
+          bloqueada_fatura: {
+            label: "Bloqueada por fatura",
+            image: statusBloqueadaIcon,
+            tone: "#DC2626",
+            fatura: "Em aberto",
+            message:
+              "Sua linha está bloqueada devido a uma fatura em aberto. Regularize o pagamento via Pix para reativar o serviço em até 24 horas.",
+          },
+          bloqueada_pagamento: {
+            label: "Bloqueada por pagamento",
+            image: statusBloqueadaIcon,
+            tone: "#DC2626",
+            fatura: "Pendente",
+            message:
+              "Não conseguimos processar o pagamento da sua última fatura. Regularize via Pix para desbloquear a linha.",
+          },
         }[currentStatus];
         return (
           <Modal
@@ -1837,7 +1854,7 @@ function ResumoConsumo() {
                     className="font-semibold"
                     style={{ color: cfg.tone }}
                   >
-                    Em dia
+                    {cfg.fatura}
                   </span>
                 </div>
               </div>
@@ -1885,6 +1902,31 @@ function ResumoConsumo() {
                   >
                     Fazer upgrade
                   </button>
+                )}
+
+                {(currentStatus === "bloqueada_fatura" ||
+                  currentStatus === "bloqueada_pagamento") && (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        setPixOpen(true);
+                      }}
+                      className="flex-1 rounded-xl px-3 py-3 text-sm font-semibold text-white transition hover:brightness-110"
+                      style={{ background: "linear-gradient(135deg,#DC2626,#b91c1c)" }}
+                    >
+                      Pagar fatura
+                    </button>
+                    <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        openAfterIconsReady(() => setUpgradeOpen(true));
+                      }}
+                      className="flex-1 rounded-xl border border-[#660099] px-3 py-3 text-sm font-semibold text-[#660099] transition hover:bg-[#f5ebfa]"
+                    >
+                      Fazer upgrade
+                    </button>
+                  </div>
                 )}
 
 
@@ -1953,6 +1995,91 @@ function ResumoConsumo() {
           {toast}
         </div>
       )}
+
+      {/* Simulador de status (dev) */}
+      <div className="fixed bottom-4 right-4 z-40">
+        {simOpen ? (
+          <div className="w-64 rounded-2xl border border-[#eee] bg-white p-3 shadow-2xl">
+            <div className="mb-2 flex items-center justify-between">
+              <div className="text-[11px] font-bold uppercase tracking-wider text-[#660099]">
+                Simulador
+              </div>
+              <button
+                onClick={() => setSimOpen(false)}
+                className="text-[#999] hover:text-[#333]"
+                aria-label="Fechar simulador"
+              >
+                ×
+              </button>
+            </div>
+            <div className="grid grid-cols-1 gap-1.5">
+              {[
+                { key: null, label: "Automático (real)", tone: "#660099", icon: null },
+                { key: "ativa" as LineStatus, label: "Ativa", tone: "#16A34A", icon: statusAtivaIcon },
+                { key: "reduzida" as LineStatus, label: "Velocidade reduzida", tone: "#C96A05", icon: statusReduzidaIcon },
+                { key: "bloqueada_fatura" as LineStatus, label: "Bloqueada — fatura", tone: "#DC2626", icon: statusBloqueadaIcon },
+                { key: "bloqueada_pagamento" as LineStatus, label: "Bloqueada — pagamento", tone: "#DC2626", icon: statusBloqueadaIcon },
+              ].map((opt) => {
+                const active = simStatus === opt.key;
+                return (
+                  <button
+                    key={String(opt.key)}
+                    onClick={() => setSimStatus(opt.key)}
+                    className="flex items-center gap-2 rounded-lg border px-2.5 py-2 text-left text-xs font-semibold transition"
+                    style={{
+                      borderColor: active ? opt.tone : "#eee",
+                      background: active ? `${opt.tone}14` : "#fff",
+                      color: opt.tone,
+                    }}
+                  >
+                    {opt.icon ? (
+                      <img src={opt.icon} alt="" className="h-4 w-4 object-contain" />
+                    ) : (
+                      <span className="inline-block h-4 w-4 rounded-full" style={{ background: opt.tone }} />
+                    )}
+                    <span className="flex-1">{opt.label}</span>
+                    {active && <span>✓</span>}
+                  </button>
+                );
+              })}
+              <button
+                onClick={() => {
+                  setSimOpen(false);
+                  openAfterIconsReady(() => setUpgradeOpen(true));
+                }}
+                className="mt-1 rounded-lg px-2.5 py-2 text-xs font-semibold text-white"
+                style={{ background: "linear-gradient(135deg,#660099,#7a00b3)" }}
+              >
+                Abrir fluxo de upgrade
+              </button>
+              <button
+                onClick={() => {
+                  setSimOpen(false);
+                  openAfterIconsReady(() => setStatusOpen(true));
+                }}
+                className="rounded-lg border border-[#660099] px-2.5 py-2 text-xs font-semibold text-[#660099]"
+              >
+                Abrir modal de status
+              </button>
+            </div>
+            {simStatus && (
+              <p className="mt-2 text-[10px] text-[#999]">
+                Simulando: <span className="font-semibold">{simStatus}</span>
+              </p>
+            )}
+          </div>
+        ) : (
+          <button
+            onClick={() => setSimOpen(true)}
+            className="flex items-center gap-2 rounded-full px-3 py-2 text-xs font-bold text-white shadow-lg transition hover:brightness-110"
+            style={{ background: "linear-gradient(135deg,#660099,#7a00b3)" }}
+            aria-label="Abrir simulador de status"
+          >
+            <span className="inline-block h-2 w-2 rounded-full bg-white" />
+            Simulador
+          </button>
+        )}
+      </div>
     </div>
   );
 }
