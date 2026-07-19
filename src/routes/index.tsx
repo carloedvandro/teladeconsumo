@@ -28,11 +28,15 @@ import icon3dData from "@/assets/icon-3d-data.png";
 import icon3dPhone from "@/assets/icon-3d-phone.png";
 import statusAtivaAsset from "@/assets/status-ativa-v2.png.asset.json";
 import statusReduzidaAsset from "@/assets/status-reduzida-v2.png.asset.json";
+import statusBloqueadaAsset from "@/assets/status-bloqueada-v2.png.asset.json";
+import statusAguardandoAsset from "@/assets/status-aguardando-v2.png.asset.json";
 
 import upgradeArrowTransparent from "@/assets/upgrade-arrow-3d-transparent.png";
 
 const statusAtivaIcon = statusAtivaAsset.url;
 const statusReduzidaIcon = statusReduzidaAsset.url;
+const statusBloqueadaIcon = statusBloqueadaAsset.url;
+const statusAguardandoIcon = statusAguardandoAsset.url;
 const upgradeArrowIcon = upgradeArrowTransparent;
 import icon3dSms from "@/assets/icon-3d-sms.png";
 import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
