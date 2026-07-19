@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
+import { supabase } from "@/integrations/supabase/client";
 import icon3dData from "@/assets/icon-3d-data.png";
 import icon3dPhone from "@/assets/icon-3d-phone.png";
 import statusAtivaAsset from "@/assets/status-ativa-v2.png.asset.json";
