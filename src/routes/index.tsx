@@ -212,10 +212,10 @@ function ConsumoRing({
   const gid = line.number.replace(/\D/g, "");
 
   return (
-    <div className="relative h-[210px] w-[260px] shrink-0">
+    <div className="relative h-[240px] w-[260px] shrink-0">
       <svg
         viewBox={`0 0 ${size} 210`}
-        className="absolute inset-0 h-full w-full"
+        className="absolute left-0 top-0 h-[210px] w-full"
         style={{ shapeRendering: "geometricPrecision" }}
       >
         <defs>
@@ -317,14 +317,13 @@ function ConsumoRing({
         <circle cx={cx - 2} cy={cy - 2} r={2} fill="#c8a2ff" opacity={0.9} />
       </svg>
 
-      {/* Big value + subtitle centered in the lower area of the gauge */}
+      {/* Big value + subtitle — pushed down toward the arc tips so it does
+          not overlap the needle base. */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center">
-        <div className="text-[34px] font-bold leading-none text-[#1a1a1a]">
+        <div className="text-[30px] font-bold leading-none text-[#1a1a1a]">
           {line.used === 0
-            ? 0
-            : line.used < 1
-              ? line.used.toFixed(2)
-              : line.used.toFixed(1)}
+            ? "0.00"
+            : line.used.toFixed(2)}
           <span className="ml-1 text-base font-semibold text-[#1a1a1a]">GB</span>
         </div>
         <div className="mt-1 text-[11px] text-[#6b6b6b]">
@@ -513,6 +512,8 @@ function ResumoConsumo() {
   const available = +(line.total - line.used).toFixed(2);
   const availPct = Math.round(100 - pct);
   const usedPct = Math.round(pct);
+  const usedPctExact = (Math.round(pct * 100) / 100).toFixed(2);
+  const availPctExact = (Math.round((100 - pct) * 100) / 100).toFixed(2);
   const color = ringColor(pct);
 
   const [now, setNow] = useState(() => new Date());
@@ -688,9 +689,9 @@ function ResumoConsumo() {
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
                           <span>
-                            <span className="font-bold" style={{ color }}>{usedPct}%</span>
+                            <span className="font-bold text-[#660099]">{usedPctExact}%</span>
                             <span className="text-[#8a8a90]"> - </span>
-                            <span className="font-bold text-[#1a1a1a]">{formatGB(line.used)}</span>
+                            <span className="font-bold text-[#1a1a1a]">{line.used.toFixed(2)} GB</span>
                           </span>
                         </div>
                         <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#ececef]">
@@ -720,9 +721,9 @@ function ResumoConsumo() {
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
                           <span>
-                            <span className="font-bold text-[#660099]">{availPct}%</span>
+                            <span className="font-bold text-[#660099]">{availPctExact}%</span>
                             <span className="text-[#8a8a90]"> - </span>
-                            <span className="font-bold text-[#1a1a1a]">{formatGB(available)}</span>
+                            <span className="font-bold text-[#1a1a1a]">{available.toFixed(2)} GB</span>
                           </span>
                         </div>
                         <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#ececef]">
@@ -843,7 +844,7 @@ function ResumoConsumo() {
               <div className="min-w-0 shrink-0">
                 <div className="text-sm font-semibold text-[#1a1a1a] leading-tight">Consumo</div>
                 <div className="text-[11px] whitespace-nowrap leading-tight">
-                  <span className="font-bold text-[#660099]">{formatGB(line.used)}</span>
+                  <span className="font-bold text-[#660099]">{line.used.toFixed(2)} GB</span>
                   <span className="text-[#6b6b6b]"> de </span>
                   <span className="font-semibold text-[#1a1a1a]">{line.total} GB</span>
                 </div>
@@ -868,7 +869,7 @@ function ResumoConsumo() {
                 />
               </div>
               <div className="shrink-0 text-right">
-                <div className="text-lg font-bold leading-none text-[#660099]">{usedPct}%</div>
+                <div className="text-lg font-bold leading-none text-[#660099]">{usedPctExact}%</div>
                 <div className="text-[10px] text-[#6b6b6b]">utilizado</div>
               </div>
             </div>
