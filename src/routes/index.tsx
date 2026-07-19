@@ -202,7 +202,7 @@ function ConsumoRing({
   // we can animate the rotation smoothly with a CSS transition.
   const needleAngle = angleAt(pct);
   const needleTipY = cy - (r - 8);
-  const needlePath = `M ${cx - 8} ${cy} L ${cx} ${needleTipY} L ${cx + 8} ${cy} Z`;
+  const needlePath = `M ${cx - 5} ${cy} L ${cx} ${needleTipY} L ${cx + 5} ${cy} Z`;
 
   // Consumed tip dot at the end of the actual consumption (also rotated)
   const tipX = cx;
@@ -231,15 +231,41 @@ function ConsumoRing({
           <filter id={`gaugeShadow-${gid}`} x="-50%" y="-50%" width="200%" height="200%">
             <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" floodColor="#000" floodOpacity="0.35" />
           </filter>
+          <linearGradient id={`bezelOuter-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#b8b8bf" />
+            <stop offset="100%" stopColor="#f4f4f7" />
+          </linearGradient>
+          <linearGradient id={`bezelInner-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#5a5a62" />
+            <stop offset="100%" stopColor="#dcdce2" />
+          </linearGradient>
         </defs>
 
-        {/* Background track */}
+        {/* 3D bezel — outer highlight ring */}
+        <path
+          d={arcPath(START, START + SWEEP, r + strokeW / 2 + 2)}
+          fill="none"
+          stroke={`url(#bezelOuter-${gid})`}
+          strokeWidth={2}
+          strokeLinecap="round"
+        />
+
+        {/* Background track (recessed) */}
         <path
           d={arcPath(START, START + SWEEP, r)}
           fill="none"
-          stroke="#e9e9ec"
+          stroke="#d8d8de"
           strokeWidth={strokeW}
           strokeLinecap="round"
+        />
+        {/* Inner shadow rim inside the arc for depth */}
+        <path
+          d={arcPath(START, START + SWEEP, r - strokeW / 2 - 1)}
+          fill="none"
+          stroke={`url(#bezelInner-${gid})`}
+          strokeWidth={1.5}
+          strokeLinecap="round"
+          opacity={0.55}
         />
 
         {/* Colored arc (full) */}
@@ -253,6 +279,16 @@ function ConsumoRing({
             strokeLinecap={i === 0 || i === segments.length - 1 ? "round" : "butt"}
           />
         ))}
+
+        {/* Top gloss highlight over colored arc */}
+        <path
+          d={arcPath(START, START + SWEEP, r + strokeW / 2 - 2)}
+          fill="none"
+          stroke="#ffffff"
+          strokeWidth={1.5}
+          strokeLinecap="round"
+          opacity={0.35}
+        />
 
         {/* Ticks */}
         {Array.from({ length: minorTicks }).map((_, i) => {
@@ -648,10 +684,10 @@ function ResumoConsumo() {
                 strokeWidth={2.75}
               />
             </button>
-            <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-4">
-              <div className="self-center md:self-auto"><ConsumoRing line={line} /></div>
+            <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-2">
+              <div className="self-center md:-ml-3 md:self-auto"><ConsumoRing line={line} /></div>
 
-              <div className="w-full md:w-[300px]">
+              <div className="w-full md:w-[340px]">
 
 
 
@@ -674,9 +710,9 @@ function ResumoConsumo() {
                   <span className="font-semibold text-[#1a1a1a]">{renewalDateLabel}</span>
                 </p>
 
-                <ul className="mt-5 space-y-2.5 text-sm">
+                <ul className="mt-5 space-y-2.5 text-sm md:-ml-2">
                   <li>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
                       <img
                         src={icon3dPie}
                         alt=""
@@ -717,7 +753,7 @@ function ResumoConsumo() {
                     </div>
                   </li>
                   <li>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
                       <img
                         src={icon3dDisk}
                         alt=""
@@ -835,7 +871,7 @@ function ResumoConsumo() {
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                      className="mt-3 flex w-full items-center gap-2 text-left text-sm font-semibold transition hover:underline md:mt-5"
+                      className="mt-3 flex w-full items-center gap-2 text-left text-sm font-semibold transition hover:underline md:-ml-2 md:mt-5"
                       style={{ color: statusTone }}
                     >
                       <img
