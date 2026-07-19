@@ -871,7 +871,7 @@ function ResumoConsumo() {
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                      className="mt-3 flex w-full items-center gap-2 text-left text-sm font-semibold transition hover:underline md:mt-5"
+                      className="mt-3 flex w-full items-center gap-2 text-left text-sm font-semibold transition hover:underline md:-ml-2 md:mt-5"
                       style={{ color: statusTone }}
                     >
                       <img
