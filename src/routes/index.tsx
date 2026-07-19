@@ -1773,7 +1773,8 @@ function ResumoConsumo() {
             bg: "#F6EEE7",
             border: "#EADBCB",
             message:
-              "Sua franquia foi consumida e a navegação segue reduzida até a próxima renovação. Não é possível antecipar o ciclo — para voltar à velocidade total, faça upgrade: seu consumo atual é preservado, novos GB são adicionados e você paga apenas a diferença proporcional.",
+              "Sua franquia foi consumida e a navegação segue em velocidade reduzida até a próxima renovação. O ciclo não pode ser adiantado. Para voltar à velocidade total, contrate um plano maior: seu consumo atual é preservado, os novos GB são somados na hora e você paga apenas a diferença proporcional dos dias restantes. No próximo ciclo, o plano já entra atualizado com a franquia cheia.",
+
           },
 
         }[currentStatus];
