@@ -544,7 +544,7 @@ function ResumoConsumo() {
 
           {/* Consumption panel overlay - centered/right like reference */}
           <div
-            className="relative -mt-24 overflow-hidden rounded-md p-5 pb-10 md:absolute md:right-8 md:top-4 md:mx-0 md:mt-0 md:w-[520px] md:translate-y-0 md:p-5 md:pb-8"
+            className="relative -mt-24 overflow-hidden rounded-md p-5 pb-10 md:absolute md:right-8 md:top-10 md:mx-0 md:mt-0 md:w-[520px] md:translate-y-0 md:p-5 md:pb-8"
             style={{
               background: "rgba(255,255,255,0.74)",
               backdropFilter: "blur(6px)",
