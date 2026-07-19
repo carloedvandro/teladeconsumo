@@ -229,10 +229,24 @@ function ConsumoRing({
             <stop offset="55%" stopColor="#7b1fa2" />
             <stop offset="100%" stopColor="#4a0072" />
           </radialGradient>
-          <linearGradient id={`needle-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#a855f7" />
-            <stop offset="100%" stopColor="#4a0072" />
+          <linearGradient id={`needleLeft-${gid}`} x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#2a0140" />
+            <stop offset="60%" stopColor="#4a0072" />
+            <stop offset="100%" stopColor="#7a1fb8" />
           </linearGradient>
+          <linearGradient id={`needleRight-${gid}`} x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#a855f7" />
+            <stop offset="55%" stopColor="#7b1fa2" />
+            <stop offset="100%" stopColor="#3a005c" />
+          </linearGradient>
+          <linearGradient id={`needleGloss-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.85" />
+            <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+          </linearGradient>
+          <radialGradient id={`hubHi-${gid}`} cx="35%" cy="30%" r="60%">
+            <stop offset="0%" stopColor="#e9d5ff" stopOpacity="0.95" />
+            <stop offset="60%" stopColor="#a855f7" stopOpacity="0" />
+          </radialGradient>
           <filter id={`gaugeShadow-${gid}`} x="-50%" y="-50%" width="200%" height="200%">
             <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" floodColor="#000" floodOpacity="0.35" />
           </filter>
