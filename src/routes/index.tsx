@@ -676,7 +676,7 @@ function ResumoConsumo() {
   return (
     <div className="min-h-screen bg-[#f3f3f3]">
 
-      <main className="mx-auto max-w-[1400px] px-4 pt-6 pb-16 md:px-6 md:pt-8">
+      <main className="mx-auto max-w-[1400px] px-2 pt-6 pb-16 md:px-6 md:pt-8">
         <h1 className="text-[32px] font-semibold leading-tight text-[#660099] md:text-[42px]">
           Resumo de Consumo
         </h1>
@@ -700,7 +700,7 @@ function ResumoConsumo() {
 
           {/* Consumption panel overlay - centered/right like reference */}
           <div
-            className="relative -mt-24 overflow-hidden rounded-md p-5 pb-10 md:absolute md:right-10 md:top-10 md:mx-0 md:mt-0 md:w-[640px] md:translate-y-0 md:px-9 md:py-6 md:pb-9"
+            className="relative -mt-24 overflow-hidden rounded-md p-3 pb-10 md:absolute md:right-10 md:top-10 md:mx-0 md:mt-0 md:w-[640px] md:translate-y-0 md:px-9 md:py-6 md:pb-9"
             style={{
               background: "rgba(255,255,255,0.74)",
               backdropFilter: "blur(6px)",
@@ -891,20 +891,21 @@ function ResumoConsumo() {
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                      className="mt-3 flex w-full items-center gap-2 text-left text-sm font-semibold transition hover:underline md:-ml-2 md:mt-5"
+                      className="mt-3 flex w-full items-center gap-2 text-left text-[13px] font-semibold transition hover:underline md:-ml-2 md:mt-5 md:text-sm"
                       style={{ color: s.tone }}
                     >
                       <img
                         src={s.icon}
                         alt={s.label}
-                        className="h-5 w-5 object-contain"
+                        className="h-5 w-5 shrink-0 object-contain"
                       />
-                      <span>Status da linha: {s.label}</span>
+                      <span className="min-w-0 flex-1 truncate whitespace-nowrap">
+                        Status da linha: {s.label}
+                      </span>
                       {effective === "reduzida" && (
-                        <>
-                          <span className="text-[10px] opacity-60">•</span>
-                          <span className="text-xs font-bold">256 Kbps</span>
-                        </>
+                        <span className="shrink-0 whitespace-nowrap text-xs font-bold">
+                          256 Kbps
+                        </span>
                       )}
                     </button>
                   );
