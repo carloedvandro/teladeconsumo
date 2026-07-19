@@ -337,6 +337,7 @@ function ResumoConsumo() {
   const [open, setOpen] = useState(false);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
+  const [upgradeCardVisible, setUpgradeCardVisible] = useState(false);
   const [expandOpen, setExpandOpen] = useState(false);
   const [iconsReady, setIconsReady] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -571,15 +572,13 @@ function ResumoConsumo() {
             }}
           >
             <button
-              aria-label="Ver histórico de consumo"
-              onClick={() => openAfterIconsReady(() => setExpandOpen(true))}
-              className="group absolute bottom-0 right-0 h-10 w-10 text-[#660099] md:h-12 md:w-12"
-              style={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
+              aria-label={upgradeCardVisible ? "Ocultar oferta de upgrade" : "Mostrar oferta de upgrade"}
+              onClick={() => setUpgradeCardVisible((v) => !v)}
+              className="group absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-[#660099] text-white shadow-[0_4px_14px_rgba(102,0,153,0.35)] transition-all duration-200 hover:scale-105 hover:bg-[#7a1ab8] hover:shadow-[0_6px_18px_rgba(102,0,153,0.45)] md:bottom-4 md:right-4 md:h-10 md:w-10"
             >
-              <span className="absolute inset-0 bg-[#d9d9d9] transition-colors duration-200 group-hover:bg-[#e8e8e8]" />
               <Plus
-                className="absolute bottom-1 right-1 h-4 w-4 transition-transform duration-200 group-hover:scale-110"
-                strokeWidth={2.75}
+                className={`h-5 w-5 transition-transform duration-200 ${upgradeCardVisible ? "rotate-45" : ""}`}
+                strokeWidth={2.5}
               />
             </button>
 
