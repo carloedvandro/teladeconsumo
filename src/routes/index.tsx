@@ -1678,6 +1678,11 @@ function ResumoConsumo() {
                       Ver consumo
                     </button>
                     <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        setToast("Abrindo suas faturas...");
+                        setTimeout(() => setToast(null), 2200);
+                      }}
                       className="flex-1 rounded-xl border border-[#660099] px-3 py-3 text-sm font-semibold text-[#660099] transition hover:bg-[#f5ebfa]"
                     >
                       Ver faturas
