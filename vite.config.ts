@@ -12,4 +12,14 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Self-host em Docker (VPS) — sobrescreve o preset padrão (cloudflare-module)
+  // do @lovable.dev/vite-tanstack-config para um servidor Node padrão.
+  vite: {
+    define: {
+      "process.env.NITRO_PRESET": JSON.stringify("node-server"),
+    },
+  },
+  nitro: {
+    preset: "node-server",
+  },
 });

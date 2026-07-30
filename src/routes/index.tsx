@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   ChevronDown,
@@ -21,7 +21,12 @@ import {
   Gauge,
   Copy,
   QrCode,
+  LogOut,
+  Bell,
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { getMyLines, type ClientLine, type LineStatus } from "@/lib/api/lines.functions";
+import { registerServiceWorkerAndPush } from "@/lib/push";
 
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
 import icon3dData from "@/assets/icon-3d-data.png";
@@ -67,35 +72,16 @@ export const Route = createFileRoute("/")({
     ],
     links: PRELOAD_ICONS.map((href) => ({ rel: "preload", as: "image", href })),
   }),
+  beforeLoad: async () => {
+    const { data } = await supabase.auth.getSession();
+    if (!data.session) {
+      throw redirect({ to: "/login" });
+    }
+  },
   component: ResumoConsumo,
 });
 
-type Line = {
-  number: string;
-  used: number; // GB
-  total: number; // GB
-  plan: string;
-  cycleDays: number;
-};
-
-type LineStatus = "ativa" | "bloqueada_fatura" | "bloqueada_pagamento" | "reduzida";
-
-const LINES: Line[] = [
-  {
-    number: "(31) 97115-7584",
-    used: 50,
-    total: 50,
-    plan: "SmartVoz 50GB",
-    cycleDays: 3,
-  },
-  {
-    number: "(32) 99963-0109",
-    used: 23.3,
-    total: 50,
-    plan: "SmartVoz 50GB",
-    cycleDays: 3,
-  },
-];
+type Line = ClientLine;
 
 // O ciclo renova no dia 2 (zera a franquia) e fecha no dia 1.
 // Calcula dias até o fim do ciclo (dia 1), contando o dia atual inclusivamente.
@@ -527,18 +513,121 @@ function ResumoConsumo() {
   const [simOpen, setSimOpen] = useState(false);
   const pixCode = "00020126580014BR.GOV.BCB.PIX0136vivo-fatura-8f2a-4c11-9e0b520400005303986540589.905802BR5915VIVO TELEFONICA6008SAO PAULO62070503***6304A1B2";
 
+  // --- Dados reais do Supabase ---
+  const [lines, setLines] = useState<ClientLine[] | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [profileName, setProfileName] = useState<string>("");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
+
+  async function loadLines() {
+    try {
+      setLoadError(null);
+      const data = await getMyLines();
+      setLines(data);
+      setLastRefresh(new Date());
+      const { data: u } = await supabase.auth.getUser();
+      if (u.user) {
+        setProfileName(
+          (u.user.user_metadata?.name as string) || u.user.email?.split("@")[0] || "",
+        );
+        const { data: prof } = await supabase
+          .from("profiles")
+          .select("is_admin")
+          .eq("id", u.user.id)
+          .single();
+        setIsAdmin(prof?.is_admin ?? false);
+      }
+    } catch (err) {
+      setLoadError(err instanceof Error ? err.message : "Erro ao carregar linhas");
+    }
+  }
+
   useEffect(() => {
     let mounted = true;
     preloadAllIcons().then(() => {
       if (mounted) setIconsReady(true);
     });
-
+    loadLines();
+    // PWA: registra service worker + push notifications
+    registerServiceWorkerAndPush();
+    // Atualiza a cada 60s (o scraper roda a cada 5 min; o cliente vê "atualizado há X")
+    const interval = window.setInterval(loadLines, 60_000);
     return () => {
       mounted = false;
+      window.clearInterval(interval);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const baseLine = LINES[lineIdx];
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    window.location.href = "/login";
+  }
+
+  // Loading / empty / error states
+  if (lines === null && !loadError) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#fafafa]">
+        <div className="text-center">
+          <div className="mx-auto mb-3 h-10 w-10 animate-spin rounded-full border-4 border-[#660099] border-t-transparent" />
+          <p className="text-sm text-[#888]">Carregando seu consumo…</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (loadError && lines === null) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#fafafa] px-4">
+        <div className="max-w-md text-center">
+          <AlertTriangle className="mx-auto mb-3 h-10 w-10 text-red-500" />
+          <p className="text-sm text-[#555]">{loadError}</p>
+          <button
+            onClick={loadLines}
+            className="mt-4 rounded-md bg-[#660099] px-4 py-2 text-sm font-medium text-white hover:bg-[#7a00b8]"
+          >
+            Tentar novamente
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (lines && lines.length === 0) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#fafafa] px-4">
+        <div className="max-w-md text-center">
+          <Phone className="mx-auto mb-3 h-10 w-10 text-[#660099]" />
+          <h1 className="text-lg font-semibold text-[#333]">Nenhuma linha vinculada</h1>
+          <p className="mt-2 text-sm text-[#888]">
+            {isAdmin
+              ? "Cadastre linhas no painel administrativo."
+              : "Entre em contato com o seu vendedor para vincular suas linhas."}
+          </p>
+          <div className="mt-6 flex justify-center gap-2">
+            {isAdmin && (
+              <a
+                href="/admin"
+                className="rounded-md bg-[#660099] px-4 py-2 text-sm font-medium text-white hover:bg-[#7a00b8]"
+              >
+                Ir para o painel admin
+              </a>
+            )}
+            <button
+              onClick={handleLogout}
+              className="rounded-md border border-[#ddd] px-4 py-2 text-sm font-medium text-[#555] hover:bg-[#f3f3f3]"
+            >
+              Sair
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const safeLineIdx = lines ? Math.min(lineIdx, lines.length - 1) : 0;
+  const baseLine = lines![safeLineIdx];
   const bonusDebito = autoDebit ? 25 : 0;
   const franquiaTotal = baseLine.total + bonusDebito;
 
@@ -676,6 +765,64 @@ function ResumoConsumo() {
   return (
     <div className="min-h-screen bg-[#f3f3f3]">
 
+      {/* Top bar: perfil, seletor de linha, atualizar, alertas, logout */}
+      <header className="sticky top-0 z-30 border-b border-[#eee] bg-white/90 backdrop-blur">
+        <div className="mx-auto flex max-w-[1400px] items-center gap-3 px-2 py-2 md:px-6">
+          <div className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#660099] text-sm font-bold text-white">
+              {profileName ? profileName.charAt(0).toUpperCase() : "V"}
+            </div>
+            <span className="hidden text-sm font-medium text-[#333] sm:inline">
+              {profileName || "Conta"}
+            </span>
+          </div>
+
+          {lines && lines.length > 1 && (
+            <select
+              value={safeLineIdx}
+              onChange={(e) => setLineIdx(Number(e.target.value))}
+              className="ml-1 rounded-md border border-[#ddd] bg-white px-2 py-1 text-sm text-[#333] focus:border-[#660099] focus:outline-none"
+              aria-label="Selecionar linha"
+            >
+              {lines.map((l, i) => (
+                <option key={l.id} value={i}>
+                  {l.number} — {l.plan}
+                </option>
+              ))}
+            </select>
+          )}
+
+          <div className="ml-auto flex items-center gap-1">
+            <button
+              onClick={loadLines}
+              className="flex items-center gap-1 rounded-md px-2 py-1.5 text-xs font-medium text-[#555] hover:bg-[#f3f3f3]"
+              title={`Atualizado ${lastRefresh.toLocaleTimeString("pt-BR")}`}
+            >
+              <RefreshCw className="h-4 w-4" />
+              <span className="hidden sm:inline">Atualizar</span>
+            </button>
+            {isAdmin && (
+              <a
+                href="/admin"
+                className="flex items-center gap-1 rounded-md px-2 py-1.5 text-xs font-medium text-[#660099] hover:bg-[#660099]/10"
+                title="Painel administrativo"
+              >
+                <Grid3x3 className="h-4 w-4" />
+                <span className="hidden sm:inline">Admin</span>
+              </a>
+            )}
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-1 rounded-md px-2 py-1.5 text-xs font-medium text-[#555] hover:bg-[#f3f3f3]"
+              title="Sair"
+            >
+              <LogOut className="h-4 w-4" />
+              <span className="hidden sm:inline">Sair</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
       <main className="mx-auto max-w-[1400px] px-2 pt-6 pb-16 md:px-6 md:pt-8">
         <h1 className="text-[32px] font-semibold leading-tight text-[#660099] md:text-[42px]">
           Resumo de Consumo
@@ -684,6 +831,11 @@ function ResumoConsumo() {
           Informação atualizada em{" "}
           <span suppressHydrationWarning className="font-semibold text-[#333]">{lastUpdatedDate}</span> às{" "}
           <span suppressHydrationWarning className="font-semibold text-[#333]">{lastUpdatedTime}</span>
+          {baseLine.lastScrapedAt && (
+            <span className="text-[#999]">
+              {" "}(scraper: há {Math.round((Date.now() - new Date(baseLine.lastScrapedAt).getTime()) / 60000)} min)
+            </span>
+          )}
 
         </p>
 
@@ -880,13 +1032,14 @@ function ResumoConsumo() {
 
                 {(() => {
                   const effective: LineStatus =
-                    simStatus ?? (usedPct >= 100 ? "reduzida" : "ativa");
-                  const map = {
+                    simStatus ?? baseLine.status;
+                  const map: Record<LineStatus, { icon: string; label: string; tone: string }> = {
                     ativa: { icon: statusAtivaIcon, label: "Ativa", tone: "#16A34A" },
                     reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", tone: "#F97316" },
                     bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", tone: "#DC2626" },
                     bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", tone: "#DC2626" },
-                  } as const;
+                    aguardando: { icon: statusAguardandoIcon, label: "Aguardando", tone: "#6B7280" },
+                  };
                   const s = map[effective];
                   return (
                     <button
@@ -1760,8 +1913,15 @@ function ResumoConsumo() {
       {/* Status da linha modal */}
       {(() => {
         const currentStatus: LineStatus =
-          simStatus ?? (usedPct >= 100 ? "reduzida" : "ativa");
-        const cfg = {
+          simStatus ?? baseLine.status;
+        const cfg = ({
+          aguardando: {
+            label: "Aguardando",
+            image: statusAguardandoIcon,
+            tone: "#6B7280",
+            fatura: "—",
+            message: "Aguardando ativação da linha.",
+          },
           ativa: {
             label: "Ativa",
             image: statusAtivaIcon,
@@ -1793,7 +1953,7 @@ function ResumoConsumo() {
             message:
               "Não conseguimos processar o pagamento da sua última fatura. Regularize via Pix para desbloquear a linha.",
           },
-        }[currentStatus];
+        } as const)[currentStatus];
         return (
           <Modal
             open={statusOpen}

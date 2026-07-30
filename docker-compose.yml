@@ -1,0 +1,71 @@
+# =============================================================================
+# Vivo Gestão de Linhas — Docker Compose raiz
+# =============================================================================
+# Sobe tudo no seu VPS:
+#   1. Supabase self-hosted (Postgres + Auth + REST + Studio)  -> include
+#   2. App TanStack Start (PWA cliente + admin)                -> web
+#   3. Scraper Python/Playwright (consumo a cada 5 min)        -> scraper
+#
+# Uso:
+#   cp .env.example .env
+#   # edite .env (senhas, chaves VAPID, credenciais Vivo)
+#   docker compose up -d
+#
+# O Supabase Studio fica em http://SEU_VPS:3001 (crie o usuário admin lá).
+# O app fica em http://SEU_VPS:3000.
+# A API Supabase (auth/rest) fica em http://SEU_VPS:8000.
+# =============================================================================
+
+include:
+  - path: ./supabase-selfhost/docker-compose.yml
+    env_file: .env
+
+services:
+  web:
+    build: .
+    container_name: vivo-web
+    restart: unless-stopped
+    depends_on:
+      - supabase-rest
+    environment:
+      # O app (SSR) fala com o Supabase pela rede interna (kong).
+      SUPABASE_URL: http://kong:8000
+      SUPABASE_PUBLISHABLE_KEY: ${ANON_KEY}
+      SUPABASE_SERVICE_ROLE_KEY: ${SERVICE_ROLE_KEY}
+      # Variáveis públicas (VITE_) — lidas em build time.
+      VITE_SUPABASE_URL: http://SEU_VPS_OU_DOMINIO:8000
+      VITE_SUPABASE_PUBLISHABLE_KEY: ${ANON_KEY}
+      VITE_VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY}
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    networks:
+      - default
+
+  scraper:
+    build: ./scraper
+    container_name: vivo-scraper
+    restart: unless-stopped
+    depends_on:
+      - supabase-rest
+    environment:
+      # Scraper usa a service role (bypassa RLS) pela rede interna.
+      SUPABASE_URL: http://kong:8000
+      SUPABASE_SERVICE_ROLE_KEY: ${SERVICE_ROLE_KEY}
+      # Credenciais do portal Vivo Empresas (PLACEHOLDER até plugar o scraper real).
+      VIVO_PORTAL_USER: ${VIVO_PORTAL_USER}
+      VIVO_PORTAL_PASS: ${VIVO_PORTAL_PASS}
+      VIVO_PORTAL_URL: ${VIVO_PORTAL_URL:-https://login.vivo.com.br/login}
+      # Push (VAPID) — gerar com: python scraper/gen_vapid_keys.py
+      VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY}
+      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY}
+      VAPID_SUBJECT: ${VAPID_SUBJECT:-mailto:admin@example.com}
+      # Intervalo do scraper (segundos). 300 = 5 min.
+      SCRAPER_INTERVAL_SEC: ${SCRAPER_INTERVAL_SEC:-300}
+    volumes:
+      - scraper-storage:/data
+    networks:
+      - default
+
+volumes:
+  scraper-storage:
