@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   ChevronDown,
@@ -740,7 +740,7 @@ function ResumoConsumo() {
                 </div>
                 <p className="mt-1 text-sm text-[#5a5a5a]">
                   Fim do ciclo{" "}
-                  <span className="font-semibold text-[#1a1a1a]">{cycleLabel}</span>
+                  <span suppressHydrationWarning className="font-semibold text-[#1a1a1a]">{cycleLabel}</span>
                 </p>
                 <p className="mt-0.5 text-sm text-[#5a5a5a]">
                   Próxima renovação:{" "}
@@ -1994,6 +1994,21 @@ function ResumoConsumo() {
           {toast}
         </div>
       )}
+
+      {/* Acesso à página de login */}
+      <Link
+        to="/login"
+        className="fixed bottom-4 left-4 z-40 inline-flex items-center gap-2 rounded-md px-4 py-2.5 text-sm font-semibold text-[#660099] transition-transform duration-200 hover:scale-[1.03]"
+        style={{
+          background: "rgba(255,255,255,0.74)",
+          backdropFilter: "blur(6px)",
+          boxShadow:
+            "0 8px 32px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.45)",
+        }}
+      >
+        <User className="h-4 w-4" />
+        Página de login
+      </Link>
 
       {/* Simulador de status (dev) */}
       <div className="fixed bottom-4 right-4 z-40">
