@@ -6,259 +6,150 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export type LineStatus =
-  | "ativa"
-  | "reduzida"
-  | "bloqueada_fatura"
-  | "bloqueada_pagamento"
-  | "aguardando"
-
 export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
-      profiles: {
-        Row: {
-          id: string
-          name: string
-          phone: string | null
-          is_admin: boolean
-          created_at: string
-        }
-        Insert: {
-          id: string
-          name?: string
-          phone?: string | null
-          is_admin?: boolean
-        }
-        Update: {
-          name?: string
-          phone?: string | null
-          is_admin?: boolean
-        }
-        Relationships: []
-      }
-      lines: {
-        Row: {
-          id: string
-          number: string
-          user_id: string | null
-          plan: string
-          total_gb: number
-          used_gb: number
-          status: LineStatus
-          cycle_closing_day: number
-          cycle_renewal_day: number
-          vivo_portal_url: string | null
-          vivo_line_id: string | null
-          last_scraped_at: string | null
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          number: string
-          user_id?: string | null
-          plan?: string
-          total_gb?: number
-          used_gb?: number
-          status?: LineStatus
-          cycle_closing_day?: number
-          cycle_renewal_day?: number
-          vivo_portal_url?: string | null
-          vivo_line_id?: string | null
-          last_scraped_at?: string | null
-        }
-        Update: {
-          id?: string
-          number?: string
-          user_id?: string | null
-          plan?: string
-          total_gb?: number
-          used_gb?: number
-          status?: LineStatus
-          cycle_closing_day?: number
-          cycle_renewal_day?: number
-          vivo_portal_url?: string | null
-          vivo_line_id?: string | null
-          last_scraped_at?: string | null
-        }
-        Relationships: []
-      }
-      consumption_snapshots: {
-        Row: {
-          id: string
-          line_id: string
-          used_gb: number
-          total_gb: number
-          status: LineStatus | null
-          scraped_at: string
-        }
-        Insert: {
-          id?: string
-          line_id: string
-          used_gb: number
-          total_gb: number
-          status?: LineStatus | null
-          scraped_at?: string
-        }
-        Update: {
-          id?: string
-          line_id?: string
-          used_gb?: number
-          total_gb?: number
-          status?: LineStatus | null
-          scraped_at?: string
-        }
-        Relationships: [
-          { foreignKeyName: "consumption_snapshots_line_id_fkey"; columns: ["line_id"]; referencedRelation: "lines"; referencedColumns: ["id"] },
-        ]
-      }
-      thresholds: {
-        Row: {
-          id: string
-          line_id: string
-          warn_pct: number
-          warn_gb: number | null
-          enabled: boolean
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          line_id: string
-          warn_pct?: number
-          warn_gb?: number | null
-          enabled?: boolean
-        }
-        Update: {
-          id?: string
-          line_id?: string
-          warn_pct?: number
-          warn_gb?: number | null
-          enabled?: boolean
-        }
-        Relationships: [
-          { foreignKeyName: "thresholds_line_id_fkey"; columns: ["line_id"]; referencedRelation: "lines"; referencedColumns: ["id"] },
-        ]
-      }
-      alerts: {
-        Row: {
-          id: string
-          line_id: string
-          user_id: string | null
-          kind: string
-          message: string
-          used_gb: number | null
-          total_gb: number | null
-          pct: number | null
-          notified: boolean
-          read: boolean
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          line_id: string
-          user_id?: string | null
-          kind?: string
-          message: string
-          used_gb?: number | null
-          total_gb?: number | null
-          pct?: number | null
-          notified?: boolean
-          read?: boolean
-        }
-        Update: {
-          id?: string
-          line_id?: string
-          user_id?: string | null
-          kind?: string
-          message?: string
-          used_gb?: number | null
-          total_gb?: number | null
-          pct?: number | null
-          notified?: boolean
-          read?: boolean
-        }
-        Relationships: [
-          { foreignKeyName: "alerts_line_id_fkey"; columns: ["line_id"]; referencedRelation: "lines"; referencedColumns: ["id"] },
-        ]
-      }
-      push_subscriptions: {
-        Row: {
-          id: string
-          user_id: string
-          endpoint: string
-          p256dh: string
-          auth_key: string
-          user_agent: string | null
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          endpoint: string
-          p256dh: string
-          auth_key: string
-          user_agent?: string | null
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          endpoint?: string
-          p256dh?: string
-          auth_key?: string
-          user_agent?: string | null
-        }
-        Relationships: []
-      }
-      scraping_runs: {
-        Row: {
-          id: string
-          started_at: string
-          finished_at: string | null
-          status: string
-          lines_ok: number
-          lines_err: number
-          error: string | null
-        }
-        Insert: {
-          id?: string
-          started_at?: string
-          finished_at?: string | null
-          status?: string
-          lines_ok?: number
-          lines_err?: number
-          error?: string | null
-        }
-        Update: {
-          id?: string
-          started_at?: string
-          finished_at?: string | null
-          status?: string
-          lines_ok?: number
-          lines_err?: number
-          error?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
-    Views: { [_ in never]: never }
+    Views: {
+      [_ in never]: never
+    }
     Functions: {
-      is_admin: { Args: Record<never, never>; Returns: boolean }
+      [_ in never]: never
     }
     Enums: {
-      line_status: LineStatus
+      [_ in never]: never
     }
-    CompositeTypes: { [_ in never]: never }
+    CompositeTypes: {
+      [_ in never]: never
+    }
   }
 }
 
-// Conveniência: tipos de linha prontos pra uso.
-export type LineRow = Database["public"]["Tables"]["lines"]["Row"]
-export type LineInsert = Database["public"]["Tables"]["lines"]["Insert"]
-export type LineUpdate = Database["public"]["Tables"]["lines"]["Update"]
-export type ThresholdRow = Database["public"]["Tables"]["thresholds"]["Row"]
-export type AlertRow = Database["public"]["Tables"]["alerts"]["Row"]
-export type SnapshotRow = Database["public"]["Tables"]["consumption_snapshots"]["Row"]
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {},
+  },
+} as const

@@ -20,16 +20,6 @@ dist-ssr
 .wrangler/
 .dev.vars
 
-# Secrets — nunca commitar
-.env
-.env.*
-!.env.example
-supabase-selfhost/.env
-
-# Scraper storage (cookies/2FA)
-scraper/data/
-
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
