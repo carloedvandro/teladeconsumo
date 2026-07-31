@@ -15,7 +15,9 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt \
     && playwright install chromium
 
-COPY . .
+# O compose usa ./scraper como contexto; mantenha o pacote em /app/scraper
+# para que `python -m scraper.main` resolva corretamente.
+COPY . ./scraper
 
 # storage persistente (cookies/2FA) entre runs
 RUN mkdir -p /data
