@@ -740,7 +740,7 @@ function ResumoConsumo() {
                 </div>
                 <p className="mt-1 text-sm text-[#5a5a5a]">
                   Fim do ciclo{" "}
-                  <span className="font-semibold text-[#1a1a1a]">{cycleLabel}</span>
+                  <span suppressHydrationWarning className="font-semibold text-[#1a1a1a]">{cycleLabel}</span>
                 </p>
                 <p className="mt-0.5 text-sm text-[#5a5a5a]">
                   Próxima renovação:{" "}
