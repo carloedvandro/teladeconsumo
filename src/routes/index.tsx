@@ -897,13 +897,13 @@ function ResumoConsumo() {
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                      className="mt-3 flex w-full items-center justify-start gap-x-2 pl-0 text-left text-[11px] font-semibold transition hover:underline md:mt-4 md:text-[12px]"
+                      className="mt-3 flex items-center gap-x-1.5 pl-0 text-left text-[11px] font-semibold transition hover:underline md:mt-4 md:text-[12px]"
                       style={{ color: s.tone }}
                     >
                       <img
                         src={s.icon}
                         alt={s.label}
-                        className="h-5 w-5 shrink-0 object-contain"
+                        className="h-4 w-4 shrink-0 object-contain"
                       />
                       <span className="whitespace-nowrap">
                         Status da linha: {s.label}
