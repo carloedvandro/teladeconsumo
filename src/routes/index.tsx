@@ -21,6 +21,7 @@ import {
   Gauge,
   Copy,
   QrCode,
+  Clock,
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
