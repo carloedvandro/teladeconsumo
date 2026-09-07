@@ -944,7 +944,7 @@ function ResumoConsumo() {
               const s = map[effective];
               const statusIcon =
                 "Icon" in s && s.Icon ? (
-                  <s.Icon className="h-5 w-5 shrink-0" style={{ color: s.tone }} aria-hidden />
+                  <s.Icon className="h-5 w-5 shrink-0" color={s.tone} aria-hidden />
                 ) : "icon" in s && s.icon ? (
                   <img
                     src={s.icon}
@@ -1925,7 +1925,7 @@ function ResumoConsumo() {
                     style={{ color: cfg.tone }}
                   >
                     {currentStatus === "reduzida_pagamento" && (
-                      <Clock className="h-4 w-4 shrink-0" aria-hidden />
+                      <Clock className="h-4 w-4 shrink-0" color={cfg.tone} aria-hidden />
                     )}
                     {cfg.fatura}
                   </span>
