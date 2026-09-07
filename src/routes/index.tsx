@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   ChevronDown,
@@ -78,12 +78,7 @@ type Line = {
   cycleDays: number;
 };
 
-type LineStatus =
-  | "ativa"
-  | "bloqueada_fatura"
-  | "bloqueada_pagamento"
-  | "reduzida"
-  | "reduzida_pagamento";
+type LineStatus = "ativa" | "bloqueada_fatura" | "bloqueada_pagamento" | "reduzida";
 
 const LINES: Line[] = [
   {
@@ -532,41 +527,6 @@ function ResumoConsumo() {
   const [simOpen, setSimOpen] = useState(false);
   const pixCode = "00020126580014BR.GOV.BCB.PIX0136vivo-fatura-8f2a-4c11-9e0b520400005303986540589.905802BR5915VIVO TELEFONICA6008SAO PAULO62070503***6304A1B2";
 
-  // Fatura: dia de vencimento. A partir da meia-noite do dia seguinte ao
-  // vencimento (ex.: venceu dia 5 -> 00:00 do dia 6), a linha entra
-  // automaticamente em velocidade reduzida por falta de pagamento.
-  const FATURA_VENCIMENTO_DIA = 5;
-  const faturaPaga = false;
-  const [faturaEmAtraso, setFaturaEmAtraso] = useState(false);
-  const [diasAtraso, setDiasAtraso] = useState(0);
-
-  useEffect(() => {
-    const check = () => {
-      if (faturaPaga) {
-        setFaturaEmAtraso(false);
-        setDiasAtraso(0);
-        return;
-      }
-      const now = new Date();
-      let venc = new Date(now.getFullYear(), now.getMonth(), FATURA_VENCIMENTO_DIA);
-      if (now.getDate() <= FATURA_VENCIMENTO_DIA) {
-        venc = new Date(now.getFullYear(), now.getMonth() - 1, FATURA_VENCIMENTO_DIA);
-      }
-      // meia-noite do dia seguinte ao vencimento
-      const corte = new Date(venc.getFullYear(), venc.getMonth(), venc.getDate() + 1);
-      const atrasado = now.getTime() >= corte.getTime();
-      setFaturaEmAtraso(atrasado);
-      setDiasAtraso(
-        atrasado ? Math.floor((now.getTime() - venc.getTime()) / 86400000) : 0,
-      );
-    };
-    check();
-    const id = setInterval(check, 60_000);
-    return () => clearInterval(id);
-  }, [faturaPaga]);
-
-
-
   useEffect(() => {
     let mounted = true;
     preloadAllIcons().then(() => {
@@ -780,7 +740,7 @@ function ResumoConsumo() {
                 </div>
                 <p className="mt-1 text-sm text-[#5a5a5a]">
                   Fim do ciclo{" "}
-                  <span suppressHydrationWarning className="font-semibold text-[#1a1a1a]">{cycleLabel}</span>
+                  <span className="font-semibold text-[#1a1a1a]">{cycleLabel}</span>
                 </p>
                 <p className="mt-0.5 text-sm text-[#5a5a5a]">
                   Próxima renovação:{" "}
@@ -920,20 +880,10 @@ function ResumoConsumo() {
 
                 {(() => {
                   const effective: LineStatus =
-                    simStatus ??
-                    (faturaEmAtraso
-                      ? "reduzida_pagamento"
-                      : usedPct >= 100
-                        ? "reduzida"
-                        : "ativa");
+                    simStatus ?? (usedPct >= 100 ? "reduzida" : "ativa");
                   const map = {
                     ativa: { icon: statusAtivaIcon, label: "Ativa", tone: "#16A34A" },
-                    reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", tone: "#F97316" },
-                    reduzida_pagamento: {
-                      icon: statusReduzidaIcon,
-                      label: "Fatura em atraso • Velocidade reduzida para 256 Kbps",
-                      tone: "#DC2626",
-                    },
+                    reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", tone: "#C96A05" },
                     bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", tone: "#DC2626" },
                     bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", tone: "#DC2626" },
                   } as const;
@@ -941,7 +891,7 @@ function ResumoConsumo() {
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                      className="-ml-3 mt-3 flex w-full items-center gap-x-2 text-left text-[11px] font-semibold transition hover:underline md:-ml-5 md:mt-5 md:text-[13px]"
+                      className="mt-3 flex w-full flex-wrap items-center gap-x-2 gap-y-1 text-left text-[13px] font-semibold transition hover:underline md:-ml-2 md:mt-5 md:text-sm"
                       style={{ color: s.tone }}
                     >
                       <img
@@ -949,13 +899,14 @@ function ResumoConsumo() {
                         alt={s.label}
                         className="h-5 w-5 shrink-0 object-contain"
                       />
-                      <span className="whitespace-nowrap">
+                      <span className="min-w-0 flex-1 truncate whitespace-nowrap">
                         Status da linha: {s.label}
-                        {effective === "reduzida" && (
-                          <span className="ml-1.5 text-xs font-bold">256 Kbps</span>
-
-                        )}
                       </span>
+                      {effective === "reduzida" && (
+                        <span className="shrink-0 whitespace-nowrap text-xs font-bold md:basis-full md:pl-7">
+                          256 Kbps
+                        </span>
+                      )}
                     </button>
                   );
                 })()}
@@ -1811,12 +1762,7 @@ function ResumoConsumo() {
       {/* Status da linha modal */}
       {(() => {
         const currentStatus: LineStatus =
-          simStatus ??
-          (faturaEmAtraso
-            ? "reduzida_pagamento"
-            : usedPct >= 100
-              ? "reduzida"
-              : "ativa");
+          simStatus ?? (usedPct >= 100 ? "reduzida" : "ativa");
         const cfg = {
           ativa: {
             label: "Ativa",
@@ -1828,18 +1774,10 @@ function ResumoConsumo() {
           reduzida: {
             label: "Velocidade reduzida",
             image: statusReduzidaIcon,
-            tone: "#F97316",
+            tone: "#C96A05",
             fatura: "Em dia",
             message:
               "Sua franquia foi totalmente consumida, e a navegação seguirá em velocidade reduzida até a próxima renovação do ciclo. Para voltar à velocidade máxima, você pode contratar um plano superior. Nesse caso, seu consumo atual é preservado, os novos GB são liberados imediatamente e você paga apenas a diferença proporcional aos dias restantes do ciclo. Na próxima renovação, o novo plano já será ativado com a franquia completa.",
-          },
-          reduzida_pagamento: {
-            label: "Fatura em atraso • Velocidade reduzida para 256 Kbps",
-            image: statusReduzidaIcon,
-            tone: "#DC2626",
-            fatura: diasAtraso > 0 ? `Em atraso (${diasAtraso} dias)` : "Em atraso",
-            message:
-              "Sua fatura venceu e não identificamos o pagamento, por isso a navegação está em velocidade reduzida para 256 Kbps. Assim que o pagamento for confirmado, a velocidade total é restabelecida automaticamente em até 24 horas.",
           },
           bloqueada_fatura: {
             label: "Bloqueada por fatura",
@@ -1946,30 +1884,6 @@ function ResumoConsumo() {
                       }}
                       className="flex-1 rounded-xl px-3 py-3 text-sm font-semibold text-white transition hover:brightness-110"
                       style={{ background: "linear-gradient(135deg,#660099,#7a00b3)" }}
-                    >
-                      Fazer upgrade
-                    </button>
-                  </div>
-                )}
-
-                {currentStatus === "reduzida_pagamento" && (
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => {
-                        setStatusOpen(false);
-                        setPixOpen(true);
-                      }}
-                      className="flex-1 rounded-xl px-3 py-3 text-sm font-semibold text-white transition hover:brightness-110"
-                      style={{ background: "linear-gradient(135deg,#DC2626,#b91c1c)" }}
-                    >
-                      Pagar fatura
-                    </button>
-                    <button
-                      onClick={() => {
-                        setStatusOpen(false);
-                        openAfterIconsReady(() => setUpgradeOpen(true));
-                      }}
-                      className="flex-1 rounded-xl border border-[#660099] px-3 py-3 text-sm font-semibold text-[#660099] transition hover:bg-[#f5ebfa]"
                     >
                       Fazer upgrade
                     </button>
@@ -2083,21 +1997,6 @@ function ResumoConsumo() {
         </div>
       )}
 
-      {/* Acesso à página de login */}
-      <Link
-        to="/login"
-        className="fixed bottom-4 left-4 z-40 inline-flex items-center gap-2 rounded-md px-4 py-2.5 text-sm font-semibold text-[#660099] transition-transform duration-200 hover:scale-[1.03]"
-        style={{
-          background: "rgba(255,255,255,0.74)",
-          backdropFilter: "blur(6px)",
-          boxShadow:
-            "0 8px 32px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.45)",
-        }}
-      >
-        <User className="h-4 w-4" />
-        Página de login
-      </Link>
-
       {/* Simulador de status (dev) */}
       <div className="fixed bottom-4 right-4 z-40">
         {simOpen ? (
@@ -2118,8 +2017,7 @@ function ResumoConsumo() {
               {[
                 { key: null, label: "Automático (real)", tone: "#660099", icon: null },
                 { key: "ativa" as LineStatus, label: "Ativa", tone: "#16A34A", icon: statusAtivaIcon },
-                { key: "reduzida" as LineStatus, label: "Velocidade reduzida", tone: "#F97316", icon: statusReduzidaIcon },
-                { key: "reduzida_pagamento" as LineStatus, label: "Fatura em atraso — 256 Kbps", tone: "#DC2626", icon: statusReduzidaIcon },
+                { key: "reduzida" as LineStatus, label: "Velocidade reduzida", tone: "#C96A05", icon: statusReduzidaIcon },
                 { key: "bloqueada_fatura" as LineStatus, label: "Bloqueada — fatura", tone: "#DC2626", icon: statusBloqueadaIcon },
                 { key: "bloqueada_pagamento" as LineStatus, label: "Bloqueada — pagamento", tone: "#DC2626", icon: statusBloqueadaIcon },
               ].map((opt) => {
