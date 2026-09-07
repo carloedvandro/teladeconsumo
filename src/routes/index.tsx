@@ -920,7 +920,7 @@ function ResumoConsumo() {
 
 
             {/* Realtime footer */}
-            <div className="mt-2 flex items-center justify-center gap-1.5 text-[11px] text-[#6b6b6b]">
+            <div className="mt-1 flex w-full items-center justify-start gap-1.5 pl-0 text-[11px] text-[#6b6b6b]">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
                 <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#660099" opacity="0.85" />
                 <path d="m9 12 2 2 4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
