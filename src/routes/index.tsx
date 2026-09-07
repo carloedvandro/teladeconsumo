@@ -78,7 +78,12 @@ type Line = {
   cycleDays: number;
 };
 
-type LineStatus = "ativa" | "bloqueada_fatura" | "bloqueada_pagamento" | "reduzida";
+type LineStatus =
+  | "ativa"
+  | "bloqueada_fatura"
+  | "bloqueada_pagamento"
+  | "reduzida"
+  | "reduzida_pagamento";
 
 const LINES: Line[] = [
   {
@@ -884,6 +889,7 @@ function ResumoConsumo() {
                   const map = {
                     ativa: { icon: statusAtivaIcon, label: "Ativa", tone: "#16A34A" },
                     reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", tone: "#F97316" },
+                    reduzida_pagamento: { icon: statusReduzidaIcon, label: "Velocidade reduzida por pagamento", tone: "#F97316" },
                     bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", tone: "#DC2626" },
                     bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", tone: "#DC2626" },
                   } as const;
@@ -901,7 +907,8 @@ function ResumoConsumo() {
                       />
                       <span className="whitespace-nowrap">
                         Status da linha: {s.label}
-                        {effective === "reduzida" && (
+                        {(effective === "reduzida" ||
+                          effective === "reduzida_pagamento") && (
                           <span className="ml-1.5 text-xs font-bold">256 Kbps</span>
                         )}
                       </span>
@@ -1777,6 +1784,14 @@ function ResumoConsumo() {
             message:
               "Sua franquia foi totalmente consumida, e a navegação seguirá em velocidade reduzida até a próxima renovação do ciclo. Para voltar à velocidade máxima, você pode contratar um plano superior. Nesse caso, seu consumo atual é preservado, os novos GB são liberados imediatamente e você paga apenas a diferença proporcional aos dias restantes do ciclo. Na próxima renovação, o novo plano já será ativado com a franquia completa.",
           },
+          reduzida_pagamento: {
+            label: "Velocidade reduzida por pagamento",
+            image: statusReduzidaIcon,
+            tone: "#F97316",
+            fatura: "Pendente",
+            message:
+              "Sua navegação está em velocidade reduzida (256 Kbps) porque há uma fatura pendente de pagamento. Assim que o pagamento for confirmado, a velocidade total é restabelecida automaticamente em até 24 horas.",
+          },
           bloqueada_fatura: {
             label: "Bloqueada por fatura",
             image: statusBloqueadaIcon,
@@ -1882,6 +1897,30 @@ function ResumoConsumo() {
                       }}
                       className="flex-1 rounded-xl px-3 py-3 text-sm font-semibold text-white transition hover:brightness-110"
                       style={{ background: "linear-gradient(135deg,#660099,#7a00b3)" }}
+                    >
+                      Fazer upgrade
+                    </button>
+                  </div>
+                )}
+
+                {currentStatus === "reduzida_pagamento" && (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        setPixOpen(true);
+                      }}
+                      className="flex-1 rounded-xl px-3 py-3 text-sm font-semibold text-white transition hover:brightness-110"
+                      style={{ background: "linear-gradient(135deg,#F97316,#ea580c)" }}
+                    >
+                      Pagar fatura
+                    </button>
+                    <button
+                      onClick={() => {
+                        setStatusOpen(false);
+                        openAfterIconsReady(() => setUpgradeOpen(true));
+                      }}
+                      className="flex-1 rounded-xl border border-[#660099] px-3 py-3 text-sm font-semibold text-[#660099] transition hover:bg-[#f5ebfa]"
                     >
                       Fazer upgrade
                     </button>
@@ -2031,6 +2070,7 @@ function ResumoConsumo() {
                 { key: null, label: "Automático (real)", tone: "#660099", icon: null },
                 { key: "ativa" as LineStatus, label: "Ativa", tone: "#16A34A", icon: statusAtivaIcon },
                 { key: "reduzida" as LineStatus, label: "Velocidade reduzida", tone: "#F97316", icon: statusReduzidaIcon },
+                { key: "reduzida_pagamento" as LineStatus, label: "Reduzida — pagamento", tone: "#F97316", icon: statusReduzidaIcon },
                 { key: "bloqueada_fatura" as LineStatus, label: "Bloqueada — fatura", tone: "#DC2626", icon: statusBloqueadaIcon },
                 { key: "bloqueada_pagamento" as LineStatus, label: "Bloqueada — pagamento", tone: "#DC2626", icon: statusBloqueadaIcon },
               ].map((opt) => {
