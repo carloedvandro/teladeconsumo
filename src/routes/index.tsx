@@ -935,7 +935,7 @@ function ResumoConsumo() {
                 ativa: { icon: statusAtivaIcon, label: "Ativa", short: "Ativa", tone: "#16A34A" },
                 reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", short: "Reduzida", tone: "#F97316" },
                 reduzida_pagamento: {
-                  Icon: Clock,
+                  icon: icon3dClockRed,
                   label: "Fatura em atraso • Velocidade reduzida para 256 Kbps",
                   short: "Fatura em atraso • Reduzida 256 Kbps",
                   tone: "#DC2626",
