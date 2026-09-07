@@ -897,7 +897,7 @@ function ResumoConsumo() {
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                      className="mt-3 flex items-center gap-x-1.5 pl-0 text-left text-[11px] font-semibold transition hover:underline md:mt-4 md:text-[12px]"
+                      className="mt-3 flex items-center gap-x-1.5 pl-0 text-left text-[11px] font-semibold transition hover:underline md:mt-4"
                       style={{ color: s.tone }}
                     >
                       <img
@@ -909,7 +909,7 @@ function ResumoConsumo() {
                         Status da linha: {s.label}
                         {(effective === "reduzida" ||
                           effective === "reduzida_pagamento") && (
-                          <span className="ml-1.5 text-xs font-bold">256 Kbps</span>
+                          <span className="ml-1 text-[11px] font-bold">256 Kbps</span>
                         )}
                       </span>
                     </button>
