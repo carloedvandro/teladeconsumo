@@ -705,7 +705,7 @@ function ResumoConsumo() {
 
           {/* Consumption panel overlay - centered/right like reference */}
           <div
-            className="relative -mt-24 overflow-hidden rounded-md p-3 pb-10 md:absolute md:right-10 md:top-10 md:mx-0 md:mt-0 md:w-[640px] md:translate-y-0 md:px-9 md:py-6 md:pb-9"
+            className="relative -mt-24 overflow-hidden rounded-md p-3 pb-10 md:absolute md:right-10 md:top-10 md:mx-0 md:mt-0 md:w-[760px] md:translate-y-0 md:px-9 md:py-6 md:pb-9"
             style={{
               background: "rgba(255,255,255,0.74)",
               backdropFilter: "blur(6px)",
@@ -726,44 +726,10 @@ function ResumoConsumo() {
                 strokeWidth={2.75}
               />
             </button>
-            <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-5">
-              <div className="self-center md:-ml-3 md:self-auto">
-                <ConsumoRing line={line} />
-                {(() => {
-                  const effective: LineStatus =
-                    simStatus ?? (usedPct >= 100 ? "reduzida" : "ativa");
-                  const map = {
-                    ativa: { icon: statusAtivaIcon, label: "Ativa", tone: "#16A34A" },
-                    reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", tone: "#F97316" },
-                    reduzida_pagamento: { icon: statusBloqueadaIcon, label: "Reduzida por pagamento", tone: "#DC2626" },
-                    bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", tone: "#DC2626" },
-                    bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", tone: "#DC2626" },
-                  } as const;
-                  const s = map[effective];
-                  return (
-                    <button
-                      onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                      className="mt-2 flex items-center justify-center gap-x-1.5 text-[11px] font-semibold transition hover:underline md:mt-3"
-                      style={{ color: s.tone }}
-                    >
-                      <img
-                        src={s.icon}
-                        alt={s.label}
-                        className="h-4 w-4 shrink-0 object-contain"
-                      />
-                      <span className="whitespace-nowrap">
-                        Status da linha: {s.label}
-                        {(effective === "reduzida" ||
-                          effective === "reduzida_pagamento") && (
-                          <span className="ml-1 text-[11px] font-bold">256 Kbps</span>
-                        )}
-                      </span>
-                    </button>
-                  );
-                })()}
-              </div>
+            <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-6">
+              <div className="self-center md:-ml-3 md:self-auto"><ConsumoRing line={line} /></div>
 
-              <div className="w-full md:w-[340px]">
+              <div className="w-full md:w-[420px]">
 
 
 
@@ -916,6 +882,39 @@ function ResumoConsumo() {
                 >
                   Ver detalhes do seu consumo &gt;
                 </button>
+
+                {(() => {
+                  const effective: LineStatus =
+                    simStatus ?? (usedPct >= 100 ? "reduzida" : "ativa");
+                  const map = {
+                    ativa: { icon: statusAtivaIcon, label: "Ativa", tone: "#16A34A" },
+                    reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", tone: "#F97316" },
+                    reduzida_pagamento: { icon: statusBloqueadaIcon, label: "Velocidade reduzida por pagamento", tone: "#DC2626" },
+                    bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", tone: "#DC2626" },
+                    bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", tone: "#DC2626" },
+                  } as const;
+                  const s = map[effective];
+                  return (
+                    <button
+                      onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
+                      className="mt-3 flex items-center gap-x-1.5 pl-0 text-left text-[11px] font-semibold transition hover:underline md:mt-4"
+                      style={{ color: s.tone }}
+                    >
+                      <img
+                        src={s.icon}
+                        alt={s.label}
+                        className="h-4 w-4 shrink-0 object-contain"
+                      />
+                      <span className="whitespace-nowrap">
+                        Status da linha: {s.label}
+                        {(effective === "reduzida" ||
+                          effective === "reduzida_pagamento") && (
+                          <span className="ml-1 text-[11px] font-bold">256 Kbps</span>
+                        )}
+                      </span>
+                    </button>
+                  );
+                })()}
               </div>
             </div>
 
