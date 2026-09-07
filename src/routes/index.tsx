@@ -1881,6 +1881,11 @@ function ResumoConsumo() {
                   height={56}
                   loading="lazy"
                   className="h-14 w-14 shrink-0 object-contain drop-shadow-sm"
+                  style={
+                    currentStatus === "reduzida_pagamento"
+                      ? { filter: "hue-rotate(-30deg) saturate(1.6) brightness(1.05)" }
+                      : undefined
+                  }
                 />
                 <div className="min-w-0">
                   <div
@@ -2146,7 +2151,16 @@ function ResumoConsumo() {
                     }}
                   >
                     {opt.icon ? (
-                      <img src={opt.icon} alt="" className="h-4 w-4 object-contain" />
+                      <img
+                        src={opt.icon}
+                        alt=""
+                        className="h-4 w-4 object-contain"
+                        style={
+                          opt.key === "reduzida_pagamento"
+                            ? { filter: "hue-rotate(-30deg) saturate(1.6) brightness(1.05)" }
+                            : undefined
+                        }
+                      />
                     ) : (
                       <span className="inline-block h-4 w-4 rounded-full" style={{ background: opt.tone }} />
                     )}
