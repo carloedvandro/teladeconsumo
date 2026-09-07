@@ -917,52 +917,51 @@ function ResumoConsumo() {
                 >
                   Ver detalhes do seu consumo &gt;
                 </button>
-
-                {(() => {
-                  const effective: LineStatus =
-                    simStatus ??
-                    (faturaEmAtraso
-                      ? "reduzida_pagamento"
-                      : usedPct >= 100
-                        ? "reduzida"
-                        : "ativa");
-                  const map = {
-                    ativa: { icon: statusAtivaIcon, label: "Ativa", short: "Ativa", tone: "#16A34A" },
-                    reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", short: "Reduzida", tone: "#F97316" },
-                    reduzida_pagamento: {
-                      icon: statusReduzidaIcon,
-                      label: "Fatura em atraso • Velocidade reduzida para 256 Kbps",
-                      short: "Fatura em atraso • Reduzida 256 Kbps",
-                      tone: "#DC2626",
-                    },
-                    bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", short: "Bloqueada", tone: "#DC2626" },
-                    bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", short: "Bloqueada", tone: "#DC2626" },
-                  } as const;
-                  const s = map[effective];
-                  return (
-                    <button
-                      onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                      className="mt-3 flex w-full items-center justify-center px-3 text-center text-[10px] font-semibold transition hover:underline md:mt-5 md:text-[13px]"
-                      style={{ color: s.tone }}
-                    >
-                      <img
-                        src={s.icon}
-                        alt={s.label}
-                        className="h-5 w-5 shrink-0 object-contain"
-                      />
-                      <span className="ml-2 whitespace-nowrap">
-                        <span className="md:hidden">Status da linha: {s.short}</span>
-                        <span className="hidden md:inline">Status da linha: {s.label}</span>
-                        {effective === "reduzida" && (
-                          <span className="ml-1.5 text-xs font-bold">256 Kbps</span>
-                        )}
-                      </span>
-                    </button>
-                  );
-                })()}
               </div>
             </div>
 
+            {(() => {
+              const effective: LineStatus =
+                simStatus ??
+                (faturaEmAtraso
+                  ? "reduzida_pagamento"
+                  : usedPct >= 100
+                    ? "reduzida"
+                    : "ativa");
+              const map = {
+                ativa: { icon: statusAtivaIcon, label: "Ativa", short: "Ativa", tone: "#16A34A" },
+                reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", short: "Reduzida", tone: "#F97316" },
+                reduzida_pagamento: {
+                  icon: statusReduzidaIcon,
+                  label: "Fatura em atraso • Velocidade reduzida para 256 Kbps",
+                  short: "Fatura em atraso • Reduzida 256 Kbps",
+                  tone: "#DC2626",
+                },
+                bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", short: "Bloqueada", tone: "#DC2626" },
+                bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", short: "Bloqueada", tone: "#DC2626" },
+              } as const;
+              const s = map[effective];
+              return (
+                <button
+                  onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
+                  className="mt-3 flex w-full items-center justify-center px-3 text-center text-[10px] font-semibold transition hover:underline md:mt-5 md:text-[13px]"
+                  style={{ color: s.tone }}
+                >
+                  <img
+                    src={s.icon}
+                    alt={s.label}
+                    className="h-5 w-5 shrink-0 object-contain"
+                  />
+                  <span className="ml-2 whitespace-nowrap">
+                    <span className="md:hidden">Status da linha: {s.short}</span>
+                    <span className="hidden md:inline">Status da linha: {s.label}</span>
+                    {effective === "reduzida" && (
+                      <span className="ml-1.5 text-xs font-bold">256 Kbps</span>
+                    )}
+                  </span>
+                </button>
+              );
+            })()}
 
             {/* Realtime footer */}
             <div className="mt-2 flex items-center justify-center gap-1.5 text-[11px] text-[#6b6b6b]">
