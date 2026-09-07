@@ -1811,7 +1811,12 @@ function ResumoConsumo() {
       {/* Status da linha modal */}
       {(() => {
         const currentStatus: LineStatus =
-          simStatus ?? (usedPct >= 100 ? "reduzida" : "ativa");
+          simStatus ??
+          (faturaEmAtraso
+            ? "reduzida_pagamento"
+            : usedPct >= 100
+              ? "reduzida"
+              : "ativa");
         const cfg = {
           ativa: {
             label: "Ativa",
