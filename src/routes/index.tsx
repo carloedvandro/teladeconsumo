@@ -1921,9 +1921,12 @@ function ResumoConsumo() {
                 <div className="flex justify-between border-t border-[#f0f0f0] py-1.5">
                   <span className="text-[#666]">Fatura</span>
                   <span
-                    className="font-semibold"
+                    className="inline-flex items-center gap-1.5 font-semibold"
                     style={{ color: cfg.tone }}
                   >
+                    {currentStatus === "reduzida_pagamento" && (
+                      <Clock className="h-4 w-4 shrink-0" aria-hidden />
+                    )}
                     {cfg.fatura}
                   </span>
                 </div>
