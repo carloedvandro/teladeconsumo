@@ -920,11 +920,20 @@ function ResumoConsumo() {
 
                 {(() => {
                   const effective: LineStatus =
-                    simStatus ?? (usedPct >= 100 ? "reduzida" : "ativa");
+                    simStatus ??
+                    (faturaEmAtraso
+                      ? "reduzida_pagamento"
+                      : usedPct >= 100
+                        ? "reduzida"
+                        : "ativa");
                   const map = {
                     ativa: { icon: statusAtivaIcon, label: "Ativa", tone: "#16A34A" },
                     reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", tone: "#F97316" },
-                    reduzida_pagamento: { icon: statusReduzidaIcon, label: "Velocidade reduzida por pagamento", tone: "#F97316" },
+                    reduzida_pagamento: {
+                      icon: statusReduzidaIcon,
+                      label: "Fatura em atraso • Velocidade reduzida para 256 Kbps",
+                      tone: "#DC2626",
+                    },
                     bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", tone: "#DC2626" },
                     bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", tone: "#DC2626" },
                   } as const;
@@ -932,7 +941,7 @@ function ResumoConsumo() {
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                      className="mt-3 flex w-full items-center gap-x-2 text-left text-[12px] font-semibold transition hover:underline md:-ml-2 md:mt-5 md:text-[13px]"
+                      className="-ml-3 mt-3 flex w-full items-center gap-x-2 text-left text-[11px] font-semibold transition hover:underline md:-ml-5 md:mt-5 md:text-[13px]"
                       style={{ color: s.tone }}
                     >
                       <img
@@ -942,9 +951,9 @@ function ResumoConsumo() {
                       />
                       <span className="whitespace-nowrap">
                         Status da linha: {s.label}
-                        {(effective === "reduzida" ||
-                          effective === "reduzida_pagamento") && (
+                        {effective === "reduzida" && (
                           <span className="ml-1.5 text-xs font-bold">256 Kbps</span>
+
                         )}
                       </span>
                     </button>
