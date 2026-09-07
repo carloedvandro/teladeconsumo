@@ -891,7 +891,7 @@ function ResumoConsumo() {
               const map = {
                 ativa: { icon: statusAtivaIcon, label: "Ativa", tone: "#16A34A" },
                 reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", tone: "#F97316" },
-                reduzida_pagamento: { icon: statusBloqueadaIcon, label: "Velocidade reduzida por pagamento", tone: "#DC2626" },
+                reduzida_pagamento: { icon: statusBloqueadaIcon, label: "Reduzida por pagamento", tone: "#DC2626" },
                 bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", tone: "#DC2626" },
                 bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", tone: "#DC2626" },
               } as const;
