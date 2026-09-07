@@ -55,6 +55,7 @@ const PRELOAD_ICONS = [
   icon3dAutorenew,
   icon3dBonus,
   icon3dAlert,
+  icon3dClockRed,
 ];
 
 
