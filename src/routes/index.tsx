@@ -2070,7 +2070,7 @@ function ResumoConsumo() {
                 { key: null, label: "Automático (real)", tone: "#660099", icon: null },
                 { key: "ativa" as LineStatus, label: "Ativa", tone: "#16A34A", icon: statusAtivaIcon },
                 { key: "reduzida" as LineStatus, label: "Velocidade reduzida", tone: "#F97316", icon: statusReduzidaIcon },
-                { key: "reduzida_pagamento" as LineStatus, label: "Reduzida — pagamento", tone: "#F97316", icon: statusReduzidaIcon },
+                { key: "reduzida_pagamento" as LineStatus, label: "Reduzida — pagamento", tone: "#DC2626", icon: statusBloqueadaIcon },
                 { key: "bloqueada_fatura" as LineStatus, label: "Bloqueada — fatura", tone: "#DC2626", icon: statusBloqueadaIcon },
                 { key: "bloqueada_pagamento" as LineStatus, label: "Bloqueada — pagamento", tone: "#DC2626", icon: statusBloqueadaIcon },
               ].map((opt) => {
