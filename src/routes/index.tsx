@@ -933,7 +933,7 @@ function ResumoConsumo() {
                 ativa: { icon: statusAtivaIcon, label: "Ativa", short: "Ativa", tone: "#16A34A" },
                 reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", short: "Reduzida", tone: "#F97316" },
                 reduzida_pagamento: {
-                  icon: statusReduzidaIcon,
+                  Icon: Clock,
                   label: "Fatura em atraso • Velocidade reduzida para 256 Kbps",
                   short: "Fatura em atraso • Reduzida 256 Kbps",
                   tone: "#DC2626",
@@ -942,17 +942,22 @@ function ResumoConsumo() {
                 bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", short: "Bloqueada", tone: "#DC2626" },
               } as const;
               const s = map[effective];
+              const statusIcon = "Icon" in s && s.Icon ? (
+                <s.Icon className="h-5 w-5 shrink-0" style={{ color: s.tone }} aria-hidden />
+              ) : (
+                <img
+                  src={s.icon}
+                  alt={s.label}
+                  className="h-5 w-5 shrink-0 object-contain"
+                />
+              );
               return (
                 <button
                   onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
                   className="mt-3 flex w-full items-center justify-center px-3 text-center text-[10px] font-semibold transition hover:underline md:mt-5 md:text-[13px]"
                   style={{ color: s.tone }}
                 >
-                  <img
-                    src={s.icon}
-                    alt={s.label}
-                    className="h-5 w-5 shrink-0 object-contain"
-                  />
+                  {statusIcon}
                   <span className="ml-2 whitespace-nowrap">
                     <span className="md:hidden">Status da linha: {s.short}</span>
                     <span className="hidden md:inline">Status da linha: {s.label}</span>
