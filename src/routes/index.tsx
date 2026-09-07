@@ -21,6 +21,7 @@ import {
   Gauge,
   Copy,
   QrCode,
+  Clock,
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
@@ -42,7 +43,6 @@ import icon3dSms from "@/assets/icon-3d-sms.png";
 import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
 import icon3dBonus from "@/assets/icon-3d-bonus.png";
 import icon3dAlert from "@/assets/icon-3d-alert.png";
-import icon3dClockRed from "@/assets/status-reduzida-pagamento-recolor.png";
 import icon3dPie from "@/assets/icon-3d-pie.png";
 import icon3dDisk from "@/assets/icon-3d-disk.png";
 const familyImg = familyImgAsset.url;
@@ -54,7 +54,6 @@ const PRELOAD_ICONS = [
   icon3dAutorenew,
   icon3dBonus,
   icon3dAlert,
-  icon3dClockRed,
 ];
 
 
@@ -934,7 +933,7 @@ function ResumoConsumo() {
                 ativa: { icon: statusAtivaIcon, label: "Ativa", short: "Ativa", tone: "#16A34A" },
                 reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", short: "Reduzida", tone: "#F97316" },
                 reduzida_pagamento: {
-                  icon: icon3dClockRed,
+                  Icon: Clock,
                   label: "Fatura em atraso • Velocidade reduzida para 256 Kbps",
                   short: "Fatura em atraso • Reduzida 256 Kbps",
                   tone: "#DC2626",
@@ -943,13 +942,16 @@ function ResumoConsumo() {
                 bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", short: "Bloqueada", tone: "#DC2626" },
               } as const;
               const s = map[effective];
-              const statusIcon = s.icon ? (
-                <img
-                  src={s.icon}
-                  alt={s.label}
-                  className="h-5 w-5 shrink-0 object-contain"
-                />
-              ) : null;
+              const statusIcon =
+                "Icon" in s && s.Icon ? (
+                  <s.Icon className="h-5 w-5 shrink-0" style={{ color: s.tone }} aria-hidden />
+                ) : "icon" in s && s.icon ? (
+                  <img
+                    src={s.icon}
+                    alt={s.label}
+                    className="h-5 w-5 shrink-0 object-contain"
+                  />
+                ) : null;
               return (
                 <button
                   onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
@@ -1923,13 +1925,7 @@ function ResumoConsumo() {
                     style={{ color: cfg.tone }}
                   >
                     {currentStatus === "reduzida_pagamento" && (
-                      <img
-                        src={icon3dClockRed}
-                        alt="Fatura em atraso"
-                        className="h-4 w-4 shrink-0 object-contain"
-                        width={512}
-                        height={512}
-                      />
+                      <Clock className="h-4 w-4 shrink-0" aria-hidden />
                     )}
                     {cfg.fatura}
                   </span>
@@ -2133,7 +2129,7 @@ function ResumoConsumo() {
                 { key: null, label: "Automático (real)", tone: "#660099", icon: null },
                 { key: "ativa" as LineStatus, label: "Ativa", tone: "#16A34A", icon: statusAtivaIcon },
                 { key: "reduzida" as LineStatus, label: "Velocidade reduzida", tone: "#F97316", icon: statusReduzidaIcon },
-                { key: "reduzida_pagamento" as LineStatus, label: "Fatura em atraso — 256 Kbps", tone: "#DC2626", icon: icon3dClockRed },
+                { key: "reduzida_pagamento" as LineStatus, label: "Fatura em atraso — 256 Kbps", tone: "#DC2626", icon: statusReduzidaIcon },
                 { key: "bloqueada_fatura" as LineStatus, label: "Bloqueada — fatura", tone: "#DC2626", icon: statusBloqueadaIcon },
                 { key: "bloqueada_pagamento" as LineStatus, label: "Bloqueada — pagamento", tone: "#DC2626", icon: statusBloqueadaIcon },
               ].map((opt) => {
