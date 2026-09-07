@@ -727,7 +727,41 @@ function ResumoConsumo() {
               />
             </button>
             <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-5">
-              <div className="self-center md:-ml-3 md:self-auto"><ConsumoRing line={line} /></div>
+              <div className="self-center md:-ml-3 md:self-auto">
+                <ConsumoRing line={line} />
+                {(() => {
+                  const effective: LineStatus =
+                    simStatus ?? (usedPct >= 100 ? "reduzida" : "ativa");
+                  const map = {
+                    ativa: { icon: statusAtivaIcon, label: "Ativa", tone: "#16A34A" },
+                    reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", tone: "#F97316" },
+                    reduzida_pagamento: { icon: statusBloqueadaIcon, label: "Reduzida por pagamento", tone: "#DC2626" },
+                    bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", tone: "#DC2626" },
+                    bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", tone: "#DC2626" },
+                  } as const;
+                  const s = map[effective];
+                  return (
+                    <button
+                      onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
+                      className="mt-2 flex items-center justify-center gap-x-1.5 text-[11px] font-semibold transition hover:underline md:mt-3"
+                      style={{ color: s.tone }}
+                    >
+                      <img
+                        src={s.icon}
+                        alt={s.label}
+                        className="h-4 w-4 shrink-0 object-contain"
+                      />
+                      <span className="whitespace-nowrap">
+                        Status da linha: {s.label}
+                        {(effective === "reduzida" ||
+                          effective === "reduzida_pagamento") && (
+                          <span className="ml-1 text-[11px] font-bold">256 Kbps</span>
+                        )}
+                      </span>
+                    </button>
+                  );
+                })()}
+              </div>
 
               <div className="w-full md:w-[340px]">
 
@@ -884,39 +918,6 @@ function ResumoConsumo() {
                 </button>
               </div>
             </div>
-
-            {(() => {
-              const effective: LineStatus =
-                simStatus ?? (usedPct >= 100 ? "reduzida" : "ativa");
-              const map = {
-                ativa: { icon: statusAtivaIcon, label: "Ativa", tone: "#16A34A" },
-                reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", tone: "#F97316" },
-                reduzida_pagamento: { icon: statusBloqueadaIcon, label: "Reduzida por pagamento", tone: "#DC2626" },
-                bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", tone: "#DC2626" },
-                bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", tone: "#DC2626" },
-              } as const;
-              const s = map[effective];
-              return (
-                <button
-                  onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                  className="mt-3 flex w-full items-center gap-x-1.5 pl-0 text-left text-[11px] font-semibold transition hover:underline md:mt-4"
-                  style={{ color: s.tone }}
-                >
-                  <img
-                    src={s.icon}
-                    alt={s.label}
-                    className="h-4 w-4 shrink-0 object-contain"
-                  />
-                  <span className="whitespace-nowrap">
-                    Status da linha: {s.label}
-                    {(effective === "reduzida" ||
-                      effective === "reduzida_pagamento") && (
-                      <span className="ml-1 text-[11px] font-bold">256 Kbps</span>
-                    )}
-                  </span>
-                </button>
-              );
-            })()}
 
 
             {/* Realtime footer */}
