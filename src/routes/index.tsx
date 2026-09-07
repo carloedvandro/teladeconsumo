@@ -1911,7 +1911,7 @@ function ResumoConsumo() {
                         setPixOpen(true);
                       }}
                       className="flex-1 rounded-xl px-3 py-3 text-sm font-semibold text-white transition hover:brightness-110"
-                      style={{ background: "linear-gradient(135deg,#F97316,#ea580c)" }}
+                      style={{ background: "linear-gradient(135deg,#DC2626,#b91c1c)" }}
                     >
                       Pagar fatura
                     </button>
