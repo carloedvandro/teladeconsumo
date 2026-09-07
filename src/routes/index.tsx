@@ -705,7 +705,7 @@ function ResumoConsumo() {
 
           {/* Consumption panel overlay - centered/right like reference */}
           <div
-            className="relative -mt-24 overflow-hidden rounded-md p-3 pb-10 md:absolute md:right-10 md:top-10 md:mx-0 md:mt-0 md:w-[760px] md:translate-y-0 md:px-9 md:py-6 md:pb-9"
+            className="relative -mt-24 overflow-hidden rounded-md p-3 pb-10 md:absolute md:right-10 md:top-10 md:mx-0 md:mt-0 md:w-[640px] md:translate-y-0 md:px-9 md:py-6 md:pb-9"
             style={{
               background: "rgba(255,255,255,0.74)",
               backdropFilter: "blur(6px)",
@@ -726,10 +726,10 @@ function ResumoConsumo() {
                 strokeWidth={2.75}
               />
             </button>
-            <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-6">
+            <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-2">
               <div className="self-center md:-ml-3 md:self-auto"><ConsumoRing line={line} /></div>
 
-              <div className="w-full md:w-[420px]">
+              <div className="w-full md:w-[340px]">
 
 
 
@@ -889,7 +889,7 @@ function ResumoConsumo() {
                   const map = {
                     ativa: { icon: statusAtivaIcon, label: "Ativa", tone: "#16A34A" },
                     reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", tone: "#F97316" },
-                    reduzida_pagamento: { icon: statusBloqueadaIcon, label: "Velocidade reduzida por pagamento", tone: "#DC2626" },
+                    reduzida_pagamento: { icon: statusReduzidaIcon, label: "Velocidade reduzida por pagamento", tone: "#F97316" },
                     bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", tone: "#DC2626" },
                     bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", tone: "#DC2626" },
                   } as const;
@@ -897,19 +897,19 @@ function ResumoConsumo() {
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                      className="mt-3 flex items-center gap-x-1.5 pl-0 text-left text-[11px] font-semibold transition hover:underline md:mt-4"
+                      className="mt-3 flex w-full items-center gap-x-2 text-left text-[12px] font-semibold transition hover:underline md:-ml-2 md:mt-5 md:text-[13px]"
                       style={{ color: s.tone }}
                     >
                       <img
                         src={s.icon}
                         alt={s.label}
-                        className="h-4 w-4 shrink-0 object-contain"
+                        className="h-5 w-5 shrink-0 object-contain"
                       />
                       <span className="whitespace-nowrap">
                         Status da linha: {s.label}
                         {(effective === "reduzida" ||
                           effective === "reduzida_pagamento") && (
-                          <span className="ml-1 text-[11px] font-bold">256 Kbps</span>
+                          <span className="ml-1.5 text-xs font-bold">256 Kbps</span>
                         )}
                       </span>
                     </button>
@@ -920,7 +920,7 @@ function ResumoConsumo() {
 
 
             {/* Realtime footer */}
-            <div className="mt-1 flex w-full items-center justify-start gap-1.5 pl-0 text-[11px] text-[#6b6b6b]">
+            <div className="mt-2 flex items-center justify-center gap-1.5 text-[11px] text-[#6b6b6b]">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
                 <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#660099" opacity="0.85" />
                 <path d="m9 12 2 2 4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -1786,8 +1786,8 @@ function ResumoConsumo() {
           },
           reduzida_pagamento: {
             label: "Velocidade reduzida por pagamento",
-            image: statusBloqueadaIcon,
-            tone: "#DC2626",
+            image: statusReduzidaIcon,
+            tone: "#F97316",
             fatura: "Pendente",
             message:
               "Sua navegação está em velocidade reduzida (256 Kbps) porque há uma fatura pendente de pagamento. Assim que o pagamento for confirmado, a velocidade total é restabelecida automaticamente em até 24 horas.",
@@ -1911,7 +1911,7 @@ function ResumoConsumo() {
                         setPixOpen(true);
                       }}
                       className="flex-1 rounded-xl px-3 py-3 text-sm font-semibold text-white transition hover:brightness-110"
-                      style={{ background: "linear-gradient(135deg,#DC2626,#b91c1c)" }}
+                      style={{ background: "linear-gradient(135deg,#F97316,#ea580c)" }}
                     >
                       Pagar fatura
                     </button>
@@ -2070,7 +2070,7 @@ function ResumoConsumo() {
                 { key: null, label: "Automático (real)", tone: "#660099", icon: null },
                 { key: "ativa" as LineStatus, label: "Ativa", tone: "#16A34A", icon: statusAtivaIcon },
                 { key: "reduzida" as LineStatus, label: "Velocidade reduzida", tone: "#F97316", icon: statusReduzidaIcon },
-                { key: "reduzida_pagamento" as LineStatus, label: "Reduzida — pagamento", tone: "#DC2626", icon: statusBloqueadaIcon },
+                { key: "reduzida_pagamento" as LineStatus, label: "Reduzida — pagamento", tone: "#F97316", icon: statusReduzidaIcon },
                 { key: "bloqueada_fatura" as LineStatus, label: "Bloqueada — fatura", tone: "#DC2626", icon: statusBloqueadaIcon },
                 { key: "bloqueada_pagamento" as LineStatus, label: "Bloqueada — pagamento", tone: "#DC2626", icon: statusBloqueadaIcon },
               ].map((opt) => {
