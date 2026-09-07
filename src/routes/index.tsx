@@ -942,15 +942,16 @@ function ResumoConsumo() {
                 bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", short: "Bloqueada", tone: "#DC2626" },
               } as const;
               const s = map[effective];
-              const statusIcon = "Icon" in s && s.Icon ? (
-                <s.Icon className="h-5 w-5 shrink-0" style={{ color: s.tone }} aria-hidden />
-              ) : (
-                <img
-                  src={s.icon}
-                  alt={s.label}
-                  className="h-5 w-5 shrink-0 object-contain"
-                />
-              );
+              const statusIcon =
+                "Icon" in s && s.Icon ? (
+                  <s.Icon className="h-5 w-5 shrink-0" style={{ color: s.tone }} aria-hidden />
+                ) : "icon" in s && s.icon ? (
+                  <img
+                    src={s.icon}
+                    alt={s.label}
+                    className="h-5 w-5 shrink-0 object-contain"
+                  />
+                ) : null;
               return (
                 <button
                   onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
