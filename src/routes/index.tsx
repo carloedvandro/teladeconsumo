@@ -532,6 +532,41 @@ function ResumoConsumo() {
   const [simOpen, setSimOpen] = useState(false);
   const pixCode = "00020126580014BR.GOV.BCB.PIX0136vivo-fatura-8f2a-4c11-9e0b520400005303986540589.905802BR5915VIVO TELEFONICA6008SAO PAULO62070503***6304A1B2";
 
+  // Fatura: dia de vencimento. A partir da meia-noite do dia seguinte ao
+  // vencimento (ex.: venceu dia 5 -> 00:00 do dia 6), a linha entra
+  // automaticamente em velocidade reduzida por falta de pagamento.
+  const FATURA_VENCIMENTO_DIA = 5;
+  const faturaPaga = false;
+  const [faturaEmAtraso, setFaturaEmAtraso] = useState(false);
+  const [diasAtraso, setDiasAtraso] = useState(0);
+
+  useEffect(() => {
+    const check = () => {
+      if (faturaPaga) {
+        setFaturaEmAtraso(false);
+        setDiasAtraso(0);
+        return;
+      }
+      const now = new Date();
+      let venc = new Date(now.getFullYear(), now.getMonth(), FATURA_VENCIMENTO_DIA);
+      if (now.getDate() <= FATURA_VENCIMENTO_DIA) {
+        venc = new Date(now.getFullYear(), now.getMonth() - 1, FATURA_VENCIMENTO_DIA);
+      }
+      // meia-noite do dia seguinte ao vencimento
+      const corte = new Date(venc.getFullYear(), venc.getMonth(), venc.getDate() + 1);
+      const atrasado = now.getTime() >= corte.getTime();
+      setFaturaEmAtraso(atrasado);
+      setDiasAtraso(
+        atrasado ? Math.floor((now.getTime() - venc.getTime()) / 86400000) : 0,
+      );
+    };
+    check();
+    const id = setInterval(check, 60_000);
+    return () => clearInterval(id);
+  }, [faturaPaga]);
+
+
+
   useEffect(() => {
     let mounted = true;
     preloadAllIcons().then(() => {
