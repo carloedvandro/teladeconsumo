@@ -1786,8 +1786,8 @@ function ResumoConsumo() {
           },
           reduzida_pagamento: {
             label: "Velocidade reduzida por pagamento",
-            image: statusReduzidaIcon,
-            tone: "#F97316",
+            image: statusBloqueadaIcon,
+            tone: "#DC2626",
             fatura: "Pendente",
             message:
               "Sua navegação está em velocidade reduzida (256 Kbps) porque há uma fatura pendente de pagamento. Assim que o pagamento for confirmado, a velocidade total é restabelecida automaticamente em até 24 horas.",
