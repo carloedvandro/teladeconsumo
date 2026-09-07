@@ -927,21 +927,22 @@ function ResumoConsumo() {
                         ? "reduzida"
                         : "ativa");
                   const map = {
-                    ativa: { icon: statusAtivaIcon, label: "Ativa", tone: "#16A34A" },
-                    reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", tone: "#F97316" },
+                    ativa: { icon: statusAtivaIcon, label: "Ativa", short: "Ativa", tone: "#16A34A" },
+                    reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", short: "Reduzida", tone: "#F97316" },
                     reduzida_pagamento: {
                       icon: statusReduzidaIcon,
                       label: "Fatura em atraso • Velocidade reduzida para 256 Kbps",
+                      short: "Fatura em atraso • Reduzida 256 Kbps",
                       tone: "#DC2626",
                     },
-                    bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", tone: "#DC2626" },
-                    bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", tone: "#DC2626" },
+                    bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", short: "Bloqueada", tone: "#DC2626" },
+                    bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", short: "Bloqueada", tone: "#DC2626" },
                   } as const;
                   const s = map[effective];
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                      className="mx-auto mt-3 flex w-fit items-center gap-x-2 text-left text-[11px] font-semibold transition hover:underline md:mt-5 md:text-[13px]"
+                      className="mt-3 flex w-full items-center justify-center px-3 text-center text-[10px] font-semibold transition hover:underline md:mt-5 md:text-[13px]"
                       style={{ color: s.tone }}
                     >
                       <img
@@ -949,8 +950,9 @@ function ResumoConsumo() {
                         alt={s.label}
                         className="h-5 w-5 shrink-0 object-contain"
                       />
-                      <span className="whitespace-nowrap">
-                        Status da linha: {s.label}
+                      <span className="ml-2 whitespace-nowrap">
+                        <span className="md:hidden">Status da linha: {s.short}</span>
+                        <span className="hidden md:inline">Status da linha: {s.label}</span>
                         {effective === "reduzida" && (
                           <span className="ml-1.5 text-xs font-bold">256 Kbps</span>
                         )}
