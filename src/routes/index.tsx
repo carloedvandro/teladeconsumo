@@ -1924,7 +1924,13 @@ function ResumoConsumo() {
                     style={{ color: cfg.tone }}
                   >
                     {currentStatus === "reduzida_pagamento" && (
-                      <Clock className="h-4 w-4 shrink-0" aria-hidden />
+                      <img
+                        src={icon3dClockRed}
+                        alt="Fatura em atraso"
+                        className="h-4 w-4 shrink-0 object-contain"
+                        width={512}
+                        height={512}
+                      />
                     )}
                     {cfg.fatura}
                   </span>
