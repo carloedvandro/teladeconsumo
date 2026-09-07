@@ -889,7 +889,7 @@ function ResumoConsumo() {
                   const map = {
                     ativa: { icon: statusAtivaIcon, label: "Ativa", tone: "#16A34A" },
                     reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", tone: "#F97316" },
-                    reduzida_pagamento: { icon: statusReduzidaIcon, label: "Velocidade reduzida por pagamento", tone: "#F97316" },
+                    reduzida_pagamento: { icon: statusBloqueadaIcon, label: "Velocidade reduzida por pagamento", tone: "#DC2626" },
                     bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", tone: "#DC2626" },
                     bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", tone: "#DC2626" },
                   } as const;
@@ -897,7 +897,7 @@ function ResumoConsumo() {
                   return (
                     <button
                       onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                      className="mt-3 flex w-full items-center gap-x-2 text-left text-[12px] font-semibold transition hover:underline md:-ml-2 md:mt-5 md:text-[13px]"
+                      className="mt-3 flex w-full items-center justify-start gap-x-2 pl-0 text-left text-[11px] font-semibold transition hover:underline md:mt-4 md:text-[12px]"
                       style={{ color: s.tone }}
                     >
                       <img
