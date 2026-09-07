@@ -1834,12 +1834,12 @@ function ResumoConsumo() {
               "Sua franquia foi totalmente consumida, e a navegação seguirá em velocidade reduzida até a próxima renovação do ciclo. Para voltar à velocidade máxima, você pode contratar um plano superior. Nesse caso, seu consumo atual é preservado, os novos GB são liberados imediatamente e você paga apenas a diferença proporcional aos dias restantes do ciclo. Na próxima renovação, o novo plano já será ativado com a franquia completa.",
           },
           reduzida_pagamento: {
-            label: "Velocidade reduzida por pagamento",
+            label: "Fatura em atraso • Velocidade reduzida para 256 Kbps",
             image: statusReduzidaIcon,
-            tone: "#F97316",
-            fatura: "Pendente",
+            tone: "#DC2626",
+            fatura: diasAtraso > 0 ? `Em atraso (${diasAtraso} dias)` : "Em atraso",
             message:
-              "Sua navegação está em velocidade reduzida (256 Kbps) porque há uma fatura pendente de pagamento. Assim que o pagamento for confirmado, a velocidade total é restabelecida automaticamente em até 24 horas.",
+              "Sua fatura venceu e não identificamos o pagamento, por isso a navegação está em velocidade reduzida para 256 Kbps. Assim que o pagamento for confirmado, a velocidade total é restabelecida automaticamente em até 24 horas.",
           },
           bloqueada_fatura: {
             label: "Bloqueada por fatura",
