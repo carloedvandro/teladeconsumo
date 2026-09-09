@@ -1874,14 +1874,23 @@ function ResumoConsumo() {
             <div className="space-y-5">
               {/* Situação */}
               <div className="flex items-center gap-3">
-                <img
-                  src={cfg.image}
-                  alt={cfg.label}
-                  width={56}
-                  height={56}
-                  loading="lazy"
-                  className="h-14 w-14 shrink-0 object-contain drop-shadow-sm"
-                />
+                {currentStatus === "reduzida_pagamento" ? (
+                  <Clock
+                    className="h-14 w-14 shrink-0"
+                    color={cfg.tone}
+                    strokeWidth={1.6}
+                    aria-hidden
+                  />
+                ) : (
+                  <img
+                    src={cfg.image}
+                    alt={cfg.label}
+                    width={56}
+                    height={56}
+                    loading="lazy"
+                    className="h-14 w-14 shrink-0 object-contain drop-shadow-sm"
+                  />
+                )}
                 <div className="min-w-0">
                   <div
                     className="text-[11px] font-semibold uppercase tracking-wider"
