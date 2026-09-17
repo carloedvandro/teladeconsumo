@@ -127,6 +127,16 @@ function nextRenewalDate(renewalDay = 2, today = new Date()) {
   return `${String(next.getDate()).padStart(2, "0")}/${String(next.getMonth() + 1).padStart(2, "0")}`;
 }
 
+// Calcula dias até o vencimento da fatura (data de corte para atraso).
+function daysUntilDueDate(dueDay = 5, today = new Date()) {
+  const y = today.getFullYear();
+  const m = today.getMonth();
+  const d = today.getDate();
+  const next = d <= dueDay ? new Date(y, m, dueDay) : new Date(y, m + 1, dueDay);
+  const ms = next.getTime() - new Date(y, m, d).getTime();
+  return Math.max(0, Math.round(ms / 86400000));
+}
+
 // Progress arc color: green → yellow → orange → red as it fills toward 100%
 function ringColor(pct: number) {
   if (pct >= 95) return "#ff2a2a"; // red
@@ -673,12 +683,12 @@ function ResumoConsumo() {
   const lastUpdatedDate = `${pad(lastUpdated.getDate())}/${pad(lastUpdated.getMonth() + 1)}/${lastUpdated.getFullYear()}`;
   const lastUpdatedTime = `${pad(lastUpdated.getHours())}:${pad(lastUpdated.getMinutes())}`;
 
-  const cycleDaysLeft = daysUntilCycleEnd(1, now);
-  const cycleLabel =
-    cycleDaysLeft === 0
-      ? "hoje"
-      : `em ${cycleDaysLeft} ${cycleDaysLeft === 1 ? "dia" : "dias"}`;
-  const renewalDateLabel = nextRenewalDate(2, now);
+  const faturaDueDays = daysUntilDueDate(FATURA_VENCIMENTO_DIA, now);
+  const faturaDueDateLabel = (() => {
+    const next = new Date(now.getFullYear(), now.getMonth(), FATURA_VENCIMENTO_DIA);
+    if (now.getDate() > FATURA_VENCIMENTO_DIA) next.setMonth(next.getMonth() + 1);
+    return `${String(next.getDate()).padStart(2, "0")}/${String(next.getMonth() + 1).padStart(2, "0")}`;
+  })();
 
 
   function showToast(msg: string) {
@@ -775,23 +785,43 @@ function ResumoConsumo() {
 
 
 
-                <div className="flex flex-wrap items-center gap-2">
-                  <h2 className="text-[15px] font-semibold tracking-wide text-[#1a1a1a]">
+                <div className="flex flex-wrap items-center gap-2 rounded-lg border border-[#660099]/15 bg-[#660099]/8 px-3 py-2">
+                  <h2 className="text-[18px] font-bold tracking-tight text-[#660099]">
                     {baseLine.plan}
                   </h2>
                   {bonusDebito > 0 && (
-                    <span className="inline-flex items-center rounded-full bg-[#16a34a]/15 px-2 py-0.5 text-[10px] font-semibold text-[#15803d] ring-1 ring-[#16a34a]/30 animate-fade-in">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[#16a34a] px-2 py-0.5 text-[11px] font-bold text-white shadow-sm animate-fade-in">
+                      <Check className="h-3 w-3" strokeWidth={3} />
                       +{bonusDebito}GB liberado
                     </span>
                   )}
                 </div>
-                <p className="mt-1 text-sm text-[#5a5a5a]">
-                  Fim do ciclo{" "}
-                  <span suppressHydrationWarning className="font-semibold text-[#1a1a1a]">{cycleLabel}</span>
-                </p>
-                <p className="mt-0.5 text-sm text-[#5a5a5a]">
-                  Próxima renovação:{" "}
-                  <span className="font-semibold text-[#1a1a1a]">{renewalDateLabel}</span>
+
+                <p className="mt-2 flex items-center gap-1.5 text-[13px]">
+                  {faturaEmAtraso ? (
+                    <>
+                      <AlertTriangle className="h-4 w-4 shrink-0 text-[#DC2626]" />
+                      <span className="font-semibold text-[#DC2626]">Fatura em atraso</span>
+                      <span className="text-[#666]">• Pague agora para reativar</span>
+                    </>
+                  ) : faturaDueDays === 0 ? (
+                    <>
+                      <Clock className="h-4 w-4 shrink-0 text-[#DC2626]" />
+                      <span className="font-semibold text-[#DC2626]">Sua fatura vence hoje</span>
+                    </>
+                  ) : faturaDueDays <= 3 ? (
+                    <>
+                      <Clock className="h-4 w-4 shrink-0 text-[#F97316]" />
+                      <span className="font-semibold text-[#F97316]">Fatura próxima do vencimento</span>
+                      <span className="text-[#666]">• Faltam {faturaDueDays} {faturaDueDays === 1 ? "dia" : "dias"}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Check className="h-4 w-4 shrink-0 text-[#16A34A]" />
+                      <span className="font-semibold text-[#16A34A]">Fatura em dia</span>
+                      <span className="text-[#666]">• Vence em {faturaDueDateLabel}</span>
+                    </>
+                  )}
                 </p>
 
                 <ul className="mt-5 -ml-2 space-y-2.5 text-sm">
@@ -1686,12 +1716,20 @@ function ResumoConsumo() {
               <span className="font-semibold text-[#660099]">{formatGB(available)}</span>
             </div>
             <div className="flex justify-between border-b border-[#eee] pb-2">
-              <span className="text-[#666]">Fim do ciclo</span>
-              <span className="font-semibold text-[#660099]">{cycleLabel}</span>
+              <span className="text-[#666]">Vencimento da fatura</span>
+              <span className="font-semibold text-[#660099]">
+                {faturaEmAtraso
+                  ? `Em atraso${diasAtraso > 0 ? ` (${diasAtraso} dias)` : ""}`
+                  : faturaDueDays === 0
+                    ? "Vence hoje"
+                    : faturaDueDateLabel}
+              </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[#666]">Próxima renovação</span>
-              <span className="font-semibold text-[#660099]">{renewalDateLabel}</span>
+              <span className="text-[#666]">Status da fatura</span>
+              <span className={`font-semibold ${faturaEmAtraso || faturaDueDays === 0 ? "text-[#DC2626]" : faturaDueDays <= 3 ? "text-[#F97316]" : "text-[#16A34A]"}`}>
+                {faturaEmAtraso ? "Atrasada" : faturaDueDays === 0 ? "Vence hoje" : faturaDueDays <= 3 ? "Próxima do vencimento" : "Em dia"}
+              </span>
             </div>
           </div>
         </div>
