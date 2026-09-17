@@ -618,6 +618,12 @@ function ResumoConsumo() {
   const rawUsed = +(baseLine.used + simExtra).toFixed(2);
   const liveUsed = Math.min(rawUsed, franquiaTotal + sobrouAnterior);
   const bisUsed = +Math.max(0, liveUsed - franquiaTotal).toFixed(2);
+  const bisAvailable = +Math.max(0, sobrouAnterior - bisUsed).toFixed(2);
+  const bisAvailPct =
+    sobrouAnterior > 0
+      ? Math.max(0, Math.min(100, (bisAvailable / sobrouAnterior) * 100))
+      : 0;
+  const bisAvailPctExact = (Math.round(bisAvailPct * 100) / 100).toFixed(2);
   const usedInFranquia = Math.min(liveUsed, franquiaTotal);
 
   const line: Line = { ...baseLine, used: usedInFranquia, total: franquiaTotal };
@@ -865,6 +871,47 @@ function ResumoConsumo() {
                               transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
                           />
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={icon3dBonus}
+                        alt=""
+                        loading="eager"
+                        decoding="sync"
+                        className="h-10 w-10 shrink-0 object-contain"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
+                          <span className="font-semibold text-[#1a1a1a]">Vivo Bis</span>
+                          <span className="text-[13px]">
+                            <span className="font-bold text-[#660099]">{bisAvailPctExact}%</span>
+                            <span className="text-[#8a8a90]"> - </span>
+                            <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
+                          </span>
+                        </div>
+
+                        <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
+                          <div
+                            className="h-full rounded-full bg-[#7ec832]"
+                            style={{
+                              width: `${bisAvailPct}%`,
+                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+                            }}
+                          />
+                          {bisAvailPct > 0 && (
+                            <div
+                              className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
+                              style={{
+                                left: `calc(${bisAvailPct}% - 6px)`,
+                                boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
+                                transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+                              }}
+                            />
+                          )}
                         </div>
                       </div>
                     </div>
