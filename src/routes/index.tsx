@@ -84,8 +84,7 @@ type LineStatus =
   | "bloqueada_fatura"
   | "bloqueada_pagamento"
   | "reduzida"
-  | "reduzida_pagamento"
-  | "usando_vivobis";
+  | "reduzida_pagamento";
 
 const LINES: Line[] = [
   {
@@ -164,10 +163,8 @@ function tipColor(pct: number) {
 
 function ConsumoRing({
   line,
-  vivoBis = false,
 }: {
   line: Line;
-  vivoBis?: boolean;
 }) {
   const pct = Math.min(100, (line.used / line.total) * 100);
 
@@ -423,13 +420,8 @@ function ConsumoRing({
           {((animPct / 100) * line.total).toFixed(2)}
           <span className="ml-1 text-base font-semibold text-[#1a1a1a]">GB</span>
         </div>
-        {vivoBis && (
-          <div className="mb-1 rounded-full bg-[#660099]/10 px-2.5 py-0.5 text-[10px] font-bold uppercase text-[#660099]">
-            Usando Vivo Bis
-          </div>
-        )}
         <div className="mt-1 text-[11px] text-[#6b6b6b]">
-          {vivoBis ? "do Vivo Bis de " : "consumidos de "}
+          consumidos de{" "}
           <span className="font-bold text-[#660099]">{line.total} GB</span>
         </div>
       </div>
@@ -629,12 +621,6 @@ function ResumoConsumo() {
   const usedInFranquia = Math.min(liveUsed, franquiaTotal);
 
   const line: Line = { ...baseLine, used: usedInFranquia, total: franquiaTotal };
-  const usingVivoBis = simStatus === "usando_vivobis";
-  const simulatedBisTotal = +Math.max(1, sobrouAnterior).toFixed(2);
-  const simulatedBisUsed = +Math.min(simulatedBisTotal, Math.max(1, simulatedBisTotal * 0.35)).toFixed(2);
-  const gaugeLine: Line = usingVivoBis
-    ? { ...line, used: simulatedBisUsed, total: simulatedBisTotal }
-    : line;
   const pct = Math.min(100, (line.used / line.total) * 100);
   const available = +(line.total - line.used).toFixed(2);
   const availPct = Math.round(100 - pct);
@@ -777,7 +763,7 @@ function ResumoConsumo() {
               />
             </button>
             <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-2">
-              <div className="self-center md:-ml-3 md:self-auto"><ConsumoRing line={gaugeLine} vivoBis={usingVivoBis} /></div>
+              <div className="self-center md:-ml-3 md:self-auto"><ConsumoRing line={line} /></div>
 
               <div className="w-full md:w-[340px]">
 
@@ -816,9 +802,9 @@ function ResumoConsumo() {
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
                           <span className="text-[13px]">
-                            <span className="font-bold text-[#660099]">{usingVivoBis ? "100.00" : usedPctExact}%</span>
+                            <span className="font-bold text-[#660099]">{usedPctExact}%</span>
                             <span className="text-[#8a8a90]"> - </span>
-                            <span className="font-bold text-[#1a1a1a]">{usingVivoBis ? line.total.toFixed(2) : line.used.toFixed(2)} GB</span>
+                            <span className="font-bold text-[#1a1a1a]">{line.used.toFixed(2)} GB</span>
                           </span>
                         </div>
 
@@ -826,7 +812,7 @@ function ResumoConsumo() {
                           <div
                             className="h-full rounded-full"
                             style={{
-                              width: `${usingVivoBis ? 100 : usedPct}%`,
+                              width: `${usedPct}%`,
                               background:
                                 "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
                               transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
@@ -835,7 +821,7 @@ function ResumoConsumo() {
                           <div
                             className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
                             style={{
-                              left: `calc(${usingVivoBis ? 100 : Math.max(0, Math.min(100, usedPct))}% - 6px)`,
+                              left: `calc(${Math.max(0, Math.min(100, usedPct))}% - 6px)`,
                               boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
                               transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
@@ -857,9 +843,9 @@ function ResumoConsumo() {
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
                           <span className="text-[13px]">
-                            <span className="font-bold text-[#660099]">{usingVivoBis ? "0.00" : availPctExact}%</span>
+                            <span className="font-bold text-[#660099]">{availPctExact}%</span>
                             <span className="text-[#8a8a90]"> - </span>
-                            <span className="font-bold text-[#1a1a1a]">{usingVivoBis ? "0.00" : available.toFixed(2)} GB</span>
+                            <span className="font-bold text-[#1a1a1a]">{available.toFixed(2)} GB</span>
                           </span>
                         </div>
 
@@ -867,14 +853,14 @@ function ResumoConsumo() {
                           <div
                             className="h-full rounded-full bg-[#660099]"
                             style={{
-                              width: `${usingVivoBis ? 0 : availPct}%`,
+                              width: `${availPct}%`,
                               transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
                           />
                           <div
                             className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
                             style={{
-                              left: `calc(${usingVivoBis ? 0 : Math.max(0, Math.min(100, availPct))}% - 6px)`,
+                              left: `calc(${Math.max(0, Math.min(100, availPct))}% - 6px)`,
                               boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
                               transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
@@ -952,7 +938,6 @@ function ResumoConsumo() {
                   short: "Fatura em atraso • Reduzida 256 Kbps",
                   tone: "#DC2626",
                 },
-                usando_vivobis: { icon: icon3dBonus, label: "Usando Vivo Bis", short: "Usando Vivo Bis", tone: "#660099" },
                 bloqueada_fatura: { icon: statusBloqueadaIcon, label: "Bloqueada por fatura", short: "Bloqueada", tone: "#DC2626" },
                 bloqueada_pagamento: { icon: statusBloqueadaIcon, label: "Bloqueada por pagamento", short: "Bloqueada", tone: "#DC2626" },
               } as const;
@@ -1633,7 +1618,7 @@ function ResumoConsumo() {
         title="Consumo detalhado"
       >
         <div className="flex flex-col items-center gap-4">
-          <ConsumoRing line={gaugeLine} vivoBis={usingVivoBis} />
+          <ConsumoRing line={line} />
           <div className="w-full space-y-2 text-sm">
             <div className="flex justify-between border-b border-[#eee] pb-2">
               <span className="text-[#666]">Plano</span>
@@ -1862,14 +1847,6 @@ function ResumoConsumo() {
             fatura: diasAtraso > 0 ? `Em atraso (${diasAtraso} dias)` : "Em atraso",
             message:
               "Sua fatura venceu e não identificamos o pagamento, por isso a navegação está em velocidade reduzida para 256 Kbps. Assim que o pagamento for confirmado, a velocidade total é restabelecida automaticamente em até 24 horas.",
-          },
-          usando_vivobis: {
-            label: "Usando Vivo Bis",
-            image: icon3dBonus,
-            tone: "#660099",
-            fatura: "Em dia",
-            message:
-              "Sua franquia mensal foi totalmente consumida. Agora sua navegação está usando o saldo Vivo Bis acumulado no ciclo anterior.",
           },
           bloqueada_fatura: {
             label: "Bloqueada por fatura",
@@ -2152,7 +2129,6 @@ function ResumoConsumo() {
                 { key: null, label: "Automático (real)", tone: "#660099", icon: null },
                 { key: "ativa" as LineStatus, label: "Ativa", tone: "#16A34A", icon: statusAtivaIcon },
                 { key: "reduzida" as LineStatus, label: "Velocidade reduzida", tone: "#F97316", icon: statusReduzidaIcon },
-                { key: "usando_vivobis" as LineStatus, label: "Usando Vivo Bis", tone: "#660099", icon: icon3dBonus },
                 { key: "reduzida_pagamento" as LineStatus, label: "Fatura em atraso — 256 Kbps", tone: "#DC2626", icon: statusReduzidaIcon },
                 { key: "bloqueada_fatura" as LineStatus, label: "Bloqueada — fatura", tone: "#DC2626", icon: statusBloqueadaIcon },
                 { key: "bloqueada_pagamento" as LineStatus, label: "Bloqueada — pagamento", tone: "#DC2626", icon: statusBloqueadaIcon },
