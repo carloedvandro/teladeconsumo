@@ -683,12 +683,12 @@ function ResumoConsumo() {
   const lastUpdatedDate = `${pad(lastUpdated.getDate())}/${pad(lastUpdated.getMonth() + 1)}/${lastUpdated.getFullYear()}`;
   const lastUpdatedTime = `${pad(lastUpdated.getHours())}:${pad(lastUpdated.getMinutes())}`;
 
-  const cycleDaysLeft = daysUntilCycleEnd(1, now);
-  const cycleLabel =
-    cycleDaysLeft === 0
-      ? "hoje"
-      : `em ${cycleDaysLeft} ${cycleDaysLeft === 1 ? "dia" : "dias"}`;
-  const renewalDateLabel = nextRenewalDate(2, now);
+  const faturaDueDays = daysUntilDueDate(FATURA_VENCIMENTO_DIA, now);
+  const faturaDueDateLabel = (() => {
+    const next = new Date(now.getFullYear(), now.getMonth(), FATURA_VENCIMENTO_DIA);
+    if (now.getDate() > FATURA_VENCIMENTO_DIA) next.setMonth(next.getMonth() + 1);
+    return `${String(next.getDate()).padStart(2, "0")}/${String(next.getMonth() + 1).padStart(2, "0")}`;
+  })();
 
 
   function showToast(msg: string) {
