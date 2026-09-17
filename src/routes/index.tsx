@@ -787,7 +787,7 @@ function ResumoConsumo() {
                   <h2
                     className="text-[22px] font-black tracking-tight"
                     style={{
-                      backgroundImage: "linear-gradient(90deg, #660099 0%, #9e3bf7 35%, #ff7a18 65%, #7ec832 100%)",
+                      backgroundImage: "linear-gradient(90deg, #660099 0%, #9e3bf7 35%, #ff7a18 65%, #ff007f 100%)",
                       WebkitBackgroundClip: "text",
                       backgroundClip: "text",
                       color: "transparent",
@@ -797,7 +797,7 @@ function ResumoConsumo() {
                     {baseLine.plan}
                   </h2>
                   {bonusDebito > 0 && (
-                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#16a34a] px-2.5 py-1 text-[12px] font-bold text-white shadow-sm animate-fade-in">
+                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[#16a34a] bg-transparent px-2.5 py-1 text-[12px] font-bold text-[#16a34a] animate-fade-in">
                       <Check className="h-3.5 w-3.5" strokeWidth={3} />
                       +{bonusDebito}GB liberado
                     </span>
