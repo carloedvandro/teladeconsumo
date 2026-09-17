@@ -619,11 +619,11 @@ function ResumoConsumo() {
   const liveUsed = Math.min(rawUsed, franquiaTotal + sobrouAnterior);
   const bisUsed = +Math.max(0, liveUsed - franquiaTotal).toFixed(2);
   const bisAvailable = +Math.max(0, sobrouAnterior - bisUsed).toFixed(2);
-  const bisAvailPct =
+  const bisUsedPct =
     sobrouAnterior > 0
-      ? Math.max(0, Math.min(100, (bisAvailable / sobrouAnterior) * 100))
+      ? Math.max(0, Math.min(100, (bisUsed / sobrouAnterior) * 100))
       : 0;
-  const bisAvailPctExact = (Math.round(bisAvailPct * 100) / 100).toFixed(2);
+  const bisUsedPctExact = (Math.round(bisUsedPct * 100) / 100).toFixed(2);
   const usedInFranquia = Math.min(liveUsed, franquiaTotal);
 
   const line: Line = { ...baseLine, used: usedInFranquia, total: franquiaTotal };
@@ -888,7 +888,7 @@ function ResumoConsumo() {
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Vivo Bis</span>
                           <span className="text-[13px]">
-                            <span className="font-bold text-[#660099]">{bisAvailPctExact}%</span>
+                            <span className="font-bold text-[#660099]">{bisUsedPctExact}%</span>
                             <span className="text-[#8a8a90]"> - </span>
                             <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
                           </span>
@@ -896,17 +896,19 @@ function ResumoConsumo() {
 
                         <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
                           <div
-                            className="h-full rounded-full bg-[#7ec832]"
+                            className="h-full rounded-full"
                             style={{
-                              width: `${bisAvailPct}%`,
+                              width: `${bisUsedPct}%`,
+                              background:
+                                "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
                               transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
                           />
-                          {bisAvailPct > 0 && (
+                          {bisUsedPct > 0 && (
                             <div
                               className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
                               style={{
-                                left: `calc(${bisAvailPct}% - 6px)`,
+                                left: `calc(${bisUsedPct}% - 6px)`,
                                 boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
                                 transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                               }}
