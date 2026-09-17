@@ -783,12 +783,21 @@ function ResumoConsumo() {
 
               <div className="w-full md:w-[320px]">
 
-                <div className="flex flex-wrap items-center gap-2.5">
-                  <h2 className="text-[22px] font-extrabold tracking-tight text-[#660099]">
+                <div className="flex items-center gap-2.5 whitespace-nowrap">
+                  <h2
+                    className="text-[22px] font-black tracking-tight"
+                    style={{
+                      backgroundImage: "linear-gradient(90deg, #660099 0%, #9e3bf7 35%, #ff7a18 65%, #7ec832 100%)",
+                      WebkitBackgroundClip: "text",
+                      backgroundClip: "text",
+                      color: "transparent",
+                      textShadow: "0 0 22px rgba(153,51,255,0.35)",
+                    }}
+                  >
                     {baseLine.plan}
                   </h2>
                   {bonusDebito > 0 && (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-[#16a34a] px-2.5 py-1 text-[12px] font-bold text-white shadow-sm animate-fade-in">
+                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#16a34a] px-2.5 py-1 text-[12px] font-bold text-white shadow-sm animate-fade-in">
                       <Check className="h-3.5 w-3.5" strokeWidth={3} />
                       +{bonusDebito}GB liberado
                     </span>
