@@ -785,13 +785,13 @@ function ResumoConsumo() {
 
                 <div className="flex items-center gap-2.5 whitespace-nowrap">
                   <h2
-                    className="text-[22px] font-black tracking-tight"
+                    className="text-[22px] font-bold tracking-tight"
                     style={{
-                      backgroundImage: "linear-gradient(90deg, #660099 0%, #9e3bf7 35%, #ff7a18 65%, #ff007f 100%)",
+                      backgroundImage: "linear-gradient(90deg, #8b5cf6 0%, #660099 30%, #b45309 70%, #171717 100%)",
                       WebkitBackgroundClip: "text",
                       backgroundClip: "text",
                       color: "transparent",
-                      textShadow: "0 0 22px rgba(153,51,255,0.35)",
+                      textShadow: "0 0 22px rgba(102,0,153,0.30)",
                     }}
                   >
                     {baseLine.plan}
