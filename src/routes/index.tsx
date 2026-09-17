@@ -757,7 +757,7 @@ function ResumoConsumo() {
 
           {/* Consumption panel overlay - centered/right like reference */}
           <div
-            className="relative -mt-24 overflow-hidden rounded-md p-3 pb-10 md:absolute md:right-8 md:top-10 md:mx-0 md:mt-0 md:w-[600px] md:translate-y-0 md:px-8 md:py-6 md:pb-9"
+            className="relative -mt-24 overflow-hidden rounded-md p-3 pb-10 md:absolute md:right-8 md:top-5 md:mx-0 md:mt-0 md:w-[600px] md:translate-y-0 md:px-8 md:py-5 md:pb-7"
             style={{
               background: "rgba(255,255,255,0.74)",
               backdropFilter: "blur(6px)",
@@ -778,15 +778,13 @@ function ResumoConsumo() {
                 strokeWidth={2.75}
               />
             </button>
-            <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-2">
+            <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-start md:justify-center md:gap-2">
               <div className="self-center md:-ml-3 md:self-auto"><ConsumoRing line={line} /></div>
 
               <div className="w-full md:w-[320px]">
 
-
-
-                <div className="flex flex-wrap items-center gap-2 rounded-lg border border-[#660099]/15 bg-[#660099]/8 px-3 py-2">
-                  <h2 className="text-[18px] font-bold tracking-tight text-[#660099]">
+                <div className="flex flex-wrap items-baseline gap-2">
+                  <h2 className="text-[22px] font-extrabold tracking-tight text-[#660099]">
                     {baseLine.plan}
                   </h2>
                   {bonusDebito > 0 && (
@@ -797,34 +795,7 @@ function ResumoConsumo() {
                   )}
                 </div>
 
-                <p className="mt-2 flex items-center gap-1.5 text-[13px]">
-                  {faturaEmAtraso ? (
-                    <>
-                      <AlertTriangle className="h-4 w-4 shrink-0 text-[#DC2626]" />
-                      <span className="font-semibold text-[#DC2626]">Fatura em atraso</span>
-                      <span className="text-[#666]">• Pague agora para reativar</span>
-                    </>
-                  ) : faturaDueDays === 0 ? (
-                    <>
-                      <Clock className="h-4 w-4 shrink-0 text-[#DC2626]" />
-                      <span className="font-semibold text-[#DC2626]">Sua fatura vence hoje</span>
-                    </>
-                  ) : faturaDueDays <= 3 ? (
-                    <>
-                      <Clock className="h-4 w-4 shrink-0 text-[#F97316]" />
-                      <span className="font-semibold text-[#F97316]">Fatura próxima do vencimento</span>
-                      <span className="text-[#666]">• Faltam {faturaDueDays} {faturaDueDays === 1 ? "dia" : "dias"}</span>
-                    </>
-                  ) : (
-                    <>
-                      <Check className="h-4 w-4 shrink-0 text-[#16A34A]" />
-                      <span className="font-semibold text-[#16A34A]">Fatura em dia</span>
-                      <span className="text-[#666]">• Vence em {faturaDueDateLabel}</span>
-                    </>
-                  )}
-                </p>
-
-                <ul className="mt-5 -ml-2 space-y-2.5 text-sm">
+                <ul className="mt-4 -ml-2 space-y-2.5 text-sm">
                   <li>
                     <div className="flex items-center gap-2">
                       <img
