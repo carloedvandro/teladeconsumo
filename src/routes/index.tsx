@@ -783,13 +783,13 @@ function ResumoConsumo() {
 
               <div className="w-full md:w-[320px]">
 
-                <div className="flex flex-wrap items-baseline gap-2">
+                <div className="flex flex-wrap items-center gap-2.5">
                   <h2 className="text-[22px] font-extrabold tracking-tight text-[#660099]">
                     {baseLine.plan}
                   </h2>
                   {bonusDebito > 0 && (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-[#16a34a] px-2 py-0.5 text-[11px] font-bold text-white shadow-sm animate-fade-in">
-                      <Check className="h-3 w-3" strokeWidth={3} />
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[#16a34a] px-2.5 py-1 text-[12px] font-bold text-white shadow-sm animate-fade-in">
+                      <Check className="h-3.5 w-3.5" strokeWidth={3} />
                       +{bonusDebito}GB liberado
                     </span>
                   )}
