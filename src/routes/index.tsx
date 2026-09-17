@@ -785,23 +785,43 @@ function ResumoConsumo() {
 
 
 
-                <div className="flex flex-wrap items-center gap-2">
-                  <h2 className="text-[15px] font-semibold tracking-wide text-[#1a1a1a]">
+                <div className="flex flex-wrap items-center gap-2 rounded-lg border border-[#660099]/15 bg-[#660099]/8 px-3 py-2">
+                  <h2 className="text-[18px] font-bold tracking-tight text-[#660099]">
                     {baseLine.plan}
                   </h2>
                   {bonusDebito > 0 && (
-                    <span className="inline-flex items-center rounded-full bg-[#16a34a]/15 px-2 py-0.5 text-[10px] font-semibold text-[#15803d] ring-1 ring-[#16a34a]/30 animate-fade-in">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[#16a34a] px-2 py-0.5 text-[11px] font-bold text-white shadow-sm animate-fade-in">
+                      <Check className="h-3 w-3" strokeWidth={3} />
                       +{bonusDebito}GB liberado
                     </span>
                   )}
                 </div>
-                <p className="mt-1 text-sm text-[#5a5a5a]">
-                  Fim do ciclo{" "}
-                  <span suppressHydrationWarning className="font-semibold text-[#1a1a1a]">{cycleLabel}</span>
-                </p>
-                <p className="mt-0.5 text-sm text-[#5a5a5a]">
-                  Próxima renovação:{" "}
-                  <span className="font-semibold text-[#1a1a1a]">{renewalDateLabel}</span>
+
+                <p className="mt-2 flex items-center gap-1.5 text-[13px]">
+                  {faturaEmAtraso ? (
+                    <>
+                      <AlertTriangle className="h-4 w-4 shrink-0 text-[#DC2626]" />
+                      <span className="font-semibold text-[#DC2626]">Fatura em atraso</span>
+                      <span className="text-[#666]">• Pague agora para reativar</span>
+                    </>
+                  ) : faturaDueDays === 0 ? (
+                    <>
+                      <Clock className="h-4 w-4 shrink-0 text-[#DC2626]" />
+                      <span className="font-semibold text-[#DC2626]">Sua fatura vence hoje</span>
+                    </>
+                  ) : faturaDueDays <= 3 ? (
+                    <>
+                      <Clock className="h-4 w-4 shrink-0 text-[#F97316]" />
+                      <span className="font-semibold text-[#F97316]">Fatura próxima do vencimento</span>
+                      <span className="text-[#666]">• Faltam {faturaDueDays} {faturaDueDays === 1 ? "dia" : "dias"}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Check className="h-4 w-4 shrink-0 text-[#16A34A]" />
+                      <span className="font-semibold text-[#16A34A]">Fatura em dia</span>
+                      <span className="text-[#666]">• Vence em {faturaDueDateLabel}</span>
+                    </>
+                  )}
                 </p>
 
                 <ul className="mt-5 -ml-2 space-y-2.5 text-sm">
