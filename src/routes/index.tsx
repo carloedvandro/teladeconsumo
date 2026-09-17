@@ -127,6 +127,16 @@ function nextRenewalDate(renewalDay = 2, today = new Date()) {
   return `${String(next.getDate()).padStart(2, "0")}/${String(next.getMonth() + 1).padStart(2, "0")}`;
 }
 
+// Calcula dias até o vencimento da fatura (data de corte para atraso).
+function daysUntilDueDate(dueDay = 5, today = new Date()) {
+  const y = today.getFullYear();
+  const m = today.getMonth();
+  const d = today.getDate();
+  const next = d <= dueDay ? new Date(y, m, dueDay) : new Date(y, m + 1, dueDay);
+  const ms = next.getTime() - new Date(y, m, d).getTime();
+  return Math.max(0, Math.round(ms / 86400000));
+}
+
 // Progress arc color: green → yellow → orange → red as it fills toward 100%
 function ringColor(pct: number) {
   if (pct >= 95) return "#ff2a2a"; // red
