@@ -1716,12 +1716,20 @@ function ResumoConsumo() {
               <span className="font-semibold text-[#660099]">{formatGB(available)}</span>
             </div>
             <div className="flex justify-between border-b border-[#eee] pb-2">
-              <span className="text-[#666]">Fim do ciclo</span>
-              <span className="font-semibold text-[#660099]">{cycleLabel}</span>
+              <span className="text-[#666]">Vencimento da fatura</span>
+              <span className="font-semibold text-[#660099]">
+                {faturaEmAtraso
+                  ? `Em atraso${diasAtraso > 0 ? ` (${diasAtraso} dias)` : ""}`
+                  : faturaDueDays === 0
+                    ? "Vence hoje"
+                    : faturaDueDateLabel}
+              </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[#666]">Próxima renovação</span>
-              <span className="font-semibold text-[#660099]">{renewalDateLabel}</span>
+              <span className="text-[#666]">Status da fatura</span>
+              <span className={`font-semibold ${faturaEmAtraso || faturaDueDays === 0 ? "text-[#DC2626]" : faturaDueDays <= 3 ? "text-[#F97316]" : "text-[#16A34A]"}`}>
+                {faturaEmAtraso ? "Atrasada" : faturaDueDays === 0 ? "Vence hoje" : faturaDueDays <= 3 ? "Próxima do vencimento" : "Em dia"}
+              </span>
             </div>
           </div>
         </div>
