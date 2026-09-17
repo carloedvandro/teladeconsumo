@@ -757,7 +757,7 @@ function ResumoConsumo() {
 
           {/* Consumption panel overlay - centered/right like reference */}
           <div
-            className="relative -mt-24 overflow-hidden rounded-md p-3 pb-10 md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[600px] md:-translate-y-1/2 md:px-8 md:py-5 md:pb-7"
+            className="relative -mt-24 overflow-hidden rounded-md p-5 md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[600px] md:-translate-y-1/2 md:p-8"
             style={{
               background: "rgba(255,255,255,0.74)",
               backdropFilter: "blur(6px)",
@@ -779,7 +779,7 @@ function ResumoConsumo() {
               />
             </button>
             <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-start md:justify-center md:gap-2">
-              <div className="self-center md:-ml-3 md:self-auto"><ConsumoRing line={line} /></div>
+              <div className="self-center md:self-auto"><ConsumoRing line={line} /></div>
 
               <div className="w-full md:w-[320px]">
 
