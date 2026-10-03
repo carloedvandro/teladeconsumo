@@ -100,7 +100,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
-  errorComponent: ErrorComponent,
+  // A versão atual do roteador exige um componente de erro com `preload`.
+  errorComponent: Object.assign(ErrorComponent, {
+    preload: () => Promise.resolve(undefined),
+  }),
 });
 
 function RootShell({ children }: { children: ReactNode }) {
