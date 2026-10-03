@@ -634,6 +634,9 @@ function ResumoConsumo() {
       ? Math.max(0, Math.min(100, (bisUsed / sobrouAnterior) * 100))
       : 0;
   const bisUsedPctExact = (Math.round(bisUsedPct * 100) / 100).toFixed(2);
+  // Sobra do Vivo Bis: quanto resta do saldo acumulado trazido do ciclo anterior.
+  const bisRemainPct = Math.max(0, Math.min(100, 100 - bisUsedPct));
+  const bisRemainPctExact = (Math.round(bisRemainPct * 100) / 100).toFixed(2);
   const usedInFranquia = Math.min(liveUsed, franquiaTotal);
 
   const line: Line = { ...baseLine, used: usedInFranquia, total: franquiaTotal };
