@@ -595,10 +595,10 @@ function ResumoConsumo() {
 
   // Real-time consumption simulation:
   // increments live usage every few seconds so the ring updates in tempo real.
-  // Ao atingir 100% da franquia, o excedente é debitado do Smart Bis do mês anterior.
+  // Ao atingir 100% da franquia, o excedente é debitado do Smart + Bis do mês anterior.
   // O ciclo fecha dia 1 e renova dia 2. Até o dia 1 ainda estamos no ciclo
   // que iniciou no dia 2 do mês anterior — então o "mês atual" para efeito
-  // de histórico e Smart Bis é o mês anterior do calendário.
+  // de histórico e Smart + Bis é o mês anterior do calendário.
   const _today = new Date();
   const _cycleAnchor =
     _today.getDate() <= 1
@@ -623,7 +623,7 @@ function ResumoConsumo() {
 
   // Consumo estático — sobe apenas na animação de entrada e para no valor real.
   // No simulador, "Velocidade reduzida" representa a franquia 100% consumida
-  // e o Smart Bis totalmente utilizado, para visualizar o estado final.
+  // e o Smart + Bis totalmente utilizado, para visualizar o estado final.
   const simExtra =
     simStatus === "reduzida"
       ? +(franquiaTotal + sobrouAnterior - baseLine.used).toFixed(2)
@@ -639,7 +639,7 @@ function ResumoConsumo() {
       ? Math.max(0, Math.min(100, (bisUsed / sobrouAnterior) * 100))
       : 0;
   const bisUsedPctExact = (Math.round(bisUsedPct * 100) / 100).toFixed(2);
-  // Sobra do Smart Bis: quanto resta do saldo acumulado trazido do ciclo anterior.
+  // Sobra do Smart + Bis: quanto resta do saldo acumulado trazido do ciclo anterior.
   const bisRemainPct = Math.max(0, Math.min(100, 100 - bisUsedPct));
   const bisRemainPctExact = (Math.round(bisRemainPct * 100) / 100).toFixed(2);
   const usedInFranquia = Math.min(liveUsed, franquiaTotal);
@@ -904,7 +904,7 @@ function ResumoConsumo() {
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Smart Bis</span>
+                          <span className="font-semibold text-[#1a1a1a]">Smart + Bis</span>
                           <span className="text-[13px]">
                             <span className="font-bold text-[#660099]">{bisRemainPctExact}%</span>
                             <span className="text-[#8a8a90]"> - </span>
@@ -939,7 +939,7 @@ function ResumoConsumo() {
                   <li>
                     <div className="flex items-center gap-2">
                       <img
-                        src={icon3dBonus}
+                        src={icon3dDisk}
                         alt=""
                         loading="eager"
                         decoding="sync"
@@ -947,7 +947,7 @@ function ResumoConsumo() {
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Smart Bis</span>
+                          <span className="font-semibold text-[#1a1a1a]">Smart + Bis</span>
                           <span className="text-[13px]">
                             <span className="font-bold text-[#660099]">{bisUsedPctExact}%</span>
                             <span className="text-[#8a8a90]"> - </span>
@@ -1197,7 +1197,7 @@ function ResumoConsumo() {
                   color: historyTab === "vivobis" ? "#660099" : "#7a5a8f",
                 }}
               >
-                Smart Bis
+                Smart + Bis
               </button>
             </div>
 
@@ -1243,7 +1243,7 @@ function ResumoConsumo() {
                 <div className="mb-2 flex items-start justify-between gap-3">
                   <div>
                     <div className="text-sm font-semibold text-[#333]">
-                      Smart Bis · Internet acumulativa
+                      Smart + Bis · Internet acumulativa
                     </div>
                     <div className="text-[11px] leading-snug text-[#888]">
                       A internet que sobra do seu plano fica disponível no mês seguinte, por 30 dias.
@@ -1254,11 +1254,11 @@ function ResumoConsumo() {
 
 
 
-                {/* Visual diagram: como funciona o Smart Bis */}
+                {/* Visual diagram: como funciona o Smart + Bis */}
                 {(() => {
                   const franquia = line.total;
                   // Mostra o ciclo atual → próximo mês, refletindo a franquia
-                  // consumida em tempo real. Se atingir 100%, não sobra Smart Bis
+                  // consumida em tempo real. Se atingir 100%, não sobra Smart + Bis
                   // e o próximo mês fica sem bônus (apenas franquia).
                   const curUsado = Math.min(franquia, line.used);
                   const curSobrou = Math.max(0, franquia - curUsado);
@@ -1355,7 +1355,7 @@ function ResumoConsumo() {
                                   "linear-gradient(90deg,#660099,#8e24aa)",
                               }}
                             >
-                              Smart Bis
+                              Smart + Bis
                             </div>
                           )}
                           <div
@@ -1398,7 +1398,7 @@ function ResumoConsumo() {
                         </div>
                       </div>
                       <div className="mt-2 text-center text-[10px] leading-snug text-[#7a5a8f]">
-                        O que sobrou vira <strong>Smart Bis</strong> e soma à
+                        O que sobrou vira <strong>Smart + Bis</strong> e soma à
                         franquia do mês seguinte por 30 dias.
                       </div>
                     </div>
@@ -1406,13 +1406,13 @@ function ResumoConsumo() {
                 })()}
 
                 <div className="mb-2 text-sm font-semibold text-[#333]">
-                  Histórico Smart Bis
+                  Histórico Smart + Bis
 
                 </div>
                 <ul className="divide-y divide-[#eee]">
                   {(() => {
                     // Projeção do próximo mês baseada no consumo em tempo real.
-                    // Se a franquia atingir 100% neste ciclo, o Smart Bis do
+                    // Se a franquia atingir 100% neste ciclo, o Smart + Bis do
                     // próximo mês fica zerado ("Sem bônus").
                     const franquia = line.total;
                     const projSobrou = Math.max(0, franquia - line.used);
@@ -1427,8 +1427,8 @@ function ResumoConsumo() {
                       : "rgba(126,200,50,0.18)";
                     const color = zerado ? "#888" : "#3d7a12";
                     const tip = zerado
-                      ? "Franquia 100% utilizada — não haverá Smart Bis no próximo mês."
-                      : "Projeção do Smart Bis que será acumulado para o próximo mês.";
+                      ? "Franquia 100% utilizada — não haverá Smart + Bis no próximo mês."
+                      : "Projeção do Smart + Bis que será acumulado para o próximo mês.";
                     return (
                       <li className="flex items-center justify-between gap-2 py-2.5 text-sm">
                         <div className="min-w-0">
@@ -1508,20 +1508,20 @@ function ResumoConsumo() {
                         statusColor = bisRestante > 0 ? "#3d7a12" : "#b34e00";
                         statusTip =
                           bisRestante > 0
-                            ? "O Smart Bis deste mês está ativo e disponível para uso."
-                            : "O Smart Bis deste mês já foi totalmente consumido.";
+                            ? "O Smart + Bis deste mês está ativo e disponível para uso."
+                            : "O Smart + Bis deste mês já foi totalmente consumido.";
                       } else if (bisConsumido >= sobrouAnterior) {
                         statusLabel = "Utilizado";
                         statusBg = "rgba(255,122,24,0.15)";
                         statusColor = "#b34e00";
                         statusTip =
-                          "O Smart Bis deste mês foi totalmente utilizado antes de expirar.";
+                          "O Smart + Bis deste mês foi totalmente utilizado antes de expirar.";
                       } else {
                         statusLabel = "Expirado";
                         statusBg = "rgba(0,0,0,0.05)";
                         statusColor = "#888";
                         statusTip =
-                          "O Smart Bis do mês anterior expirou após 30 dias sem uso completo.";
+                          "O Smart + Bis do mês anterior expirou após 30 dias sem uso completo.";
                       }
 
                       return (
