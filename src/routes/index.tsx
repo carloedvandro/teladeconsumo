@@ -623,7 +623,12 @@ function ResumoConsumo() {
   );
 
   // Consumo estático — sobe apenas na animação de entrada e para no valor real.
-  const simExtra = 0;
+  // No simulador, "Velocidade reduzida" representa a franquia 100% consumida
+  // e o Vivo Bis totalmente utilizado, para visualizar o estado final.
+  const simExtra =
+    simStatus === "reduzida"
+      ? +(franquiaTotal + sobrouAnterior - baseLine.used).toFixed(2)
+      : 0;
 
 
   const rawUsed = +(baseLine.used + simExtra).toFixed(2);
@@ -904,7 +909,7 @@ function ResumoConsumo() {
                           <span className="text-[13px]">
                             <span className="font-bold text-[#660099]">{bisRemainPctExact}%</span>
                             <span className="text-[#8a8a90]"> - </span>
-                            <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
+                            <span className="font-bold text-[#1a1a1a]">{sobrouAnterior.toFixed(2)} GB</span>
                           </span>
                         </div>
 
