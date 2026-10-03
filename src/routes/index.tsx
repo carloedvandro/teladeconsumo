@@ -905,7 +905,7 @@ function ResumoConsumo() {
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Vivo Bis</span>
+                          <span className="font-semibold text-[#1a1a1a]">Smart Bis</span>
                           <span className="text-[13px]">
                             <span className="font-bold text-[#660099]">{bisRemainPctExact}%</span>
                             <span className="text-[#8a8a90]"> - </span>
@@ -915,9 +915,11 @@ function ResumoConsumo() {
 
                         <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
                           <div
-                            className="h-full rounded-full bg-[#660099]"
+                            className="h-full rounded-full"
                             style={{
                               width: `${bisRemainPct}%`,
+                              background:
+                                "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
                               transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
                           />
@@ -938,7 +940,7 @@ function ResumoConsumo() {
                   <li>
                     <div className="flex items-center gap-2">
                       <img
-                        src={icon3dSmartBis}
+                        src={icon3dBonus}
                         alt=""
                         loading="eager"
                         decoding="sync"
@@ -946,7 +948,7 @@ function ResumoConsumo() {
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
+                          <span className="font-semibold text-[#1a1a1a]">Smart Bis</span>
                           <span className="text-[13px]">
                             <span className="font-bold text-[#660099]">{bisUsedPctExact}%</span>
                             <span className="text-[#8a8a90]"> - </span>
