@@ -176,6 +176,7 @@ function tipColor(pct: number) {
 function ConsumptionPieIcon({ percentage }: { percentage: number }) {
   const pct = Math.max(0, Math.min(100, percentage));
   const color = tipColor(pct);
+  const gradientEnd = Math.max(12, pct);
 
   return (
     <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
@@ -190,7 +191,7 @@ function ConsumptionPieIcon({ percentage }: { percentage: number }) {
       <div
         className="absolute inset-0"
         style={{
-          backgroundColor: color,
+          backgroundImage: `linear-gradient(135deg, #7ec832 0%, #f4c20d ${Math.min(48, gradientEnd * 0.55)}%, #ff7a18 ${Math.min(78, gradientEnd * 0.82)}%, ${color} ${gradientEnd}%, ${color} 100%)`,
           WebkitMaskImage: `url(${icon3dPie})`,
           maskImage: `url(${icon3dPie})`,
           WebkitMaskPosition: "center",
@@ -200,7 +201,7 @@ function ConsumptionPieIcon({ percentage }: { percentage: number }) {
           WebkitMaskSize: "contain",
           maskSize: "contain",
           mixBlendMode: "color",
-          transition: "background-color 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+          transition: "background-image 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       />
       <img
@@ -208,8 +209,8 @@ function ConsumptionPieIcon({ percentage }: { percentage: number }) {
         alt=""
         loading="eager"
         decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain opacity-35"
-        style={{ mixBlendMode: "screen" }}
+        className="absolute inset-0 h-full w-full object-contain opacity-45 grayscale"
+        style={{ mixBlendMode: "soft-light" }}
       />
       <span
         className="absolute inset-0 rounded-full opacity-40"
