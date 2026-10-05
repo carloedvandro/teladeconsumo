@@ -923,7 +923,7 @@ function ResumoConsumo() {
                           </span>
                         </div>
 
-                        <BrightDataBar percentage={usedPct} variant="consumption" />
+                        <BrightDataBar percentage={pct} variant="consumption" />
                       </div>
                     </div>
                   </li>
@@ -938,7 +938,7 @@ function ResumoConsumo() {
                           </span>
                         </div>
 
-                        <BrightDataBar percentage={availPct} variant="available" />
+                        <BrightDataBar percentage={100 - pct} variant="available" />
                       </div>
                     </div>
                   </li>
