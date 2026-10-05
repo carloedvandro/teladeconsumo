@@ -896,7 +896,7 @@ function ResumoConsumo() {
                   <li>
                     <div className="flex items-center gap-2">
                       <img
-                        src={icon3dBonus}
+                        src={icon3dPie}
                         alt=""
                         loading="eager"
                         decoding="sync"
@@ -939,7 +939,7 @@ function ResumoConsumo() {
                   <li>
                     <div className="flex items-center gap-2">
                       <img
-                        src={icon3dPie}
+                        src={icon3dDisk}
                         alt=""
                         loading="eager"
                         decoding="sync"
