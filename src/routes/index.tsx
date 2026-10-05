@@ -764,8 +764,9 @@ function ResumoConsumo() {
           />
 
           {/* Consumption panel overlay - centered/right like reference */}
+          <div className="relative -mt-24 md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[600px] md:-translate-y-1/2">
           <div
-            className="relative -mt-24 overflow-hidden rounded-md p-5 md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[600px] md:-translate-y-1/2 md:p-8"
+            className="overflow-hidden rounded-md p-4 md:w-full md:p-6"
             style={{
               background: "rgba(255,255,255,0.74)",
               backdropFilter: "blur(6px)",
@@ -786,7 +787,7 @@ function ResumoConsumo() {
                 strokeWidth={2.75}
               />
             </button>
-            <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-start md:justify-center md:gap-2">
+            <div className="flex flex-col items-stretch gap-3 md:flex-row md:items-start md:justify-center md:gap-2">
               <div className="self-center md:self-auto"><ConsumoRing line={line} /></div>
 
               <div className="w-full pr-3 md:w-[320px] md:pr-4">
@@ -812,7 +813,7 @@ function ResumoConsumo() {
                   )}
                 </div>
 
-                <ul className="mt-4 -ml-2 space-y-2.5 text-sm">
+                <ul className="mt-3 -ml-2 space-y-2 text-sm">
                   <li>
                     <div className="flex items-center gap-2">
                       <img
@@ -820,7 +821,7 @@ function ResumoConsumo() {
                         alt=""
                         loading="eager"
                         decoding="sync"
-                        className="h-10 w-10 shrink-0 object-contain"
+                        className="h-9 w-9 shrink-0 object-contain"
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
@@ -861,7 +862,7 @@ function ResumoConsumo() {
                         alt=""
                         loading="eager"
                         decoding="sync"
-                        className="h-10 w-10 shrink-0 object-contain"
+                        className="h-9 w-9 shrink-0 object-contain"
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
@@ -900,7 +901,7 @@ function ResumoConsumo() {
                         alt=""
                         loading="eager"
                         decoding="sync"
-                        className="h-10 w-10 shrink-0 object-contain"
+                        className="h-9 w-9 shrink-0 object-contain"
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
@@ -943,7 +944,7 @@ function ResumoConsumo() {
                         alt=""
                         loading="eager"
                         decoding="sync"
-                        className="h-10 w-10 shrink-0 object-contain"
+                        className="h-9 w-9 shrink-0 object-contain"
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
@@ -983,10 +984,10 @@ function ResumoConsumo() {
 
 
                 {/* Renovação automática (integrada, sem card) */}
-                <div className="mt-4 flex items-start justify-between gap-4">
+                <div className="mt-3 flex items-start justify-between gap-4">
                   <div className="min-w-0 pt-0.5">
                     <span className="text-sm font-semibold text-[#1a1a1a]">Renovação automática</span>
-                    <div className="mt-2.5 space-y-0.5">
+                    <div className="mt-1.5 space-y-0.5">
                       {autoDebit ? (
                         <div
                           className="text-[11px] font-semibold text-[#660099] transition-all duration-500"
@@ -1024,7 +1025,7 @@ function ResumoConsumo() {
 
                 <button
                   onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
-                  className="mt-4 text-sm font-semibold text-[#660099] hover:underline md:mt-8"
+                  className="mt-3 text-sm font-semibold text-[#660099] hover:underline md:mt-5"
                 >
                   Ver detalhes do seu consumo &gt;
                 </button>
@@ -1065,7 +1066,7 @@ function ResumoConsumo() {
               return (
                 <button
                   onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                  className="mt-3 flex w-full items-center justify-center px-3 text-center text-[10px] font-semibold transition hover:underline md:mt-5 md:text-[13px]"
+                  className="mt-2.5 flex w-full items-center justify-center px-3 text-center text-[10px] font-semibold transition hover:underline md:mt-4 md:text-[13px]"
                   style={{ color: s.tone }}
                 >
                   {statusIcon}
@@ -1080,14 +1081,18 @@ function ResumoConsumo() {
               );
             })()}
 
-            {/* Realtime footer */}
-            <div className="mt-2 flex items-center justify-center gap-1.5 text-[11px] text-[#6b6b6b]">
+          </div>
+
+          {/* Nota em tempo real — fora do painel, embaixo */}
+          <div className="mt-2.5 flex w-full items-center justify-center">
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-white/70 px-3 py-1 text-[11px] text-[#4a4a4a] shadow-sm backdrop-blur-sm">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden>
                 <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#660099" opacity="0.85" />
                 <path d="m9 12 2 2 4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               Os dados são atualizados em tempo real.
             </div>
+          </div>
           </div>
 
 
