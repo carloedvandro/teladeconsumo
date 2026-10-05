@@ -173,6 +173,55 @@ function tipColor(pct: number) {
   return lerpColor("#ff7a18", "#ff2a2a", (p - 80) / 20);
 }
 
+function ConsumptionPieIcon({ percentage }: { percentage: number }) {
+  const pct = Math.max(0, Math.min(100, percentage));
+  const color = tipColor(pct);
+
+  return (
+    <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
+      <img
+        src={icon3dPie}
+        alt=""
+        loading="eager"
+        decoding="sync"
+        className="absolute inset-0 h-full w-full object-contain"
+        style={{ filter: "grayscale(1) contrast(1.08) brightness(0.9)" }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundColor: color,
+          WebkitMaskImage: `url(${icon3dPie})`,
+          maskImage: `url(${icon3dPie})`,
+          WebkitMaskPosition: "center",
+          maskPosition: "center",
+          WebkitMaskRepeat: "no-repeat",
+          maskRepeat: "no-repeat",
+          WebkitMaskSize: "contain",
+          maskSize: "contain",
+          mixBlendMode: "color",
+          transition: "background-color 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
+      />
+      <img
+        src={icon3dPie}
+        alt=""
+        loading="eager"
+        decoding="sync"
+        className="absolute inset-0 h-full w-full object-contain opacity-35"
+        style={{ mixBlendMode: "screen" }}
+      />
+      <span
+        className="absolute inset-0 rounded-full opacity-40"
+        style={{
+          boxShadow: `0 0 9px ${color}`,
+          transition: "box-shadow 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
+      />
+    </div>
+  );
+}
+
 function ConsumoRing({
   line,
 }: {
@@ -818,18 +867,7 @@ function ResumoConsumo() {
                 <ul className="mt-3 -ml-2 space-y-2 text-sm">
                   <li>
                     <div className="flex items-center gap-2">
-                      <img
-                        src={icon3dPie}
-                        alt=""
-                        loading="eager"
-                        decoding="sync"
-                        className="h-9 w-9 shrink-0 object-contain"
-                        style={{
-                          filter: `hue-rotate(${-160 - 1.2 * Math.max(0, Math.min(100, usedPct))}deg)`,
-                          transition:
-                            "filter 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                        }}
-                      />
+                      <ConsumptionPieIcon percentage={usedPct} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
@@ -890,6 +928,15 @@ function ResumoConsumo() {
                               "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                           }}
                         />
+                        <span
+                          className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none text-white"
+                          style={{
+                            textShadow:
+                              "0 1px 2px rgba(50,0,74,0.95), 0 0 3px rgba(50,0,74,0.8)",
+                          }}
+                        >
+                          {Math.round(Math.max(0, Math.min(100, availPct)))}%
+                        </span>
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
