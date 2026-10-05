@@ -919,8 +919,6 @@ function ResumoConsumo() {
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
                           <span className="text-[13px]">
-                            <span className="font-bold text-[#660099]">{usedPctExact}%</span>
-                            <span className="text-[#8a8a90]"> - </span>
                             <span className="font-bold text-[#1a1a1a]">{line.used.toFixed(2)} GB</span>
                           </span>
                         </div>
@@ -936,8 +934,6 @@ function ResumoConsumo() {
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
                           <span className="text-[13px]">
-                            <span className="font-bold text-[#660099]">{availPctExact}%</span>
-                            <span className="text-[#8a8a90]"> - </span>
                             <span className="font-bold text-[#1a1a1a]">{available.toFixed(2)} GB</span>
                           </span>
                         </div>
@@ -953,8 +949,6 @@ function ResumoConsumo() {
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
                           <span className="text-[13px]">
-                            <span className="font-bold text-[#660099]">{bisRemainPctExact}%</span>
-                            <span className="text-[#8a8a90]"> - </span>
                             <span className="font-bold text-[#1a1a1a]">{sobrouAnterior.toFixed(2)} GB</span>
                           </span>
                         </div>
@@ -970,8 +964,6 @@ function ResumoConsumo() {
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
                           <span className="text-[13px]">
-                            <span className="font-bold text-[#660099]">{bisUsedPctExact}%</span>
-                            <span className="text-[#8a8a90]"> - </span>
                             <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
                           </span>
                         </div>
