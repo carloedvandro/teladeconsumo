@@ -259,7 +259,7 @@ function BrightDataBar({
         style={{
           left: `${Math.max(9, Math.min(91, pct))}%`,
           background: markerColor,
-          boxShadow: `0 2px 8px color-mix(in oklab, ${markerColor} 55%, transparent), inset 0 1px 0 color-mix(in oklab, white 50%, transparent)`,
+          boxShadow: `0 2px 8px color-mix(in oklab, ${markerColor} 55%, transparent), inset 0 1px 0 color-mix(in oklab, var(--primary-foreground) 50%, transparent)`,
           transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
         }}
       >
@@ -925,66 +925,13 @@ function ResumoConsumo() {
                           </span>
                         </div>
 
-                        <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
-                          <div
-                            className="h-full rounded-full"
-                            style={{
-                              width: `${usedPct}%`,
-                              background:
-                                "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
-                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                          <div
-                            className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
-                            style={{
-                              left: `calc(${Math.max(0, Math.min(100, usedPct))}% - 6px)`,
-                              boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
-                              transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                        </div>
+                        <BrightDataBar percentage={usedPct} variant="consumption" />
                       </div>
                     </div>
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <div
-                        className="relative h-9 w-9 shrink-0"
-                        aria-hidden="true"
-                      >
-                        {/* Bateria "vazia": versão apagada do ícone, sempre por baixo */}
-                        <img
-                          src={icon3dDisk}
-                          alt=""
-                          loading="eager"
-                          decoding="sync"
-                          className="absolute inset-0 h-full w-full object-contain opacity-[0.16]"
-                          style={{ filter: "grayscale(0.6)" }}
-                        />
-                        {/* Carga restante: revela o ícone de baixo para cima conforme a franquia disponível */}
-                        <img
-                          src={icon3dDisk}
-                          alt=""
-                          loading="eager"
-                          decoding="sync"
-                          className="absolute inset-0 h-full w-full object-contain"
-                          style={{
-                            clipPath: `inset(${100 - Math.max(0, Math.min(100, availPct))}% 0 0 0)`,
-                            transition:
-                              "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                          }}
-                        />
-                        <span
-                          className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none text-white"
-                          style={{
-                            textShadow:
-                              "0 1px 2px rgba(50,0,74,0.95), 0 0 3px rgba(50,0,74,0.8)",
-                          }}
-                        >
-                          {Math.round(Math.max(0, Math.min(100, availPct)))}%
-                        </span>
-                      </div>
+                      <DataBatteryIcon percentage={availPct} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
@@ -995,35 +942,13 @@ function ResumoConsumo() {
                           </span>
                         </div>
 
-                        <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
-                          <div
-                            className="h-full rounded-full bg-[#660099]"
-                            style={{
-                              width: `${availPct}%`,
-                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                          <div
-                            className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
-                            style={{
-                              left: `calc(${Math.max(0, Math.min(100, availPct))}% - 6px)`,
-                              boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
-                              transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                        </div>
+                        <BrightDataBar percentage={availPct} variant="available" />
                       </div>
                     </div>
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <img
-                        src={icon3dPie}
-                        alt=""
-                        loading="eager"
-                        decoding="sync"
-                        className="h-9 w-9 shrink-0 object-contain"
-                      />
+                      <ConsumptionPieIcon percentage={bisRemainPct} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
@@ -1034,39 +959,13 @@ function ResumoConsumo() {
                           </span>
                         </div>
 
-                        <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
-                          <div
-                            className="h-full rounded-full"
-                            style={{
-                              width: `${bisRemainPct}%`,
-                              background:
-                                "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
-                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                          {bisRemainPct > 0 && (
-                            <div
-                              className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
-                              style={{
-                                left: `calc(${bisRemainPct}% - 6px)`,
-                                boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
-                                transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                              }}
-                            />
-                          )}
-                        </div>
+                        <BrightDataBar percentage={bisRemainPct} variant="consumption" />
                       </div>
                     </div>
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <img
-                        src={icon3dDisk}
-                        alt=""
-                        loading="eager"
-                        decoding="sync"
-                        className="h-9 w-9 shrink-0 object-contain"
-                      />
+                      <DataBatteryIcon percentage={bisRemainPct} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
@@ -1077,27 +976,7 @@ function ResumoConsumo() {
                           </span>
                         </div>
 
-                        <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
-                          <div
-                            className="h-full rounded-full"
-                            style={{
-                              width: `${bisUsedPct}%`,
-                              background:
-                                "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
-                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                          {bisUsedPct > 0 && (
-                            <div
-                              className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
-                              style={{
-                                left: `calc(${bisUsedPct}% - 6px)`,
-                                boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
-                                transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                              }}
-                            />
-                          )}
-                        </div>
+                        <BrightDataBar percentage={bisRemainPct} variant="available" />
                       </div>
                     </div>
                   </li>
