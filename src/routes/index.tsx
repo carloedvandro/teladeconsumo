@@ -821,7 +821,7 @@ function ResumoConsumo() {
                         alt=""
                         loading="eager"
                         decoding="sync"
-                        className="h-10 w-10 shrink-0 object-contain"
+                        className="h-9 w-9 shrink-0 object-contain"
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
@@ -862,7 +862,7 @@ function ResumoConsumo() {
                         alt=""
                         loading="eager"
                         decoding="sync"
-                        className="h-10 w-10 shrink-0 object-contain"
+                        className="h-9 w-9 shrink-0 object-contain"
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
@@ -901,7 +901,7 @@ function ResumoConsumo() {
                         alt=""
                         loading="eager"
                         decoding="sync"
-                        className="h-10 w-10 shrink-0 object-contain"
+                        className="h-9 w-9 shrink-0 object-contain"
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
@@ -944,7 +944,7 @@ function ResumoConsumo() {
                         alt=""
                         loading="eager"
                         decoding="sync"
-                        className="h-10 w-10 shrink-0 object-contain"
+                        className="h-9 w-9 shrink-0 object-contain"
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
