@@ -175,8 +175,6 @@ function tipColor(pct: number) {
 
 function ConsumptionPieIcon({ percentage }: { percentage: number }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  const color = tipColor(pct);
-  const gradientEnd = Math.max(12, pct);
 
   return (
     <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
@@ -186,39 +184,87 @@ function ConsumptionPieIcon({ percentage }: { percentage: number }) {
         loading="eager"
         decoding="sync"
         className="absolute inset-0 h-full w-full object-contain"
-        style={{ filter: "grayscale(1) contrast(1.08) brightness(0.9)" }}
-      />
-      <div
-        className="absolute inset-0"
         style={{
-          backgroundImage: `linear-gradient(135deg, #7ec832 0%, #f4c20d ${Math.min(48, gradientEnd * 0.55)}%, #ff7a18 ${Math.min(78, gradientEnd * 0.82)}%, ${color} ${gradientEnd}%, ${color} 100%)`,
-          WebkitMaskImage: `url(${icon3dPie})`,
-          maskImage: `url(${icon3dPie})`,
-          WebkitMaskPosition: "center",
-          maskPosition: "center",
-          WebkitMaskRepeat: "no-repeat",
-          maskRepeat: "no-repeat",
-          WebkitMaskSize: "contain",
-          maskSize: "contain",
-          mixBlendMode: "color",
-          transition: "background-image 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+          filter: "saturate(1.55) contrast(1.08) drop-shadow(0 0 5px color-mix(in oklab, var(--data-purple) 58%, transparent))",
         }}
       />
-      <img
-        src={icon3dPie}
-        alt=""
-        loading="eager"
-        decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain opacity-45 grayscale"
-        style={{ mixBlendMode: "soft-light" }}
-      />
       <span
-        className="absolute inset-0 rounded-full opacity-40"
+        className="absolute inset-0 rounded-full opacity-50"
         style={{
-          boxShadow: `0 0 9px ${color}`,
+          boxShadow: `0 0 ${4 + pct / 14}px color-mix(in oklab, var(--data-purple) 48%, transparent)`,
           transition: "box-shadow 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       />
+    </div>
+  );
+}
+
+function DataBatteryIcon({ percentage }: { percentage: number }) {
+  const pct = Math.max(0, Math.min(100, percentage));
+  return (
+    <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
+      <img
+        src={icon3dDisk}
+        alt=""
+        loading="eager"
+        decoding="sync"
+        className="absolute inset-0 h-full w-full object-contain opacity-20 grayscale"
+      />
+      <img
+        src={icon3dDisk}
+        alt=""
+        loading="eager"
+        decoding="sync"
+        className="absolute inset-0 h-full w-full object-contain"
+        style={{
+          clipPath: `inset(${100 - pct}% 0 0 0)`,
+          filter: "saturate(1.7) brightness(1.12) drop-shadow(0 0 5px color-mix(in oklab, var(--data-magenta) 58%, transparent))",
+          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
+      />
+      <span className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none text-primary-foreground [text-shadow:0_1px_3px_var(--data-purple)]">
+        {Math.round(pct)}%
+      </span>
+    </div>
+  );
+}
+
+function BrightDataBar({
+  percentage,
+  variant,
+}: {
+  percentage: number;
+  variant: "consumption" | "available";
+}) {
+  const pct = Math.max(0, Math.min(100, percentage));
+  const markerColor = variant === "consumption" ? tipColor(pct) : "var(--data-purple)";
+  const fill =
+    variant === "consumption"
+      ? "linear-gradient(90deg,var(--data-green),var(--data-yellow) 45%,var(--data-orange) 72%,var(--data-red))"
+      : "linear-gradient(90deg,var(--data-purple),var(--data-magenta))";
+
+  return (
+    <div className="relative mt-2.5 h-2 w-full rounded-full bg-[var(--data-track)] shadow-inner">
+      <div
+        className="h-full rounded-full"
+        style={{
+          width: `${pct}%`,
+          background: fill,
+          boxShadow: `0 0 8px color-mix(in oklab, ${markerColor} 48%, transparent)`,
+          transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
+      />
+      <span
+        className="absolute top-1/2 min-w-11 -translate-x-1/2 -translate-y-1/2 rounded-full px-2 py-0.5 text-center text-[10px] font-black leading-none text-primary-foreground"
+        style={{
+          left: `${Math.max(9, Math.min(91, pct))}%`,
+          background: markerColor,
+          boxShadow: `0 2px 8px color-mix(in oklab, ${markerColor} 55%, transparent), inset 0 1px 0 color-mix(in oklab, var(--primary-foreground) 50%, transparent)`,
+          transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
+        }}
+      >
+        {pct.toFixed(2)}%
+      </span>
     </div>
   );
 }
@@ -873,185 +919,56 @@ function ResumoConsumo() {
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
                           <span className="text-[13px]">
-                            <span className="font-bold text-[#660099]">{usedPctExact}%</span>
-                            <span className="text-[#8a8a90]"> - </span>
                             <span className="font-bold text-[#1a1a1a]">{line.used.toFixed(2)} GB</span>
                           </span>
                         </div>
 
-                        <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
-                          <div
-                            className="h-full rounded-full"
-                            style={{
-                              width: `${usedPct}%`,
-                              background:
-                                "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
-                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                          <div
-                            className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
-                            style={{
-                              left: `calc(${Math.max(0, Math.min(100, usedPct))}% - 6px)`,
-                              boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
-                              transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                        </div>
+                        <BrightDataBar percentage={pct} variant="consumption" />
                       </div>
                     </div>
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <div
-                        className="relative h-9 w-9 shrink-0"
-                        aria-hidden="true"
-                      >
-                        {/* Bateria "vazia": versão apagada do ícone, sempre por baixo */}
-                        <img
-                          src={icon3dDisk}
-                          alt=""
-                          loading="eager"
-                          decoding="sync"
-                          className="absolute inset-0 h-full w-full object-contain opacity-[0.16]"
-                          style={{ filter: "grayscale(0.6)" }}
-                        />
-                        {/* Carga restante: revela o ícone de baixo para cima conforme a franquia disponível */}
-                        <img
-                          src={icon3dDisk}
-                          alt=""
-                          loading="eager"
-                          decoding="sync"
-                          className="absolute inset-0 h-full w-full object-contain"
-                          style={{
-                            clipPath: `inset(${100 - Math.max(0, Math.min(100, availPct))}% 0 0 0)`,
-                            transition:
-                              "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                          }}
-                        />
-                        <span
-                          className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none text-white"
-                          style={{
-                            textShadow:
-                              "0 1px 2px rgba(50,0,74,0.95), 0 0 3px rgba(50,0,74,0.8)",
-                          }}
-                        >
-                          {Math.round(Math.max(0, Math.min(100, availPct)))}%
-                        </span>
-                      </div>
+                      <DataBatteryIcon percentage={availPct} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
                           <span className="text-[13px]">
-                            <span className="font-bold text-[#660099]">{availPctExact}%</span>
-                            <span className="text-[#8a8a90]"> - </span>
                             <span className="font-bold text-[#1a1a1a]">{available.toFixed(2)} GB</span>
                           </span>
                         </div>
 
-                        <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
-                          <div
-                            className="h-full rounded-full bg-[#660099]"
-                            style={{
-                              width: `${availPct}%`,
-                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                          <div
-                            className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
-                            style={{
-                              left: `calc(${Math.max(0, Math.min(100, availPct))}% - 6px)`,
-                              boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
-                              transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                        </div>
+                        <BrightDataBar percentage={100 - pct} variant="available" />
                       </div>
                     </div>
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <img
-                        src={icon3dPie}
-                        alt=""
-                        loading="eager"
-                        decoding="sync"
-                        className="h-9 w-9 shrink-0 object-contain"
-                      />
+                      <ConsumptionPieIcon percentage={bisRemainPct} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
                           <span className="text-[13px]">
-                            <span className="font-bold text-[#660099]">{bisRemainPctExact}%</span>
-                            <span className="text-[#8a8a90]"> - </span>
                             <span className="font-bold text-[#1a1a1a]">{sobrouAnterior.toFixed(2)} GB</span>
                           </span>
                         </div>
 
-                        <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
-                          <div
-                            className="h-full rounded-full"
-                            style={{
-                              width: `${bisRemainPct}%`,
-                              background:
-                                "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
-                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                          {bisRemainPct > 0 && (
-                            <div
-                              className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
-                              style={{
-                                left: `calc(${bisRemainPct}% - 6px)`,
-                                boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
-                                transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                              }}
-                            />
-                          )}
-                        </div>
+                        <BrightDataBar percentage={bisRemainPct} variant="consumption" />
                       </div>
                     </div>
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <img
-                        src={icon3dDisk}
-                        alt=""
-                        loading="eager"
-                        decoding="sync"
-                        className="h-9 w-9 shrink-0 object-contain"
-                      />
+                      <DataBatteryIcon percentage={bisRemainPct} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
                           <span className="text-[13px]">
-                            <span className="font-bold text-[#660099]">{bisUsedPctExact}%</span>
-                            <span className="text-[#8a8a90]"> - </span>
                             <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
                           </span>
                         </div>
 
-                        <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
-                          <div
-                            className="h-full rounded-full"
-                            style={{
-                              width: `${bisUsedPct}%`,
-                              background:
-                                "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
-                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                          {bisUsedPct > 0 && (
-                            <div
-                              className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
-                              style={{
-                                left: `calc(${bisUsedPct}% - 6px)`,
-                                boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
-                                transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                              }}
-                            />
-                          )}
-                        </div>
+                        <BrightDataBar percentage={bisRemainPct} variant="available" />
                       </div>
                     </div>
                   </li>
