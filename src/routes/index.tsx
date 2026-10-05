@@ -45,6 +45,7 @@ import icon3dBonus from "@/assets/icon-3d-bonus.png";
 import icon3dAlert from "@/assets/icon-3d-alert.png";
 import icon3dPie from "@/assets/icon-3d-pie.png";
 import icon3dDisk from "@/assets/icon-3d-disk.png";
+import icon3dDetails from "@/assets/icon-3d-details.png";
 const familyImg = familyImgAsset.url;
 
 const PRELOAD_ICONS = [
@@ -54,6 +55,7 @@ const PRELOAD_ICONS = [
   icon3dAutorenew,
   icon3dBonus,
   icon3dAlert,
+  icon3dDetails,
 ];
 
 
@@ -993,7 +995,7 @@ function ResumoConsumo() {
                           className="text-[11px] font-semibold text-[#660099] transition-all duration-500"
                           style={{ opacity: 1, transform: 'translateY(0)' }}
                         >
-                          Débito automático ativo
+                          Renova no dia 5 de cada mês
                         </div>
                       ) : (
                         <div className="text-[11px] font-medium text-[#666] transition-all duration-500">
@@ -1025,8 +1027,15 @@ function ResumoConsumo() {
 
                 <button
                   onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
-                  className="mt-3 text-sm font-semibold text-[#660099] hover:underline md:mt-5"
+                  className="-ml-2 mt-3 flex items-center gap-2 text-sm font-semibold text-[#660099] hover:underline md:mt-5"
                 >
+                  <img
+                    src={icon3dDetails}
+                    alt=""
+                    loading="eager"
+                    decoding="sync"
+                    className="h-9 w-9 shrink-0 object-contain"
+                  />
                   Ver detalhes do seu consumo &gt;
                 </button>
               </div>
