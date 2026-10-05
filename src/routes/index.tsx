@@ -1012,10 +1012,10 @@ function ResumoConsumo() {
                     <div className="mt-1.5 space-y-0.5">
                       {autoDebit ? (
                         <div
-                          className="text-[11px] font-semibold text-[#660099] transition-all duration-500"
+                          className="text-[11px] font-semibold text-[#16a34a] transition-all duration-500"
                           style={{ opacity: 1, transform: 'translateY(0)' }}
                         >
-                          Renova no dia 5 de cada mês
+                          Débito automático ativo
                         </div>
                       ) : (
                         <div className="text-[11px] font-medium text-[#666] transition-all duration-500">
