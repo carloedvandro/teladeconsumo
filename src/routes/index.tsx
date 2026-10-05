@@ -859,13 +859,33 @@ function ResumoConsumo() {
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <img
-                        src={icon3dDisk}
-                        alt=""
-                        loading="eager"
-                        decoding="sync"
-                        className="h-9 w-9 shrink-0 object-contain"
-                      />
+                      <div
+                        className="relative h-9 w-9 shrink-0"
+                        aria-hidden="true"
+                      >
+                        {/* Bateria "vazia": versão apagada do ícone, sempre por baixo */}
+                        <img
+                          src={icon3dDisk}
+                          alt=""
+                          loading="eager"
+                          decoding="sync"
+                          className="absolute inset-0 h-full w-full object-contain opacity-[0.16]"
+                          style={{ filter: "grayscale(0.6)" }}
+                        />
+                        {/* Carga restante: revela o ícone de baixo para cima conforme a franquia disponível */}
+                        <img
+                          src={icon3dDisk}
+                          alt=""
+                          loading="eager"
+                          decoding="sync"
+                          className="absolute inset-0 h-full w-full object-contain"
+                          style={{
+                            clipPath: `inset(${100 - Math.max(0, Math.min(100, availPct))}% 0 0 0)`,
+                            transition:
+                              "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+                          }}
+                        />
+                      </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
