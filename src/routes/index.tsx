@@ -787,7 +787,7 @@ function ResumoConsumo() {
                 strokeWidth={2.75}
               />
             </button>
-            <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-start md:justify-center md:gap-2">
+            <div className="flex flex-col items-stretch gap-3 md:flex-row md:items-start md:justify-center md:gap-2">
               <div className="self-center md:self-auto"><ConsumoRing line={line} /></div>
 
               <div className="w-full pr-3 md:w-[320px] md:pr-4">
@@ -813,7 +813,7 @@ function ResumoConsumo() {
                   )}
                 </div>
 
-                <ul className="mt-4 -ml-2 space-y-2.5 text-sm">
+                <ul className="mt-3 -ml-2 space-y-2 text-sm">
                   <li>
                     <div className="flex items-center gap-2">
                       <img
@@ -984,10 +984,10 @@ function ResumoConsumo() {
 
 
                 {/* Renovação automática (integrada, sem card) */}
-                <div className="mt-4 flex items-start justify-between gap-4">
+                <div className="mt-3 flex items-start justify-between gap-4">
                   <div className="min-w-0 pt-0.5">
                     <span className="text-sm font-semibold text-[#1a1a1a]">Renovação automática</span>
-                    <div className="mt-2.5 space-y-0.5">
+                    <div className="mt-1.5 space-y-0.5">
                       {autoDebit ? (
                         <div
                           className="text-[11px] font-semibold text-[#660099] transition-all duration-500"
@@ -1025,7 +1025,7 @@ function ResumoConsumo() {
 
                 <button
                   onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
-                  className="mt-4 text-sm font-semibold text-[#660099] hover:underline md:mt-8"
+                  className="mt-3 text-sm font-semibold text-[#660099] hover:underline md:mt-5"
                 >
                   Ver detalhes do seu consumo &gt;
                 </button>
@@ -1066,7 +1066,7 @@ function ResumoConsumo() {
               return (
                 <button
                   onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                  className="mt-3 flex w-full items-center justify-center px-3 text-center text-[10px] font-semibold transition hover:underline md:mt-5 md:text-[13px]"
+                  className="mt-2.5 flex w-full items-center justify-center px-3 text-center text-[10px] font-semibold transition hover:underline md:mt-4 md:text-[13px]"
                   style={{ color: s.tone }}
                 >
                   {statusIcon}
