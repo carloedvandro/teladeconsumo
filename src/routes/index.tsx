@@ -824,6 +824,11 @@ function ResumoConsumo() {
                         loading="eager"
                         decoding="sync"
                         className="h-9 w-9 shrink-0 object-contain"
+                        style={{
+                          filter: `hue-rotate(${-160 - 1.2 * Math.max(0, Math.min(100, usedPct))}deg)`,
+                          transition:
+                            "filter 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+                        }}
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
