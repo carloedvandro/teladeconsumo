@@ -47,8 +47,6 @@ import icon3dSms from "@/assets/icon-3d-sms.png";
 import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
 import icon3dBonus from "@/assets/icon-3d-bonus.png";
 import icon3dAlert from "@/assets/icon-3d-alert.png";
-import icon3dDisk from "@/assets/icon-3d-disk.png";
-import icon3dDetails from "@/assets/icon-3d-details.png";
 const familyImg = familyImgAsset.url;
 
 const PRELOAD_ICONS = [
@@ -58,7 +56,6 @@ const PRELOAD_ICONS = [
   icon3dAutorenew,
   icon3dBonus,
   icon3dAlert,
-  icon3dDetails,
 ];
 
 
@@ -311,8 +308,8 @@ function ConsumptionMetric({
       <ConsumptionMetricIcon type={icon} />
       <div className="min-w-0 flex-1">
         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-          <span className="truncate text-[13px] font-bold text-foreground">{label}</span>
-          <span className="text-[13px] font-extrabold" style={{ color: percentageColor }}>{pct.toFixed(2)}%</span>
+          <span className="min-w-0 text-[12px] font-bold text-foreground">{label}</span>
+          <span className="shrink-0 text-[12px] font-extrabold" style={{ color: percentageColor }}>{pct.toFixed(2)}%</span>
         </div>
         <div className="mt-2 flex items-center gap-2">
           <BrightDataBar percentage={pct} variant={variant} />
