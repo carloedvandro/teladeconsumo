@@ -18,6 +18,7 @@ import {
   AlertTriangle,
   Mail,
   Unlock,
+  Gift,
   Gauge,
   Copy,
   QrCode,
@@ -165,23 +166,99 @@ function lerpColor(a: string, b: string, t: number) {
   return `rgb(${r}, ${g}, ${bl})`;
 }
 // Tip color interpolated across the full 0-100% spectrum so the arc tip
-// shifts smoothly green → yellow → orange → red as consumption grows.
+// starts in a medium purple and darkens progressively to a strong dark
+// purple at 100%. The easing curve makes it darker sooner (~15%).
 function tipColor(pct: number) {
   const p = Math.min(100, Math.max(0, pct));
-  if (p <= 50) return lerpColor("#62b81c", "#f4c20d", p / 50);
-  if (p <= 80) return lerpColor("#f4c20d", "#ff7a18", (p - 50) / 30);
-  return lerpColor("#ff7a18", "#d10f0f", (p - 80) / 20);
+  const t = Math.pow(p / 100, 0.72);
+  return lerpColor("#b26bf0", "#660099", t);
 }
 
-function ConsumptionPieIcon() {
+// Gradient for the bar fills — stops follow tipColor so the capsule always
+// sits exactly on the tip color of the visible portion.
+const BAR_GRADIENT = `linear-gradient(90deg, ${[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+  .map((i) => `${tipColor(i)} ${i}%`)
+  .join(", ")})`;
+
+function ConsumptionPieIcon({ percentage }: { percentage: number }) {
+  const pct = Math.max(0, Math.min(100, percentage));
+
   return (
-    <img
-      src={icon3dPie}
-      alt=""
-      loading="eager"
-      decoding="sync"
-      className="h-9 w-9 shrink-0 object-contain"
-    />
+    <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
+      <img
+        src={icon3dPie}
+        alt=""
+        loading="eager"
+        decoding="sync"
+        className="absolute inset-0 h-full w-full object-contain"
+        style={{ filter: "saturate(1.55) contrast(1.08)" }}
+      />
+    </div>
+  );
+}
+
+function DataBatteryIcon({ percentage }: { percentage: number }) {
+  const pct = Math.max(0, Math.min(100, percentage));
+  return (
+    <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
+      <img
+        src={icon3dDisk}
+        alt=""
+        loading="eager"
+        decoding="sync"
+        className="absolute inset-0 h-full w-full object-contain opacity-20 grayscale"
+      />
+      <img
+        src={icon3dDisk}
+        alt=""
+        loading="eager"
+        decoding="sync"
+        className="absolute inset-0 h-full w-full object-contain"
+        style={{
+          clipPath: `inset(${100 - pct}% 0 0 0)`,
+          filter: "saturate(1.7) brightness(1.12)",
+          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
+      />
+      <span className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none text-primary-foreground [text-shadow:0_1px_3px_var(--data-purple)]">
+        {Math.round(pct)}%
+      </span>
+    </div>
+  );
+}
+
+function BrightDataBar({
+  percentage,
+  variant,
+}: {
+  percentage: number;
+  variant: "consumption" | "available";
+}) {
+  const pct = Math.max(0, Math.min(100, percentage));
+  const markerColor = tipColor(pct);
+
+  return (
+    <div className="relative mt-2.5 h-4 w-full overflow-hidden rounded-full bg-white shadow-inner">
+      <div
+        className="h-full w-full"
+        style={{
+          background: BAR_GRADIENT,
+          clipPath: `inset(0 ${100 - pct}% 0 0 round 999px)`,
+          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
+      />
+      <span
+        className="absolute top-0 flex h-full min-w-11 -translate-x-1/2 items-center justify-center rounded-full px-2 text-center text-[10px] font-black leading-none text-primary-foreground"
+        style={{
+          left: `${Math.max(9, Math.min(91, pct))}%`,
+          background: markerColor,
+          boxShadow: `0 2px 8px color-mix(in oklab, ${markerColor} 55%, transparent), inset 0 1px 0 color-mix(in oklab, var(--primary-foreground) 50%, transparent)`,
+          transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
+        }}
+      >
+        {pct.toFixed(2)}%
+      </span>
+    </div>
   );
 }
 
@@ -225,15 +302,6 @@ function ConsumoRing({
       color: tipColor((fromPct + toPct) / 2),
     };
   });
-  // Estende o preenchimento sobre as pontas arredondadas do trilho para o
-  // arco colorido chegar até as pontinhas (verde à esquerda, vermelhão no 100%).
-  const CAP_DEG = 6;
-  if (pct > 0) {
-    segments.unshift({
-      d: arcPath(START - CAP_DEG, angleAt(0) + 0.6, r),
-      color: tipColor(0),
-    });
-  }
 
   // Ticks
   const majorTicks = 11; // at 0, 10, 20 ... 100
@@ -257,6 +325,9 @@ function ConsumoRing({
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [pct]);
+  // The colored arc only fills up to the needle position; the rest of the
+  // track stays a translucent white rail.
+  const filledSegments = segments.filter((_, i) => ((i + 1) / STEPS) * 100 <= animPct + 0.5);
   const needleAngle = angleAt(animPct);
   const needleTipY = cy - (r - 8);
   // 3D needle geometry — a slim triangular blade with a separate left/right
@@ -265,16 +336,6 @@ function ConsumoRing({
   const needleLeftPath = `M ${cx - nBaseHalf} ${cy} L ${cx} ${needleTipY} L ${cx} ${cy} Z`;
   const needleRightPath = `M ${cx} ${cy} L ${cx} ${needleTipY} L ${cx + nBaseHalf} ${cy} Z`;
   const needleGlossPath = `M ${cx - 1.2} ${cy - 4} L ${cx} ${needleTipY + 6} L ${cx + 1.2} ${cy - 4} Z`;
-
-  // Fill wedge — the colored arc is clipped to everything between 0% and the
-  // needle position, so the gauge stays white and the pointer "carries" the
-  // green→red scale with it until the full 100% (red).
-  const fillStartDeg = pct > 0 ? START - CAP_DEG : START;
-  const fillEndDeg = angleAt(animPct) + (animPct >= 99.9 ? CAP_DEG : 0);
-  const fillR = r + strokeW / 2 + 2;
-  const fillFrom = polar(fillStartDeg, fillR);
-  const fillTo = polar(fillEndDeg, fillR);
-  const fillWedge = `M ${cx} ${cy} L ${fillFrom.x} ${fillFrom.y} A ${fillR} ${fillR} 0 ${fillEndDeg - fillStartDeg > 180 ? 1 : 0} 1 ${fillTo.x} ${fillTo.y} Z`;
 
   // Consumed tip dot at the end of the actual consumption (also rotated)
   const tipX = cx;
@@ -317,9 +378,6 @@ function ConsumoRing({
           <filter id={`gaugeShadow-${gid}`} x="-50%" y="-50%" width="200%" height="200%">
             <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" floodColor="#000" floodOpacity="0.35" />
           </filter>
-          <clipPath id={`gaugeFill-${gid}`}>
-            <path d={fillWedge} />
-          </clipPath>
           <linearGradient id={`bezelOuter-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#b8b8bf" />
             <stop offset="100%" stopColor="#f4f4f7" />
@@ -339,11 +397,12 @@ function ConsumoRing({
           strokeLinecap="round"
         />
 
-        {/* Background track (recessed) — white base, the pointer carries the color */}
+        {/* Background track — translucent white rail */}
         <path
           d={arcPath(START, START + SWEEP, r)}
           fill="none"
           stroke="#ffffff"
+          strokeOpacity={0.55}
           strokeWidth={strokeW}
           strokeLinecap="round"
         />
@@ -357,29 +416,30 @@ function ConsumoRing({
           opacity={0.55}
         />
 
-        {/* Colored fill — grows with the needle, same green→red scale as the bars */}
-        <g clipPath={`url(#gaugeFill-${gid})`}>
-          {segments.map((s, i) => (
-            <path
-              key={i}
-              d={s.d}
-              fill="none"
-              stroke={s.color}
-              strokeWidth={strokeW}
-              strokeLinecap="butt"
-            />
-          ))}
-
-          {/* Top gloss highlight over the colored fill */}
+        {/* Colored arc — fills only up to the needle, purple→magenta */}
+        {filledSegments.map((s, i) => (
           <path
-            d={arcPath(START, START + SWEEP, r + strokeW / 2 - 2)}
+            key={i}
+            d={s.d}
+            fill="none"
+            stroke={s.color}
+            strokeWidth={strokeW}
+            strokeLinecap={i === 0 || i === filledSegments.length - 1 ? "round" : "butt"}
+            style={{ filter: "saturate(1.15)" }}
+          />
+        ))}
+
+        {/* Top gloss highlight over the filled arc only */}
+        {animPct > 0.5 && (
+          <path
+            d={arcPath(START, angleAt(Math.max(0.5, animPct)), r + strokeW / 2 - 2)}
             fill="none"
             stroke="#ffffff"
             strokeWidth={1.5}
             strokeLinecap="round"
-            opacity={0.35}
+            opacity={0.45}
           />
-        </g>
+        )}
 
         {/* Ticks */}
         {Array.from({ length: minorTicks }).map((_, i) => {
@@ -429,7 +489,7 @@ function ConsumoRing({
           {/* Consumed tip cap (small dot at needle position on arc) */}
           {pct > 0 && (
             <>
-              <circle cx={tipX} cy={tipY} r={strokeW / 2 + 1} fill={tipCol} filter={`url(#gaugeShadow-${gid})`} />
+              <circle cx={tipX} cy={tipY} r={strokeW / 2 + 1} fill={tipCol} />
               <circle cx={tipX} cy={tipY} r={2} fill="#fff" />
             </>
           )}
@@ -628,7 +688,7 @@ function ResumoConsumo() {
   }, []);
 
   const baseLine = LINES[lineIdx];
-  const bonusDebito = autoDebit ? 25 : 0;
+  const bonusDebito = autoDebit ? 20 : 0;
   const franquiaTotal = baseLine.total + bonusDebito;
 
   // Real-time consumption simulation:
@@ -676,6 +736,7 @@ function ResumoConsumo() {
     sobrouAnterior > 0
       ? Math.max(0, Math.min(100, (bisUsed / sobrouAnterior) * 100))
       : 0;
+  const bisUsedPctExact = (Math.round(bisUsedPct * 100) / 100).toFixed(2);
   // Sobra do Smart Mais Bis: quanto resta do saldo acumulado trazido do ciclo anterior.
   const bisRemainPct = Math.max(0, Math.min(100, 100 - bisUsedPct));
   const bisRemainPctExact = (Math.round(bisRemainPct * 100) / 100).toFixed(2);
@@ -829,9 +890,9 @@ function ResumoConsumo() {
 
               <div className="w-full pr-3 md:w-[320px] md:pr-4">
 
-                <div className="flex items-center gap-2.5 whitespace-nowrap">
+                <div className="flex items-center gap-1.5 whitespace-nowrap">
                   <h2
-                    className="text-[22px] font-bold tracking-tight"
+                    className="text-[20px] font-bold tracking-tight"
                     style={{
                       backgroundImage: "linear-gradient(90deg, #8b5cf6 0%, #660099 30%, #b45309 70%, #171717 100%)",
                       WebkitBackgroundClip: "text",
@@ -843,8 +904,8 @@ function ResumoConsumo() {
                     {baseLine.plan}
                   </h2>
                   {bonusDebito > 0 && (
-                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[#16a34a] bg-transparent px-2.5 py-1 text-[12px] font-bold text-[#16a34a] animate-fade-in">
-                      <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                    <span className="mt-[2px] inline-flex shrink-0 items-center gap-1 text-[11px] font-bold text-[#16A34A] animate-fade-in">
+                      <Gift className="h-3.5 w-3.5" strokeWidth={2.6} />
                       +{bonusDebito}GB liberado
                     </span>
                   )}
@@ -853,191 +914,53 @@ function ResumoConsumo() {
                 <ul className="mt-3 -ml-2 space-y-2 text-sm">
                   <li>
                     <div className="flex items-center gap-2">
-                      <ConsumptionPieIcon />
+                      <ConsumptionPieIcon percentage={usedPct} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
                           <span className="text-[13px]">
-                            <span className="font-bold text-[#660099]">{usedPctExact}%</span>
-                            <span className="text-[#8a8a90]"> - </span>
                             <span className="font-bold text-[#1a1a1a]">{line.used.toFixed(2)} GB</span>
                           </span>
                         </div>
 
-                        <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
-                          <div
-                            className="h-full rounded-full"
-                            style={{
-                              width: `${usedPct}%`,
-                              background:
-                                "linear-gradient(90deg,#62b81c 0%,#f4c20d 45%,#ff7a18 75%,#d10f0f 100%)",
-                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                          <div
-                            className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
-                            style={{
-                              left: `calc(${Math.max(0, Math.min(100, usedPct))}% - 6px)`,
-                              boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
-                              transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                        </div>
+                        <BrightDataBar percentage={pct} variant="consumption" />
                       </div>
                     </div>
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <div
-                        className="relative h-9 w-9 shrink-0"
-                        aria-hidden="true"
-                      >
-                        {/* Bateria "vazia": versão apagada do ícone, sempre por baixo */}
-                        <img
-                          src={icon3dDisk}
-                          alt=""
-                          loading="eager"
-                          decoding="sync"
-                          className="absolute inset-0 h-full w-full object-contain opacity-[0.16]"
-                          style={{ filter: "grayscale(0.6)" }}
-                        />
-                        {/* Carga restante: revela o ícone de baixo para cima conforme a franquia disponível */}
-                        <img
-                          src={icon3dDisk}
-                          alt=""
-                          loading="eager"
-                          decoding="sync"
-                          className="absolute inset-0 h-full w-full object-contain"
-                          style={{
-                            clipPath: `inset(${100 - Math.max(0, Math.min(100, availPct))}% 0 0 0)`,
-                            transition:
-                              "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                          }}
-                        />
-                        <span
-                          className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none text-white"
-                          style={{
-                            textShadow:
-                              "0 1px 2px rgba(50,0,74,0.95), 0 0 3px rgba(50,0,74,0.8)",
-                          }}
-                        >
-                          {Math.round(Math.max(0, Math.min(100, availPct)))}%
-                        </span>
-                      </div>
+                      <DataBatteryIcon percentage={availPct} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
                           <span className="text-[13px]">
-                            <span className="font-bold text-[#660099]">{availPctExact}%</span>
-                            <span className="text-[#8a8a90]"> - </span>
                             <span className="font-bold text-[#1a1a1a]">{available.toFixed(2)} GB</span>
                           </span>
                         </div>
 
-                        <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
-                          <div
-                            className="h-full rounded-full bg-[#660099]"
-                            style={{
-                              width: `${availPct}%`,
-                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                          <div
-                            className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
-                            style={{
-                              left: `calc(${Math.max(0, Math.min(100, availPct))}% - 6px)`,
-                              boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
-                              transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                        </div>
+                        <BrightDataBar percentage={100 - pct} variant="available" />
                       </div>
                     </div>
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <img
-                        src={icon3dDisk}
-                        alt=""
-                        loading="eager"
-                        decoding="sync"
-                        className="h-9 w-9 shrink-0 object-contain"
-                      />
+                      <DataBatteryIcon percentage={bisRemainPct} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="text-[13px] font-semibold tracking-tight text-[#1a1a1a]">Disponível Smart Mais Bis</span>
-                          <span className="text-[12px]">
-                            <span className="font-bold text-[#660099]">{bisRemainPctExact}%</span>
-                            <span className="text-[#8a8a90]"> - </span>
+                          <span className="font-semibold text-[#1a1a1a]">Disponível Smart+Bis</span>
+                          <span className="text-[13px]">
                             <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
                           </span>
                         </div>
 
-                        <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
-                          <div
-                            className="h-full rounded-full"
-                            style={{
-                              width: `${bisRemainPct}%`,
-                              background:
-                                "linear-gradient(90deg,#62b81c 0%,#f4c20d 45%,#ff7a18 75%,#d10f0f 100%)",
-                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                          {bisRemainPct > 0 && (
-                            <div
-                              className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
-                              style={{
-                                left: `calc(${bisRemainPct}% - 6px)`,
-                                boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
-                                transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                              }}
-                            />
-                          )}
-                        </div>
+                        <BrightDataBar percentage={bisRemainPct} variant="available" />
                       </div>
                     </div>
                   </li>
                 </ul>
 
 
-                {/* Renovação automática (integrada, sem card) */}
-                <div className="mt-3 flex items-start justify-between gap-4">
-                  <div className="min-w-0 pt-0.5">
-                    <span className="text-sm font-semibold text-[#1a1a1a]">Renovação automática</span>
-                    <div className="mt-1.5 space-y-0.5">
-                      {autoDebit ? (
-                        <div
-                          className="text-[11px] font-semibold text-[#16a34a] transition-all duration-500"
-                          style={{ opacity: 1, transform: 'translateY(0)' }}
-                        >
-                          Débito automático ativo
-                        </div>
-                      ) : (
-                        <div className="text-[11px] font-medium text-[#666] transition-all duration-500">
-                          Ative e ganhe +25GB de bônus
-                        </div>
-                      )}
-
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={autoDebit}
-                    onClick={() => {
-                      openAfterIconsReady(() => setConfirmAutoDebit(true));
-                    }}
-                    className={`relative mt-0.5 inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
-                      autoDebit ? "bg-[#16a34a]" : "bg-[#bfbfbf]"
-                    }`}
-                  >
-                    <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-300 ${
-                        autoDebit ? "translate-x-[18px]" : "translate-x-[2px]"
-                      }`}
-                    />
-                  </button>
-                </div>
+                {/* Débito automático — movido para a largura total do painel */}
 
 
                 <button
@@ -1054,6 +977,40 @@ function ResumoConsumo() {
                   Ver detalhes do seu consumo &gt;
                 </button>
               </div>
+            </div>
+
+            {/* Débito automático — linha de ponta a ponta do painel */}
+            <div
+              className="mt-3 flex items-center justify-between gap-4 rounded-xl px-4 py-2.5"
+              style={{
+                background: "rgba(255,255,255,0.55)",
+                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.45)",
+              }}
+            >
+              <div className="min-w-0">
+                <span className="text-sm font-bold text-[#1a1a1a]">Débito automático</span>
+                <div className="mt-0.5 whitespace-nowrap text-[11px] font-medium leading-tight text-[#2e2e3a]">
+                  Sua mensalidade será descontada automaticamente do saldo da conta na data da renovação.
+                </div>
+              </div>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={autoDebit}
+                aria-label="Débito automático"
+                onClick={() => {
+                  openAfterIconsReady(() => setConfirmAutoDebit(true));
+                }}
+                className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
+                  autoDebit ? "bg-[#16A34A]" : "bg-[#bfbfbf]"
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-300 ${
+                    autoDebit ? "translate-x-[18px]" : "translate-x-[2px]"
+                  }`}
+                />
+              </button>
             </div>
 
             {(() => {
@@ -1105,10 +1062,10 @@ function ResumoConsumo() {
               );
             })()}
 
-            {/* Nota em tempo real — de volta dentro do card, só o textinho com o ícone */}
-            <div className="mt-2.5 flex items-center justify-center gap-1.5 pb-1 text-[12px] font-medium text-[#2b2b2b]">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0">
-                <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#660099" opacity="0.9" />
+            {/* Nota em tempo real — dentro do card, sem fundo */}
+            <div className="mt-2 flex w-full items-center justify-center gap-1.5 px-3 py-1.5 text-[11px] font-medium text-[#2e2e3a]">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0">
+                <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#660099" opacity="0.85" />
                 <path d="m9 12 2 2 4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               Os dados são atualizados em tempo real.
@@ -1116,6 +1073,10 @@ function ResumoConsumo() {
 
           </div>
           </div>
+
+
+
+
         </section>
 
 
@@ -1822,7 +1783,7 @@ function ResumoConsumo() {
             <div className="relative flex items-center gap-3 sm:gap-4">
               <img
                 src={icon3dAutorenew}
-                alt="Renovação automática"
+                alt="Débito automático"
                 width={56}
                 height={56}
                 loading="eager" decoding="sync" fetchPriority="high"
@@ -1830,7 +1791,7 @@ function ResumoConsumo() {
               />
               <div className="min-w-0 flex-1">
                 <h3 className="text-[17px] sm:text-[20px] font-semibold tracking-tight text-[#1a1a1a] leading-tight whitespace-nowrap">
-                  {autoDebit ? "Renovação Automática Ativa" : "Ativar Renovação Automática"}
+                  {autoDebit ? "Débito Automático Ativo" : "Ativar Débito Automático"}
                 </h3>
                 <p className="mt-0.5 text-xs font-medium text-[#660099]/80">
                   {autoDebit ? "Função ativa · não pode ser desativada" : "Função premium SmartVoz"}
@@ -1936,7 +1897,7 @@ function ResumoConsumo() {
                     onClick={() => {
                       setAutoDebit(true);
                       setConfirmAutoDebit(false);
-                      setToast("Renovação automática ativada · +25GB liberados");
+                      setToast("Débito automático ativado · +20GB liberados");
                       setTimeout(() => setToast(null), 3000);
                     }}
                     className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
