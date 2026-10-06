@@ -22,6 +22,10 @@ import {
   Copy,
   QrCode,
   Clock,
+  BarChart3,
+  ArrowUpDown,
+  Database,
+  CreditCard,
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
@@ -43,8 +47,6 @@ import icon3dSms from "@/assets/icon-3d-sms.png";
 import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
 import icon3dBonus from "@/assets/icon-3d-bonus.png";
 import icon3dAlert from "@/assets/icon-3d-alert.png";
-import icon3dDisk from "@/assets/icon-3d-disk.png";
-import icon3dDetails from "@/assets/icon-3d-details.png";
 const familyImg = familyImgAsset.url;
 
 const PRELOAD_ICONS = [
@@ -54,7 +56,6 @@ const PRELOAD_ICONS = [
   icon3dAutorenew,
   icon3dBonus,
   icon3dAlert,
-  icon3dDetails,
 ];
 
 
@@ -232,99 +233,14 @@ function hexToHue(color: string) {
 }
 const ICON_BASE_HUE = 277;
 
-function DataBatteryIcon({
-  percentage,
-  variant,
-  color: colorOverride,
-}: {
-  percentage: number;
-  variant: "consumption" | "available" | "availableFixed";
-  color?: string;
-}) {
-  const pct = Math.max(0, Math.min(100, percentage));
-  const color =
-    colorOverride ??
-    (variant === "consumption"
-      ? tipColor(pct)
-      : variant === "availableFixed"
-        ? "#16a34a"
-        : tipColor(100 - pct));
-  const hueShift = Math.round(hexToHue(color) - ICON_BASE_HUE);
+function ConsumptionMetricIcon({ type }: { type: "usage" | "available" | "bonus" }) {
+  const Icon = type === "usage" ? BarChart3 : type === "available" ? ArrowUpDown : Database;
   return (
-    <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
-      <img
-        src={icon3dDisk}
-        alt=""
-        loading="eager"
-        decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain"
-        style={{ filter: "grayscale(1) opacity(0.28) brightness(1.35)" }}
-      />
-      <div
-        className="absolute inset-0"
-        style={{
-          clipPath: `inset(${100 - pct}% 0 0 0)`,
-          backgroundImage:
-            variant === "consumption"
-              ? "linear-gradient(to top, #16a34a 0%, #4ade80 18%, #a3e635 34%, #facc15 50%, #f59e0b 64%, #f97316 78%, #ef4444 90%, #dc2626 100%)"
-              : color,
-          backgroundColor: variant === "consumption" ? undefined : color,
-          maskImage: `url(${icon3dDisk})`,
-          WebkitMaskImage: `url(${icon3dDisk})`,
-          maskSize: "contain",
-          WebkitMaskSize: "contain",
-          maskPosition: "center",
-          WebkitMaskPosition: "center",
-          maskRepeat: "no-repeat",
-          WebkitMaskRepeat: "no-repeat",
-          filter: "saturate(1.6) brightness(1.12)",
-          transition:
-            "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
-        }}
-      />
-      {/* Gloss layer — adds the shiny "lustro" finish on top of the fill */}
-      <div
-        className="absolute inset-0"
-        style={{
-          clipPath: `inset(${100 - pct}% 0 0 0)`,
-          backgroundImage:
-            "linear-gradient(180deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.18) 30%, rgba(255,255,255,0) 55%, rgba(255,255,255,0.22) 92%, rgba(255,255,255,0.45) 100%)",
-          maskImage: `url(${icon3dDisk})`,
-          WebkitMaskImage: `url(${icon3dDisk})`,
-          maskSize: "contain",
-          WebkitMaskSize: "contain",
-          maskPosition: "center",
-          WebkitMaskPosition: "center",
-          maskRepeat: "no-repeat",
-          WebkitMaskRepeat: "no-repeat",
-          mixBlendMode: "screen",
-          opacity: 0.55,
-          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
-      />
-      <img
-        src={icon3dDisk}
-        alt=""
-        loading="eager"
-        decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain opacity-20 mix-blend-multiply"
-        style={{
-          clipPath: `inset(${100 - pct}% 0 0 0)`,
-          filter: `hue-rotate(${hueShift}deg) saturate(1.3) brightness(1.2)`,
-          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
-      />
-      <span
-        className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none text-primary-foreground"
-        style={{
-          color: pct === 0 ? "var(--muted-foreground)" : undefined,
-          textShadow: pct === 0 ? "none" : `0 1px 3px ${color}`,
-          transition: "color 900ms ease, text-shadow 900ms ease",
-        }}
-      >
-        {Math.round(pct)}%
-      </span>
-    </div>
+    <span className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-consumption-purple text-primary-foreground shadow-[inset_0_1px_2px_color-mix(in_oklab,var(--color-primary-foreground)_70%,transparent),0_3px_8px_color-mix(in_oklab,var(--color-consumption-purple)_35%,transparent)]" aria-hidden="true">
+      <span className="absolute inset-x-1 top-0 h-1/2 rounded-full bg-primary-foreground/20 blur-[2px]" />
+      <Icon className="relative h-6 w-6" strokeWidth={3} />
+      {type === "bonus" && <span className="absolute bottom-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-primary-foreground text-[11px] font-black leading-none text-consumption-purple">+</span>}
+    </span>
   );
 }
 
@@ -344,15 +260,7 @@ function BrightDataBar({
         : tipColor(100 - pct);
 
   return (
-    <div
-      className="relative mt-2.5 h-3.5 w-full rounded-full bg-[var(--data-track)]"
-      style={{
-        // Inner "trilho" (rail) groove — subtle inset depth so the fill and
-        // the white tip knob run inside a recessed track.
-        boxShadow:
-          "inset 0 2px 3px rgba(20, 20, 45, 0.22), inset 0 -1px 2px rgba(255, 255, 255, 0.9), inset 0 0 0 1px rgba(255, 255, 255, 0.45)",
-      }}
-    >
+    <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-consumption-track shadow-inner">
       <div
         className="absolute inset-y-0 left-0 overflow-hidden rounded-full"
         style={{
@@ -376,19 +284,39 @@ function BrightDataBar({
           }}
         />
       </div>
-      {/* White glossy knob riding at the tip of the fill, like the reference */}
-      <div
-        className="absolute top-1/2 h-[18px] w-[18px] rounded-full"
-        style={{
-          left: `${Math.max(4, Math.min(96, pct))}%`,
-          transform: "translate(-50%, -50%)",
-          background: "linear-gradient(180deg,#ffffff 20%,#efeff5 100%)",
-          boxShadow:
-            "0 1px 4px rgba(20, 20, 45, 0.35), inset 0 1px 0 rgba(255,255,255,0.95), 0 0 0 1px rgba(20,20,45,0.06)",
-          transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
-      />
     </div>
+  );
+}
+
+function ConsumptionMetric({
+  icon,
+  label,
+  percentage,
+  amount,
+  variant,
+}: {
+  icon: "usage" | "available" | "bonus";
+  label: string;
+  percentage: number;
+  amount: number;
+  variant: "consumption" | "available" | "bonusAvailable";
+}) {
+  const pct = Math.max(0, Math.min(100, percentage));
+  const percentageColor = pct === 100 ? "var(--destructive)" : "var(--consumption-violet)";
+  return (
+    <li className="flex items-center gap-3 rounded-lg border border-primary-foreground/50 bg-consumption-row px-2.5 py-2 shadow-[inset_0_1px_0_color-mix(in_oklab,var(--color-primary-foreground)_70%,transparent)] backdrop-blur-sm">
+      <ConsumptionMetricIcon type={icon} />
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
+          <span className="min-w-0 text-[12px] font-bold text-foreground">{label}</span>
+          <span className="shrink-0 text-[12px] font-extrabold" style={{ color: percentageColor }}>{pct.toFixed(2)}%</span>
+        </div>
+        <div className="mt-2 flex items-center gap-2">
+          <BrightDataBar percentage={pct} variant={variant} />
+          <span className="shrink-0 text-[14px] font-extrabold text-foreground">{amount.toFixed(2)} <span className="font-semibold text-muted-foreground">GB</span></span>
+        </div>
+      </div>
+    </li>
   );
 }
 
@@ -1034,114 +962,20 @@ function ResumoConsumo() {
                   )}
                 </div>
 
-                <ul className="mt-3 -ml-2 space-y-2 text-sm">
-                  <li>
-                    <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={usedPct} variant="consumption" />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
-                          <span className="flex items-center gap-2 text-[13px]">
-                            <span
-                              className="font-bold"
-                              style={{ color: tipColor(pct), transition: "color 900ms ease" }}
-                            >
-                              {pct.toFixed(2)}%
-                            </span>
-                            <span className="font-light text-[#c9c9c9]">|</span>
-                            <span className="font-bold text-[#1a1a1a]">{line.used.toFixed(2)} GB</span>
-                          </span>
-                        </div>
-
-                        <BrightDataBar percentage={pct} variant="consumption" />
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={availPct} variant="availableFixed" color={PURPLE_ICON} />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
-                          <span className="flex items-center gap-2 text-[13px]">
-                            <span className="font-bold" style={{ color: PURPLE_TEXT }}>
-                              {availPctExact}%
-                            </span>
-                            <span className="font-light text-[#c9c9c9]">|</span>
-                            <span className="font-bold text-[#1a1a1a]">{available.toFixed(2)} GB</span>
-                          </span>
-                        </div>
-
-                        <BrightDataBar percentage={100 - pct} variant="available" />
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={bisRemainPct} variant="available" />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Disponível Smart Mais Bis</span>
-                          <span className="flex items-center gap-2 text-[13px]">
-                            <span
-                              className="font-bold"
-                              style={{ color: tipColor(100 - bisRemainPct), transition: "color 900ms ease" }}
-                            >
-                              {bisRemainPctExact}%
-                            </span>
-                            <span className="font-light text-[#c9c9c9]">|</span>
-                            <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
-                          </span>
-                        </div>
-
-                        <BrightDataBar percentage={bisRemainPct} variant="bonusAvailable" />
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={100 - bisRemainPct} variant="consumption" />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
-                          <span className="flex items-center gap-2 text-[13px]">
-                            <span
-                              className="font-bold"
-                              style={{ color: tipColor(100 - bisRemainPct), transition: "color 900ms ease" }}
-                            >
-                              {(100 - bisRemainPct).toFixed(2)}%
-                            </span>
-                            <span className="font-light text-[#c9c9c9]">|</span>
-                            <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
-                          </span>
-                        </div>
-
-                        <BrightDataBar percentage={100 - bisRemainPct} variant="consumption" />
-                      </div>
-                    </div>
-                  </li>
+                <ul className="mt-3 space-y-2 text-sm">
+                  <ConsumptionMetric icon="usage" label="Meu Consumo" percentage={pct} amount={line.used} variant="consumption" />
+                  <ConsumptionMetric icon="available" label="Disponíveis" percentage={availPct} amount={available} variant="available" />
+                  <ConsumptionMetric icon="bonus" label="Disponível Smart Mais Bis" percentage={bisRemainPct} amount={bisAvailable} variant="bonusAvailable" />
                 </ul>
 
 
-                {/* Renovação automática (integrada, sem card) */}
-                <div className="mt-3 flex items-start justify-between gap-4">
-                  <div className="min-w-0 pt-0.5">
-                    <span className="text-sm font-semibold text-[#1a1a1a]">Renovação automática</span>
-                    <div className="mt-1.5 space-y-0.5">
-                      {autoDebit ? (
-                        <div
-                          className="text-[11px] font-semibold text-[#16a34a] transition-all duration-500"
-                          style={{ opacity: 1, transform: 'translateY(0)' }}
-                        >
-                          Débito automático ativo
-                        </div>
-                      ) : (
-                        <div className="text-[11px] font-medium text-[#666] transition-all duration-500">
-                          Ative e ganhe +25GB de bônus
-                        </div>
-                      )}
-
-                    </div>
+                <div className="mt-2 flex items-center gap-3 rounded-lg border border-primary-foreground/50 bg-consumption-row px-2.5 py-2 shadow-[inset_0_1px_0_color-mix(in_oklab,var(--color-primary-foreground)_70%,transparent)] backdrop-blur-sm">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-consumption-soft bg-primary-foreground/40 text-consumption-violet" aria-hidden="true">
+                    <CreditCard className="h-6 w-6" strokeWidth={2.5} />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <span className="text-sm font-bold text-foreground">Débito automático</span>
+                    <div className="mt-0.5 text-[11px] font-medium text-muted-foreground">Desconto automático do saldo</div>
                   </div>
                   <button
                     type="button"
@@ -1150,19 +984,14 @@ function ResumoConsumo() {
                     onClick={() => {
                       openAfterIconsReady(() => setConfirmAutoDebit(true));
                     }}
-                    className={`relative mt-0.5 inline-flex h-4 w-8 shrink-0 cursor-pointer items-center rounded-full border transition-all duration-300 group ${
-                      autoDebit ? "border-[#16a34a] bg-[#16a34a]" : "border-[#a8a8a8] bg-[#c9c9c9]"
+                    className={`group relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full border transition-all duration-300 ${
+                      autoDebit ? "border-consumption-purple bg-consumption-purple" : "border-border bg-muted"
                     }`}
                   >
                     <span
-                      className={`inline-block h-3 w-3 transform rounded-full transition-transform duration-300 ${
-                        autoDebit ? "translate-x-[18px]" : "translate-x-[2px]"
+                      className={`inline-block h-6 w-6 transform rounded-full bg-primary-foreground transition-transform duration-300 ${
+                        autoDebit ? "translate-x-[21px]" : "translate-x-px"
                       }`}
-                      style={{
-                        background: "linear-gradient(180deg,#ffffff,#f1f1f1)",
-                        boxShadow:
-                          "0 1px 2px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.95), 0 0 0 1px rgba(0,0,0,0.06)",
-                      }}
                     />
                     <span
                       aria-hidden
@@ -1183,16 +1012,10 @@ function ResumoConsumo() {
 
                 <button
                   onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
-                  className="-ml-2 mt-3 flex items-center gap-2 text-sm font-semibold text-[#660099] hover:underline md:mt-5"
+                  className="mt-2 flex h-10 w-full items-center justify-center rounded-lg bg-consumption-soft px-4 text-sm font-bold text-consumption-violet transition-colors hover:bg-accent"
                 >
-                  <img
-                    src={icon3dDetails}
-                    alt=""
-                    loading="eager"
-                    decoding="sync"
-                    className="h-9 w-9 shrink-0 object-contain"
-                  />
-                  Ver detalhes do seu consumo &gt;
+                  <span>Ver detalhes do seu consumo</span>
+                  <ChevronRight className="ml-auto h-4 w-4" strokeWidth={3} aria-hidden="true" />
                 </button>
               </div>
             </div>
