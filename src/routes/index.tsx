@@ -1054,7 +1054,7 @@ function ResumoConsumo() {
                           <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
                           <span className="flex items-center gap-2 text-[13px]">
                             <span className="font-bold" style={{ color: PURPLE_TEXT }}>
-                              {availPct.toFixed(2)}%
+                              {availPctExact}%
                             </span>
                             <span className="font-light text-[#c9c9c9]">|</span>
                             <span className="font-bold text-[#1a1a1a]">{available.toFixed(2)} GB</span>
@@ -1076,7 +1076,7 @@ function ResumoConsumo() {
                               className="font-bold"
                               style={{ color: tipColor(100 - bisRemainPct), transition: "color 900ms ease" }}
                             >
-                              {bisRemainPct.toFixed(2)}%
+                              {bisRemainPctExact}%
                             </span>
                             <span className="font-light text-[#c9c9c9]">|</span>
                             <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
