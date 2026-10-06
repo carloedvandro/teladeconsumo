@@ -280,7 +280,11 @@ function DataBatteryIcon({
       />
       <span
         className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none text-primary-foreground"
-        style={{ textShadow: `0 1px 3px ${color}`, transition: "text-shadow 900ms ease" }}
+        style={{
+          color: pct === 0 ? "var(--muted-foreground)" : undefined,
+          textShadow: pct === 0 ? "none" : `0 1px 3px ${color}`,
+          transition: "color 900ms ease, text-shadow 900ms ease",
+        }}
       >
         {Math.round(pct)}%
       </span>
@@ -300,7 +304,7 @@ function BrightDataBar({
   const fill = variant === "consumption" ? spectrumGradient(false) : markerColor;
 
   return (
-    <div className="relative mt-2.5 h-3.5 w-full rounded-full bg-[var(--data-track)]">
+    <div className="relative mt-2.5 h-4 w-full rounded-full bg-[var(--data-track)]">
       <div
         className="absolute inset-y-0 left-0 rounded-full"
         style={{
