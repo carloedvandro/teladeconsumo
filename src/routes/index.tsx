@@ -168,7 +168,7 @@ function lerpColor(a: string, b: string, t: number) {
 // shifts smoothly purple → magenta, matching the data bars below.
 function tipColor(pct: number) {
   const p = Math.min(100, Math.max(0, pct));
-  return lerpColor("#8a2be2", "#f032d8", p / 100);
+  return lerpColor("#7c3aed", "#ff2fd6", p / 100);
 }
 
 function ConsumptionPieIcon({ percentage }: { percentage: number }) {
@@ -317,6 +317,9 @@ function ConsumoRing({
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [pct]);
+  // The colored arc only fills up to the needle position; the rest of the
+  // track stays a translucent white rail.
+  const filledSegments = segments.filter((_, i) => ((i + 1) / STEPS) * 100 <= animPct + 0.5);
   const needleAngle = angleAt(animPct);
   const needleTipY = cy - (r - 8);
   // 3D needle geometry — a slim triangular blade with a separate left/right
@@ -386,11 +389,12 @@ function ConsumoRing({
           strokeLinecap="round"
         />
 
-        {/* Background track (recessed) */}
+        {/* Background track — translucent white rail */}
         <path
           d={arcPath(START, START + SWEEP, r)}
           fill="none"
-          stroke="#d8d8de"
+          stroke="#ffffff"
+          strokeOpacity={0.55}
           strokeWidth={strokeW}
           strokeLinecap="round"
         />
@@ -404,27 +408,30 @@ function ConsumoRing({
           opacity={0.55}
         />
 
-        {/* Colored arc (full) */}
-        {segments.map((s, i) => (
+        {/* Colored arc — fills only up to the needle, purple→magenta */}
+        {filledSegments.map((s, i) => (
           <path
             key={i}
             d={s.d}
             fill="none"
             stroke={s.color}
             strokeWidth={strokeW}
-            strokeLinecap={i === 0 || i === segments.length - 1 ? "round" : "butt"}
+            strokeLinecap={i === 0 || i === filledSegments.length - 1 ? "round" : "butt"}
+            style={{ filter: `drop-shadow(0 0 5px ${s.color})` }}
           />
         ))}
 
-        {/* Top gloss highlight over colored arc */}
-        <path
-          d={arcPath(START, START + SWEEP, r + strokeW / 2 - 2)}
-          fill="none"
-          stroke="#ffffff"
-          strokeWidth={1.5}
-          strokeLinecap="round"
-          opacity={0.35}
-        />
+        {/* Top gloss highlight over the filled arc only */}
+        {animPct > 0.5 && (
+          <path
+            d={arcPath(START, angleAt(Math.max(0.5, animPct)), r + strokeW / 2 - 2)}
+            fill="none"
+            stroke="#ffffff"
+            strokeWidth={1.5}
+            strokeLinecap="round"
+            opacity={0.45}
+          />
+        )}
 
         {/* Ticks */}
         {Array.from({ length: minorTicks }).map((_, i) => {
