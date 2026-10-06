@@ -180,7 +180,7 @@ function IconTile({ children }: { children: React.ReactNode }) {
       aria-hidden="true"
       className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] text-white"
       style={{
-        background: "linear-gradient(145deg,#a78bfa 0%,#7c3aed 48%,#5b21b6 100%)",
+        background: "linear-gradient(180deg,#3b0764 0%,#5b21b6 45%,#7c3aed 75%,#a78bfa 100%)",
         boxShadow:
           "0 5px 12px -3px rgba(91,33,182,0.5), inset 0 1px 1.5px rgba(255,255,255,0.55), inset 0 -2px 4px rgba(30,0,60,0.35)",
       }}
