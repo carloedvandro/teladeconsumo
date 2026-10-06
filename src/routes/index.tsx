@@ -319,9 +319,9 @@ function ConsumoRing({
       >
         <defs>
           <linearGradient id={`arc-${gid}`} x1="0" y1="1" x2="1" y2="0">
-            <stop offset="0%" stopColor="#5b21b6" />
-            <stop offset="40%" stopColor="#7c3aed" />
-            <stop offset="75%" stopColor="#a855f7" />
+            <stop offset="0%" stopColor="#6d28d9" />
+            <stop offset="45%" stopColor="#9333ea" />
+            <stop offset="75%" stopColor="#c026d3" />
             <stop offset="100%" stopColor="#e879f9" />
           </linearGradient>
           <filter id={`ballShadow-${gid}`} x="-80%" y="-80%" width="260%" height="260%">
@@ -333,10 +333,10 @@ function ConsumoRing({
         <path
           d={fullPath}
           fill="none"
-          stroke="rgba(91,33,182,0.12)"
-          strokeWidth={strokeW + 10}
+          stroke="rgba(109,40,217,0.16)"
+          strokeWidth={strokeW + 8}
           strokeLinecap="round"
-          style={{ filter: "blur(10px)" }}
+          style={{ filter: "blur(8px)" }}
         />
         {/* Trilho */}
         <path d={fullPath} fill="none" stroke="#e3e3ea" strokeWidth={strokeW} strokeLinecap="round" />
@@ -364,7 +364,7 @@ function ConsumoRing({
         {/* Bolinha branca na ponta do consumo */}
         {animPct > 0.05 && (
           <g filter={`url(#ballShadow-${gid})`}>
-            <circle cx={ball.x} cy={ball.y} r={strokeW / 2 + 2} fill="#ffffff" />
+            <circle cx={ball.x} cy={ball.y} r={strokeW / 2 + 3} fill="#ffffff" />
           </g>
         )}
       </svg>
@@ -795,7 +795,7 @@ function ResumoConsumo() {
                       </IconTile>
                       <div className="min-w-0">
                         <div className="text-[13.5px] font-semibold text-[#1a1a1a]">Débito automático</div>
-                        <div className="text-[11.5px] leading-tight text-[#6b6b6b]">Desconto automático do saldo</div>
+                        <div className="whitespace-nowrap text-[11px] leading-tight text-[#6b6b6b]">Desconto automático do saldo</div>
                       </div>
                     </div>
                     <button
