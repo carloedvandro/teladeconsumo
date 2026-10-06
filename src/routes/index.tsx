@@ -981,7 +981,7 @@ function ResumoConsumo() {
 
             {/* Débito automático — linha de ponta a ponta do painel */}
             <div
-              className="mt-3 rounded-xl px-3 py-2.5"
+              className="-mx-4 mt-3 rounded-xl py-2.5 pr-7 pl-2 md:mx-0 md:px-4"
               style={{
                 background: "rgba(255,255,255,0.55)",
                 boxShadow: "inset 0 1px 0 rgba(255,255,255,0.45)",
