@@ -259,6 +259,8 @@ function BrightDataBar({
   );
 }
 
+// Velocímetro circular da arte: anel roxo brilhante de 270°, trilho cinza e
+// bolinha branca na ponta do consumo, com o valor central animando no spin-up.
 function ConsumoRing({
   line,
 }: {
@@ -266,18 +268,14 @@ function ConsumoRing({
 }) {
   const pct = Math.min(100, (line.used / line.total) * 100);
 
-  // Gauge geometry — semicircular speedometer, 240° sweep
-  const size = 228;
+  const size = 240;
   const cx = size / 2;
-  const cy = 150;
-  const r = 105;
-  const strokeW = 14;
-  // Sweep from -120° (left-bottom) through 0° (top) to +120° (right-bottom)
-  const SWEEP = 240;
-  const START = -120; // degrees
+  const cy = size / 2;
+  const r = 96;
+  const strokeW = 20;
+  const SWEEP = 270;
+  const START = -135;
   const angleAt = (percent: number) => START + (percent / 100) * SWEEP;
-
-  // Convert gauge angle (0° = up, clockwise) to xy
   const polar = (deg: number, radius: number) => {
     const rad = (deg * Math.PI) / 180;
     return { x: cx + radius * Math.sin(rad), y: cy - radius * Math.cos(rad) };
@@ -289,23 +287,10 @@ function ConsumoRing({
     return `M ${a.x} ${a.y} A ${radius} ${radius} 0 ${large} 1 ${b.x} ${b.y}`;
   };
 
-  // Full colored arc: green→yellow→orange→red split into many tiny segments
-  const STEPS = 100;
-  const segments = Array.from({ length: STEPS }, (_, i) => {
-    const fromPct = (i / STEPS) * 100;
-    const toPct = ((i + 1) / STEPS) * 100;
-    return {
-      d: arcPath(angleAt(fromPct), angleAt(toPct) + 0.6, r),
-      color: tipColor((fromPct + toPct) / 2),
-    };
-  });
+  const fullPath = arcPath(START, START + SWEEP, r);
+  const arcLen = (SWEEP / 360) * 2 * Math.PI * r;
 
-  // Ticks
-  const majorTicks = 11; // at 0, 10, 20 ... 100
-  const minorTicks = 41; // between majors
-
-  // Needle — starts at 0% and animates up to the real value on mount so the
-  // gauge feels like it's "spinning up" every time the user lands on the page.
+  // Spin-up: bolinha e valor animam de 0 até o consumo real ao montar.
   const [animPct, setAnimPct] = useState(0);
   useEffect(() => {
     setAnimPct(0);
@@ -314,7 +299,6 @@ function ConsumoRing({
     let raf = 0;
     const tick = (now: number) => {
       const t = Math.min(1, (now - start) / duration);
-      // easeOutCubic for a smooth spin-up
       const eased = 1 - Math.pow(1 - t, 3);
       setAnimPct(pct * eased);
       if (t < 1) raf = requestAnimationFrame(tick);
@@ -322,205 +306,88 @@ function ConsumoRing({
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [pct]);
-  const needleAngle = angleAt(animPct);
-  const needleTipY = cy - (r - 8);
-  // 3D needle geometry — a slim triangular blade with a separate left/right
-  // face so we can shade each side to fake volume.
-  const nBaseHalf = 5;
-  const needleLeftPath = `M ${cx - nBaseHalf} ${cy} L ${cx} ${needleTipY} L ${cx} ${cy} Z`;
-  const needleRightPath = `M ${cx} ${cy} L ${cx} ${needleTipY} L ${cx + nBaseHalf} ${cy} Z`;
-  const needleGlossPath = `M ${cx - 1.2} ${cy - 4} L ${cx} ${needleTipY + 6} L ${cx + 1.2} ${cy - 4} Z`;
-
-  // Consumed tip dot at the end of the actual consumption (also rotated)
-  const tipX = cx;
-  const tipY = cy - r;
-  const tipCol = tipColor(pct);
 
   const gid = line.number.replace(/\D/g, "");
+  const ball = polar(angleAt(animPct), r);
 
   return (
-    <div className="relative h-[240px] w-[228px] shrink-0">
+    <div className="relative h-[240px] w-[240px] shrink-0">
       <svg
-        viewBox={`0 0 ${size} 210`}
-        className="absolute left-0 top-0 h-[210px] w-full"
+        viewBox={`0 0 ${size} ${size}`}
+        className="absolute inset-0 h-full w-full"
         style={{ shapeRendering: "geometricPrecision" }}
       >
         <defs>
-          <radialGradient id={`hub-${gid}`} cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#a855f7" />
-            <stop offset="55%" stopColor="#7b1fa2" />
-            <stop offset="100%" stopColor="#4a0072" />
-          </radialGradient>
-          <linearGradient id={`needleLeft-${gid}`} x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#2a0140" />
-            <stop offset="60%" stopColor="#4a0072" />
-            <stop offset="100%" stopColor="#7a1fb8" />
+          <linearGradient id={`arc-${gid}`} x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stopColor="#5b21b6" />
+            <stop offset="40%" stopColor="#7c3aed" />
+            <stop offset="75%" stopColor="#a855f7" />
+            <stop offset="100%" stopColor="#e879f9" />
           </linearGradient>
-          <linearGradient id={`needleRight-${gid}`} x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#a855f7" />
-            <stop offset="55%" stopColor="#7b1fa2" />
-            <stop offset="100%" stopColor="#3a005c" />
-          </linearGradient>
-          <linearGradient id={`needleGloss-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.85" />
-            <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
-          </linearGradient>
-          <radialGradient id={`hubHi-${gid}`} cx="35%" cy="30%" r="60%">
-            <stop offset="0%" stopColor="#e9d5ff" stopOpacity="0.95" />
-            <stop offset="60%" stopColor="#a855f7" stopOpacity="0" />
-          </radialGradient>
-          <filter id={`gaugeShadow-${gid}`} x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" floodColor="#000" floodOpacity="0.35" />
+          <filter id={`ballShadow-${gid}`} x="-80%" y="-80%" width="260%" height="260%">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#4c1d95" floodOpacity="0.45" />
           </filter>
-          <linearGradient id={`bezelOuter-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#b8b8bf" />
-            <stop offset="100%" stopColor="#f4f4f7" />
-          </linearGradient>
-          <linearGradient id={`bezelInner-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#5a5a62" />
-            <stop offset="100%" stopColor="#dcdce2" />
-          </linearGradient>
         </defs>
 
-        {/* 3D bezel — outer highlight ring */}
+        {/* Halo suave sob o anel */}
         <path
-          d={arcPath(START, START + SWEEP, r + strokeW / 2 + 2)}
+          d={fullPath}
           fill="none"
-          stroke={`url(#bezelOuter-${gid})`}
-          strokeWidth={2}
+          stroke="rgba(91,33,182,0.12)"
+          strokeWidth={strokeW + 10}
           strokeLinecap="round"
+          style={{ filter: "blur(10px)" }}
         />
-
-        {/* Background track (recessed) */}
-        <path
-          d={arcPath(START, START + SWEEP, r)}
-          fill="none"
-          stroke="#d8d8de"
-          strokeWidth={strokeW}
-          strokeLinecap="round"
-        />
-        {/* Inner shadow rim inside the arc for depth */}
-        <path
-          d={arcPath(START, START + SWEEP, r - strokeW / 2 - 1)}
-          fill="none"
-          stroke={`url(#bezelInner-${gid})`}
-          strokeWidth={1.5}
-          strokeLinecap="round"
-          opacity={0.55}
-        />
-
-        {/* Colored arc (full) */}
-        {segments.map((s, i) => (
-          <path
-            key={i}
-            d={s.d}
-            fill="none"
-            stroke={s.color}
-            strokeWidth={strokeW}
-            strokeLinecap={i === 0 || i === segments.length - 1 ? "round" : "butt"}
-          />
-        ))}
-
-        {/* Top gloss highlight over colored arc */}
-        <path
-          d={arcPath(START, START + SWEEP, r + strokeW / 2 - 2)}
-          fill="none"
-          stroke="#ffffff"
-          strokeWidth={1.5}
-          strokeLinecap="round"
-          opacity={0.35}
-        />
-
-        {/* Ticks */}
-        {Array.from({ length: minorTicks }).map((_, i) => {
-          const deg = START + (i / (minorTicks - 1)) * SWEEP;
-          const p1 = polar(deg, r - strokeW / 2 - 3);
-          const p2 = polar(deg, r - strokeW / 2 - 9);
-          return (
-            <line
-              key={`m-${i}`}
-              x1={p1.x}
-              y1={p1.y}
-              x2={p2.x}
-              y2={p2.y}
-              stroke="#bdbdc4"
-              strokeWidth={1}
+        {/* Trilho */}
+        <path d={fullPath} fill="none" stroke="#e3e3ea" strokeWidth={strokeW} strokeLinecap="round" />
+        {/* Progresso roxo + brilho interno */}
+        {animPct > 0.2 && (
+          <>
+            <path
+              d={fullPath}
+              fill="none"
+              stroke={`url(#arc-${gid})`}
+              strokeWidth={strokeW}
+              strokeLinecap="round"
+              strokeDasharray={`${(animPct / 100) * arcLen} ${arcLen}`}
             />
-          );
-        })}
-        {Array.from({ length: majorTicks }).map((_, i) => {
-          const deg = START + (i / (majorTicks - 1)) * SWEEP;
-          const p1 = polar(deg, r - strokeW / 2 - 2);
-          const p2 = polar(deg, r - strokeW / 2 - 13);
-          return (
-            <line
-              key={`M-${i}`}
-              x1={p1.x}
-              y1={p1.y}
-              x2={p2.x}
-              y2={p2.y}
-              stroke="#8a8a90"
-              strokeWidth={2}
+            <path
+              d={fullPath}
+              fill="none"
+              stroke="rgba(255,255,255,0.32)"
+              strokeWidth={6}
+              strokeLinecap="round"
+              strokeDasharray={`${(animPct / 100) * arcLen} ${arcLen}`}
             />
-          );
-        })}
-
-        {/* Rotating group: needle + consumed tip dot. Animates smoothly
-            when the consumption percentage changes. */}
-        <g
-          style={{
-            transform: `rotate(${needleAngle}deg)`,
-            transformOrigin: `${cx}px ${cy}px`,
-            transformBox: "view-box",
-            transition: "transform 1800ms cubic-bezier(0.22, 1, 0.36, 1)",
-            willChange: "transform",
-          }}
-        >
-          {/* Consumed tip cap (small dot at needle position on arc) */}
-          {pct > 0 && (
-            <>
-              <circle cx={tipX} cy={tipY} r={strokeW / 2 + 1} fill={tipCol} filter={`url(#gaugeShadow-${gid})`} />
-              <circle cx={tipX} cy={tipY} r={2} fill="#fff" />
-            </>
-          )}
-
-          {/* 3D Needle — two shaded faces + glossy specular strip */}
-          <g filter={`url(#gaugeShadow-${gid})`}>
-            <path d={needleLeftPath} fill={`url(#needleLeft-${gid})`} />
-            <path d={needleRightPath} fill={`url(#needleRight-${gid})`} />
-            {/* central seam highlight to sell the ridge */}
-            <line
-              x1={cx}
-              y1={cy}
-              x2={cx}
-              y2={needleTipY}
-              stroke="#e9d5ff"
-              strokeWidth={0.7}
-              opacity={0.85}
-            />
-            {/* glossy specular on the right face */}
-            <path d={needleGlossPath} fill={`url(#needleGloss-${gid})`} opacity={0.55} />
+          </>
+        )}
+        {/* Bolinha branca na ponta do consumo */}
+        {animPct > 0.05 && (
+          <g filter={`url(#ballShadow-${gid})`}>
+            <circle cx={ball.x} cy={ball.y} r={strokeW / 2 + 2} fill="#ffffff" />
           </g>
-        </g>
-
-        {/* Hub (3D pivot) — layered for depth */}
-        <circle cx={cx} cy={cy} r={15} fill="#1a0033" opacity={0.35} filter={`url(#gaugeShadow-${gid})`} />
-        <circle cx={cx} cy={cy} r={13} fill={`url(#hub-${gid})`} />
-        <circle cx={cx} cy={cy} r={13} fill={`url(#hubHi-${gid})`} />
-        <circle cx={cx} cy={cy} r={6} fill="#2a0140" />
-        <circle cx={cx - 1.5} cy={cy - 1.5} r={1.8} fill="#e9d5ff" opacity={0.95} />
-        <circle cx={cx + 3} cy={cy + 3} r={1.2} fill="#000" opacity={0.35} />
+        )}
       </svg>
 
-      {/* Big value + subtitle — pushed up a bit so it sits above the arc tips. */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-2 flex flex-col items-center">
-        <div className="text-[30px] font-bold leading-none text-[#1a1a1a]">
-          {((animPct / 100) * line.total).toFixed(2)}
-          <span className="ml-1 text-base font-semibold text-[#1a1a1a]">GB</span>
+      {/* Centro: mini gráfico, valor, subtítulo, divisor e porcentagem */}
+      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+        <div aria-hidden className="flex items-end gap-[3px]">
+          <span className="h-[7px] w-[4px] rounded-full bg-[#b7a6f5]" />
+          <span className="h-[11px] w-[4px] rounded-full bg-[#b7a6f5]" />
+          <span className="h-[15px] w-[4px] rounded-full bg-[#8b5cf6]" />
         </div>
-        <div className="mt-1 text-[11px] text-[#6b6b6b]">
-          consumidos de{" "}
-          <span className="font-bold text-[#660099]">{line.total} GB</span>
+        <div className="mt-1.5 flex items-baseline">
+          <span className="text-[34px] font-extrabold leading-none tracking-tight text-[#111827]">
+            {((animPct / 100) * line.total).toFixed(2)}
+          </span>
+          <span className="ml-1 text-[19px] font-bold leading-none text-[#6d28d9]">GB</span>
+        </div>
+        <div className="mt-1.5 text-[11px] text-[#6b6b6b]">
+          consumidos de <span className="font-bold text-[#1a1a1a]">{line.total} GB</span>
+        </div>
+        <div className="mt-2 h-px w-24 bg-[#dcdce4]" />
+        <div className="mt-1.5 text-[20px] font-bold leading-none text-[#6d28d9]">
+          {animPct.toFixed(2)}%
         </div>
       </div>
     </div>
