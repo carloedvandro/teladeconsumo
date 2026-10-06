@@ -904,8 +904,15 @@ function ResumoConsumo() {
                     {baseLine.plan}
                   </h2>
                   {bonusDebito > 0 && (
-                    <span className="mt-[2px] inline-flex shrink-0 items-center gap-0.5 text-[20px] font-bold text-[#16A34A] animate-fade-in">
-                      <Gift className="h-5 w-5" strokeWidth={2.6} />
+                    <span className="mt-[2px] inline-flex shrink-0 items-center gap-1 text-[20px] font-bold text-[#16A34A] animate-fade-in">
+                      <img
+                        src={icon3dGift}
+                        alt=""
+                        width={816}
+                        height={816}
+                        className="h-[18px] w-[18px] object-contain"
+                        style={{ filter: "saturate(1.25)" }}
+                      />
                       +{bonusDebito}GB liberado
                     </span>
                   )}
