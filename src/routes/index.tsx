@@ -165,11 +165,30 @@ function lerpColor(a: string, b: string, t: number) {
 }
 // Tip color interpolated across the full 0-100% spectrum so the arc tip
 // shifts smoothly green → yellow → orange → red as consumption grows.
+// Multi-stop spectrum shared by the gauge and the bars: green → lime →
+// yellow → amber → orange → red-orange → red.
+const SPECTRUM: [number, string][] = [
+  [0, "#16a34a"],
+  [18, "#4ade80"],
+  [34, "#a3e635"],
+  [50, "#facc15"],
+  [64, "#f59e0b"],
+  [78, "#f97316"],
+  [90, "#ef4444"],
+  [100, "#dc2626"],
+];
+const spectrumGradient = (reverse = false) =>
+  `linear-gradient(90deg,${SPECTRUM.map(([p, c]) => `${c} ${reverse ? 100 - p : p}%`)
+    .sort((a, b) => parseFloat(a.split(" ")[1]) - parseFloat(b.split(" ")[1]))
+    .join(",")})`;
 function tipColor(pct: number) {
   const p = Math.min(100, Math.max(0, pct));
-  if (p <= 50) return lerpColor("#7ec832", "#f4c20d", p / 50);
-  if (p <= 80) return lerpColor("#f4c20d", "#ff7a18", (p - 50) / 30);
-  return lerpColor("#ff7a18", "#ff2a2a", (p - 80) / 20);
+  for (let i = 1; i < SPECTRUM.length; i++) {
+    const [p1, c1] = SPECTRUM[i];
+    const [p0, c0] = SPECTRUM[i - 1];
+    if (p <= p1) return lerpColor(c0, c1, (p - p0) / (p1 - p0));
+  }
+  return SPECTRUM[SPECTRUM.length - 1][1];
 }
 
 function DataBatteryIcon({ percentage }: { percentage: number }) {
@@ -214,7 +233,9 @@ function BrightDataBar({
   // Solid color reflecting the state: consumption goes green→red as it fills;
   // available is green when full and turns red as it empties.
   const markerColor = variant === "consumption" ? tipColor(pct) : tipColor(100 - pct);
-  const fill = markerColor;
+  // Spectrum is pinned to the full track width, so the visible fill shows
+  // every color up to the current percentage (like the gauge arc).
+  const fill = spectrumGradient(variant === "available");
 
   return (
     <div className="relative mt-2.5 h-2 w-full rounded-full bg-[var(--data-track)] shadow-inner">
@@ -222,7 +243,9 @@ function BrightDataBar({
         className="absolute inset-y-0 left-0 rounded-full"
         style={{
           width: `${pct}%`,
-          background: fill,
+          backgroundImage: fill,
+          backgroundSize: `${pct > 0 ? (100 / pct) * 100 : 100}% 100%`,
+          backgroundRepeat: "no-repeat",
           boxShadow: `0 0 8px color-mix(in oklab, ${markerColor} 48%, transparent)`,
           transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
         }}
