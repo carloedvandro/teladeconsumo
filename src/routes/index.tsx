@@ -996,7 +996,7 @@ function ResumoConsumo() {
                 onClick={() => {
                   openAfterIconsReady(() => setConfirmAutoDebit(true));
                 }}
-                className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 md:order-3 ${
+                className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
                   autoDebit ? "bg-[#16A34A]" : "bg-[#bfbfbf]"
                 }`}
               >
@@ -1006,8 +1006,8 @@ function ResumoConsumo() {
                   }`}
                 />
               </button>
-              <div className="min-w-0 w-full md:order-2 md:w-auto">
-                <div className="text-[11px] font-medium leading-snug text-[#2e2e3a] md:whitespace-nowrap md:leading-tight">
+              <div className="min-w-0 w-full">
+                <div className="mt-0.5 text-[11px] font-medium leading-snug text-[#2e2e3a] md:whitespace-nowrap md:leading-tight">
                   Sua mensalidade será descontada automaticamente do saldo da conta na data da renovação.
                 </div>
               </div>
