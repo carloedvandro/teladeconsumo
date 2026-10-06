@@ -1066,7 +1066,6 @@ function ResumoConsumo() {
                       style={{ boxShadow: "0 0 0 3px rgba(255,255,255,0.7)" }}
                     />
                   </button>
-                  </button>
                 </div>
 
 
