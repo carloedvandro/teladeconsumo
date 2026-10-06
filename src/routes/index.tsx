@@ -890,7 +890,7 @@ function ResumoConsumo() {
 
               <div className="w-full pr-3 md:w-[320px] md:pr-4">
 
-                <div className="flex items-center gap-1.5 whitespace-nowrap">
+                <div className="flex items-center gap-1 whitespace-nowrap">
                   <h2
                     className="text-[20px] font-bold tracking-tight"
                     style={{
@@ -904,8 +904,8 @@ function ResumoConsumo() {
                     {baseLine.plan}
                   </h2>
                   {bonusDebito > 0 && (
-                    <span className="mt-[2px] inline-flex shrink-0 items-center gap-1 text-[11px] font-bold text-[#16A34A] animate-fade-in">
-                      <Gift className="h-3.5 w-3.5" strokeWidth={2.6} />
+                    <span className="mt-[1px] inline-flex shrink-0 items-center gap-0.5 text-[11px] font-bold text-[#16A34A] animate-fade-in">
+                      <Gift className="h-5 w-5 shrink-0" strokeWidth={2.4} />
                       +{bonusDebito}GB liberado
                     </span>
                   )}
@@ -981,33 +981,35 @@ function ResumoConsumo() {
 
             {/* Débito automático — linha de ponta a ponta do painel */}
             <div
-              className="flex flex-wrap items-center justify-between gap-x-4 gap-y-0.5 rounded-xl px-4 py-2.5"
+              className="-mx-4 mt-3 rounded-xl py-2.5 pr-7 pl-2 md:mx-0 md:px-4"
               style={{
                 background: "rgba(255,255,255,0.55)",
                 boxShadow: "inset 0 1px 0 rgba(255,255,255,0.45)",
               }}
             >
-              <span className="text-sm font-bold text-[#1a1a1a]">Débito automático</span>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={autoDebit}
-                aria-label="Débito automático"
-                onClick={() => {
-                  openAfterIconsReady(() => setConfirmAutoDebit(true));
-                }}
-                className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
-                  autoDebit ? "bg-[#16A34A]" : "bg-[#bfbfbf]"
-                }`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-300 ${
-                    autoDebit ? "translate-x-[18px]" : "translate-x-[2px]"
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-sm font-bold text-[#1a1a1a]">Débito automático</span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={autoDebit}
+                  aria-label="Débito automático"
+                  onClick={() => {
+                    openAfterIconsReady(() => setConfirmAutoDebit(true));
+                  }}
+                  className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
+                    autoDebit ? "bg-[#16A34A]" : "bg-[#bfbfbf]"
                   }`}
-                />
-              </button>
-              <div className="min-w-0 w-full">
-                <div className="mt-0.5 text-[11px] font-medium leading-snug text-[#2e2e3a] md:whitespace-nowrap md:leading-tight">
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-300 ${
+                      autoDebit ? "translate-x-[18px]" : "translate-x-[2px]"
+                    }`}
+                  />
+                </button>
+              </div>
+              <div className="min-w-0">
+                <div className="text-[11px] font-medium leading-snug text-[#2e2e3a] md:whitespace-nowrap md:leading-tight">
                   Sua mensalidade será descontada automaticamente do saldo da conta na data da renovação.
                 </div>
               </div>
