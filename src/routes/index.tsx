@@ -165,12 +165,10 @@ function lerpColor(a: string, b: string, t: number) {
   return `rgb(${r}, ${g}, ${bl})`;
 }
 // Tip color interpolated across the full 0-100% spectrum so the arc tip
-// shifts smoothly green → yellow → orange → red as consumption grows.
+// shifts smoothly purple → magenta, matching the data bars below.
 function tipColor(pct: number) {
   const p = Math.min(100, Math.max(0, pct));
-  if (p <= 50) return lerpColor("#7ec832", "#f4c20d", p / 50);
-  if (p <= 80) return lerpColor("#f4c20d", "#ff7a18", (p - 50) / 30);
-  return lerpColor("#ff7a18", "#ff2a2a", (p - 80) / 20);
+  return lerpColor("#8a2be2", "#f032d8", p / 100);
 }
 
 function ConsumptionPieIcon({ percentage }: { percentage: number }) {
@@ -231,7 +229,7 @@ function BrightDataBar({
   const markerColor = "var(--data-purple)";
 
   return (
-    <div className="relative mt-2.5 h-2 w-full rounded-full bg-white shadow-inner">
+    <div className="relative mt-2.5 h-4 w-full rounded-full bg-white shadow-inner">
       <div
         className="h-full rounded-full"
         style={{
@@ -242,7 +240,7 @@ function BrightDataBar({
         }}
       />
       <span
-        className="absolute top-1/2 min-w-11 -translate-x-1/2 -translate-y-1/2 rounded-full px-2 py-0.5 text-center text-[10px] font-black leading-none text-primary-foreground"
+        className="absolute top-0 flex h-full min-w-11 -translate-x-1/2 items-center justify-center rounded-full px-2 text-center text-[10px] font-black leading-none text-primary-foreground"
         style={{
           left: `${Math.max(9, Math.min(91, pct))}%`,
           background: markerColor,
@@ -1056,8 +1054,8 @@ function ResumoConsumo() {
               );
             })()}
 
-            {/* Nota em tempo real — dentro do card */}
-            <div className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-md bg-white/70 px-3 py-1.5 text-[11px] text-[#4a4a4a] backdrop-blur-sm">
+            {/* Nota em tempo real — dentro do card, sem fundo */}
+            <div className="mt-2 flex w-full items-center justify-center gap-1.5 px-3 py-1.5 text-[11px] font-medium text-[#2e2e3a]">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0">
                 <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#660099" opacity="0.85" />
                 <path d="m9 12 2 2 4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
