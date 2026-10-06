@@ -981,18 +981,13 @@ function ResumoConsumo() {
 
             {/* Débito automático — linha de ponta a ponta do painel */}
             <div
-              className="mt-3 flex items-center justify-between gap-4 rounded-xl px-4 py-2.5"
+              className="flex flex-wrap items-center justify-between gap-x-4 gap-y-0.5 rounded-xl px-4 py-2.5"
               style={{
                 background: "rgba(255,255,255,0.55)",
                 boxShadow: "inset 0 1px 0 rgba(255,255,255,0.45)",
               }}
             >
-              <div className="min-w-0">
-                <span className="text-sm font-bold text-[#1a1a1a]">Débito automático</span>
-                <div className="mt-0.5 text-[11px] font-medium leading-snug text-[#2e2e3a] md:whitespace-nowrap md:leading-tight">
-                  Sua mensalidade será descontada automaticamente do saldo da conta na data da renovação.
-                </div>
-              </div>
+              <span className="text-sm font-bold text-[#1a1a1a]">Débito automático</span>
               <button
                 type="button"
                 role="switch"
@@ -1001,7 +996,7 @@ function ResumoConsumo() {
                 onClick={() => {
                   openAfterIconsReady(() => setConfirmAutoDebit(true));
                 }}
-                className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
+                className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 md:order-3 ${
                   autoDebit ? "bg-[#16A34A]" : "bg-[#bfbfbf]"
                 }`}
               >
@@ -1011,6 +1006,11 @@ function ResumoConsumo() {
                   }`}
                 />
               </button>
+              <div className="min-w-0 w-full md:order-2 md:w-auto">
+                <div className="text-[11px] font-medium leading-snug text-[#2e2e3a] md:whitespace-nowrap md:leading-tight">
+                  Sua mensalidade será descontada automaticamente do saldo da conta na data da renovação.
+                </div>
+              </div>
             </div>
 
             {(() => {
