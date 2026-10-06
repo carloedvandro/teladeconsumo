@@ -344,6 +344,9 @@ function ConsumoRing({
           <filter id={`gaugeShadow-${gid}`} x="-50%" y="-50%" width="200%" height="200%">
             <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" floodColor="#000" floodOpacity="0.35" />
           </filter>
+          <clipPath id={`gaugeFill-${gid}`}>
+            <path d={fillWedge} />
+          </clipPath>
           <linearGradient id={`bezelOuter-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#b8b8bf" />
             <stop offset="100%" stopColor="#f4f4f7" />
@@ -363,11 +366,11 @@ function ConsumoRing({
           strokeLinecap="round"
         />
 
-        {/* Background track (recessed) */}
+        {/* Background track (recessed) — white base, the pointer carries the color */}
         <path
           d={arcPath(START, START + SWEEP, r)}
           fill="none"
-          stroke="#d8d8de"
+          stroke="#ffffff"
           strokeWidth={strokeW}
           strokeLinecap="round"
         />
