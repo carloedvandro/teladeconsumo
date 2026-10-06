@@ -1041,7 +1041,7 @@ function ResumoConsumo() {
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
-                          <span className="flex items-center gap-2 text-[13px]">
+                          <span className="flex items-center gap-1.5 text-[12.5px]">
                             <span
                               className="font-bold"
                               style={{ color: tipColor(pct), transition: "color 900ms ease" }}
@@ -1063,7 +1063,7 @@ function ResumoConsumo() {
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
-                          <span className="flex items-center gap-2 text-[13px]">
+                          <span className="flex items-center gap-1.5 text-[12.5px]">
                             <span className="font-bold" style={{ color: PURPLE_TEXT }}>
                               {availPctExact}%
                             </span>
@@ -1082,7 +1082,7 @@ function ResumoConsumo() {
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponível Smart Mais Bis</span>
-                          <span className="flex items-center gap-2 text-[13px]">
+                          <span className="flex items-center gap-1.5 text-[12.5px]">
                             <span
                               className="font-bold"
                               style={{ color: tipColor(100 - bisRemainPct), transition: "color 900ms ease" }}
