@@ -198,6 +198,12 @@ function tipColor(pct: number) {
   return SPECTRUM[SPECTRUM.length - 1][1];
 }
 
+// Purple scale for the "Disponíveis" line — matches the approved reference
+// prints: deep purple → bright magenta bar, purple % text, purple 3D icon.
+const PURPLE_BAR = "linear-gradient(90deg,#4c0d7a 0%,#7a10b4 40%,#a61fd6 75%,#c33df0 100%)";
+const PURPLE_TEXT = "#9d20d6";
+const PURPLE_ICON = "#7a10b4";
+
 // Hue of the source purple icon (#660099 ≈ 277°); the filled battery layer is
 // hue-rotated to match the bar/capsule color so icon and bar always combine.
 function hexToHue(color: string) {
@@ -229,17 +235,20 @@ const ICON_BASE_HUE = 277;
 function DataBatteryIcon({
   percentage,
   variant,
+  color: colorOverride,
 }: {
   percentage: number;
   variant: "consumption" | "available" | "availableFixed";
+  color?: string;
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
   const color =
-    variant === "consumption"
+    colorOverride ??
+    (variant === "consumption"
       ? tipColor(pct)
       : variant === "availableFixed"
         ? "#16a34a"
-        : tipColor(100 - pct);
+        : tipColor(100 - pct));
   const hueShift = Math.round(hexToHue(color) - ICON_BASE_HUE);
   return (
     <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
@@ -327,23 +336,19 @@ function BrightDataBar({
   variant: "consumption" | "available" | "bonusAvailable";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  const markerColor =
-    variant === "consumption"
-      ? tipColor(pct)
-      : variant === "available"
-        ? "#16a34a"
-        : tipColor(100 - pct);
   const fill =
     variant === "consumption"
       ? spectrumGradient(false)
-      : markerColor;
+      : variant === "available"
+        ? PURPLE_BAR
+        : tipColor(100 - pct);
 
   return (
     <div
       className="relative mt-2.5 h-3.5 w-full rounded-full bg-[var(--data-track)]"
       style={{
         // Inner "trilho" (rail) groove — subtle inset depth so the fill and
-        // the percentage capsule run inside a recessed track.
+        // the white tip knob run inside a recessed track.
         boxShadow:
           "inset 0 2px 3px rgba(20, 20, 45, 0.22), inset 0 -1px 2px rgba(255, 255, 255, 0.9), inset 0 0 0 1px rgba(255, 255, 255, 0.45)",
       }}
@@ -360,18 +365,18 @@ function BrightDataBar({
           transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
         }}
       />
-      <span
-        className="absolute top-1/2 flex h-3.5 min-w-11 items-center justify-center rounded-full px-2 text-center text-[10px] font-black leading-none text-primary-foreground"
+      {/* White glossy knob riding at the tip of the fill, like the reference */}
+      <div
+        className="absolute top-1/2 h-[18px] w-[18px] rounded-full"
         style={{
-          left: `${Math.max(9, Math.min(91, pct))}%`,
+          left: `${Math.max(4, Math.min(96, pct))}%`,
           transform: "translate(-50%, -50%)",
-          background: markerColor,
-          boxShadow: "0 1px 3px rgba(20, 20, 45, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35)",
-          transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
+          background: "linear-gradient(180deg,#ffffff 20%,#efeff5 100%)",
+          boxShadow:
+            "0 1px 4px rgba(20, 20, 45, 0.35), inset 0 1px 0 rgba(255,255,255,0.95), 0 0 0 1px rgba(20,20,45,0.06)",
+          transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
-      >
-        {pct.toFixed(2)}%
-      </span>
+      />
     </div>
   );
 }
@@ -1025,7 +1030,14 @@ function ResumoConsumo() {
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
-                          <span className="text-[13px]">
+                          <span className="flex items-center gap-2 text-[13px]">
+                            <span
+                              className="font-bold"
+                              style={{ color: tipColor(pct), transition: "color 900ms ease" }}
+                            >
+                              {pct.toFixed(2)}%
+                            </span>
+                            <span className="font-light text-[#c9c9c9]">|</span>
                             <span className="font-bold text-[#1a1a1a]">{line.used.toFixed(2)} GB</span>
                           </span>
                         </div>
@@ -1036,11 +1048,15 @@ function ResumoConsumo() {
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={availPct} variant="availableFixed" />
+                      <DataBatteryIcon percentage={availPct} variant="availableFixed" color={PURPLE_ICON} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
-                          <span className="text-[13px]">
+                          <span className="flex items-center gap-2 text-[13px]">
+                            <span className="font-bold" style={{ color: PURPLE_TEXT }}>
+                              {availPctExact}%
+                            </span>
+                            <span className="font-light text-[#c9c9c9]">|</span>
                             <span className="font-bold text-[#1a1a1a]">{available.toFixed(2)} GB</span>
                           </span>
                         </div>
@@ -1055,7 +1071,14 @@ function ResumoConsumo() {
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponível Smart Mais Bis</span>
-                          <span className="text-[13px]">
+                          <span className="flex items-center gap-2 text-[13px]">
+                            <span
+                              className="font-bold"
+                              style={{ color: tipColor(100 - bisRemainPct), transition: "color 900ms ease" }}
+                            >
+                              {bisRemainPctExact}%
+                            </span>
+                            <span className="font-light text-[#c9c9c9]">|</span>
                             <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
                           </span>
                         </div>
