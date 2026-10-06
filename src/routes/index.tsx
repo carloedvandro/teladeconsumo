@@ -400,7 +400,7 @@ function ConsumoRing({
   const pct = Math.min(100, (line.used / line.total) * 100);
 
   // Gauge geometry — semicircular speedometer, 240° sweep
-  const size = 260;
+  const size = 240;
   const cx = size / 2;
   const cy = 150;
   const r = 105;
@@ -472,7 +472,7 @@ function ConsumoRing({
   const gid = line.number.replace(/\D/g, "");
 
   return (
-    <div className="relative h-[240px] w-[260px] shrink-0">
+    <div className="relative h-[240px] w-[240px] shrink-0">
       <svg
         viewBox={`0 0 ${size} 210`}
         className="absolute left-0 top-0 h-[210px] w-full"
