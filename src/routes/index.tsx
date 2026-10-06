@@ -166,10 +166,10 @@ function lerpColor(a: string, b: string, t: number) {
   return `rgb(${r}, ${g}, ${bl})`;
 }
 // Tip color interpolated across the full 0-100% spectrum so the arc tip
-// shifts smoothly purple → magenta, matching the data bars below.
+// starts light and builds to a strong dark purple at 100%, matching the bars.
 function tipColor(pct: number) {
   const p = Math.min(100, Math.max(0, pct));
-  return lerpColor("#660099", "#7a00b3", p / 100);
+  return lerpColor("#7a00b3", "#660099", p / 100);
 }
 
 function ConsumptionPieIcon({ percentage }: { percentage: number }) {
@@ -235,7 +235,7 @@ function BrightDataBar({
         className="h-full rounded-full"
         style={{
           width: `${pct}%`,
-          background: "linear-gradient(90deg,var(--data-purple),var(--data-magenta))",
+          background: "linear-gradient(90deg,var(--data-magenta),var(--data-purple))",
           boxShadow: "0 0 8px color-mix(in oklab, var(--data-purple) 48%, transparent)",
           transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
@@ -883,9 +883,9 @@ function ResumoConsumo() {
 
               <div className="w-full pr-3 md:w-[320px] md:pr-4">
 
-                <div className="flex items-center gap-2.5 whitespace-nowrap">
+                <div className="flex items-center gap-1.5 whitespace-nowrap">
                   <h2
-                    className="text-[22px] font-bold tracking-tight"
+                    className="text-[20px] font-bold tracking-tight"
                     style={{
                       backgroundImage: "linear-gradient(90deg, #8b5cf6 0%, #660099 30%, #b45309 70%, #171717 100%)",
                       WebkitBackgroundClip: "text",
@@ -897,9 +897,9 @@ function ResumoConsumo() {
                     {baseLine.plan}
                   </h2>
                   {bonusDebito > 0 && (
-                    <span className="mt-[3px] -ml-1 inline-flex shrink-0 items-center gap-1.5 text-[13px] font-bold text-[#3b07d6] animate-fade-in">
-                      <Gift className="h-4 w-4" strokeWidth={2.6} />
-                      +{bonusDebito}GB liberado
+                    <span className="mt-[2px] inline-flex shrink-0 items-center gap-1 text-[11px] font-bold text-[#16A34A] animate-fade-in">
+                      <Gift className="h-3.5 w-3.5" strokeWidth={2.6} />
+                      Mais {bonusDebito} giga de bônus
                     </span>
                   )}
                 </div>
@@ -976,8 +976,8 @@ function ResumoConsumo() {
             <div className="mt-3 flex items-center justify-between gap-4">
               <div className="min-w-0">
                 <span className="text-sm font-bold text-[#1a1a1a]">Débito automático</span>
-                <div className="mt-0.5 text-[11px] font-medium leading-tight text-[#5f5f7d]">
-                  Ao ativar, você autoriza o desconto automático da mensalidade no saldo da sua conta a cada renovação.
+                <div className="mt-0.5 whitespace-nowrap text-[11px] font-medium leading-tight text-[#5f5f7d]">
+                  Sua mensalidade será descontada automaticamente do saldo da conta na data da renovação.
                 </div>
               </div>
               <button
