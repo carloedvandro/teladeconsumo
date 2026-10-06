@@ -26,6 +26,7 @@ import {
   CreditCard,
   ArrowUpDown,
   Database,
+  BarChart3,
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
@@ -742,47 +743,50 @@ function ResumoConsumo() {
                 strokeWidth={2.75}
               />
             </button>
-            <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-5">
+            {/* Título no topo do card, como na arte */}
+            <div className="flex items-center gap-2 whitespace-nowrap">
+              <h2 className="text-[22px] font-bold tracking-tight">
+                <span className="text-[#111827]">{baseLine.plan.split(" ")[0]}</span>{" "}
+                <span className="text-[#2563eb]">{baseLine.plan.split(" ").slice(1).join(" ")}</span>
+              </h2>
+              {bonusDebito > 0 && (
+                <span className="inline-flex shrink-0 items-center gap-1 text-[13px] font-semibold text-[#6d28d9]">
+                  <Gift className="h-4 w-4" strokeWidth={2.25} />
+                  +{bonusDebito}GB liberado
+                </span>
+              )}
+            </div>
+
+            <div className="mt-3 flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-5">
               <div className="self-center md:self-auto"><ConsumoRing line={line} /></div>
 
               <div className="w-full pr-3 md:w-auto md:flex-1 md:pr-0">
-                {/* Título — nome escuro + franquia azul, bônus roxo com presente (arte) */}
-                <div className="flex items-center gap-2 whitespace-nowrap">
-                  <h2 className="text-[22px] font-bold tracking-tight">
-                    <span className="text-[#111827]">{baseLine.plan.split(" ")[0]}</span>{" "}
-                    <span className="text-[#2563eb]">{baseLine.plan.split(" ").slice(1).join(" ")}</span>
-                  </h2>
-                  {bonusDebito > 0 && (
-                    <span className="inline-flex shrink-0 items-center gap-1 text-[13px] font-semibold text-[#6d28d9]">
-                      <Gift className="h-4 w-4" strokeWidth={2.25} />
-                      +{bonusDebito}GB liberado
-                    </span>
-                  )}
-                </div>
-
-                <div className="mt-2.5 space-y-2">
+                <div className="space-y-2">
                   {[
-                    { label: "Meu Consumo", pct: pct, pctColor: pctTextColor(pct), gb: line.used, variant: "consumption" as const },
-                    { label: "Disponíveis", pct: 100 - pct, pctColor: pctTextColor(100 - pct), gb: available, variant: "available" as const },
-                    { label: "Disponível Smart Mais Bis", pct: bisRemainPct, pctColor: pctTextColor(bisRemainPct), gb: bisAvailable, variant: "bonusAvailable" as const },
+                    { label: "Meu Consumo", pct: pct, pctColor: pctTextColor(pct), gb: line.used, variant: "consumption" as const, icon: <BarChart3 className="h-5 w-5" strokeWidth={2.2} /> },
+                    { label: "Disponíveis", pct: 100 - pct, pctColor: pctTextColor(100 - pct), gb: available, variant: "available" as const, icon: <ArrowUpDown className="h-5 w-5" strokeWidth={2.2} /> },
+                    { label: "Disponível Smart Mais Bis", pct: bisRemainPct, pctColor: pctTextColor(bisRemainPct), gb: bisAvailable, variant: "bonusAvailable" as const, icon: <Database className="h-5 w-5" strokeWidth={2.2} /> },
                   ].map((row) => (
-                    <div key={row.label} className="rounded-[18px] bg-white/60 p-3 shadow-[0_1px_3px_rgba(20,20,45,0.06)]">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-[13px] font-semibold text-[#1a1a1a]">{row.label}</span>
-                        <span
-                          className="text-[13.5px] font-bold"
-                          style={{ color: row.pctColor, transition: "color 900ms ease" }}
-                        >
-                          {row.pct.toFixed(2)}%
-                        </span>
-                      </div>
-                      <div className="mt-2 flex items-center gap-2.5">
-                        <div className="min-w-0 flex-1">
-                          <BrightDataBar percentage={row.pct} variant={row.variant} className="" />
+                    <div key={row.label} className="flex items-center gap-2.5 rounded-[18px] bg-white/60 p-3 shadow-[0_1px_3px_rgba(20,20,45,0.06)]">
+                      <IconTile>{row.icon}</IconTile>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[13px] font-semibold text-[#1a1a1a]">{row.label}</span>
+                          <span
+                            className="text-[13.5px] font-bold"
+                            style={{ color: row.pctColor, transition: "color 900ms ease" }}
+                          >
+                            {row.pct.toFixed(2)}%
+                          </span>
                         </div>
-                        <span className="shrink-0 whitespace-nowrap text-[13.5px] font-bold text-[#1a1a1a]">
-                          {row.gb.toFixed(2)} <span className="font-medium text-[#8a8a8a]">GB</span>
-                        </span>
+                        <div className="mt-2 flex items-center gap-2.5">
+                          <div className="min-w-0 flex-1">
+                            <BrightDataBar percentage={row.pct} variant={row.variant} className="" />
+                          </div>
+                          <span className="shrink-0 whitespace-nowrap text-[13.5px] font-bold text-[#1a1a1a]">
+                            {row.gb.toFixed(2)} <span className="font-medium text-[#8a8a8a]">GB</span>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -845,6 +849,8 @@ function ResumoConsumo() {
               </div>
             </div>
 
+            {/* Rodapé do card: status à esquerda, aviso em tempo real à direita (arte) */}
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 border-t border-[#e4e4ea] pt-3 md:mt-4">
             {(() => {
               const effective: LineStatus =
                 simStatus ??
@@ -879,7 +885,7 @@ function ResumoConsumo() {
               return (
                 <button
                   onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                  className="mt-3 flex w-full items-center gap-2 px-0.5 text-left text-[12.5px] transition hover:opacity-80 md:mt-4"
+                  className="flex min-w-0 items-center gap-2 text-left text-[12.5px] transition hover:opacity-80"
                 >
                   {statusIcon}
                   <span className="whitespace-nowrap">
@@ -897,17 +903,14 @@ function ResumoConsumo() {
                 </button>
               );
             })()}
-          </div>
-
-          {/* Nota em tempo real — fora do card, alinhada à direita */}
-          <div className="mt-2.5 flex justify-end">
-            <div className="flex h-8 items-center border-l-2 border-[#660099]/35 bg-white/55 px-3 text-[11px] font-medium text-[#666] backdrop-blur-sm">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden className="mr-2 shrink-0 text-[#8a8a8a]">
-                <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
-                <path d="M12 10.8v5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                <circle cx="12" cy="7.6" r="1" fill="currentColor" />
-              </svg>
-              <span className="whitespace-nowrap">Os dados são atualizados em tempo real.</span>
+              <div className="flex shrink-0 items-center gap-1.5 border-l border-[#e4e4ea] pl-3 text-[11px] font-medium text-[#666]">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0 text-[#8a8a8a]">
+                  <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
+                  <path d="M12 10.8v5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  <circle cx="12" cy="7.6" r="1" fill="currentColor" />
+                </svg>
+                <span className="whitespace-nowrap">Os dados são atualizados em tempo real.</span>
+              </div>
             </div>
           </div>
         </div>
