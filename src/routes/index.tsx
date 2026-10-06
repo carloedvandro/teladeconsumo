@@ -989,7 +989,7 @@ function ResumoConsumo() {
             >
               <div className="min-w-0">
                 <span className="text-sm font-bold text-[#1a1a1a]">Débito automático</span>
-                <div className="mt-0.5 whitespace-nowrap text-[11px] font-medium leading-tight text-[#2e2e3a]">
+                <div className="mt-0.5 text-[11px] font-medium leading-snug text-[#2e2e3a] md:whitespace-nowrap md:leading-tight">
                   Sua mensalidade será descontada automaticamente do saldo da conta na data da renovação.
                 </div>
               </div>
