@@ -168,57 +168,20 @@ function lerpColor(a: string, b: string, t: number) {
 // shifts smoothly green → yellow → orange → red as consumption grows.
 function tipColor(pct: number) {
   const p = Math.min(100, Math.max(0, pct));
-  if (p <= 50) return lerpColor("#7ec832", "#f4c20d", p / 50);
+  if (p <= 50) return lerpColor("#62b81c", "#f4c20d", p / 50);
   if (p <= 80) return lerpColor("#f4c20d", "#ff7a18", (p - 50) / 30);
-  return lerpColor("#ff7a18", "#ff2a2a", (p - 80) / 20);
+  return lerpColor("#ff7a18", "#d10f0f", (p - 80) / 20);
 }
 
-function ConsumptionPieIcon({ percentage }: { percentage: number }) {
-  const pct = Math.max(0, Math.min(100, percentage));
-  const color = tipColor(pct);
-
+function ConsumptionPieIcon() {
   return (
-    <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
-      <img
-        src={icon3dPie}
-        alt=""
-        loading="eager"
-        decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain"
-        style={{ filter: "grayscale(1) contrast(1.08) brightness(0.9)" }}
-      />
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundColor: color,
-          WebkitMaskImage: `url(${icon3dPie})`,
-          maskImage: `url(${icon3dPie})`,
-          WebkitMaskPosition: "center",
-          maskPosition: "center",
-          WebkitMaskRepeat: "no-repeat",
-          maskRepeat: "no-repeat",
-          WebkitMaskSize: "contain",
-          maskSize: "contain",
-          mixBlendMode: "color",
-          transition: "background-color 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
-      />
-      <img
-        src={icon3dPie}
-        alt=""
-        loading="eager"
-        decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain opacity-35"
-        style={{ mixBlendMode: "screen" }}
-      />
-      <span
-        className="absolute inset-0 rounded-full opacity-40"
-        style={{
-          boxShadow: `0 0 9px ${color}`,
-          transition: "box-shadow 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
-      />
-    </div>
+    <img
+      src={icon3dPie}
+      alt=""
+      loading="eager"
+      decoding="sync"
+      className="h-9 w-9 shrink-0 object-contain"
+    />
   );
 }
 
@@ -262,6 +225,15 @@ function ConsumoRing({
       color: tipColor((fromPct + toPct) / 2),
     };
   });
+  // Estende o preenchimento sobre as pontas arredondadas do trilho para o
+  // arco colorido chegar até as pontinhas (verde à esquerda, vermelhão no 100%).
+  const CAP_DEG = 6;
+  if (pct > 0) {
+    segments.unshift({
+      d: arcPath(START - CAP_DEG, angleAt(0) + 0.6, r),
+      color: tipColor(0),
+    });
+  }
 
   // Ticks
   const majorTicks = 11; // at 0, 10, 20 ... 100
@@ -297,11 +269,12 @@ function ConsumoRing({
   // Fill wedge — the colored arc is clipped to everything between 0% and the
   // needle position, so the gauge stays white and the pointer "carries" the
   // green→red scale with it until the full 100% (red).
-  const fillEndDeg = angleAt(animPct);
+  const fillStartDeg = pct > 0 ? START - CAP_DEG : START;
+  const fillEndDeg = angleAt(animPct) + (animPct >= 99.9 ? CAP_DEG : 0);
   const fillR = r + strokeW / 2 + 2;
-  const fillFrom = polar(START, fillR);
+  const fillFrom = polar(fillStartDeg, fillR);
   const fillTo = polar(fillEndDeg, fillR);
-  const fillWedge = `M ${cx} ${cy} L ${fillFrom.x} ${fillFrom.y} A ${fillR} ${fillR} 0 ${fillEndDeg - START > 180 ? 1 : 0} 1 ${fillTo.x} ${fillTo.y} Z`;
+  const fillWedge = `M ${cx} ${cy} L ${fillFrom.x} ${fillFrom.y} A ${fillR} ${fillR} 0 ${fillEndDeg - fillStartDeg > 180 ? 1 : 0} 1 ${fillTo.x} ${fillTo.y} Z`;
 
   // Consumed tip dot at the end of the actual consumption (also rotated)
   const tipX = cx;
@@ -703,7 +676,6 @@ function ResumoConsumo() {
     sobrouAnterior > 0
       ? Math.max(0, Math.min(100, (bisUsed / sobrouAnterior) * 100))
       : 0;
-  const bisUsedPctExact = (Math.round(bisUsedPct * 100) / 100).toFixed(2);
   // Sobra do Smart Mais Bis: quanto resta do saldo acumulado trazido do ciclo anterior.
   const bisRemainPct = Math.max(0, Math.min(100, 100 - bisUsedPct));
   const bisRemainPctExact = (Math.round(bisRemainPct * 100) / 100).toFixed(2);
@@ -881,7 +853,7 @@ function ResumoConsumo() {
                 <ul className="mt-3 -ml-2 space-y-2 text-sm">
                   <li>
                     <div className="flex items-center gap-2">
-                      <ConsumptionPieIcon percentage={usedPct} />
+                      <ConsumptionPieIcon />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
@@ -898,7 +870,7 @@ function ResumoConsumo() {
                             style={{
                               width: `${usedPct}%`,
                               background:
-                                "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
+                                "linear-gradient(90deg,#62b81c 0%,#f4c20d 45%,#ff7a18 75%,#d10f0f 100%)",
                               transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
                           />
@@ -985,49 +957,6 @@ function ResumoConsumo() {
                   <li>
                     <div className="flex items-center gap-2">
                       <img
-                        src={icon3dPie}
-                        alt=""
-                        loading="eager"
-                        decoding="sync"
-                        className="h-9 w-9 shrink-0 object-contain"
-                      />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
-                          <span className="text-[13px]">
-                            <span className="font-bold text-[#660099]">{bisRemainPctExact}%</span>
-                            <span className="text-[#8a8a90]"> - </span>
-                            <span className="font-bold text-[#1a1a1a]">{sobrouAnterior.toFixed(2)} GB</span>
-                          </span>
-                        </div>
-
-                        <div className="relative mt-1.5 h-1.5 w-full overflow-visible rounded-full bg-[#ececef]">
-                          <div
-                            className="h-full rounded-full"
-                            style={{
-                              width: `${bisRemainPct}%`,
-                              background:
-                                "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
-                              transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                            }}
-                          />
-                          {bisRemainPct > 0 && (
-                            <div
-                              className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
-                              style={{
-                                left: `calc(${bisRemainPct}% - 6px)`,
-                                boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
-                                transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-                              }}
-                            />
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="flex items-center gap-2">
-                      <img
                         src={icon3dDisk}
                         alt=""
                         loading="eager"
@@ -1036,9 +965,9 @@ function ResumoConsumo() {
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
-                          <span className="text-[13px]">
-                            <span className="font-bold text-[#660099]">{bisUsedPctExact}%</span>
+                          <span className="text-[13px] font-semibold tracking-tight text-[#1a1a1a]">Disponível Smart Mais Bis</span>
+                          <span className="text-[12px]">
+                            <span className="font-bold text-[#660099]">{bisRemainPctExact}%</span>
                             <span className="text-[#8a8a90]"> - </span>
                             <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
                           </span>
@@ -1048,17 +977,17 @@ function ResumoConsumo() {
                           <div
                             className="h-full rounded-full"
                             style={{
-                              width: `${bisUsedPct}%`,
+                              width: `${bisRemainPct}%`,
                               background:
-                                "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
+                                "linear-gradient(90deg,#62b81c 0%,#f4c20d 45%,#ff7a18 75%,#d10f0f 100%)",
                               transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
                           />
-                          {bisUsedPct > 0 && (
+                          {bisRemainPct > 0 && (
                             <div
                               className="absolute top-1/2 h-3 w-3 -translate-y-1/2 rounded-full bg-white"
                               style={{
-                                left: `calc(${bisUsedPct}% - 6px)`,
+                                left: `calc(${bisRemainPct}% - 6px)`,
                                 boxShadow: "0 1px 3px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(0,0,0,0.06)",
                                 transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                               }}
