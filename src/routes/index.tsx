@@ -903,17 +903,14 @@ function ResumoConsumo() {
                 </button>
               );
             })()}
-          </div>
-
-          {/* Nota em tempo real — fora do card, alinhada à direita */}
-          <div className="mt-2.5 flex justify-end">
-            <div className="flex h-8 items-center border-l-2 border-[#660099]/35 bg-white/55 px-3 text-[11px] font-medium text-[#666] backdrop-blur-sm">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden className="mr-2 shrink-0 text-[#8a8a8a]">
-                <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
-                <path d="M12 10.8v5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                <circle cx="12" cy="7.6" r="1" fill="currentColor" />
-              </svg>
-              <span className="whitespace-nowrap">Os dados são atualizados em tempo real.</span>
+              <div className="flex shrink-0 items-center gap-1.5 border-l border-[#e4e4ea] pl-3 text-[11px] font-medium text-[#666]">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0 text-[#8a8a8a]">
+                  <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
+                  <path d="M12 10.8v5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  <circle cx="12" cy="7.6" r="1" fill="currentColor" />
+                </svg>
+                <span className="whitespace-nowrap">Os dados são atualizados em tempo real.</span>
+              </div>
             </div>
           </div>
         </div>
