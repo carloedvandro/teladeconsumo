@@ -354,7 +354,7 @@ function BrightDataBar({
       }}
     >
       <div
-        className="absolute inset-y-0 left-0 rounded-full"
+        className="absolute inset-y-0 left-0 overflow-hidden rounded-full"
         style={{
           width: `${pct}%`,
           backgroundImage: fill,
@@ -362,9 +362,20 @@ function BrightDataBar({
           backgroundSize:
             variant === "consumption" ? `${pct > 0 ? (100 / pct) * 100 : 100}% 100%` : "100% 100%",
           backgroundRepeat: "no-repeat",
+          // Vivid, glossy finish — same "bem vivo" look as the gauge arc
+          filter: "saturate(1.45) brightness(1.1)",
           transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
         }}
-      />
+      >
+        {/* Gloss highlight running along the top of the fill */}
+        <div
+          className="pointer-events-none absolute inset-0 rounded-full"
+          style={{
+            backgroundImage:
+              "linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.12) 45%, rgba(255,255,255,0) 70%)",
+          }}
+        />
+      </div>
       {/* White glossy knob riding at the tip of the fill, like the reference */}
       <div
         className="absolute top-1/2 h-[18px] w-[18px] rounded-full"
@@ -1084,6 +1095,28 @@ function ResumoConsumo() {
                         </div>
 
                         <BrightDataBar percentage={bisRemainPct} variant="bonusAvailable" />
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="flex items-center gap-2">
+                      <DataBatteryIcon percentage={100 - bisRemainPct} variant="consumption" />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
+                          <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
+                          <span className="flex items-center gap-2 text-[13px]">
+                            <span
+                              className="font-bold"
+                              style={{ color: tipColor(100 - bisRemainPct), transition: "color 900ms ease" }}
+                            >
+                              {(100 - bisRemainPct).toFixed(2)}%
+                            </span>
+                            <span className="font-light text-[#c9c9c9]">|</span>
+                            <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
+                          </span>
+                        </div>
+
+                        <BrightDataBar percentage={100 - bisRemainPct} variant="consumption" />
                       </div>
                     </div>
                   </li>
