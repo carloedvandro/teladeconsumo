@@ -968,13 +968,11 @@ function ResumoConsumo() {
 
 
                 {/* Débito automático (integrado, sem card) */}
-                <div className="mt-2 flex items-center justify-between gap-4">
+                <div className="mt-2 -ml-2 flex items-center justify-between gap-4">
                   <div className="min-w-0">
                     <span className="text-sm font-bold text-[#1a1a1a]">Débito automático</span>
                     <div className="mt-0.5 text-[11px] font-medium leading-tight text-[#5f5f7d]">
-                      {autoDebit
-                        ? "Em débito automático, desconto automático do saldo da conta"
-                        : "Ative o débito automático pra ganhar 20 giga de bônus"}
+                      Ao ativar, você autoriza o desconto automático da mensalidade no saldo da sua conta a cada renovação.
                     </div>
                   </div>
                   <button
