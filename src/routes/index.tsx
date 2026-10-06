@@ -168,7 +168,7 @@ function lerpColor(a: string, b: string, t: number) {
 // shifts smoothly purple → magenta, matching the data bars below.
 function tipColor(pct: number) {
   const p = Math.min(100, Math.max(0, pct));
-  return lerpColor("#7c3aed", "#ff2fd6", p / 100);
+  return lerpColor("#660099", "#7a00b3", p / 100);
 }
 
 function ConsumptionPieIcon({ percentage }: { percentage: number }) {
@@ -417,7 +417,7 @@ function ConsumoRing({
             stroke={s.color}
             strokeWidth={strokeW}
             strokeLinecap={i === 0 || i === filledSegments.length - 1 ? "round" : "butt"}
-            style={{ filter: "saturate(1.55) brightness(1.15)" }}
+            style={{ filter: "saturate(1.15)" }}
           />
         ))}
 
