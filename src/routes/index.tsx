@@ -680,7 +680,7 @@ function ResumoConsumo() {
   }, []);
 
   const baseLine = LINES[lineIdx];
-  const bonusDebito = autoDebit ? 25 : 0;
+  const bonusDebito = autoDebit ? 20 : 0;
   const franquiaTotal = baseLine.total + bonusDebito;
 
   // Real-time consumption simulation:
@@ -898,7 +898,7 @@ function ResumoConsumo() {
                   {bonusDebito > 0 && (
                     <span className="mt-[2px] inline-flex shrink-0 items-center gap-1 text-[11px] font-bold text-[#16A34A] animate-fade-in">
                       <Gift className="h-3.5 w-3.5" strokeWidth={2.6} />
-                      Mais {bonusDebito} giga de bônus
+                      +{bonusDebito}GB liberado
                     </span>
                   )}
                 </div>
@@ -1889,7 +1889,7 @@ function ResumoConsumo() {
                     onClick={() => {
                       setAutoDebit(true);
                       setConfirmAutoDebit(false);
-                      setToast("Débito automático ativado · +25GB liberados");
+                      setToast("Débito automático ativado · +20GB liberados");
                       setTimeout(() => setToast(null), 3000);
                     }}
                     className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
