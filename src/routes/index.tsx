@@ -400,7 +400,7 @@ function ConsumoRing({
   const pct = Math.min(100, (line.used / line.total) * 100);
 
   // Gauge geometry — semicircular speedometer, 240° sweep
-  const size = 260;
+  const size = 228;
   const cx = size / 2;
   const cy = 150;
   const r = 105;
@@ -472,7 +472,7 @@ function ConsumoRing({
   const gid = line.number.replace(/\D/g, "");
 
   return (
-    <div className="relative h-[240px] w-[260px] shrink-0">
+    <div className="relative h-[240px] w-[228px] shrink-0">
       <svg
         viewBox={`0 0 ${size} 210`}
         className="absolute left-0 top-0 h-[210px] w-full"
@@ -985,9 +985,9 @@ function ResumoConsumo() {
           />
 
           {/* Consumption panel overlay - centered/right like reference */}
-          <div className="relative -mt-24 md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[600px] md:-translate-y-1/2">
+          <div className="relative -mt-24 md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[592px] md:-translate-y-1/2">
           <div
-            className="overflow-hidden rounded-md p-4 md:w-full md:p-6"
+            className="overflow-hidden rounded-md p-4 md:w-full md:p-5"
             style={{
               background: "rgba(255,255,255,0.74)",
               backdropFilter: "blur(6px)",
@@ -1011,7 +1011,7 @@ function ResumoConsumo() {
             <div className="flex flex-col items-stretch gap-3 md:flex-row md:items-start md:justify-center md:gap-2">
               <div className="self-center md:self-auto"><ConsumoRing line={line} /></div>
 
-              <div className="w-full pr-3 md:w-[320px] md:pr-4">
+              <div className="w-full pr-3 md:w-auto md:flex-1 md:pr-0">
 
                 <div className="flex items-center gap-2.5 whitespace-nowrap">
                   <h2
@@ -1036,12 +1036,12 @@ function ResumoConsumo() {
 
                 <ul className="mt-3 -ml-2 space-y-2 text-sm">
                   <li>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5">
                       <DataBatteryIcon percentage={usedPct} variant="consumption" />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
-                          <span className="flex items-center gap-2 text-[13px]">
+                          <span className="text-[12.5px] font-semibold text-[#1a1a1a]">Meu Consumo</span>
+                          <span className="flex items-center gap-1 text-[12px]">
                             <span
                               className="font-bold"
                               style={{ color: tipColor(pct), transition: "color 900ms ease" }}
@@ -1058,12 +1058,12 @@ function ResumoConsumo() {
                     </div>
                   </li>
                   <li>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5">
                       <DataBatteryIcon percentage={availPct} variant="availableFixed" color={PURPLE_ICON} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
-                          <span className="flex items-center gap-2 text-[13px]">
+                          <span className="text-[12.5px] font-semibold text-[#1a1a1a]">Disponíveis</span>
+                          <span className="flex items-center gap-1 text-[12px]">
                             <span className="font-bold" style={{ color: PURPLE_TEXT }}>
                               {availPctExact}%
                             </span>
@@ -1077,12 +1077,12 @@ function ResumoConsumo() {
                     </div>
                   </li>
                   <li>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5">
                       <DataBatteryIcon percentage={bisRemainPct} variant="available" />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Disponível Smart Mais Bis</span>
-                          <span className="flex items-center gap-2 text-[13px]">
+                          <span className="text-[12.5px] font-semibold text-[#1a1a1a]">Disponível Smart Mais Bis</span>
+                          <span className="flex items-center gap-1 text-[12px]">
                             <span
                               className="font-bold"
                               style={{ color: tipColor(100 - bisRemainPct), transition: "color 900ms ease" }}
@@ -1095,28 +1095,6 @@ function ResumoConsumo() {
                         </div>
 
                         <BrightDataBar percentage={bisRemainPct} variant="bonusAvailable" />
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={100 - bisRemainPct} variant="consumption" />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
-                          <span className="flex items-center gap-2 text-[13px]">
-                            <span
-                              className="font-bold"
-                              style={{ color: tipColor(100 - bisRemainPct), transition: "color 900ms ease" }}
-                            >
-                              {(100 - bisRemainPct).toFixed(2)}%
-                            </span>
-                            <span className="font-light text-[#c9c9c9]">|</span>
-                            <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
-                          </span>
-                        </div>
-
-                        <BrightDataBar percentage={100 - bisRemainPct} variant="consumption" />
                       </div>
                     </div>
                   </li>
