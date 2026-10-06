@@ -1044,7 +1044,7 @@ function ResumoConsumo() {
                   >
                     <span
                       className={`inline-block h-3 w-3 transform rounded-full transition-transform duration-300 ${
-                        autoDebit ? "translate-x-[17px]" : "translate-x-[2px]"
+                        autoDebit ? "translate-x-[18px]" : "translate-x-[2px]"
                       }`}
                       style={{
                         background: "linear-gradient(180deg,#ffffff,#f1f1f1)",
