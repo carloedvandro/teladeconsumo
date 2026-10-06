@@ -849,6 +849,8 @@ function ResumoConsumo() {
               </div>
             </div>
 
+            {/* Rodapé do card: status à esquerda, aviso em tempo real à direita (arte) */}
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 border-t border-[#e4e4ea] pt-3 md:mt-4">
             {(() => {
               const effective: LineStatus =
                 simStatus ??
@@ -883,7 +885,7 @@ function ResumoConsumo() {
               return (
                 <button
                   onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                  className="mt-3 flex w-full items-center gap-2 px-0.5 text-left text-[12.5px] transition hover:opacity-80 md:mt-4"
+                  className="flex min-w-0 items-center gap-2 text-left text-[12.5px] transition hover:opacity-80"
                 >
                   {statusIcon}
                   <span className="whitespace-nowrap">
