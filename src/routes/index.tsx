@@ -1792,7 +1792,7 @@ function ResumoConsumo() {
               />
               <div className="min-w-0 flex-1">
                 <h3 className="text-[17px] sm:text-[20px] font-semibold tracking-tight text-[#1a1a1a] leading-tight whitespace-nowrap">
-                  {autoDebit ? "Renovação Automática Ativa" : "Ativar Renovação Automática"}
+                  {autoDebit ? "Débito Automático Ativo" : "Ativar Débito Automático"}
                 </h3>
                 <p className="mt-0.5 text-xs font-medium text-[#660099]/80">
                   {autoDebit ? "Função ativa · não pode ser desativada" : "Função premium SmartVoz"}
