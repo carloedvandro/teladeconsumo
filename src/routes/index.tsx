@@ -25,6 +25,7 @@ import {
   Clock,
 } from "lucide-react";
 
+import icon3dGift from "@/assets/icon-3d-gift.png";
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
 import icon3dData from "@/assets/icon-3d-data.png";
 import icon3dPhone from "@/assets/icon-3d-phone.png";
