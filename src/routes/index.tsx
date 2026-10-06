@@ -964,40 +964,34 @@ function ResumoConsumo() {
                 </ul>
 
 
-                {/* Renovação automática (integrada, sem card) */}
-                <div className="mt-3 flex items-start justify-between gap-4">
-                  <div className="min-w-0 pt-0.5">
-                    <span className="text-sm font-semibold text-[#1a1a1a]">Renovação automática</span>
-                    <div className="mt-1.5 space-y-0.5">
-                      {autoDebit ? (
-                        <div
-                          className="text-[11px] font-semibold text-[#16a34a] transition-all duration-500"
-                          style={{ opacity: 1, transform: 'translateY(0)' }}
-                        >
-                          Débito automático ativo
-                        </div>
-                      ) : (
-                        <div className="text-[11px] font-medium text-[#666] transition-all duration-500">
-                          Ative e ganhe +25GB de bônus
-                        </div>
-                      )}
-
+                {/* Débito automático (integrado, sem card) */}
+                <div className="mt-2 flex items-center justify-between gap-4">
+                  <div className="min-w-0">
+                    <span className="text-sm font-bold text-[#1a1a1a]">Débito automático</span>
+                    <div className="mt-0.5 space-y-0">
+                      <div className="text-[11px] font-medium leading-tight text-[#5f5f7d]">
+                        Débito à vista
+                      </div>
+                      <div className="text-[11px] font-medium leading-tight text-[#5f5f7d]">
+                        Desconto automático do saldo
+                      </div>
                     </div>
                   </div>
                   <button
                     type="button"
                     role="switch"
                     aria-checked={autoDebit}
+                    aria-label="Débito automático"
                     onClick={() => {
                       openAfterIconsReady(() => setConfirmAutoDebit(true));
                     }}
-                    className={`relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
-                      autoDebit ? "bg-[#16a34a]" : "bg-[#bfbfbf]"
+                    className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
+                      autoDebit ? "bg-[#7c3aed]" : "bg-[#bfbfbf]"
                     }`}
                   >
                     <span
-                      className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-300 ${
-                        autoDebit ? "translate-x-[22px]" : "translate-x-[2px]"
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-300 ${
+                        autoDebit ? "translate-x-[18px]" : "translate-x-[2px]"
                       }`}
                     />
                   </button>
@@ -1790,7 +1784,7 @@ function ResumoConsumo() {
             <div className="relative flex items-center gap-3 sm:gap-4">
               <img
                 src={icon3dAutorenew}
-                alt="Renovação automática"
+                alt="Débito automático"
                 width={56}
                 height={56}
                 loading="eager" decoding="sync" fetchPriority="high"
@@ -1798,7 +1792,7 @@ function ResumoConsumo() {
               />
               <div className="min-w-0 flex-1">
                 <h3 className="text-[17px] sm:text-[20px] font-semibold tracking-tight text-[#1a1a1a] leading-tight whitespace-nowrap">
-                  {autoDebit ? "Renovação Automática Ativa" : "Ativar Renovação Automática"}
+                  {autoDebit ? "Débito Automático Ativo" : "Ativar Débito Automático"}
                 </h3>
                 <p className="mt-0.5 text-xs font-medium text-[#660099]/80">
                   {autoDebit ? "Função ativa · não pode ser desativada" : "Função premium SmartVoz"}
@@ -1904,7 +1898,7 @@ function ResumoConsumo() {
                     onClick={() => {
                       setAutoDebit(true);
                       setConfirmAutoDebit(false);
-                      setToast("Renovação automática ativada · +25GB liberados");
+                      setToast("Débito automático ativado · +25GB liberados");
                       setTimeout(() => setToast(null), 3000);
                     }}
                     className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
