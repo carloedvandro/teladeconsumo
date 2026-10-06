@@ -317,6 +317,9 @@ function ConsumoRing({
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [pct]);
+  // The colored arc only fills up to the needle position; the rest of the
+  // track stays a translucent white rail.
+  const filledSegments = segments.filter((_, i) => ((i + 1) / STEPS) * 100 <= animPct + 0.5);
   const needleAngle = angleAt(animPct);
   const needleTipY = cy - (r - 8);
   // 3D needle geometry — a slim triangular blade with a separate left/right
