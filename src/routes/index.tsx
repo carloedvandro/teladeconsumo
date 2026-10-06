@@ -1036,12 +1036,12 @@ function ResumoConsumo() {
 
                 <ul className="mt-3 -ml-2 space-y-2 text-sm">
                   <li>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5">
                       <DataBatteryIcon percentage={usedPct} variant="consumption" />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
-                          <span className="flex items-center gap-1.5 text-[12.5px]">
+                          <span className="text-[13px] font-semibold text-[#1a1a1a]">Meu Consumo</span>
+                          <span className="flex items-center gap-1 text-[12px]">
                             <span
                               className="font-bold"
                               style={{ color: tipColor(pct), transition: "color 900ms ease" }}
@@ -1058,12 +1058,12 @@ function ResumoConsumo() {
                     </div>
                   </li>
                   <li>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5">
                       <DataBatteryIcon percentage={availPct} variant="availableFixed" color={PURPLE_ICON} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
-                          <span className="flex items-center gap-1.5 text-[12.5px]">
+                          <span className="text-[13px] font-semibold text-[#1a1a1a]">Disponíveis</span>
+                          <span className="flex items-center gap-1 text-[12px]">
                             <span className="font-bold" style={{ color: PURPLE_TEXT }}>
                               {availPctExact}%
                             </span>
@@ -1077,12 +1077,12 @@ function ResumoConsumo() {
                     </div>
                   </li>
                   <li>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5">
                       <DataBatteryIcon percentage={bisRemainPct} variant="available" />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Disponível Smart Mais Bis</span>
-                          <span className="flex items-center gap-1.5 text-[12.5px]">
+                          <span className="text-[13px] font-semibold text-[#1a1a1a]">Disponível Smart Mais Bis</span>
+                          <span className="flex items-center gap-1 text-[12px]">
                             <span
                               className="font-bold"
                               style={{ color: tipColor(100 - bisRemainPct), transition: "color 900ms ease" }}
