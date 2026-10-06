@@ -235,7 +235,7 @@ function BrightDataBar({
         className="h-full rounded-full"
         style={{
           width: `${pct}%`,
-          background: "linear-gradient(90deg,var(--data-purple),var(--data-magenta))",
+          background: "linear-gradient(90deg,var(--data-magenta),var(--data-purple))",
           boxShadow: "0 0 8px color-mix(in oklab, var(--data-purple) 48%, transparent)",
           transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
