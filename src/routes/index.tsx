@@ -228,19 +228,17 @@ function BrightDataBar({
   variant: "consumption" | "available";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  const markerColor = variant === "consumption" ? tipColor(pct) : "var(--data-purple)";
-  const fill =
-    variant === "consumption"
-      ? "linear-gradient(90deg,var(--data-green),var(--data-yellow) 45%,var(--data-orange) 72%,var(--data-red))"
-      : "linear-gradient(90deg,var(--data-purple),var(--data-magenta))";
+  const markerColor = "var(--data-purple)";
 
   return (
-    <div className="relative mt-2.5 h-2 w-full rounded-full bg-[var(--data-track)] shadow-inner">
+    <div className="relative mt-2.5 h-2 w-full rounded-full bg-white shadow-inner">
       <div
-        className="h-full w-full rounded-full"
+        className="h-full rounded-full"
         style={{
-          background: fill,
-          boxShadow: `0 0 8px color-mix(in oklab, ${markerColor} 48%, transparent)`,
+          width: `${pct}%`,
+          background: "linear-gradient(90deg,var(--data-purple),var(--data-magenta))",
+          boxShadow: "0 0 8px color-mix(in oklab, var(--data-purple) 48%, transparent)",
+          transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       />
       <span
@@ -951,7 +949,7 @@ function ResumoConsumo() {
                       <DataBatteryIcon percentage={bisRemainPct} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
+                          <span className="font-semibold text-[#1a1a1a]">Disponível Smart Mais Bis</span>
                           <span className="text-[13px]">
                             <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
                           </span>
@@ -968,13 +966,8 @@ function ResumoConsumo() {
                 <div className="mt-2 flex items-center justify-between gap-4">
                   <div className="min-w-0">
                     <span className="text-sm font-bold text-[#1a1a1a]">Débito automático</span>
-                    <div className="mt-0.5 space-y-0">
-                      <div className="text-[11px] font-medium leading-tight text-[#5f5f7d]">
-                        Débito à vista
-                      </div>
-                      <div className="text-[11px] font-medium leading-tight text-[#5f5f7d]">
-                        Desconto automático do saldo
-                      </div>
+                    <div className="mt-0.5 text-[11px] font-medium leading-tight text-[#5f5f7d]">
+                      Desconto automático do saldo
                     </div>
                   </div>
                   <button
@@ -1063,15 +1056,15 @@ function ResumoConsumo() {
               );
             })()}
 
-          </div>
+            {/* Nota em tempo real — dentro do card */}
+            <div className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-md bg-white/70 px-3 py-1.5 text-[11px] text-[#4a4a4a] backdrop-blur-sm">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0">
+                <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#660099" opacity="0.85" />
+                <path d="m9 12 2 2 4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              Os dados são atualizados em tempo real.
+            </div>
 
-          {/* Nota em tempo real — barra de ponta a ponta, alinhada ao painel */}
-          <div className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-md bg-white/70 px-3 py-1.5 text-[11px] text-[#4a4a4a] backdrop-blur-sm">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0">
-              <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#660099" opacity="0.85" />
-              <path d="m9 12 2 2 4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            Os dados são atualizados em tempo real.
           </div>
           </div>
 
