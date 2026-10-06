@@ -972,7 +972,9 @@ function ResumoConsumo() {
                   <div className="min-w-0">
                     <span className="text-sm font-bold text-[#1a1a1a]">Débito automático</span>
                     <div className="mt-0.5 text-[11px] font-medium leading-tight text-[#5f5f7d]">
-                      Desconto automático do saldo
+                      {autoDebit
+                        ? "Em débito automático, desconto automático do saldo da conta"
+                        : "Ative o débito automático pra ganhar 20 giga de bônus"}
                     </div>
                   </div>
                   <button
@@ -984,7 +986,7 @@ function ResumoConsumo() {
                       openAfterIconsReady(() => setConfirmAutoDebit(true));
                     }}
                     className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
-                      autoDebit ? "bg-[#7c3aed]" : "bg-[#bfbfbf]"
+                      autoDebit ? "bg-[#16A34A]" : "bg-[#bfbfbf]"
                     }`}
                   >
                     <span
