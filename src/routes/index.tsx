@@ -1898,7 +1898,7 @@ function ResumoConsumo() {
                     onClick={() => {
                       setAutoDebit(true);
                       setConfirmAutoDebit(false);
-                      setToast("Renovação automática ativada · +25GB liberados");
+                      setToast("Débito automático ativado · +25GB liberados");
                       setTimeout(() => setToast(null), 3000);
                     }}
                     className="rounded-xl px-6 py-2.5 text-sm font-semibold text-white transition hover:brightness-110"
