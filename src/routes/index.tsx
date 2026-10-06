@@ -1186,6 +1186,7 @@ function ResumoConsumo() {
             </div>
 
           </div>
+          </div>
         </section>
 
 
