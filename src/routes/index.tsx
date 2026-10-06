@@ -400,7 +400,7 @@ function ConsumoRing({
   const pct = Math.min(100, (line.used / line.total) * 100);
 
   // Gauge geometry — semicircular speedometer, 240° sweep
-  const size = 240;
+  const size = 230;
   const cx = size / 2;
   const cy = 150;
   const r = 105;
@@ -472,7 +472,7 @@ function ConsumoRing({
   const gid = line.number.replace(/\D/g, "");
 
   return (
-    <div className="relative h-[240px] w-[240px] shrink-0">
+    <div className="relative h-[240px] w-[230px] shrink-0">
       <svg
         viewBox={`0 0 ${size} 210`}
         className="absolute left-0 top-0 h-[210px] w-full"
@@ -1040,7 +1040,7 @@ function ResumoConsumo() {
                       <DataBatteryIcon percentage={usedPct} variant="consumption" />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="text-[13px] font-semibold text-[#1a1a1a]">Meu Consumo</span>
+                          <span className="text-[12.5px] font-semibold text-[#1a1a1a]">Meu Consumo</span>
                           <span className="flex items-center gap-1 text-[12px]">
                             <span
                               className="font-bold"
@@ -1062,7 +1062,7 @@ function ResumoConsumo() {
                       <DataBatteryIcon percentage={availPct} variant="availableFixed" color={PURPLE_ICON} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="text-[13px] font-semibold text-[#1a1a1a]">Disponíveis</span>
+                          <span className="text-[12.5px] font-semibold text-[#1a1a1a]">Disponíveis</span>
                           <span className="flex items-center gap-1 text-[12px]">
                             <span className="font-bold" style={{ color: PURPLE_TEXT }}>
                               {availPctExact}%
@@ -1081,7 +1081,7 @@ function ResumoConsumo() {
                       <DataBatteryIcon percentage={bisRemainPct} variant="available" />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="text-[13px] font-semibold text-[#1a1a1a]">Disponível Smart Mais Bis</span>
+                          <span className="text-[12.5px] font-semibold text-[#1a1a1a]">Disponível Smart Mais Bis</span>
                           <span className="flex items-center gap-1 text-[12px]">
                             <span
                               className="font-bold"
