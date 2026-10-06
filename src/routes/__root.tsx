@@ -78,10 +78,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "SmartVoz | Controle de Consumo" },
+      { title: "Lovable App" },
       { name: "description", content: "Visualizes and tracks mobile data, minutes, and SMS consumption with detailed historical data." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "SmartVoz | Controle de Consumo" },
+      { property: "og:title", content: "Lovable App" },
       { property: "og:description", content: "Visualizes and tracks mobile data, minutes, and SMS consumption with detailed historical data." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

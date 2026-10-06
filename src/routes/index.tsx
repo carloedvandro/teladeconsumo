@@ -22,10 +22,6 @@ import {
   Copy,
   QrCode,
   Clock,
-  BarChart3,
-  ArrowUpDown,
-  Database,
-  CreditCard,
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
@@ -47,6 +43,9 @@ import icon3dSms from "@/assets/icon-3d-sms.png";
 import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
 import icon3dBonus from "@/assets/icon-3d-bonus.png";
 import icon3dAlert from "@/assets/icon-3d-alert.png";
+import icon3dPie from "@/assets/icon-3d-pie.png";
+import icon3dDisk from "@/assets/icon-3d-disk.png";
+import icon3dDetails from "@/assets/icon-3d-details.png";
 const familyImg = familyImgAsset.url;
 
 const PRELOAD_ICONS = [
@@ -56,24 +55,18 @@ const PRELOAD_ICONS = [
   icon3dAutorenew,
   icon3dBonus,
   icon3dAlert,
+  icon3dDetails,
 ];
 
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Meu Consumo | SmartVoz" },
+      { title: "Resumo de Consumo | Vivo" },
       {
         name: "description",
-        content: "Acompanhe sua franquia, o consumo e o saldo Smart Mais Bis em tempo real.",
+        content: "Acompanhe seu consumo de dados Vivo Móvel em tempo real.",
       },
-      { property: "og:title", content: "Meu Consumo | SmartVoz" },
-      {
-        property: "og:description",
-        content: "Acompanhe sua franquia, o consumo e o saldo Smart Mais Bis em tempo real.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
     ],
     links: PRELOAD_ICONS.map((href) => ({ rel: "preload", as: "image", href })),
   }),
@@ -173,74 +166,57 @@ function lerpColor(a: string, b: string, t: number) {
 }
 // Tip color interpolated across the full 0-100% spectrum so the arc tip
 // shifts smoothly green → yellow → orange → red as consumption grows.
-// Multi-stop spectrum shared by the gauge and the bars: green → lime →
-// yellow → amber → orange → red-orange → red.
-const SPECTRUM: [number, string][] = [
-  [0, "#16a34a"],
-  [18, "#4ade80"],
-  [34, "#a3e635"],
-  [50, "#facc15"],
-  [64, "#f59e0b"],
-  [78, "#f97316"],
-  [90, "#ef4444"],
-  [100, "#dc2626"],
-];
-const spectrumGradient = (reverse = false) =>
-  `linear-gradient(90deg,${SPECTRUM.map(([p, c]) => `${c} ${reverse ? 100 - p : p}%`)
-    .sort((a, b) => parseFloat(a.split(" ")[1]) - parseFloat(b.split(" ")[1]))
-    .join(",")})`;
 function tipColor(pct: number) {
   const p = Math.min(100, Math.max(0, pct));
-  for (let i = 1; i < SPECTRUM.length; i++) {
-    const [p1, c1] = SPECTRUM[i];
-    const [p0, c0] = SPECTRUM[i - 1];
-    if (p <= p1) return lerpColor(c0, c1, (p - p0) / (p1 - p0));
-  }
-  return SPECTRUM[SPECTRUM.length - 1][1];
+  if (p <= 50) return lerpColor("#7ec832", "#f4c20d", p / 50);
+  if (p <= 80) return lerpColor("#f4c20d", "#ff7a18", (p - 50) / 30);
+  return lerpColor("#ff7a18", "#ff2a2a", (p - 80) / 20);
 }
 
-// Purple scale for the "Disponíveis" line — matches the approved reference
-// prints: deep purple → bright magenta bar, purple % text, purple 3D icon.
-const PURPLE_BAR = "linear-gradient(90deg,#4c0d7a 0%,#7a10b4 40%,#a61fd6 75%,#c33df0 100%)";
-const PURPLE_TEXT = "#9d20d6";
-const PURPLE_ICON = "#7a10b4";
+function ConsumptionPieIcon({ percentage }: { percentage: number }) {
+  const pct = Math.max(0, Math.min(100, percentage));
 
-// Hue of the source purple icon (#660099 ≈ 277°); the filled battery layer is
-// hue-rotated to match the bar/capsule color so icon and bar always combine.
-function hexToHue(color: string) {
-  let r = 0;
-  let g = 0;
-  let b = 0;
-  const rgbMatch = color.match(/rgb\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/);
-  if (rgbMatch) {
-    r = parseInt(rgbMatch[1], 10) / 255;
-    g = parseInt(rgbMatch[2], 10) / 255;
-    b = parseInt(rgbMatch[3], 10) / 255;
-  } else {
-    r = parseInt(color.slice(1, 3), 16) / 255;
-    g = parseInt(color.slice(3, 5), 16) / 255;
-    b = parseInt(color.slice(5, 7), 16) / 255;
-  }
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  const d = max - min;
-  if (d === 0) return 0;
-  let h = 0;
-  if (max === r) h = ((g - b) / d) % 6;
-  else if (max === g) h = (b - r) / d + 2;
-  else h = (r - g) / d + 4;
-  return (h * 60 + 360) % 360;
-}
-const ICON_BASE_HUE = 277;
-
-function ConsumptionMetricIcon({ type }: { type: "usage" | "available" | "bonus" }) {
-  const Icon = type === "usage" ? BarChart3 : type === "available" ? ArrowUpDown : Database;
   return (
-    <span className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-consumption-purple text-primary-foreground shadow-[inset_0_1px_2px_color-mix(in_oklab,var(--color-primary-foreground)_70%,transparent),0_3px_8px_color-mix(in_oklab,var(--color-consumption-purple)_35%,transparent)]" aria-hidden="true">
-      <span className="absolute inset-x-1 top-0 h-1/2 rounded-full bg-primary-foreground/20 blur-[2px]" />
-      <Icon className="relative h-6 w-6" strokeWidth={3} />
-      {type === "bonus" && <span className="absolute bottom-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-primary-foreground text-[11px] font-black leading-none text-consumption-purple">+</span>}
-    </span>
+    <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
+      <img
+        src={icon3dPie}
+        alt=""
+        loading="eager"
+        decoding="sync"
+        className="absolute inset-0 h-full w-full object-contain"
+        style={{ filter: "saturate(1.55) contrast(1.08)" }}
+      />
+    </div>
+  );
+}
+
+function DataBatteryIcon({ percentage }: { percentage: number }) {
+  const pct = Math.max(0, Math.min(100, percentage));
+  return (
+    <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
+      <img
+        src={icon3dDisk}
+        alt=""
+        loading="eager"
+        decoding="sync"
+        className="absolute inset-0 h-full w-full object-contain opacity-20 grayscale"
+      />
+      <img
+        src={icon3dDisk}
+        alt=""
+        loading="eager"
+        decoding="sync"
+        className="absolute inset-0 h-full w-full object-contain"
+        style={{
+          clipPath: `inset(${100 - pct}% 0 0 0)`,
+          filter: "saturate(1.7) brightness(1.12)",
+          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
+      />
+      <span className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none text-primary-foreground [text-shadow:0_1px_3px_var(--data-purple)]">
+        {Math.round(pct)}%
+      </span>
+    </div>
   );
 }
 
@@ -249,74 +225,36 @@ function BrightDataBar({
   variant,
 }: {
   percentage: number;
-  variant: "consumption" | "available" | "bonusAvailable";
+  variant: "consumption" | "available";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
+  const markerColor = variant === "consumption" ? tipColor(pct) : "var(--data-purple)";
   const fill =
     variant === "consumption"
-      ? spectrumGradient(false)
-      : variant === "available"
-        ? PURPLE_BAR
-        : tipColor(100 - pct);
+      ? "linear-gradient(90deg,var(--data-green),var(--data-yellow) 45%,var(--data-orange) 72%,var(--data-red))"
+      : "linear-gradient(90deg,var(--data-purple),var(--data-magenta))";
 
   return (
-    <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-consumption-track shadow-inner">
+    <div className="relative mt-2.5 h-2 w-full rounded-full bg-[var(--data-track)] shadow-inner">
       <div
-        className="absolute inset-y-0 left-0 overflow-hidden rounded-full"
+        className="h-full w-full rounded-full"
         style={{
-          width: `${pct}%`,
-          backgroundImage: fill,
-          backgroundColor: fill,
-          backgroundSize:
-            variant === "consumption" ? `${pct > 0 ? (100 / pct) * 100 : 100}% 100%` : "100% 100%",
-          backgroundRepeat: "no-repeat",
-          // Vivid, glossy finish — same "bem vivo" look as the gauge arc
-          filter: "saturate(1.45) brightness(1.1)",
-          transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
+          background: fill,
+          boxShadow: `0 0 8px color-mix(in oklab, ${markerColor} 48%, transparent)`,
+        }}
+      />
+      <span
+        className="absolute top-1/2 min-w-11 -translate-x-1/2 -translate-y-1/2 rounded-full px-2 py-0.5 text-center text-[10px] font-black leading-none text-primary-foreground"
+        style={{
+          left: `${Math.max(9, Math.min(91, pct))}%`,
+          background: markerColor,
+          boxShadow: `0 2px 8px color-mix(in oklab, ${markerColor} 55%, transparent), inset 0 1px 0 color-mix(in oklab, var(--primary-foreground) 50%, transparent)`,
+          transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
         }}
       >
-        {/* Gloss highlight running along the top of the fill */}
-        <div
-          className="pointer-events-none absolute inset-0 rounded-full"
-          style={{
-            backgroundImage:
-              "linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.12) 45%, rgba(255,255,255,0) 70%)",
-          }}
-        />
-      </div>
+        {pct.toFixed(2)}%
+      </span>
     </div>
-  );
-}
-
-function ConsumptionMetric({
-  icon,
-  label,
-  percentage,
-  amount,
-  variant,
-}: {
-  icon: "usage" | "available" | "bonus";
-  label: string;
-  percentage: number;
-  amount: number;
-  variant: "consumption" | "available" | "bonusAvailable";
-}) {
-  const pct = Math.max(0, Math.min(100, percentage));
-  const percentageColor = pct === 100 ? "var(--destructive)" : "var(--consumption-violet)";
-  return (
-    <li className="flex items-center gap-3 rounded-lg border border-primary-foreground/50 bg-consumption-row px-2.5 py-2 shadow-[inset_0_1px_0_color-mix(in_oklab,var(--color-primary-foreground)_70%,transparent)] backdrop-blur-sm">
-      <ConsumptionMetricIcon type={icon} />
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-          <span className="min-w-0 text-[12px] font-bold text-foreground">{label}</span>
-          <span className="shrink-0 text-[12px] font-extrabold" style={{ color: percentageColor }}>{pct.toFixed(2)}%</span>
-        </div>
-        <div className="mt-2 flex items-center gap-2">
-          <BrightDataBar percentage={pct} variant={variant} />
-          <span className="shrink-0 text-[14px] font-extrabold text-foreground">{amount.toFixed(2)} <span className="font-semibold text-muted-foreground">GB</span></span>
-        </div>
-      </div>
-    </li>
   );
 }
 
@@ -962,20 +900,89 @@ function ResumoConsumo() {
                   )}
                 </div>
 
-                <ul className="mt-3 space-y-2 text-sm">
-                  <ConsumptionMetric icon="usage" label="Meu Consumo" percentage={pct} amount={line.used} variant="consumption" />
-                  <ConsumptionMetric icon="available" label="Disponíveis" percentage={availPct} amount={available} variant="available" />
-                  <ConsumptionMetric icon="bonus" label="Disponível Smart Mais Bis" percentage={bisRemainPct} amount={bisAvailable} variant="bonusAvailable" />
+                <ul className="mt-3 -ml-2 space-y-2 text-sm">
+                  <li>
+                    <div className="flex items-center gap-2">
+                      <ConsumptionPieIcon percentage={usedPct} />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
+                          <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
+                          <span className="text-[13px]">
+                            <span className="font-bold text-[#1a1a1a]">{line.used.toFixed(2)} GB</span>
+                          </span>
+                        </div>
+
+                        <BrightDataBar percentage={pct} variant="consumption" />
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="flex items-center gap-2">
+                      <DataBatteryIcon percentage={availPct} />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
+                          <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
+                          <span className="text-[13px]">
+                            <span className="font-bold text-[#1a1a1a]">{available.toFixed(2)} GB</span>
+                          </span>
+                        </div>
+
+                        <BrightDataBar percentage={100 - pct} variant="available" />
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="flex items-center gap-2">
+                      <ConsumptionPieIcon percentage={bisRemainPct} />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
+                          <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
+                          <span className="text-[13px]">
+                            <span className="font-bold text-[#1a1a1a]">{sobrouAnterior.toFixed(2)} GB</span>
+                          </span>
+                        </div>
+
+                        <BrightDataBar percentage={bisRemainPct} variant="consumption" />
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="flex items-center gap-2">
+                      <DataBatteryIcon percentage={bisRemainPct} />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
+                          <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
+                          <span className="text-[13px]">
+                            <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
+                          </span>
+                        </div>
+
+                        <BrightDataBar percentage={bisRemainPct} variant="available" />
+                      </div>
+                    </div>
+                  </li>
                 </ul>
 
 
-                <div className="mt-2 flex items-center gap-3 rounded-lg border border-primary-foreground/50 bg-consumption-row px-2.5 py-2 shadow-[inset_0_1px_0_color-mix(in_oklab,var(--color-primary-foreground)_70%,transparent)] backdrop-blur-sm">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-consumption-soft bg-primary-foreground/40 text-consumption-violet" aria-hidden="true">
-                    <CreditCard className="h-6 w-6" strokeWidth={2.5} />
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <span className="text-sm font-bold text-foreground">Débito automático</span>
-                    <div className="mt-0.5 text-[11px] font-medium text-muted-foreground">Desconto automático do saldo</div>
+                {/* Renovação automática (integrada, sem card) */}
+                <div className="mt-3 flex items-start justify-between gap-4">
+                  <div className="min-w-0 pt-0.5">
+                    <span className="text-sm font-semibold text-[#1a1a1a]">Renovação automática</span>
+                    <div className="mt-1.5 space-y-0.5">
+                      {autoDebit ? (
+                        <div
+                          className="text-[11px] font-semibold text-[#16a34a] transition-all duration-500"
+                          style={{ opacity: 1, transform: 'translateY(0)' }}
+                        >
+                          Débito automático ativo
+                        </div>
+                      ) : (
+                        <div className="text-[11px] font-medium text-[#666] transition-all duration-500">
+                          Ative e ganhe +25GB de bônus
+                        </div>
+                      )}
+
+                    </div>
                   </div>
                   <button
                     type="button"
@@ -984,27 +991,14 @@ function ResumoConsumo() {
                     onClick={() => {
                       openAfterIconsReady(() => setConfirmAutoDebit(true));
                     }}
-                    className={`group relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full border transition-all duration-300 ${
-                      autoDebit ? "border-consumption-purple bg-consumption-purple" : "border-border bg-muted"
+                    className={`relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
+                      autoDebit ? "bg-[#16a34a]" : "bg-[#bfbfbf]"
                     }`}
                   >
                     <span
-                      className={`inline-block h-6 w-6 transform rounded-full bg-primary-foreground transition-transform duration-300 ${
-                        autoDebit ? "translate-x-[21px]" : "translate-x-px"
+                      className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-300 ${
+                        autoDebit ? "translate-x-[22px]" : "translate-x-[2px]"
                       }`}
-                    />
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 rounded-full transition-opacity duration-300"
-                      style={{
-                        boxShadow: "0 0 0 3px rgba(255,255,255,0.55), 0 2px 6px -1px rgba(0,0,0,0.18)",
-                        opacity: autoDebit ? 1 : 0,
-                      }}
-                    />
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                      style={{ boxShadow: "0 0 0 3px rgba(255,255,255,0.7)" }}
                     />
                   </button>
                 </div>
@@ -1012,10 +1006,16 @@ function ResumoConsumo() {
 
                 <button
                   onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
-                  className="mt-2 flex h-10 w-full items-center justify-center rounded-lg bg-consumption-soft px-4 text-sm font-bold text-consumption-violet transition-colors hover:bg-accent"
+                  className="-ml-2 mt-3 flex items-center gap-2 text-sm font-semibold text-[#660099] hover:underline md:mt-5"
                 >
-                  <span>Ver detalhes do seu consumo</span>
-                  <ChevronRight className="ml-auto h-4 w-4" strokeWidth={3} aria-hidden="true" />
+                  <img
+                    src={icon3dDetails}
+                    alt=""
+                    loading="eager"
+                    decoding="sync"
+                    className="h-9 w-9 shrink-0 object-contain"
+                  />
+                  Ver detalhes do seu consumo &gt;
                 </button>
               </div>
             </div>
@@ -1069,14 +1069,15 @@ function ResumoConsumo() {
               );
             })()}
 
-          {/* Nota em tempo real — dentro do painel, abaixo do status */}
-          <div className="mt-1 flex w-full items-center justify-center gap-1.5 px-3 pt-1 text-[11px] text-[#4a4a4a]">
+          </div>
+
+          {/* Nota em tempo real — barra de ponta a ponta, alinhada ao painel */}
+          <div className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-md bg-white/70 px-3 py-1.5 text-[11px] text-[#4a4a4a] backdrop-blur-sm">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0">
               <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#660099" opacity="0.85" />
               <path d="m9 12 2 2 4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
             Os dados são atualizados em tempo real.
-          </div>
           </div>
           </div>
 
