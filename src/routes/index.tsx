@@ -61,11 +61,18 @@ const PRELOAD_ICONS = [
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Resumo de Consumo | Vivo" },
+      { title: "Meu Consumo | SmartVoz" },
       {
         name: "description",
-        content: "Acompanhe seu consumo de dados Vivo Móvel em tempo real.",
+        content: "Acompanhe sua franquia, o consumo e o saldo Smart Mais Bis em tempo real.",
       },
+      { property: "og:title", content: "Meu Consumo | SmartVoz" },
+      {
+        property: "og:description",
+        content: "Acompanhe sua franquia, o consumo e o saldo Smart Mais Bis em tempo real.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
     links: PRELOAD_ICONS.map((href) => ({ rel: "preload", as: "image", href })),
   }),
@@ -221,12 +228,13 @@ const ICON_BASE_HUE = 277;
 
 function DataBatteryIcon({
   percentage,
-  color,
+  variant,
 }: {
   percentage: number;
-  color: string;
+  variant: "consumption" | "available";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
+  const color = variant === "consumption" ? tipColor(pct) : tipColor(100 - pct);
   const hueShift = Math.round(hexToHue(color) - ICON_BASE_HUE);
   return (
     <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
@@ -235,20 +243,39 @@ function DataBatteryIcon({
         alt=""
         loading="eager"
         decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain opacity-40"
-        style={{ filter: "saturate(0.6) brightness(1.25)" }}
+        className="absolute inset-0 h-full w-full object-contain"
+        style={{ filter: "grayscale(1) opacity(0.16) brightness(1.35)" }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          clipPath: `inset(${100 - pct}% 0 0 0)`,
+          backgroundImage:
+            variant === "consumption"
+              ? "linear-gradient(to top, #16a34a 0%, #4ade80 18%, #a3e635 34%, #facc15 50%, #f59e0b 64%, #f97316 78%, #ef4444 90%, #dc2626 100%)"
+              : color,
+          maskImage: `url(${icon3dDisk})`,
+          WebkitMaskImage: `url(${icon3dDisk})`,
+          maskSize: "contain",
+          WebkitMaskSize: "contain",
+          maskPosition: "center",
+          WebkitMaskPosition: "center",
+          maskRepeat: "no-repeat",
+          WebkitMaskRepeat: "no-repeat",
+          transition:
+            "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
+        }}
       />
       <img
         src={icon3dDisk}
         alt=""
         loading="eager"
         decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain"
+        className="absolute inset-0 h-full w-full object-contain opacity-35 mix-blend-multiply"
         style={{
           clipPath: `inset(${100 - pct}% 0 0 0)`,
-          filter: `hue-rotate(${hueShift}deg) saturate(1.7) brightness(1.12)`,
-          transition:
-            "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1), filter 900ms ease",
+          filter: `hue-rotate(${hueShift}deg) saturate(1.3) brightness(1.2)`,
+          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       />
       <span
@@ -269,33 +296,29 @@ function BrightDataBar({
   variant: "consumption" | "available";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  // Solid color reflecting the state: consumption goes green→red as it fills;
-  // available is green when full and turns red as it empties.
   const markerColor = variant === "consumption" ? tipColor(pct) : tipColor(100 - pct);
-  // Spectrum is pinned to the full track width, so the visible fill shows
-  // every color up to the current percentage (like the gauge arc).
-  const fill = spectrumGradient(variant === "available");
+  const fill = variant === "consumption" ? spectrumGradient(false) : markerColor;
 
-    return (
-    <div className="relative mt-2.5 h-2.5 w-full rounded-full bg-[var(--data-track)] shadow-inner">
+  return (
+    <div className="relative mt-2.5 h-3.5 w-full rounded-full bg-[var(--data-track)]">
       <div
         className="absolute inset-y-0 left-0 rounded-full"
         style={{
           width: `${pct}%`,
           backgroundImage: fill,
-          backgroundSize: `${pct > 0 ? (100 / pct) * 100 : 100}% 100%`,
+          backgroundColor: fill,
+          backgroundSize:
+            variant === "consumption" ? `${pct > 0 ? (100 / pct) * 100 : 100}% 100%` : "100% 100%",
           backgroundRepeat: "no-repeat",
-          boxShadow: `0 0 10px color-mix(in oklab, ${markerColor} 48%, transparent)`,
           transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
         }}
       />
       <span
-        className="absolute top-1/2 flex h-5 min-w-11 items-center justify-center rounded-full px-2 text-center text-[10px] font-black leading-none text-primary-foreground"
+        className="absolute top-1/2 flex h-4 min-w-11 items-center justify-center rounded-full px-2 text-center text-[9px] font-black leading-none text-primary-foreground"
         style={{
           left: `${Math.max(9, Math.min(91, pct))}%`,
           transform: "translate(-50%, -50%)",
           background: markerColor,
-          boxShadow: `0 2px 8px color-mix(in oklab, ${markerColor} 55%, transparent), inset 0 1px 0 color-mix(in oklab, var(--primary-foreground) 50%, transparent)`,
           transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
         }}
       >
@@ -950,7 +973,7 @@ function ResumoConsumo() {
                 <ul className="mt-3 -ml-2 space-y-2 text-sm">
                   <li>
                     <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={usedPct} color={tipColor(pct)} />
+                      <DataBatteryIcon percentage={usedPct} variant="consumption" />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
@@ -965,7 +988,7 @@ function ResumoConsumo() {
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={availPct} color={tipColor(100 - availPct)} />
+                      <DataBatteryIcon percentage={availPct} variant="available" />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
@@ -980,7 +1003,7 @@ function ResumoConsumo() {
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={bisRemainPct} color={tipColor(100 - bisRemainPct)} />
+                      <DataBatteryIcon percentage={bisRemainPct} variant="available" />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponível Smart Mais Bis</span>
@@ -995,7 +1018,7 @@ function ResumoConsumo() {
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={100 - bisRemainPct} color={tipColor(100 - bisRemainPct)} />
+                      <DataBatteryIcon percentage={bisUsedPct} variant="consumption" />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
@@ -1004,7 +1027,7 @@ function ResumoConsumo() {
                           </span>
                         </div>
 
-                        <BrightDataBar percentage={100 - bisRemainPct} variant="consumption" />
+                        <BrightDataBar percentage={bisUsedPct} variant="consumption" />
                       </div>
                     </div>
                   </li>
