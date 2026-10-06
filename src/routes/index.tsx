@@ -763,27 +763,30 @@ function ResumoConsumo() {
               <div className="w-full pr-3 md:w-auto md:flex-1 md:pr-0">
                 <div className="space-y-2">
                   {[
-                    { label: "Meu Consumo", pct: pct, pctColor: pctTextColor(pct), gb: line.used, variant: "consumption" as const },
-                    { label: "Disponíveis", pct: 100 - pct, pctColor: pctTextColor(100 - pct), gb: available, variant: "available" as const },
-                    { label: "Disponível Smart Mais Bis", pct: bisRemainPct, pctColor: pctTextColor(bisRemainPct), gb: bisAvailable, variant: "bonusAvailable" as const },
+                    { label: "Meu Consumo", pct: pct, pctColor: pctTextColor(pct), gb: line.used, variant: "consumption" as const, icon: <BarChart3 className="h-5 w-5" strokeWidth={2.2} /> },
+                    { label: "Disponíveis", pct: 100 - pct, pctColor: pctTextColor(100 - pct), gb: available, variant: "available" as const, icon: <ArrowUpDown className="h-5 w-5" strokeWidth={2.2} /> },
+                    { label: "Disponível Smart Mais Bis", pct: bisRemainPct, pctColor: pctTextColor(bisRemainPct), gb: bisAvailable, variant: "bonusAvailable" as const, icon: <Database className="h-5 w-5" strokeWidth={2.2} /> },
                   ].map((row) => (
-                    <div key={row.label} className="rounded-[18px] bg-white/60 p-3 shadow-[0_1px_3px_rgba(20,20,45,0.06)]">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-[13px] font-semibold text-[#1a1a1a]">{row.label}</span>
-                        <span
-                          className="text-[13.5px] font-bold"
-                          style={{ color: row.pctColor, transition: "color 900ms ease" }}
-                        >
-                          {row.pct.toFixed(2)}%
-                        </span>
-                      </div>
-                      <div className="mt-2 flex items-center gap-2.5">
-                        <div className="min-w-0 flex-1">
-                          <BrightDataBar percentage={row.pct} variant={row.variant} className="" />
+                    <div key={row.label} className="flex items-center gap-2.5 rounded-[18px] bg-white/60 p-3 shadow-[0_1px_3px_rgba(20,20,45,0.06)]">
+                      <IconTile>{row.icon}</IconTile>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[13px] font-semibold text-[#1a1a1a]">{row.label}</span>
+                          <span
+                            className="text-[13.5px] font-bold"
+                            style={{ color: row.pctColor, transition: "color 900ms ease" }}
+                          >
+                            {row.pct.toFixed(2)}%
+                          </span>
                         </div>
-                        <span className="shrink-0 whitespace-nowrap text-[13.5px] font-bold text-[#1a1a1a]">
-                          {row.gb.toFixed(2)} <span className="font-medium text-[#8a8a8a]">GB</span>
-                        </span>
+                        <div className="mt-2 flex items-center gap-2.5">
+                          <div className="min-w-0 flex-1">
+                            <BrightDataBar percentage={row.pct} variant={row.variant} className="" />
+                          </div>
+                          <span className="shrink-0 whitespace-nowrap text-[13.5px] font-bold text-[#1a1a1a]">
+                            {row.gb.toFixed(2)} <span className="font-medium text-[#8a8a8a]">GB</span>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   ))}
