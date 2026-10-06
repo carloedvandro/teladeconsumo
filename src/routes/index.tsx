@@ -173,38 +173,6 @@ function tipColor(pct: number) {
   return lerpColor("#ff7a18", "#ff2a2a", (p - 80) / 20);
 }
 
-function ConsumptionPieIcon({ percentage }: { percentage: number }) {
-  const pct = Math.max(0, Math.min(100, percentage));
-
-  return (
-    <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
-      <img
-        src={icon3dPie}
-        alt=""
-        loading="eager"
-        decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain opacity-40"
-        style={{ filter: "saturate(0.6) brightness(1.25)" }}
-      />
-      <img
-        src={icon3dPie}
-        alt=""
-        loading="eager"
-        decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain"
-        style={{
-          clipPath: `inset(${100 - pct}% 0 0 0)`,
-          filter: "saturate(1.7) brightness(1.12)",
-          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
-      />
-      <span className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none text-primary-foreground [text-shadow:0_1px_3px_var(--data-purple)]">
-        {Math.round(pct)}%
-      </span>
-    </div>
-  );
-}
-
 function DataBatteryIcon({ percentage }: { percentage: number }) {
   const pct = Math.max(0, Math.min(100, percentage));
   return (
