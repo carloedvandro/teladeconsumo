@@ -999,7 +999,7 @@ function ResumoConsumo() {
             <button
               aria-label="Ver histórico de consumo"
               onClick={() => openAfterIconsReady(() => setExpandOpen(true))}
-              className="group absolute bottom-0 right-0 h-10 w-10 text-[#660099] md:h-12 md:w-12"
+              className="group absolute bottom-0 right-0 z-10 h-10 w-10 text-[#660099] md:h-12 md:w-12"
               style={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
             >
               <span className="absolute inset-0 bg-[#d9d9d9] transition-colors duration-200 group-hover:bg-[#e8e8e8]" />
