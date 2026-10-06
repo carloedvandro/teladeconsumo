@@ -890,7 +890,7 @@ function ResumoConsumo() {
 
               <div className="w-full pr-3 md:w-[320px] md:pr-4">
 
-                <div className="flex items-center gap-1.5 whitespace-nowrap">
+                <div className="flex items-center gap-1 whitespace-nowrap">
                   <h2
                     className="text-[20px] font-bold tracking-tight"
                     style={{
