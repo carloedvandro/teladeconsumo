@@ -22,6 +22,10 @@ import {
   Copy,
   QrCode,
   Clock,
+  Gift,
+  CreditCard,
+  ArrowUpDown,
+  Database,
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
@@ -43,8 +47,6 @@ import icon3dSms from "@/assets/icon-3d-sms.png";
 import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
 import icon3dBonus from "@/assets/icon-3d-bonus.png";
 import icon3dAlert from "@/assets/icon-3d-alert.png";
-import icon3dDisk from "@/assets/icon-3d-disk.png";
-import icon3dDetails from "@/assets/icon-3d-details.png";
 const familyImg = familyImgAsset.url;
 
 const PRELOAD_ICONS = [
@@ -54,7 +56,6 @@ const PRELOAD_ICONS = [
   icon3dAutorenew,
   icon3dBonus,
   icon3dAlert,
-  icon3dDetails,
 ];
 
 
@@ -158,194 +159,60 @@ function formatGB(gb: number) {
   return `${gb.toFixed(1)} GB`;
 }
 
-function hexToRgb(hex: string) {
-  const h = hex.replace("#", "");
-  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)] as const;
-}
-function lerpColor(a: string, b: string, t: number) {
-  const [ar, ag, ab] = hexToRgb(a);
-  const [br, bg, bb] = hexToRgb(b);
-  const r = Math.round(ar + (br - ar) * t);
-  const g = Math.round(ag + (bg - ag) * t);
-  const bl = Math.round(ab + (bb - ab) * t);
-  return `rgb(${r}, ${g}, ${bl})`;
-}
-// Tip color interpolated across the full 0-100% spectrum so the arc tip
-// shifts smoothly green → yellow → orange → red as consumption grows.
-// Multi-stop spectrum shared by the gauge and the bars: green → lime →
-// yellow → amber → orange → red-orange → red.
-const SPECTRUM: [number, string][] = [
-  [0, "#16a34a"],
-  [18, "#4ade80"],
-  [34, "#a3e635"],
-  [50, "#facc15"],
-  [64, "#f59e0b"],
-  [78, "#f97316"],
-  [90, "#ef4444"],
-  [100, "#dc2626"],
-];
-const spectrumGradient = (reverse = false) =>
-  `linear-gradient(90deg,${SPECTRUM.map(([p, c]) => `${c} ${reverse ? 100 - p : p}%`)
-    .sort((a, b) => parseFloat(a.split(" ")[1]) - parseFloat(b.split(" ")[1]))
-    .join(",")})`;
-function tipColor(pct: number) {
-  const p = Math.min(100, Math.max(0, pct));
-  for (let i = 1; i < SPECTRUM.length; i++) {
-    const [p1, c1] = SPECTRUM[i];
-    const [p0, c0] = SPECTRUM[i - 1];
-    if (p <= p1) return lerpColor(c0, c1, (p - p0) / (p1 - p0));
-  }
-  return SPECTRUM[SPECTRUM.length - 1][1];
-}
+// Paleta viva da arte aprovada: roxo em todas as barras; o consumo puxa para
+// rosa/laranja/vermelho conforme a franquia enche. A porcentagem fica índigo
+// e vira vermelha nos extremos (100% consumido ou zerado).
+const INDIGO_TEXT = "#4f46e5";
+const RED_TEXT = "#dc2626";
+const BAR_PURPLE = "linear-gradient(90deg,#4f46e5 0%,#6d28d9 55%,#7c3aed 100%)";
+const BAR_CONSUMPTION =
+  "linear-gradient(90deg,#4c1d95 0%,#6d28d9 28%,#a855f7 52%,#d946ef 70%,#f97316 86%,#ef4444 100%)";
+const BAR_BONUS =
+  "linear-gradient(90deg,#4c1d95 0%,#7c3aed 30%,#c026d3 60%,#ef4444 100%)";
+const pctTextColor = (p: number) => (p >= 99.5 || p <= 0.05 ? RED_TEXT : INDIGO_TEXT);
 
-// Purple scale for the "Disponíveis" line — matches the approved reference
-// prints: deep purple → bright magenta bar, purple % text, purple 3D icon.
-const PURPLE_BAR = "linear-gradient(90deg,#4c0d7a 0%,#7a10b4 40%,#a61fd6 75%,#c33df0 100%)";
-const PURPLE_TEXT = "#9d20d6";
-const PURPLE_ICON = "#7a10b4";
 
-// Hue of the source purple icon (#660099 ≈ 277°); the filled battery layer is
-// hue-rotated to match the bar/capsule color so icon and bar always combine.
-function hexToHue(color: string) {
-  let r = 0;
-  let g = 0;
-  let b = 0;
-  const rgbMatch = color.match(/rgb\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/);
-  if (rgbMatch) {
-    r = parseInt(rgbMatch[1], 10) / 255;
-    g = parseInt(rgbMatch[2], 10) / 255;
-    b = parseInt(rgbMatch[3], 10) / 255;
-  } else {
-    r = parseInt(color.slice(1, 3), 16) / 255;
-    g = parseInt(color.slice(3, 5), 16) / 255;
-    b = parseInt(color.slice(5, 7), 16) / 255;
-  }
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  const d = max - min;
-  if (d === 0) return 0;
-  let h = 0;
-  if (max === r) h = ((g - b) / d) % 6;
-  else if (max === g) h = (b - r) / d + 2;
-  else h = (r - g) / d + 4;
-  return (h * 60 + 360) % 360;
-}
-const ICON_BASE_HUE = 277;
-
-function DataBatteryIcon({
-  percentage,
-  variant,
-  color: colorOverride,
-}: {
-  percentage: number;
-  variant: "consumption" | "available" | "availableFixed";
-  color?: string;
-}) {
-  const pct = Math.max(0, Math.min(100, percentage));
-  const color =
-    colorOverride ??
-    (variant === "consumption"
-      ? tipColor(pct)
-      : variant === "availableFixed"
-        ? "#16a34a"
-        : tipColor(100 - pct));
-  const hueShift = Math.round(hexToHue(color) - ICON_BASE_HUE);
+// Ícone 3D da arte: squircle roxo com brilho e glifo branco.
+function IconTile({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
-      <img
-        src={icon3dDisk}
-        alt=""
-        loading="eager"
-        decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain"
-        style={{ filter: "grayscale(1) opacity(0.28) brightness(1.35)" }}
-      />
-      <div
-        className="absolute inset-0"
-        style={{
-          clipPath: `inset(${100 - pct}% 0 0 0)`,
-          backgroundImage:
-            variant === "consumption"
-              ? "linear-gradient(to top, #16a34a 0%, #4ade80 18%, #a3e635 34%, #facc15 50%, #f59e0b 64%, #f97316 78%, #ef4444 90%, #dc2626 100%)"
-              : color,
-          backgroundColor: variant === "consumption" ? undefined : color,
-          maskImage: `url(${icon3dDisk})`,
-          WebkitMaskImage: `url(${icon3dDisk})`,
-          maskSize: "contain",
-          WebkitMaskSize: "contain",
-          maskPosition: "center",
-          WebkitMaskPosition: "center",
-          maskRepeat: "no-repeat",
-          WebkitMaskRepeat: "no-repeat",
-          filter: "saturate(1.6) brightness(1.12)",
-          transition:
-            "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
-        }}
-      />
-      {/* Gloss layer — adds the shiny "lustro" finish on top of the fill */}
-      <div
-        className="absolute inset-0"
-        style={{
-          clipPath: `inset(${100 - pct}% 0 0 0)`,
-          backgroundImage:
-            "linear-gradient(180deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.18) 30%, rgba(255,255,255,0) 55%, rgba(255,255,255,0.22) 92%, rgba(255,255,255,0.45) 100%)",
-          maskImage: `url(${icon3dDisk})`,
-          WebkitMaskImage: `url(${icon3dDisk})`,
-          maskSize: "contain",
-          WebkitMaskSize: "contain",
-          maskPosition: "center",
-          WebkitMaskPosition: "center",
-          maskRepeat: "no-repeat",
-          WebkitMaskRepeat: "no-repeat",
-          mixBlendMode: "screen",
-          opacity: 0.55,
-          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
-      />
-      <img
-        src={icon3dDisk}
-        alt=""
-        loading="eager"
-        decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain opacity-20 mix-blend-multiply"
-        style={{
-          clipPath: `inset(${100 - pct}% 0 0 0)`,
-          filter: `hue-rotate(${hueShift}deg) saturate(1.3) brightness(1.2)`,
-          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
-      />
+    <span
+      aria-hidden="true"
+      className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] text-white"
+      style={{
+        background: "linear-gradient(145deg,#a78bfa 0%,#7c3aed 48%,#5b21b6 100%)",
+        boxShadow:
+          "0 5px 12px -3px rgba(91,33,182,0.5), inset 0 1px 1.5px rgba(255,255,255,0.55), inset 0 -2px 4px rgba(30,0,60,0.35)",
+      }}
+    >
+      {children}
       <span
-        className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none text-primary-foreground"
-        style={{
-          color: pct === 0 ? "var(--muted-foreground)" : undefined,
-          textShadow: pct === 0 ? "none" : `0 1px 3px ${color}`,
-          transition: "color 900ms ease, text-shadow 900ms ease",
-        }}
-      >
-        {Math.round(pct)}%
-      </span>
-    </div>
+        className="pointer-events-none absolute inset-x-1.5 top-1 h-2.5 rounded-full"
+        style={{ background: "linear-gradient(180deg,rgba(255,255,255,0.7),rgba(255,255,255,0))" }}
+      />
+    </span>
   );
 }
 
 function BrightDataBar({
   percentage,
   variant,
+  className = "mt-2.5",
 }: {
   percentage: number;
   variant: "consumption" | "available" | "bonusAvailable";
+  className?: string;
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
   const fill =
     variant === "consumption"
-      ? spectrumGradient(false)
+      ? BAR_CONSUMPTION
       : variant === "available"
-        ? PURPLE_BAR
-        : tipColor(100 - pct);
+        ? BAR_PURPLE
+        : BAR_BONUS;
 
   return (
     <div
-      className="relative mt-2.5 h-3.5 w-full rounded-full bg-[var(--data-track)]"
+      className={"relative " + className + " h-3.5 w-full rounded-full bg-[var(--data-track)]"}
       style={{
         // Inner "trilho" (rail) groove — subtle inset depth so the fill and
         // the white tip knob run inside a recessed track.
@@ -392,6 +259,8 @@ function BrightDataBar({
   );
 }
 
+// Velocímetro circular da arte: anel roxo brilhante de 270°, trilho cinza e
+// bolinha branca na ponta do consumo, com o valor central animando no spin-up.
 function ConsumoRing({
   line,
 }: {
@@ -399,18 +268,14 @@ function ConsumoRing({
 }) {
   const pct = Math.min(100, (line.used / line.total) * 100);
 
-  // Gauge geometry — semicircular speedometer, 240° sweep
-  const size = 228;
+  const size = 240;
   const cx = size / 2;
-  const cy = 150;
-  const r = 105;
-  const strokeW = 14;
-  // Sweep from -120° (left-bottom) through 0° (top) to +120° (right-bottom)
-  const SWEEP = 240;
-  const START = -120; // degrees
+  const cy = size / 2;
+  const r = 96;
+  const strokeW = 20;
+  const SWEEP = 270;
+  const START = -135;
   const angleAt = (percent: number) => START + (percent / 100) * SWEEP;
-
-  // Convert gauge angle (0° = up, clockwise) to xy
   const polar = (deg: number, radius: number) => {
     const rad = (deg * Math.PI) / 180;
     return { x: cx + radius * Math.sin(rad), y: cy - radius * Math.cos(rad) };
@@ -422,23 +287,10 @@ function ConsumoRing({
     return `M ${a.x} ${a.y} A ${radius} ${radius} 0 ${large} 1 ${b.x} ${b.y}`;
   };
 
-  // Full colored arc: green→yellow→orange→red split into many tiny segments
-  const STEPS = 100;
-  const segments = Array.from({ length: STEPS }, (_, i) => {
-    const fromPct = (i / STEPS) * 100;
-    const toPct = ((i + 1) / STEPS) * 100;
-    return {
-      d: arcPath(angleAt(fromPct), angleAt(toPct) + 0.6, r),
-      color: tipColor((fromPct + toPct) / 2),
-    };
-  });
+  const fullPath = arcPath(START, START + SWEEP, r);
+  const arcLen = (SWEEP / 360) * 2 * Math.PI * r;
 
-  // Ticks
-  const majorTicks = 11; // at 0, 10, 20 ... 100
-  const minorTicks = 41; // between majors
-
-  // Needle — starts at 0% and animates up to the real value on mount so the
-  // gauge feels like it's "spinning up" every time the user lands on the page.
+  // Spin-up: bolinha e valor animam de 0 até o consumo real ao montar.
   const [animPct, setAnimPct] = useState(0);
   useEffect(() => {
     setAnimPct(0);
@@ -447,7 +299,6 @@ function ConsumoRing({
     let raf = 0;
     const tick = (now: number) => {
       const t = Math.min(1, (now - start) / duration);
-      // easeOutCubic for a smooth spin-up
       const eased = 1 - Math.pow(1 - t, 3);
       setAnimPct(pct * eased);
       if (t < 1) raf = requestAnimationFrame(tick);
@@ -455,205 +306,88 @@ function ConsumoRing({
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [pct]);
-  const needleAngle = angleAt(animPct);
-  const needleTipY = cy - (r - 8);
-  // 3D needle geometry — a slim triangular blade with a separate left/right
-  // face so we can shade each side to fake volume.
-  const nBaseHalf = 5;
-  const needleLeftPath = `M ${cx - nBaseHalf} ${cy} L ${cx} ${needleTipY} L ${cx} ${cy} Z`;
-  const needleRightPath = `M ${cx} ${cy} L ${cx} ${needleTipY} L ${cx + nBaseHalf} ${cy} Z`;
-  const needleGlossPath = `M ${cx - 1.2} ${cy - 4} L ${cx} ${needleTipY + 6} L ${cx + 1.2} ${cy - 4} Z`;
-
-  // Consumed tip dot at the end of the actual consumption (also rotated)
-  const tipX = cx;
-  const tipY = cy - r;
-  const tipCol = tipColor(pct);
 
   const gid = line.number.replace(/\D/g, "");
+  const ball = polar(angleAt(animPct), r);
 
   return (
-    <div className="relative h-[240px] w-[228px] shrink-0">
+    <div className="relative h-[240px] w-[240px] shrink-0">
       <svg
-        viewBox={`0 0 ${size} 210`}
-        className="absolute left-0 top-0 h-[210px] w-full"
+        viewBox={`0 0 ${size} ${size}`}
+        className="absolute inset-0 h-full w-full"
         style={{ shapeRendering: "geometricPrecision" }}
       >
         <defs>
-          <radialGradient id={`hub-${gid}`} cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#a855f7" />
-            <stop offset="55%" stopColor="#7b1fa2" />
-            <stop offset="100%" stopColor="#4a0072" />
-          </radialGradient>
-          <linearGradient id={`needleLeft-${gid}`} x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#2a0140" />
-            <stop offset="60%" stopColor="#4a0072" />
-            <stop offset="100%" stopColor="#7a1fb8" />
+          <linearGradient id={`arc-${gid}`} x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0%" stopColor="#6d28d9" />
+            <stop offset="45%" stopColor="#9333ea" />
+            <stop offset="75%" stopColor="#c026d3" />
+            <stop offset="100%" stopColor="#e879f9" />
           </linearGradient>
-          <linearGradient id={`needleRight-${gid}`} x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#a855f7" />
-            <stop offset="55%" stopColor="#7b1fa2" />
-            <stop offset="100%" stopColor="#3a005c" />
-          </linearGradient>
-          <linearGradient id={`needleGloss-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.85" />
-            <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
-          </linearGradient>
-          <radialGradient id={`hubHi-${gid}`} cx="35%" cy="30%" r="60%">
-            <stop offset="0%" stopColor="#e9d5ff" stopOpacity="0.95" />
-            <stop offset="60%" stopColor="#a855f7" stopOpacity="0" />
-          </radialGradient>
-          <filter id={`gaugeShadow-${gid}`} x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" floodColor="#000" floodOpacity="0.35" />
+          <filter id={`ballShadow-${gid}`} x="-80%" y="-80%" width="260%" height="260%">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="#4c1d95" floodOpacity="0.45" />
           </filter>
-          <linearGradient id={`bezelOuter-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#b8b8bf" />
-            <stop offset="100%" stopColor="#f4f4f7" />
-          </linearGradient>
-          <linearGradient id={`bezelInner-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#5a5a62" />
-            <stop offset="100%" stopColor="#dcdce2" />
-          </linearGradient>
         </defs>
 
-        {/* 3D bezel — outer highlight ring */}
+        {/* Halo suave sob o anel */}
         <path
-          d={arcPath(START, START + SWEEP, r + strokeW / 2 + 2)}
+          d={fullPath}
           fill="none"
-          stroke={`url(#bezelOuter-${gid})`}
-          strokeWidth={2}
+          stroke="rgba(109,40,217,0.16)"
+          strokeWidth={strokeW + 8}
           strokeLinecap="round"
+          style={{ filter: "blur(8px)" }}
         />
-
-        {/* Background track (recessed) */}
-        <path
-          d={arcPath(START, START + SWEEP, r)}
-          fill="none"
-          stroke="#d8d8de"
-          strokeWidth={strokeW}
-          strokeLinecap="round"
-        />
-        {/* Inner shadow rim inside the arc for depth */}
-        <path
-          d={arcPath(START, START + SWEEP, r - strokeW / 2 - 1)}
-          fill="none"
-          stroke={`url(#bezelInner-${gid})`}
-          strokeWidth={1.5}
-          strokeLinecap="round"
-          opacity={0.55}
-        />
-
-        {/* Colored arc (full) */}
-        {segments.map((s, i) => (
-          <path
-            key={i}
-            d={s.d}
-            fill="none"
-            stroke={s.color}
-            strokeWidth={strokeW}
-            strokeLinecap={i === 0 || i === segments.length - 1 ? "round" : "butt"}
-          />
-        ))}
-
-        {/* Top gloss highlight over colored arc */}
-        <path
-          d={arcPath(START, START + SWEEP, r + strokeW / 2 - 2)}
-          fill="none"
-          stroke="#ffffff"
-          strokeWidth={1.5}
-          strokeLinecap="round"
-          opacity={0.35}
-        />
-
-        {/* Ticks */}
-        {Array.from({ length: minorTicks }).map((_, i) => {
-          const deg = START + (i / (minorTicks - 1)) * SWEEP;
-          const p1 = polar(deg, r - strokeW / 2 - 3);
-          const p2 = polar(deg, r - strokeW / 2 - 9);
-          return (
-            <line
-              key={`m-${i}`}
-              x1={p1.x}
-              y1={p1.y}
-              x2={p2.x}
-              y2={p2.y}
-              stroke="#bdbdc4"
-              strokeWidth={1}
+        {/* Trilho */}
+        <path d={fullPath} fill="none" stroke="#e3e3ea" strokeWidth={strokeW} strokeLinecap="round" />
+        {/* Progresso roxo + brilho interno */}
+        {animPct > 0.2 && (
+          <>
+            <path
+              d={fullPath}
+              fill="none"
+              stroke={`url(#arc-${gid})`}
+              strokeWidth={strokeW}
+              strokeLinecap="round"
+              strokeDasharray={`${(animPct / 100) * arcLen} ${arcLen}`}
             />
-          );
-        })}
-        {Array.from({ length: majorTicks }).map((_, i) => {
-          const deg = START + (i / (majorTicks - 1)) * SWEEP;
-          const p1 = polar(deg, r - strokeW / 2 - 2);
-          const p2 = polar(deg, r - strokeW / 2 - 13);
-          return (
-            <line
-              key={`M-${i}`}
-              x1={p1.x}
-              y1={p1.y}
-              x2={p2.x}
-              y2={p2.y}
-              stroke="#8a8a90"
-              strokeWidth={2}
+            <path
+              d={fullPath}
+              fill="none"
+              stroke="rgba(255,255,255,0.32)"
+              strokeWidth={6}
+              strokeLinecap="round"
+              strokeDasharray={`${(animPct / 100) * arcLen} ${arcLen}`}
             />
-          );
-        })}
-
-        {/* Rotating group: needle + consumed tip dot. Animates smoothly
-            when the consumption percentage changes. */}
-        <g
-          style={{
-            transform: `rotate(${needleAngle}deg)`,
-            transformOrigin: `${cx}px ${cy}px`,
-            transformBox: "view-box",
-            transition: "transform 1800ms cubic-bezier(0.22, 1, 0.36, 1)",
-            willChange: "transform",
-          }}
-        >
-          {/* Consumed tip cap (small dot at needle position on arc) */}
-          {pct > 0 && (
-            <>
-              <circle cx={tipX} cy={tipY} r={strokeW / 2 + 1} fill={tipCol} filter={`url(#gaugeShadow-${gid})`} />
-              <circle cx={tipX} cy={tipY} r={2} fill="#fff" />
-            </>
-          )}
-
-          {/* 3D Needle — two shaded faces + glossy specular strip */}
-          <g filter={`url(#gaugeShadow-${gid})`}>
-            <path d={needleLeftPath} fill={`url(#needleLeft-${gid})`} />
-            <path d={needleRightPath} fill={`url(#needleRight-${gid})`} />
-            {/* central seam highlight to sell the ridge */}
-            <line
-              x1={cx}
-              y1={cy}
-              x2={cx}
-              y2={needleTipY}
-              stroke="#e9d5ff"
-              strokeWidth={0.7}
-              opacity={0.85}
-            />
-            {/* glossy specular on the right face */}
-            <path d={needleGlossPath} fill={`url(#needleGloss-${gid})`} opacity={0.55} />
+          </>
+        )}
+        {/* Bolinha branca na ponta do consumo */}
+        {animPct > 0.05 && (
+          <g filter={`url(#ballShadow-${gid})`}>
+            <circle cx={ball.x} cy={ball.y} r={strokeW / 2 + 3} fill="#ffffff" />
           </g>
-        </g>
-
-        {/* Hub (3D pivot) — layered for depth */}
-        <circle cx={cx} cy={cy} r={15} fill="#1a0033" opacity={0.35} filter={`url(#gaugeShadow-${gid})`} />
-        <circle cx={cx} cy={cy} r={13} fill={`url(#hub-${gid})`} />
-        <circle cx={cx} cy={cy} r={13} fill={`url(#hubHi-${gid})`} />
-        <circle cx={cx} cy={cy} r={6} fill="#2a0140" />
-        <circle cx={cx - 1.5} cy={cy - 1.5} r={1.8} fill="#e9d5ff" opacity={0.95} />
-        <circle cx={cx + 3} cy={cy + 3} r={1.2} fill="#000" opacity={0.35} />
+        )}
       </svg>
 
-      {/* Big value + subtitle — pushed up a bit so it sits above the arc tips. */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-2 flex flex-col items-center">
-        <div className="text-[30px] font-bold leading-none text-[#1a1a1a]">
-          {((animPct / 100) * line.total).toFixed(2)}
-          <span className="ml-1 text-base font-semibold text-[#1a1a1a]">GB</span>
+      {/* Centro: mini gráfico, valor, subtítulo, divisor e porcentagem */}
+      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+        <div aria-hidden className="flex items-end gap-[3px]">
+          <span className="h-[7px] w-[4px] rounded-full bg-[#b7a6f5]" />
+          <span className="h-[11px] w-[4px] rounded-full bg-[#b7a6f5]" />
+          <span className="h-[15px] w-[4px] rounded-full bg-[#8b5cf6]" />
         </div>
-        <div className="mt-1 text-[11px] text-[#6b6b6b]">
-          consumidos de{" "}
-          <span className="font-bold text-[#660099]">{line.total} GB</span>
+        <div className="mt-1.5 flex items-baseline">
+          <span className="text-[34px] font-extrabold leading-none tracking-tight text-[#111827]">
+            {((animPct / 100) * line.total).toFixed(2)}
+          </span>
+          <span className="ml-1 text-[19px] font-bold leading-none text-[#6d28d9]">GB</span>
+        </div>
+        <div className="mt-1.5 text-[11px] text-[#6b6b6b]">
+          consumidos de <span className="font-bold text-[#1a1a1a]">{line.total} GB</span>
+        </div>
+        <div className="mt-2 h-px w-24 bg-[#dcdce4]" />
+        <div className="mt-1.5 text-[20px] font-bold leading-none text-[#6d28d9]">
+          {animPct.toFixed(2)}%
         </div>
       </div>
     </div>
@@ -1008,169 +742,105 @@ function ResumoConsumo() {
                 strokeWidth={2.75}
               />
             </button>
-            <div className="flex flex-col items-stretch gap-3 md:flex-row md:items-start md:justify-center md:gap-2">
+            <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-5">
               <div className="self-center md:self-auto"><ConsumoRing line={line} /></div>
 
               <div className="w-full pr-3 md:w-auto md:flex-1 md:pr-0">
-
-                <div className="flex items-center gap-2.5 whitespace-nowrap">
-                  <h2
-                    className="text-[22px] font-bold tracking-tight"
-                    style={{
-                      backgroundImage: "linear-gradient(90deg, #8b5cf6 0%, #660099 30%, #b45309 70%, #171717 100%)",
-                      WebkitBackgroundClip: "text",
-                      backgroundClip: "text",
-                      color: "transparent",
-                      textShadow: "0 0 22px rgba(102,0,153,0.30)",
-                    }}
-                  >
-                    {baseLine.plan}
+                {/* Título — nome escuro + franquia azul, bônus roxo com presente (arte) */}
+                <div className="flex items-center gap-2 whitespace-nowrap">
+                  <h2 className="text-[22px] font-bold tracking-tight">
+                    <span className="text-[#111827]">{baseLine.plan.split(" ")[0]}</span>{" "}
+                    <span className="text-[#2563eb]">{baseLine.plan.split(" ").slice(1).join(" ")}</span>
                   </h2>
                   {bonusDebito > 0 && (
-                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[#16a34a] bg-transparent px-2.5 py-1 text-[12px] font-bold text-[#16a34a] animate-fade-in">
-                      <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                    <span className="inline-flex shrink-0 items-center gap-1 text-[13px] font-semibold text-[#6d28d9]">
+                      <Gift className="h-4 w-4" strokeWidth={2.25} />
                       +{bonusDebito}GB liberado
                     </span>
                   )}
                 </div>
 
-                <ul className="mt-3 -ml-2 space-y-2 text-sm">
-                  <li>
-                    <div className="flex items-center gap-1.5">
-                      <DataBatteryIcon percentage={usedPct} variant="consumption" />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="text-[12.5px] font-semibold text-[#1a1a1a]">Meu Consumo</span>
-                          <span className="flex items-center gap-1 text-[12px]">
-                            <span
-                              className="font-bold"
-                              style={{ color: tipColor(pct), transition: "color 900ms ease" }}
-                            >
-                              {pct.toFixed(2)}%
-                            </span>
-                            <span className="font-light text-[#c9c9c9]">|</span>
-                            <span className="font-bold text-[#1a1a1a]">{line.used.toFixed(2)} GB</span>
-                          </span>
-                        </div>
-
-                        <BrightDataBar percentage={pct} variant="consumption" />
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="flex items-center gap-1.5">
-                      <DataBatteryIcon percentage={availPct} variant="availableFixed" color={PURPLE_ICON} />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="text-[12.5px] font-semibold text-[#1a1a1a]">Disponíveis</span>
-                          <span className="flex items-center gap-1 text-[12px]">
-                            <span className="font-bold" style={{ color: PURPLE_TEXT }}>
-                              {availPctExact}%
-                            </span>
-                            <span className="font-light text-[#c9c9c9]">|</span>
-                            <span className="font-bold text-[#1a1a1a]">{available.toFixed(2)} GB</span>
-                          </span>
-                        </div>
-
-                        <BrightDataBar percentage={100 - pct} variant="available" />
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="flex items-center gap-1.5">
-                      <DataBatteryIcon percentage={bisRemainPct} variant="available" />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="text-[12.5px] font-semibold text-[#1a1a1a]">Disponível Smart Mais Bis</span>
-                          <span className="flex items-center gap-1 text-[12px]">
-                            <span
-                              className="font-bold"
-                              style={{ color: tipColor(100 - bisRemainPct), transition: "color 900ms ease" }}
-                            >
-                              {bisRemainPctExact}%
-                            </span>
-                            <span className="font-light text-[#c9c9c9]">|</span>
-                            <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
-                          </span>
-                        </div>
-
-                        <BrightDataBar percentage={bisRemainPct} variant="bonusAvailable" />
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-
-
-                {/* Renovação automática (integrada, sem card) */}
-                <div className="mt-3 flex items-start justify-between gap-4">
-                  <div className="min-w-0 pt-0.5">
-                    <span className="text-sm font-semibold text-[#1a1a1a]">Renovação automática</span>
-                    <div className="mt-1.5 space-y-0.5">
-                      {autoDebit ? (
-                        <div
-                          className="text-[11px] font-semibold text-[#16a34a] transition-all duration-500"
-                          style={{ opacity: 1, transform: 'translateY(0)' }}
+                <div className="mt-2.5 space-y-2">
+                  {[
+                    { label: "Meu Consumo", pct: pct, pctColor: pctTextColor(pct), gb: line.used, variant: "consumption" as const },
+                    { label: "Disponíveis", pct: 100 - pct, pctColor: pctTextColor(100 - pct), gb: available, variant: "available" as const },
+                    { label: "Disponível Smart Mais Bis", pct: bisRemainPct, pctColor: pctTextColor(bisRemainPct), gb: bisAvailable, variant: "bonusAvailable" as const },
+                  ].map((row) => (
+                    <div key={row.label} className="rounded-[18px] bg-white/60 p-3 shadow-[0_1px_3px_rgba(20,20,45,0.06)]">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[13px] font-semibold text-[#1a1a1a]">{row.label}</span>
+                        <span
+                          className="text-[13.5px] font-bold"
+                          style={{ color: row.pctColor, transition: "color 900ms ease" }}
                         >
-                          Débito automático ativo
+                          {row.pct.toFixed(2)}%
+                        </span>
+                      </div>
+                      <div className="mt-2 flex items-center gap-2.5">
+                        <div className="min-w-0 flex-1">
+                          <BrightDataBar percentage={row.pct} variant={row.variant} className="" />
                         </div>
-                      ) : (
-                        <div className="text-[11px] font-medium text-[#666] transition-all duration-500">
-                          Ative e ganhe +25GB de bônus
-                        </div>
-                      )}
-
+                        <span className="shrink-0 whitespace-nowrap text-[13.5px] font-bold text-[#1a1a1a]">
+                          {row.gb.toFixed(2)} <span className="font-medium text-[#8a8a8a]">GB</span>
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={autoDebit}
-                    onClick={() => {
-                      openAfterIconsReady(() => setConfirmAutoDebit(true));
-                    }}
-                    className={`relative mt-0.5 inline-flex h-4 w-8 shrink-0 cursor-pointer items-center rounded-full border transition-all duration-300 group ${
-                      autoDebit ? "border-[#16a34a] bg-[#16a34a]" : "border-[#a8a8a8] bg-[#c9c9c9]"
-                    }`}
-                  >
-                    <span
-                      className={`inline-block h-3 w-3 transform rounded-full transition-transform duration-300 ${
-                        autoDebit ? "translate-x-[18px]" : "translate-x-[2px]"
+                  ))}
+
+                  {/* Débito automático */}
+                  <div className="flex items-center justify-between gap-3 rounded-[18px] bg-white/60 p-3 shadow-[0_1px_3px_rgba(20,20,45,0.06)]">
+                    <div className="flex min-w-0 items-center gap-2.5">
+                      <IconTile>
+                        <CreditCard className="h-5 w-5" strokeWidth={2.2} />
+                      </IconTile>
+                      <div className="min-w-0">
+                        <div className="text-[13.5px] font-semibold text-[#1a1a1a]">Débito automático</div>
+                        <div className="whitespace-nowrap text-[11px] leading-tight text-[#6b6b6b]">Desconto automático do saldo</div>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={autoDebit}
+                      onClick={() => {
+                        openAfterIconsReady(() => setConfirmAutoDebit(true));
+                      }}
+                      className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border transition-all duration-300 group ${
+                        autoDebit ? "border-[#7c3aed] bg-[#7c3aed]" : "border-[#a8a8a8] bg-[#c9c9c9]"
                       }`}
-                      style={{
-                        background: "linear-gradient(180deg,#ffffff,#f1f1f1)",
-                        boxShadow:
-                          "0 1px 2px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.95), 0 0 0 1px rgba(0,0,0,0.06)",
-                      }}
-                    />
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 rounded-full transition-opacity duration-300"
-                      style={{
-                        boxShadow: "0 0 0 3px rgba(255,255,255,0.55), 0 2px 6px -1px rgba(0,0,0,0.18)",
-                        opacity: autoDebit ? 1 : 0,
-                      }}
-                    />
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                      style={{ boxShadow: "0 0 0 3px rgba(255,255,255,0.7)" }}
-                    />
-                  </button>
+                    >
+                      <span
+                        className={`inline-block h-[18px] w-[18px] transform rounded-full bg-white transition-transform duration-300 ${
+                          autoDebit ? "translate-x-[21px]" : "translate-x-[3px]"
+                        }`}
+                        style={{
+                          boxShadow: "0 1px 3px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.95)",
+                        }}
+                      />
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0 rounded-full transition-opacity duration-300"
+                        style={{ boxShadow: "0 0 0 3px rgba(255,255,255,0.55)", opacity: autoDebit ? 1 : 0 }}
+                      />
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                        style={{ boxShadow: "0 0 0 3px rgba(255,255,255,0.7)" }}
+                      />
+                    </button>
+                  </div>
                 </div>
 
-
+                {/* Ver detalhes — pílula roxa clara (arte) */}
                 <button
                   onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
-                  className="-ml-2 mt-3 flex items-center gap-2 text-sm font-semibold text-[#660099] hover:underline md:mt-5"
+                  className="mt-2.5 flex h-11 w-full items-center justify-center gap-1.5 rounded-[14px] text-[14px] font-semibold text-[#6d28d9] transition hover:brightness-[1.03]"
+                  style={{
+                    background: "linear-gradient(180deg, rgba(124,58,237,0.14), rgba(124,58,237,0.07))",
+                  }}
                 >
-                  <img
-                    src={icon3dDetails}
-                    alt=""
-                    loading="eager"
-                    decoding="sync"
-                    className="h-9 w-9 shrink-0 object-contain"
-                  />
-                  Ver detalhes do seu consumo &gt;
+                  Ver detalhes do seu consumo
+                  <ChevronRight className="h-4 w-4" strokeWidth={2.5} />
                 </button>
               </div>
             </div>
@@ -1209,32 +879,38 @@ function ResumoConsumo() {
               return (
                 <button
                   onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                  className="mt-2.5 flex w-full items-center justify-center px-3 text-center text-[10px] font-semibold transition hover:underline md:mt-4 md:text-[13px]"
-                  style={{ color: s.tone }}
+                  className="mt-3 flex w-full items-center gap-2 px-0.5 text-left text-[12.5px] transition hover:opacity-80 md:mt-4"
                 >
                   {statusIcon}
-                  <span className="ml-2 whitespace-nowrap">
-                    <span className="md:hidden">Status da linha: {s.short}</span>
-                    <span className="hidden md:inline">Status da linha: {s.label}</span>
+                  <span className="whitespace-nowrap">
+                    <span className="font-semibold text-[#1a1a1a]">Status da linha: </span>
+                    <span className="hidden font-bold md:inline" style={{ color: s.tone }}>
+                      {s.label}
+                    </span>
+                    <span className="inline font-bold md:hidden" style={{ color: s.tone }}>
+                      {s.short}
+                    </span>
                     {effective === "reduzida" && (
-                      <span className="ml-1.5 text-xs font-bold">256 Kbps</span>
+                      <span className="ml-1.5 text-xs font-bold" style={{ color: s.tone }}>256 Kbps</span>
                     )}
                   </span>
                 </button>
               );
             })()}
+          </div>
 
-          {/* Nota em tempo real — faixa colada no rodapé do card, de ponta a ponta (referência) */}
-          <div className="-mx-4 -mb-4 mt-3 flex h-9 items-center border-t border-border/60 bg-muted/50 pl-4 pr-12 text-[11px] font-medium text-muted-foreground backdrop-blur-sm md:-mx-5 md:-mb-5 md:pl-5 md:pr-14">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden className="mr-2 shrink-0 text-foreground/70">
-              <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
-              <path d="M12 10.8v5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-              <circle cx="12" cy="7.6" r="1" fill="currentColor" />
-            </svg>
-            <span className="truncate">Os dados são atualizados em tempo real.</span>
+          {/* Nota em tempo real — fora do card, alinhada à direita */}
+          <div className="mt-2.5 flex justify-end">
+            <div className="flex h-8 items-center border-l-2 border-[#660099]/35 bg-white/55 px-3 text-[11px] font-medium text-[#666] backdrop-blur-sm">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden className="mr-2 shrink-0 text-[#8a8a8a]">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
+                <path d="M12 10.8v5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                <circle cx="12" cy="7.6" r="1" fill="currentColor" />
+              </svg>
+              <span className="whitespace-nowrap">Os dados são atualizados em tempo real.</span>
+            </div>
           </div>
-          </div>
-          </div>
+        </div>
 
 
 
