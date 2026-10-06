@@ -249,7 +249,7 @@ function DataBatteryIcon({
         loading="eager"
         decoding="sync"
         className="absolute inset-0 h-full w-full object-contain"
-        style={{ filter: "grayscale(1) opacity(0.16) brightness(1.35)" }}
+        style={{ filter: "grayscale(1) opacity(0.28) brightness(1.35)" }}
       />
       <div
         className="absolute inset-0"
@@ -259,6 +259,7 @@ function DataBatteryIcon({
             variant === "consumption"
               ? "linear-gradient(to top, #16a34a 0%, #4ade80 18%, #a3e635 34%, #facc15 50%, #f59e0b 64%, #f97316 78%, #ef4444 90%, #dc2626 100%)"
               : color,
+          backgroundColor: variant === "consumption" ? undefined : color,
           maskImage: `url(${icon3dDisk})`,
           WebkitMaskImage: `url(${icon3dDisk})`,
           maskSize: "contain",
@@ -267,8 +268,29 @@ function DataBatteryIcon({
           WebkitMaskPosition: "center",
           maskRepeat: "no-repeat",
           WebkitMaskRepeat: "no-repeat",
+          filter: "saturate(1.6) brightness(1.12)",
           transition:
             "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
+        }}
+      />
+      {/* Gloss layer — adds the shiny "lustro" finish on top of the fill */}
+      <div
+        className="absolute inset-0"
+        style={{
+          clipPath: `inset(${100 - pct}% 0 0 0)`,
+          backgroundImage:
+            "linear-gradient(180deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.18) 30%, rgba(255,255,255,0) 55%, rgba(255,255,255,0.22) 92%, rgba(255,255,255,0.45) 100%)",
+          maskImage: `url(${icon3dDisk})`,
+          WebkitMaskImage: `url(${icon3dDisk})`,
+          maskSize: "contain",
+          WebkitMaskSize: "contain",
+          maskPosition: "center",
+          WebkitMaskPosition: "center",
+          maskRepeat: "no-repeat",
+          WebkitMaskRepeat: "no-repeat",
+          mixBlendMode: "screen",
+          opacity: 0.55,
+          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       />
       <img
@@ -276,7 +298,7 @@ function DataBatteryIcon({
         alt=""
         loading="eager"
         decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain opacity-35 mix-blend-multiply"
+        className="absolute inset-0 h-full w-full object-contain opacity-20 mix-blend-multiply"
         style={{
           clipPath: `inset(${100 - pct}% 0 0 0)`,
           filter: `hue-rotate(${hueShift}deg) saturate(1.3) brightness(1.2)`,
@@ -317,7 +339,15 @@ function BrightDataBar({
       : markerColor;
 
   return (
-    <div className="relative mt-2.5 h-4 w-full rounded-full bg-[var(--data-track)]">
+    <div
+      className="relative mt-2.5 h-3.5 w-full rounded-full bg-[var(--data-track)]"
+      style={{
+        // Inner "trilho" (rail) groove — subtle inset depth so the fill and
+        // the percentage capsule run inside a recessed track.
+        boxShadow:
+          "inset 0 2px 3px rgba(20, 20, 45, 0.22), inset 0 -1px 2px rgba(255, 255, 255, 0.9), inset 0 0 0 1px rgba(255, 255, 255, 0.45)",
+      }}
+    >
       <div
         className="absolute inset-y-0 left-0 rounded-full"
         style={{
@@ -331,11 +361,12 @@ function BrightDataBar({
         }}
       />
       <span
-        className="absolute top-1/2 flex h-4 min-w-11 items-center justify-center rounded-full px-2 text-center text-[9px] font-black leading-none text-primary-foreground"
+        className="absolute top-1/2 flex h-3.5 min-w-11 items-center justify-center rounded-full px-2 text-center text-[10px] font-black leading-none text-primary-foreground"
         style={{
           left: `${Math.max(9, Math.min(91, pct))}%`,
           transform: "translate(-50%, -50%)",
           background: markerColor,
+          boxShadow: "0 1px 3px rgba(20, 20, 45, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35)",
           transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
         }}
       >
