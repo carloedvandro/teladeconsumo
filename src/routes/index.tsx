@@ -384,27 +384,29 @@ function ConsumoRing({
           opacity={0.55}
         />
 
-        {/* Colored arc (full) */}
-        {segments.map((s, i) => (
-          <path
-            key={i}
-            d={s.d}
-            fill="none"
-            stroke={s.color}
-            strokeWidth={strokeW}
-            strokeLinecap={i === 0 || i === segments.length - 1 ? "round" : "butt"}
-          />
-        ))}
+        {/* Colored fill — grows with the needle, same green→red scale as the bars */}
+        <g clipPath={`url(#gaugeFill-${gid})`}>
+          {segments.map((s, i) => (
+            <path
+              key={i}
+              d={s.d}
+              fill="none"
+              stroke={s.color}
+              strokeWidth={strokeW}
+              strokeLinecap="butt"
+            />
+          ))}
 
-        {/* Top gloss highlight over colored arc */}
-        <path
-          d={arcPath(START, START + SWEEP, r + strokeW / 2 - 2)}
-          fill="none"
-          stroke="#ffffff"
-          strokeWidth={1.5}
-          strokeLinecap="round"
-          opacity={0.35}
-        />
+          {/* Top gloss highlight over the colored fill */}
+          <path
+            d={arcPath(START, START + SWEEP, r + strokeW / 2 - 2)}
+            fill="none"
+            stroke="#ffffff"
+            strokeWidth={1.5}
+            strokeLinecap="round"
+            opacity={0.35}
+          />
+        </g>
 
         {/* Ticks */}
         {Array.from({ length: minorTicks }).map((_, i) => {
