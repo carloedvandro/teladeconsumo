@@ -1176,21 +1176,16 @@ function ResumoConsumo() {
               );
             })()}
 
+            {/* Nota em tempo real — de volta dentro do card, só o textinho com o ícone */}
+            <div className="mt-2.5 flex items-center justify-center gap-1.5 pb-1 text-[12px] font-medium text-[#2b2b2b]">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0">
+                <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#660099" opacity="0.9" />
+                <path d="m9 12 2 2 4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              Os dados são atualizados em tempo real.
+            </div>
+
           </div>
-
-          {/* Nota em tempo real — barra de ponta a ponta, alinhada ao painel */}
-          <div className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-md bg-white/70 px-3 py-1.5 text-[11px] text-[#4a4a4a] backdrop-blur-sm">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0">
-              <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#660099" opacity="0.85" />
-              <path d="m9 12 2 2 4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            Os dados são atualizados em tempo real.
-          </div>
-          </div>
-
-
-
-
         </section>
 
 
