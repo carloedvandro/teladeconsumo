@@ -1784,7 +1784,7 @@ function ResumoConsumo() {
             <div className="relative flex items-center gap-3 sm:gap-4">
               <img
                 src={icon3dAutorenew}
-                alt="Renovação automática"
+                alt="Débito automático"
                 width={56}
                 height={56}
                 loading="eager" decoding="sync" fetchPriority="high"
