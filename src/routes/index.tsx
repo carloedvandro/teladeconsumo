@@ -297,11 +297,16 @@ function BrightDataBar({
   variant,
 }: {
   percentage: number;
-  variant: "consumption" | "available";
+  variant: "consumption" | "available" | "bonusAvailable";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
   const markerColor = variant === "consumption" ? tipColor(pct) : tipColor(100 - pct);
-  const fill = variant === "consumption" ? spectrumGradient(false) : markerColor;
+  const fill =
+    variant === "consumption"
+      ? spectrumGradient(false)
+      : variant === "bonusAvailable"
+        ? markerColor
+        : "transparent";
 
   return (
     <div className="relative mt-2.5 h-4 w-full rounded-full bg-[var(--data-track)]">
@@ -1016,7 +1021,7 @@ function ResumoConsumo() {
                           </span>
                         </div>
 
-                        <BrightDataBar percentage={bisRemainPct} variant="available" />
+                        <BrightDataBar percentage={bisRemainPct} variant="bonusAvailable" />
                       </div>
                     </div>
                   </li>
