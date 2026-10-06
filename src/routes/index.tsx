@@ -905,7 +905,7 @@ function ResumoConsumo() {
                   </h2>
                   {bonusDebito > 0 && (
                     <span className="mt-[1px] inline-flex shrink-0 items-center gap-0.5 text-[11px] font-bold text-[#16A34A] animate-fade-in">
-                      <Gift className="h-[18px] w-[18px] shrink-0" strokeWidth={2.4} />
+                      <Gift className="h-5 w-5 shrink-0" strokeWidth={2.4} />
                       +{bonusDebito}GB liberado
                     </span>
                   )}
