@@ -871,7 +871,7 @@ function ResumoConsumo() {
                             style={{
                               width: `${usedPct}%`,
                               background:
-                                "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
+                                "linear-gradient(90deg,#62b81c 0%,#f4c20d 45%,#ff7a18 75%,#d10f0f 100%)",
                               transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
                           />
@@ -980,7 +980,7 @@ function ResumoConsumo() {
                             style={{
                               width: `${bisRemainPct}%`,
                               background:
-                                "linear-gradient(90deg,#7ec832 0%,#f4c20d 45%,#ff7a18 75%,#ff2a2a 100%)",
+                                "linear-gradient(90deg,#62b81c 0%,#f4c20d 45%,#ff7a18 75%,#d10f0f 100%)",
                               transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
                             }}
                           />
