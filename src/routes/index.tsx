@@ -43,7 +43,6 @@ import icon3dSms from "@/assets/icon-3d-sms.png";
 import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
 import icon3dBonus from "@/assets/icon-3d-bonus.png";
 import icon3dAlert from "@/assets/icon-3d-alert.png";
-import icon3dPie from "@/assets/icon-3d-pie.png";
 import icon3dDisk from "@/assets/icon-3d-disk.png";
 import icon3dDetails from "@/assets/icon-3d-details.png";
 const familyImg = familyImgAsset.url;
@@ -173,38 +172,6 @@ function tipColor(pct: number) {
   return lerpColor("#ff7a18", "#ff2a2a", (p - 80) / 20);
 }
 
-function ConsumptionPieIcon({ percentage }: { percentage: number }) {
-  const pct = Math.max(0, Math.min(100, percentage));
-
-  return (
-    <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
-      <img
-        src={icon3dPie}
-        alt=""
-        loading="eager"
-        decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain opacity-40"
-        style={{ filter: "saturate(0.6) brightness(1.25)" }}
-      />
-      <img
-        src={icon3dPie}
-        alt=""
-        loading="eager"
-        decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain"
-        style={{
-          clipPath: `inset(${100 - pct}% 0 0 0)`,
-          filter: "saturate(1.7) brightness(1.12)",
-          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
-      />
-      <span className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none text-primary-foreground [text-shadow:0_1px_3px_var(--data-purple)]">
-        {Math.round(pct)}%
-      </span>
-    </div>
-  );
-}
-
 function DataBatteryIcon({ percentage }: { percentage: number }) {
   const pct = Math.max(0, Math.min(100, percentage));
   return (
@@ -244,11 +211,10 @@ function BrightDataBar({
   variant: "consumption" | "available";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  const markerColor = variant === "consumption" ? tipColor(pct) : "var(--data-purple)";
-  const fill =
-    variant === "consumption"
-      ? "linear-gradient(90deg,var(--data-green),var(--data-yellow) 45%,var(--data-orange) 72%,var(--data-red))"
-      : "linear-gradient(90deg,var(--data-purple),var(--data-magenta))";
+  // Solid color reflecting the state: consumption goes green→red as it fills;
+  // available is green when full and turns red as it empties.
+  const markerColor = variant === "consumption" ? tipColor(pct) : tipColor(100 - pct);
+  const fill = markerColor;
 
   return (
     <div className="relative mt-2.5 h-2 w-full rounded-full bg-[var(--data-track)] shadow-inner">
@@ -258,7 +224,7 @@ function BrightDataBar({
           width: `${pct}%`,
           background: fill,
           boxShadow: `0 0 8px color-mix(in oklab, ${markerColor} 48%, transparent)`,
-          transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+          transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
         }}
       />
       <span
@@ -921,7 +887,7 @@ function ResumoConsumo() {
                 <ul className="mt-3 -ml-2 space-y-2 text-sm">
                   <li>
                     <div className="flex items-center gap-2">
-                      <ConsumptionPieIcon percentage={usedPct} />
+                      <DataBatteryIcon percentage={usedPct} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
@@ -951,7 +917,7 @@ function ResumoConsumo() {
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <ConsumptionPieIcon percentage={bisRemainPct} />
+                      <DataBatteryIcon percentage={100 - bisRemainPct} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
@@ -960,7 +926,7 @@ function ResumoConsumo() {
                           </span>
                         </div>
 
-                        <BrightDataBar percentage={bisRemainPct} variant="consumption" />
+                        <BrightDataBar percentage={100 - bisRemainPct} variant="consumption" />
                       </div>
                     </div>
                   </li>
