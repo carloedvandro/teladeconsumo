@@ -972,25 +972,13 @@ function ResumoConsumo() {
                 </ul>
 
 
-                {/* Renovação automática (integrada, sem card) */}
-                <div className="mt-3 flex items-start justify-between gap-4">
-                  <div className="min-w-0 pt-0.5">
-                    <span className="text-sm font-semibold text-[#1a1a1a]">Renovação automática</span>
-                    <div className="mt-1.5 space-y-0.5">
-                      {autoDebit ? (
-                        <div
-                          className="text-[11px] font-semibold text-[#16a34a] transition-all duration-500"
-                          style={{ opacity: 1, transform: 'translateY(0)' }}
-                        >
-                          Débito automático ativo
-                        </div>
-                      ) : (
-                        <div className="text-[11px] font-medium text-[#666] transition-all duration-500">
-                          Ative e ganhe +25GB de bônus
-                        </div>
-                      )}
-
-                    </div>
+                <div className="mt-2 flex items-center gap-3 rounded-lg border border-primary-foreground/50 bg-consumption-row px-2.5 py-2 shadow-[inset_0_1px_0_color-mix(in_oklab,var(--color-primary-foreground)_70%,transparent)] backdrop-blur-sm">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-consumption-soft bg-primary-foreground/40 text-consumption-violet" aria-hidden="true">
+                    <CreditCard className="h-6 w-6" strokeWidth={2.5} />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <span className="text-sm font-bold text-foreground">Débito automático</span>
+                    <div className="mt-0.5 text-[11px] font-medium text-muted-foreground">Desconto automático do saldo</div>
                   </div>
                   <button
                     type="button"
@@ -999,19 +987,14 @@ function ResumoConsumo() {
                     onClick={() => {
                       openAfterIconsReady(() => setConfirmAutoDebit(true));
                     }}
-                    className={`relative mt-0.5 inline-flex h-4 w-8 shrink-0 cursor-pointer items-center rounded-full border transition-all duration-300 group ${
-                      autoDebit ? "border-[#16a34a] bg-[#16a34a]" : "border-[#a8a8a8] bg-[#c9c9c9]"
+                    className={`group relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full border transition-all duration-300 ${
+                      autoDebit ? "border-consumption-purple bg-consumption-purple" : "border-border bg-muted"
                     }`}
                   >
                     <span
-                      className={`inline-block h-3 w-3 transform rounded-full transition-transform duration-300 ${
-                        autoDebit ? "translate-x-[18px]" : "translate-x-[2px]"
+                      className={`inline-block h-6 w-6 transform rounded-full bg-primary-foreground transition-transform duration-300 ${
+                        autoDebit ? "translate-x-[21px]" : "translate-x-px"
                       }`}
-                      style={{
-                        background: "linear-gradient(180deg,#ffffff,#f1f1f1)",
-                        boxShadow:
-                          "0 1px 2px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.95), 0 0 0 1px rgba(0,0,0,0.06)",
-                      }}
                     />
                     <span
                       aria-hidden
@@ -1032,16 +1015,10 @@ function ResumoConsumo() {
 
                 <button
                   onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
-                  className="-ml-2 mt-3 flex items-center gap-2 text-sm font-semibold text-[#660099] hover:underline md:mt-5"
+                  className="mt-2 flex h-10 w-full items-center justify-center rounded-lg bg-consumption-soft px-4 text-sm font-bold text-consumption-violet transition-colors hover:bg-accent"
                 >
-                  <img
-                    src={icon3dDetails}
-                    alt=""
-                    loading="eager"
-                    decoding="sync"
-                    className="h-9 w-9 shrink-0 object-contain"
-                  />
-                  Ver detalhes do seu consumo &gt;
+                  <span>Ver detalhes do seu consumo</span>
+                  <ChevronRight className="ml-auto h-4 w-4" strokeWidth={3} aria-hidden="true" />
                 </button>
               </div>
             </div>
