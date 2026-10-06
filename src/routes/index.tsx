@@ -742,169 +742,105 @@ function ResumoConsumo() {
                 strokeWidth={2.75}
               />
             </button>
-            <div className="flex flex-col items-stretch gap-3 md:flex-row md:items-start md:justify-center md:gap-2">
+            <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-5">
               <div className="self-center md:self-auto"><ConsumoRing line={line} /></div>
 
               <div className="w-full pr-3 md:w-auto md:flex-1 md:pr-0">
-
-                <div className="flex items-center gap-2.5 whitespace-nowrap">
-                  <h2
-                    className="text-[22px] font-bold tracking-tight"
-                    style={{
-                      backgroundImage: "linear-gradient(90deg, #8b5cf6 0%, #660099 30%, #b45309 70%, #171717 100%)",
-                      WebkitBackgroundClip: "text",
-                      backgroundClip: "text",
-                      color: "transparent",
-                      textShadow: "0 0 22px rgba(102,0,153,0.30)",
-                    }}
-                  >
-                    {baseLine.plan}
+                {/* Título — nome escuro + franquia azul, bônus roxo com presente (arte) */}
+                <div className="flex items-center gap-2 whitespace-nowrap">
+                  <h2 className="text-[22px] font-bold tracking-tight">
+                    <span className="text-[#111827]">{baseLine.plan.split(" ")[0]}</span>{" "}
+                    <span className="text-[#2563eb]">{baseLine.plan.split(" ").slice(1).join(" ")}</span>
                   </h2>
                   {bonusDebito > 0 && (
-                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[#16a34a] bg-transparent px-2.5 py-1 text-[12px] font-bold text-[#16a34a] animate-fade-in">
-                      <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                    <span className="inline-flex shrink-0 items-center gap-1 text-[13px] font-semibold text-[#6d28d9]">
+                      <Gift className="h-4 w-4" strokeWidth={2.25} />
                       +{bonusDebito}GB liberado
                     </span>
                   )}
                 </div>
 
-                <ul className="mt-3 -ml-2 space-y-2 text-sm">
-                  <li>
-                    <div className="flex items-center gap-1.5">
-                      <DataBatteryIcon percentage={usedPct} variant="consumption" />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="text-[12.5px] font-semibold text-[#1a1a1a]">Meu Consumo</span>
-                          <span className="flex items-center gap-1 text-[12px]">
-                            <span
-                              className="font-bold"
-                              style={{ color: tipColor(pct), transition: "color 900ms ease" }}
-                            >
-                              {pct.toFixed(2)}%
-                            </span>
-                            <span className="font-light text-[#c9c9c9]">|</span>
-                            <span className="font-bold text-[#1a1a1a]">{line.used.toFixed(2)} GB</span>
-                          </span>
-                        </div>
-
-                        <BrightDataBar percentage={pct} variant="consumption" />
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="flex items-center gap-1.5">
-                      <DataBatteryIcon percentage={availPct} variant="availableFixed" color={PURPLE_ICON} />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="text-[12.5px] font-semibold text-[#1a1a1a]">Disponíveis</span>
-                          <span className="flex items-center gap-1 text-[12px]">
-                            <span className="font-bold" style={{ color: PURPLE_TEXT }}>
-                              {availPctExact}%
-                            </span>
-                            <span className="font-light text-[#c9c9c9]">|</span>
-                            <span className="font-bold text-[#1a1a1a]">{available.toFixed(2)} GB</span>
-                          </span>
-                        </div>
-
-                        <BrightDataBar percentage={100 - pct} variant="available" />
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="flex items-center gap-1.5">
-                      <DataBatteryIcon percentage={bisRemainPct} variant="available" />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="text-[12.5px] font-semibold text-[#1a1a1a]">Disponível Smart Mais Bis</span>
-                          <span className="flex items-center gap-1 text-[12px]">
-                            <span
-                              className="font-bold"
-                              style={{ color: tipColor(100 - bisRemainPct), transition: "color 900ms ease" }}
-                            >
-                              {bisRemainPctExact}%
-                            </span>
-                            <span className="font-light text-[#c9c9c9]">|</span>
-                            <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
-                          </span>
-                        </div>
-
-                        <BrightDataBar percentage={bisRemainPct} variant="bonusAvailable" />
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-
-
-                {/* Renovação automática (integrada, sem card) */}
-                <div className="mt-3 flex items-start justify-between gap-4">
-                  <div className="min-w-0 pt-0.5">
-                    <span className="text-sm font-semibold text-[#1a1a1a]">Renovação automática</span>
-                    <div className="mt-1.5 space-y-0.5">
-                      {autoDebit ? (
-                        <div
-                          className="text-[11px] font-semibold text-[#16a34a] transition-all duration-500"
-                          style={{ opacity: 1, transform: 'translateY(0)' }}
+                <div className="mt-2.5 space-y-2">
+                  {[
+                    { label: "Meu Consumo", pct: pct, pctColor: pctTextColor(pct), gb: line.used, variant: "consumption" as const },
+                    { label: "Disponíveis", pct: 100 - pct, pctColor: pctTextColor(100 - pct), gb: available, variant: "available" as const },
+                    { label: "Disponível Smart Mais Bis", pct: bisRemainPct, pctColor: pctTextColor(bisRemainPct), gb: bisAvailable, variant: "bonusAvailable" as const },
+                  ].map((row) => (
+                    <div key={row.label} className="rounded-[18px] bg-white/60 p-3 shadow-[0_1px_3px_rgba(20,20,45,0.06)]">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[13px] font-semibold text-[#1a1a1a]">{row.label}</span>
+                        <span
+                          className="text-[13.5px] font-bold"
+                          style={{ color: row.pctColor, transition: "color 900ms ease" }}
                         >
-                          Débito automático ativo
+                          {row.pct.toFixed(2)}%
+                        </span>
+                      </div>
+                      <div className="mt-2 flex items-center gap-2.5">
+                        <div className="min-w-0 flex-1">
+                          <BrightDataBar percentage={row.pct} variant={row.variant} className="" />
                         </div>
-                      ) : (
-                        <div className="text-[11px] font-medium text-[#666] transition-all duration-500">
-                          Ative e ganhe +25GB de bônus
-                        </div>
-                      )}
-
+                        <span className="shrink-0 whitespace-nowrap text-[13.5px] font-bold text-[#1a1a1a]">
+                          {row.gb.toFixed(2)} <span className="font-medium text-[#8a8a8a]">GB</span>
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={autoDebit}
-                    onClick={() => {
-                      openAfterIconsReady(() => setConfirmAutoDebit(true));
-                    }}
-                    className={`relative mt-0.5 inline-flex h-4 w-8 shrink-0 cursor-pointer items-center rounded-full border transition-all duration-300 group ${
-                      autoDebit ? "border-[#16a34a] bg-[#16a34a]" : "border-[#a8a8a8] bg-[#c9c9c9]"
-                    }`}
-                  >
-                    <span
-                      className={`inline-block h-3 w-3 transform rounded-full transition-transform duration-300 ${
-                        autoDebit ? "translate-x-[18px]" : "translate-x-[2px]"
+                  ))}
+
+                  {/* Débito automático */}
+                  <div className="flex items-center justify-between gap-3 rounded-[18px] bg-white/60 p-3 shadow-[0_1px_3px_rgba(20,20,45,0.06)]">
+                    <div className="flex min-w-0 items-center gap-2.5">
+                      <IconTile>
+                        <CreditCard className="h-5 w-5" strokeWidth={2.2} />
+                      </IconTile>
+                      <div className="min-w-0">
+                        <div className="text-[13.5px] font-semibold text-[#1a1a1a]">Débito automático</div>
+                        <div className="text-[11.5px] leading-tight text-[#6b6b6b]">Desconto automático do saldo</div>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={autoDebit}
+                      onClick={() => {
+                        openAfterIconsReady(() => setConfirmAutoDebit(true));
+                      }}
+                      className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border transition-all duration-300 group ${
+                        autoDebit ? "border-[#7c3aed] bg-[#7c3aed]" : "border-[#a8a8a8] bg-[#c9c9c9]"
                       }`}
-                      style={{
-                        background: "linear-gradient(180deg,#ffffff,#f1f1f1)",
-                        boxShadow:
-                          "0 1px 2px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.95), 0 0 0 1px rgba(0,0,0,0.06)",
-                      }}
-                    />
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 rounded-full transition-opacity duration-300"
-                      style={{
-                        boxShadow: "0 0 0 3px rgba(255,255,255,0.55), 0 2px 6px -1px rgba(0,0,0,0.18)",
-                        opacity: autoDebit ? 1 : 0,
-                      }}
-                    />
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                      style={{ boxShadow: "0 0 0 3px rgba(255,255,255,0.7)" }}
-                    />
-                  </button>
+                    >
+                      <span
+                        className={`inline-block h-[18px] w-[18px] transform rounded-full bg-white transition-transform duration-300 ${
+                          autoDebit ? "translate-x-[21px]" : "translate-x-[3px]"
+                        }`}
+                        style={{
+                          boxShadow: "0 1px 3px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.95)",
+                        }}
+                      />
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0 rounded-full transition-opacity duration-300"
+                        style={{ boxShadow: "0 0 0 3px rgba(255,255,255,0.55)", opacity: autoDebit ? 1 : 0 }}
+                      />
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                        style={{ boxShadow: "0 0 0 3px rgba(255,255,255,0.7)" }}
+                      />
+                    </button>
+                  </div>
                 </div>
 
-
+                {/* Ver detalhes — pílula roxa clara (arte) */}
                 <button
                   onClick={() => openAfterIconsReady(() => setDetailsOpen(true))}
-                  className="-ml-2 mt-3 flex items-center gap-2 text-sm font-semibold text-[#660099] hover:underline md:mt-5"
+                  className="mt-2.5 flex h-11 w-full items-center justify-center gap-1.5 rounded-[14px] text-[14px] font-semibold text-[#6d28d9] transition hover:brightness-[1.03]"
+                  style={{
+                    background: "linear-gradient(180deg, rgba(124,58,237,0.14), rgba(124,58,237,0.07))",
+                  }}
                 >
-                  <img
-                    src={icon3dDetails}
-                    alt=""
-                    loading="eager"
-                    decoding="sync"
-                    className="h-9 w-9 shrink-0 object-contain"
-                  />
-                  Ver detalhes do seu consumo &gt;
+                  Ver detalhes do seu consumo
+                  <ChevronRight className="h-4 w-4" strokeWidth={2.5} />
                 </button>
               </div>
             </div>
@@ -943,32 +879,38 @@ function ResumoConsumo() {
               return (
                 <button
                   onClick={() => openAfterIconsReady(() => setStatusOpen(true))}
-                  className="mt-2.5 flex w-full items-center justify-center px-3 text-center text-[10px] font-semibold transition hover:underline md:mt-4 md:text-[13px]"
-                  style={{ color: s.tone }}
+                  className="mt-3 flex w-full items-center gap-2 px-0.5 text-left text-[12.5px] transition hover:opacity-80 md:mt-4"
                 >
                   {statusIcon}
-                  <span className="ml-2 whitespace-nowrap">
-                    <span className="md:hidden">Status da linha: {s.short}</span>
-                    <span className="hidden md:inline">Status da linha: {s.label}</span>
+                  <span className="whitespace-nowrap">
+                    <span className="font-semibold text-[#1a1a1a]">Status da linha: </span>
+                    <span className="hidden font-bold md:inline" style={{ color: s.tone }}>
+                      {s.label}
+                    </span>
+                    <span className="inline font-bold md:hidden" style={{ color: s.tone }}>
+                      {s.short}
+                    </span>
                     {effective === "reduzida" && (
-                      <span className="ml-1.5 text-xs font-bold">256 Kbps</span>
+                      <span className="ml-1.5 text-xs font-bold" style={{ color: s.tone }}>256 Kbps</span>
                     )}
                   </span>
                 </button>
               );
             })()}
+          </div>
 
-          {/* Nota em tempo real — faixa colada no rodapé do card, de ponta a ponta (referência) */}
-          <div className="-mx-4 -mb-4 mt-3 flex h-9 items-center border-t border-border/60 bg-muted/50 pl-4 pr-12 text-[11px] font-medium text-muted-foreground backdrop-blur-sm md:-mx-5 md:-mb-5 md:pl-5 md:pr-14">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden className="mr-2 shrink-0 text-foreground/70">
-              <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
-              <path d="M12 10.8v5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-              <circle cx="12" cy="7.6" r="1" fill="currentColor" />
-            </svg>
-            <span className="truncate">Os dados são atualizados em tempo real.</span>
+          {/* Nota em tempo real — fora do card, alinhada à direita */}
+          <div className="mt-2.5 flex justify-end">
+            <div className="flex h-8 items-center border-l-2 border-[#660099]/35 bg-white/55 px-3 text-[11px] font-medium text-[#666] backdrop-blur-sm">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden className="mr-2 shrink-0 text-[#8a8a8a]">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
+                <path d="M12 10.8v5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                <circle cx="12" cy="7.6" r="1" fill="currentColor" />
+              </svg>
+              <span className="whitespace-nowrap">Os dados são atualizados em tempo real.</span>
+            </div>
           </div>
-          </div>
-          </div>
+        </div>
 
 
 
