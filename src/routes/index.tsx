@@ -1025,21 +1025,6 @@ function ResumoConsumo() {
                       </div>
                     </div>
                   </li>
-                  <li>
-                    <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={bisUsedPct} variant="consumption" />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
-                          <span className="text-[13px]">
-                            <span className="font-bold text-[#1a1a1a]">{sobrouAnterior.toFixed(2)} GB</span>
-                          </span>
-                        </div>
-
-                        <BrightDataBar percentage={bisUsedPct} variant="consumption" />
-                      </div>
-                    </div>
-                  </li>
                 </ul>
 
 
