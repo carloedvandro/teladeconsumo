@@ -237,10 +237,12 @@ function BrightDataBar({
   return (
     <div className="relative mt-2.5 h-2 w-full rounded-full bg-[var(--data-track)] shadow-inner">
       <div
-        className="h-full w-full rounded-full"
+        className="absolute inset-y-0 left-0 rounded-full"
         style={{
+          width: `${pct}%`,
           background: fill,
           boxShadow: `0 0 8px color-mix(in oklab, ${markerColor} 48%, transparent)`,
+          transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       />
       <span
