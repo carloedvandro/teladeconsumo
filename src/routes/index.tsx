@@ -43,7 +43,6 @@ import icon3dSms from "@/assets/icon-3d-sms.png";
 import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
 import icon3dBonus from "@/assets/icon-3d-bonus.png";
 import icon3dAlert from "@/assets/icon-3d-alert.png";
-import icon3dPie from "@/assets/icon-3d-pie.png";
 import icon3dDisk from "@/assets/icon-3d-disk.png";
 import icon3dDetails from "@/assets/icon-3d-details.png";
 const familyImg = familyImgAsset.url;
