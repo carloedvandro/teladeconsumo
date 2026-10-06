@@ -294,6 +294,15 @@ function ConsumoRing({
   const needleRightPath = `M ${cx} ${cy} L ${cx} ${needleTipY} L ${cx + nBaseHalf} ${cy} Z`;
   const needleGlossPath = `M ${cx - 1.2} ${cy - 4} L ${cx} ${needleTipY + 6} L ${cx + 1.2} ${cy - 4} Z`;
 
+  // Fill wedge — the colored arc is clipped to everything between 0% and the
+  // needle position, so the gauge stays white and the pointer "carries" the
+  // green→red scale with it until the full 100% (red).
+  const fillEndDeg = angleAt(animPct);
+  const fillR = r + strokeW / 2 + 2;
+  const fillFrom = polar(START, fillR);
+  const fillTo = polar(fillEndDeg, fillR);
+  const fillWedge = `M ${cx} ${cy} L ${fillFrom.x} ${fillFrom.y} A ${fillR} ${fillR} 0 ${fillEndDeg - START > 180 ? 1 : 0} 1 ${fillTo.x} ${fillTo.y} Z`;
+
   // Consumed tip dot at the end of the actual consumption (also rotated)
   const tipX = cx;
   const tipY = cy - r;
