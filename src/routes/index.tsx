@@ -417,7 +417,7 @@ function ConsumoRing({
             stroke={s.color}
             strokeWidth={strokeW}
             strokeLinecap={i === 0 || i === filledSegments.length - 1 ? "round" : "butt"}
-            style={{ filter: "saturate(1.55) brightness(1.15)" }}
+            style={{ filter: "saturate(1.15)" }}
           />
         ))}
 
