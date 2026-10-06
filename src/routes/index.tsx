@@ -883,9 +883,9 @@ function ResumoConsumo() {
 
               <div className="w-full pr-3 md:w-[320px] md:pr-4">
 
-                <div className="flex items-center gap-2.5 whitespace-nowrap">
+                <div className="flex items-center gap-1.5 whitespace-nowrap">
                   <h2
-                    className="text-[22px] font-bold tracking-tight"
+                    className="text-[20px] font-bold tracking-tight"
                     style={{
                       backgroundImage: "linear-gradient(90deg, #8b5cf6 0%, #660099 30%, #b45309 70%, #171717 100%)",
                       WebkitBackgroundClip: "text",
@@ -897,8 +897,8 @@ function ResumoConsumo() {
                     {baseLine.plan}
                   </h2>
                   {bonusDebito > 0 && (
-                    <span className="mt-[3px] -ml-1 inline-flex shrink-0 items-center gap-1.5 text-[13px] font-bold text-[#16A34A] animate-fade-in">
-                      <Gift className="h-4 w-4" strokeWidth={2.6} />
+                    <span className="mt-[2px] inline-flex shrink-0 items-center gap-1 text-[11px] font-bold text-[#16A34A] animate-fade-in">
+                      <Gift className="h-3.5 w-3.5" strokeWidth={2.6} />
                       Mais {bonusDebito} giga de bônus
                     </span>
                   )}
