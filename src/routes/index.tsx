@@ -191,8 +191,43 @@ function tipColor(pct: number) {
   return SPECTRUM[SPECTRUM.length - 1][1];
 }
 
-function DataBatteryIcon({ percentage }: { percentage: number }) {
+// Hue of the source purple icon (#660099 ≈ 277°); the filled battery layer is
+// hue-rotated to match the bar/capsule color so icon and bar always combine.
+function hexToHue(color: string) {
+  let r = 0;
+  let g = 0;
+  let b = 0;
+  const rgbMatch = color.match(/rgb\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/);
+  if (rgbMatch) {
+    r = parseInt(rgbMatch[1], 10) / 255;
+    g = parseInt(rgbMatch[2], 10) / 255;
+    b = parseInt(rgbMatch[3], 10) / 255;
+  } else {
+    r = parseInt(color.slice(1, 3), 16) / 255;
+    g = parseInt(color.slice(3, 5), 16) / 255;
+    b = parseInt(color.slice(5, 7), 16) / 255;
+  }
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const d = max - min;
+  if (d === 0) return 0;
+  let h = 0;
+  if (max === r) h = ((g - b) / d) % 6;
+  else if (max === g) h = (b - r) / d + 2;
+  else h = (r - g) / d + 4;
+  return (h * 60 + 360) % 360;
+}
+const ICON_BASE_HUE = 277;
+
+function DataBatteryIcon({
+  percentage,
+  color,
+}: {
+  percentage: number;
+  color: string;
+}) {
   const pct = Math.max(0, Math.min(100, percentage));
+  const hueShift = Math.round(hexToHue(color) - ICON_BASE_HUE);
   return (
     <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
       <img
@@ -211,11 +246,15 @@ function DataBatteryIcon({ percentage }: { percentage: number }) {
         className="absolute inset-0 h-full w-full object-contain"
         style={{
           clipPath: `inset(${100 - pct}% 0 0 0)`,
-          filter: "saturate(1.7) brightness(1.12)",
-          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+          filter: `hue-rotate(${hueShift}deg) saturate(1.7) brightness(1.12)`,
+          transition:
+            "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1), filter 900ms ease",
         }}
       />
-      <span className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none text-primary-foreground [text-shadow:0_1px_3px_var(--data-purple)]">
+      <span
+        className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none text-primary-foreground"
+        style={{ textShadow: `0 1px 3px ${color}`, transition: "text-shadow 900ms ease" }}
+      >
         {Math.round(pct)}%
       </span>
     </div>
@@ -238,7 +277,7 @@ function BrightDataBar({
   const fill = spectrumGradient(variant === "available");
 
     return (
-    <div className="relative mt-2.5 h-5 w-full rounded-full bg-[var(--data-track)] shadow-inner">
+    <div className="relative mt-2.5 h-2.5 w-full rounded-full bg-[var(--data-track)] shadow-inner">
       <div
         className="absolute inset-y-0 left-0 rounded-full"
         style={{
@@ -251,9 +290,10 @@ function BrightDataBar({
         }}
       />
       <span
-        className="absolute top-0 bottom-0 flex min-w-11 -translate-x-1/2 items-center justify-center rounded-full px-2 text-center text-[10px] font-black leading-none text-primary-foreground"
+        className="absolute top-1/2 flex h-5 min-w-11 items-center justify-center rounded-full px-2 text-center text-[10px] font-black leading-none text-primary-foreground"
         style={{
           left: `${Math.max(9, Math.min(91, pct))}%`,
+          transform: "translate(-50%, -50%)",
           background: markerColor,
           boxShadow: `0 2px 8px color-mix(in oklab, ${markerColor} 55%, transparent), inset 0 1px 0 color-mix(in oklab, var(--primary-foreground) 50%, transparent)`,
           transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
@@ -910,7 +950,7 @@ function ResumoConsumo() {
                 <ul className="mt-3 -ml-2 space-y-2 text-sm">
                   <li>
                     <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={usedPct} />
+                      <DataBatteryIcon percentage={usedPct} color={tipColor(pct)} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
@@ -925,7 +965,7 @@ function ResumoConsumo() {
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={availPct} />
+                      <DataBatteryIcon percentage={availPct} color={tipColor(100 - availPct)} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
@@ -940,7 +980,7 @@ function ResumoConsumo() {
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={bisRemainPct} />
+                      <DataBatteryIcon percentage={bisRemainPct} color={tipColor(100 - bisRemainPct)} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponível Smart Mais Bis</span>
@@ -955,7 +995,7 @@ function ResumoConsumo() {
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={100 - bisRemainPct} />
+                      <DataBatteryIcon percentage={100 - bisRemainPct} color={tipColor(100 - bisRemainPct)} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
