@@ -227,17 +227,16 @@ function BrightDataBar({
   variant: "consumption" | "available";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  const markerColor = "var(--data-purple)";
+  const markerColor = tipColor(pct);
 
   return (
-    <div className="relative mt-2.5 h-4 w-full rounded-full bg-white shadow-inner">
+    <div className="relative mt-2.5 h-4 w-full overflow-hidden rounded-full bg-white shadow-inner">
       <div
-        className="h-full rounded-full"
+        className="h-full w-full"
         style={{
-          width: `${pct}%`,
           background: "linear-gradient(90deg,var(--data-magenta),var(--data-purple))",
-          boxShadow: "0 0 8px color-mix(in oklab, var(--data-purple) 48%, transparent)",
-          transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+          clipPath: `inset(0 ${100 - pct}% 0 0 round 999px)`,
+          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       />
       <span
