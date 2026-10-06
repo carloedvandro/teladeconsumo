@@ -193,10 +193,20 @@ function tipColor(pct: number) {
 
 // Hue of the source purple icon (#660099 ≈ 277°); the filled battery layer is
 // hue-rotated to match the bar/capsule color so icon and bar always combine.
-function hexToHue(hex: string) {
-  const r = parseInt(hex.slice(1, 3), 16) / 255;
-  const g = parseInt(hex.slice(3, 5), 16) / 255;
-  const b = parseInt(hex.slice(5, 7), 16) / 255;
+function hexToHue(color: string) {
+  let r = 0;
+  let g = 0;
+  let b = 0;
+  const rgbMatch = color.match(/rgb\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/);
+  if (rgbMatch) {
+    r = parseInt(rgbMatch[1], 10) / 255;
+    g = parseInt(rgbMatch[2], 10) / 255;
+    b = parseInt(rgbMatch[3], 10) / 255;
+  } else {
+    r = parseInt(color.slice(1, 3), 16) / 255;
+    g = parseInt(color.slice(3, 5), 16) / 255;
+    b = parseInt(color.slice(5, 7), 16) / 255;
+  }
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
   const d = max - min;
