@@ -965,8 +965,8 @@ function ResumoConsumo() {
                       />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Disponível Smart Mais Bis</span>
-                          <span className="text-[13px]">
+                          <span className="text-[13px] font-semibold tracking-tight text-[#1a1a1a]">Disponível Smart Mais Bis</span>
+                          <span className="text-[12px]">
                             <span className="font-bold text-[#660099]">{bisRemainPctExact}%</span>
                             <span className="text-[#8a8a90]"> - </span>
                             <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
