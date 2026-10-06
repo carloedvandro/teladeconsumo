@@ -231,10 +231,15 @@ function DataBatteryIcon({
   variant,
 }: {
   percentage: number;
-  variant: "consumption" | "available";
+  variant: "consumption" | "available" | "availableFixed";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  const color = variant === "consumption" ? tipColor(pct) : tipColor(100 - pct);
+  const color =
+    variant === "consumption"
+      ? tipColor(pct)
+      : variant === "availableFixed"
+        ? "#16a34a"
+        : tipColor(100 - pct);
   const hueShift = Math.round(hexToHue(color) - ICON_BASE_HUE);
   return (
     <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
@@ -300,13 +305,16 @@ function BrightDataBar({
   variant: "consumption" | "available" | "bonusAvailable";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  const markerColor = variant === "consumption" ? tipColor(pct) : tipColor(100 - pct);
+  const markerColor =
+    variant === "consumption"
+      ? tipColor(pct)
+      : variant === "available"
+        ? "#16a34a"
+        : tipColor(100 - pct);
   const fill =
     variant === "consumption"
       ? spectrumGradient(false)
-      : variant === "bonusAvailable"
-        ? markerColor
-        : "transparent";
+      : markerColor;
 
   return (
     <div className="relative mt-2.5 h-4 w-full rounded-full bg-[var(--data-track)]">
@@ -997,7 +1005,7 @@ function ResumoConsumo() {
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={availPct} variant="available" />
+                      <DataBatteryIcon percentage={availPct} variant="availableFixed" />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
@@ -1151,15 +1159,14 @@ function ResumoConsumo() {
               );
             })()}
 
-          </div>
-
-          {/* Nota em tempo real — barra de ponta a ponta, alinhada ao painel */}
-          <div className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-md bg-white/70 px-3 py-1.5 text-[11px] text-[#4a4a4a] backdrop-blur-sm">
+          {/* Nota em tempo real — dentro do painel, abaixo do status */}
+          <div className="mt-1 flex w-full items-center justify-center gap-1.5 px-3 pt-1 text-[11px] text-[#4a4a4a]">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0">
               <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#660099" opacity="0.85" />
               <path d="m9 12 2 2 4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
             Os dados são atualizados em tempo real.
+          </div>
           </div>
           </div>
 
