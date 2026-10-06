@@ -389,11 +389,12 @@ function ConsumoRing({
           strokeLinecap="round"
         />
 
-        {/* Background track (recessed) */}
+        {/* Background track — translucent white rail */}
         <path
           d={arcPath(START, START + SWEEP, r)}
           fill="none"
-          stroke="#d8d8de"
+          stroke="#ffffff"
+          strokeOpacity={0.55}
           strokeWidth={strokeW}
           strokeLinecap="round"
         />
