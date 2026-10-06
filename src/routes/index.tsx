@@ -22,6 +22,10 @@ import {
   Copy,
   QrCode,
   Clock,
+  BarChart3,
+  ArrowUpDown,
+  Database,
+  CreditCard,
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
@@ -232,99 +236,14 @@ function hexToHue(color: string) {
 }
 const ICON_BASE_HUE = 277;
 
-function DataBatteryIcon({
-  percentage,
-  variant,
-  color: colorOverride,
-}: {
-  percentage: number;
-  variant: "consumption" | "available" | "availableFixed";
-  color?: string;
-}) {
-  const pct = Math.max(0, Math.min(100, percentage));
-  const color =
-    colorOverride ??
-    (variant === "consumption"
-      ? tipColor(pct)
-      : variant === "availableFixed"
-        ? "#16a34a"
-        : tipColor(100 - pct));
-  const hueShift = Math.round(hexToHue(color) - ICON_BASE_HUE);
+function ConsumptionMetricIcon({ type }: { type: "usage" | "available" | "bonus" }) {
+  const Icon = type === "usage" ? BarChart3 : type === "available" ? ArrowUpDown : Database;
   return (
-    <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
-      <img
-        src={icon3dDisk}
-        alt=""
-        loading="eager"
-        decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain"
-        style={{ filter: "grayscale(1) opacity(0.28) brightness(1.35)" }}
-      />
-      <div
-        className="absolute inset-0"
-        style={{
-          clipPath: `inset(${100 - pct}% 0 0 0)`,
-          backgroundImage:
-            variant === "consumption"
-              ? "linear-gradient(to top, #16a34a 0%, #4ade80 18%, #a3e635 34%, #facc15 50%, #f59e0b 64%, #f97316 78%, #ef4444 90%, #dc2626 100%)"
-              : color,
-          backgroundColor: variant === "consumption" ? undefined : color,
-          maskImage: `url(${icon3dDisk})`,
-          WebkitMaskImage: `url(${icon3dDisk})`,
-          maskSize: "contain",
-          WebkitMaskSize: "contain",
-          maskPosition: "center",
-          WebkitMaskPosition: "center",
-          maskRepeat: "no-repeat",
-          WebkitMaskRepeat: "no-repeat",
-          filter: "saturate(1.6) brightness(1.12)",
-          transition:
-            "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
-        }}
-      />
-      {/* Gloss layer — adds the shiny "lustro" finish on top of the fill */}
-      <div
-        className="absolute inset-0"
-        style={{
-          clipPath: `inset(${100 - pct}% 0 0 0)`,
-          backgroundImage:
-            "linear-gradient(180deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.18) 30%, rgba(255,255,255,0) 55%, rgba(255,255,255,0.22) 92%, rgba(255,255,255,0.45) 100%)",
-          maskImage: `url(${icon3dDisk})`,
-          WebkitMaskImage: `url(${icon3dDisk})`,
-          maskSize: "contain",
-          WebkitMaskSize: "contain",
-          maskPosition: "center",
-          WebkitMaskPosition: "center",
-          maskRepeat: "no-repeat",
-          WebkitMaskRepeat: "no-repeat",
-          mixBlendMode: "screen",
-          opacity: 0.55,
-          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
-      />
-      <img
-        src={icon3dDisk}
-        alt=""
-        loading="eager"
-        decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain opacity-20 mix-blend-multiply"
-        style={{
-          clipPath: `inset(${100 - pct}% 0 0 0)`,
-          filter: `hue-rotate(${hueShift}deg) saturate(1.3) brightness(1.2)`,
-          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
-      />
-      <span
-        className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none text-primary-foreground"
-        style={{
-          color: pct === 0 ? "var(--muted-foreground)" : undefined,
-          textShadow: pct === 0 ? "none" : `0 1px 3px ${color}`,
-          transition: "color 900ms ease, text-shadow 900ms ease",
-        }}
-      >
-        {Math.round(pct)}%
-      </span>
-    </div>
+    <span className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-consumption-purple text-primary-foreground shadow-[inset_0_1px_2px_color-mix(in_oklab,var(--color-primary-foreground)_70%,transparent),0_3px_8px_color-mix(in_oklab,var(--color-consumption-purple)_35%,transparent)]" aria-hidden="true">
+      <span className="absolute inset-x-1 top-0 h-1/2 rounded-full bg-primary-foreground/20 blur-[2px]" />
+      <Icon className="relative h-6 w-6" strokeWidth={3} />
+      {type === "bonus" && <span className="absolute bottom-1 right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-primary-foreground text-[11px] font-black leading-none text-consumption-purple">+</span>}
+    </span>
   );
 }
 
