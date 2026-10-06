@@ -904,8 +904,8 @@ function ResumoConsumo() {
                     {baseLine.plan}
                   </h2>
                   {bonusDebito > 0 && (
-                    <span className="mt-[1px] inline-flex shrink-0 items-center gap-0.5 text-[11px] font-bold text-[#16A34A] animate-fade-in">
-                      <Gift className="h-5 w-5 shrink-0" strokeWidth={2.4} />
+                    <span className="mt-[1px] inline-flex shrink-0 items-center gap-1 text-[13px] font-bold text-[#16A34A] animate-fade-in">
+                      <Gift className="h-6 w-6 shrink-0" strokeWidth={2.4} />
                       +{bonusDebito}GB liberado
                     </span>
                   )}
@@ -1008,7 +1008,7 @@ function ResumoConsumo() {
                   />
                 </button>
               </div>
-              <div className="min-w-0">
+              <div className="min-w-0 pr-11 md:pr-0">
                 <div className="text-[11px] font-medium leading-snug text-[#2e2e3a] md:whitespace-nowrap md:leading-tight">
                   Sua mensalidade será descontada automaticamente do saldo da conta na data da renovação.
                 </div>
