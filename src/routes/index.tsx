@@ -939,7 +939,7 @@ function ResumoConsumo() {
                       <ConsumptionPieIcon percentage={bisRemainPct} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
+                          <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
                           <span className="text-[13px]">
                             <span className="font-bold text-[#1a1a1a]">{sobrouAnterior.toFixed(2)} GB</span>
                           </span>
@@ -954,7 +954,7 @@ function ResumoConsumo() {
                       <DataBatteryIcon percentage={bisRemainPct} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Disponível Smart Mais Bis</span>
+                          <span className="font-semibold text-[#1a1a1a]">Disponível Smart+Bis</span>
                           <span className="text-[13px]">
                             <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
                           </span>
