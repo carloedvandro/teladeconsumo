@@ -18,6 +18,7 @@ import {
   AlertTriangle,
   Mail,
   Unlock,
+  Gift,
   Gauge,
   Copy,
   QrCode,
@@ -896,8 +897,8 @@ function ResumoConsumo() {
                     {baseLine.plan}
                   </h2>
                   {bonusDebito > 0 && (
-                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[#16a34a] bg-transparent px-2.5 py-1 text-[12px] font-bold text-[#16a34a] animate-fade-in">
-                      <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                    <span className="mt-[3px] -ml-1 inline-flex shrink-0 items-center gap-1.5 text-[13px] font-bold text-[#3b07d6] animate-fade-in">
+                      <Gift className="h-4 w-4" strokeWidth={2.6} />
                       +{bonusDebito}GB liberado
                     </span>
                   )}
