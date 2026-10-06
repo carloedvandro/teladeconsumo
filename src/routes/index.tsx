@@ -168,7 +168,7 @@ function lerpColor(a: string, b: string, t: number) {
 // shifts smoothly purple → magenta, matching the data bars below.
 function tipColor(pct: number) {
   const p = Math.min(100, Math.max(0, pct));
-  return lerpColor("#8a2be2", "#f032d8", p / 100);
+  return lerpColor("#7c3aed", "#ff2fd6", p / 100);
 }
 
 function ConsumptionPieIcon({ percentage }: { percentage: number }) {
