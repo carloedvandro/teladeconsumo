@@ -408,27 +408,30 @@ function ConsumoRing({
           opacity={0.55}
         />
 
-        {/* Colored arc (full) */}
-        {segments.map((s, i) => (
+        {/* Colored arc — fills only up to the needle, purple→magenta */}
+        {filledSegments.map((s, i) => (
           <path
             key={i}
             d={s.d}
             fill="none"
             stroke={s.color}
             strokeWidth={strokeW}
-            strokeLinecap={i === 0 || i === segments.length - 1 ? "round" : "butt"}
+            strokeLinecap={i === 0 || i === filledSegments.length - 1 ? "round" : "butt"}
+            style={{ filter: `drop-shadow(0 0 5px ${s.color})` }}
           />
         ))}
 
-        {/* Top gloss highlight over colored arc */}
-        <path
-          d={arcPath(START, START + SWEEP, r + strokeW / 2 - 2)}
-          fill="none"
-          stroke="#ffffff"
-          strokeWidth={1.5}
-          strokeLinecap="round"
-          opacity={0.35}
-        />
+        {/* Top gloss highlight over the filled arc only */}
+        {animPct > 0.5 && (
+          <path
+            d={arcPath(START, angleAt(Math.max(0.5, animPct)), r + strokeW / 2 - 2)}
+            fill="none"
+            stroke="#ffffff"
+            strokeWidth={1.5}
+            strokeLinecap="round"
+            opacity={0.45}
+          />
+        )}
 
         {/* Ticks */}
         {Array.from({ length: minorTicks }).map((_, i) => {
