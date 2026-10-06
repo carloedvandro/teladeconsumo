@@ -400,7 +400,7 @@ function ConsumoRing({
   const pct = Math.min(100, (line.used / line.total) * 100);
 
   // Gauge geometry — semicircular speedometer, 240° sweep
-  const size = 230;
+  const size = 228;
   const cx = size / 2;
   const cy = 150;
   const r = 105;
@@ -472,7 +472,7 @@ function ConsumoRing({
   const gid = line.number.replace(/\D/g, "");
 
   return (
-    <div className="relative h-[240px] w-[230px] shrink-0">
+    <div className="relative h-[240px] w-[228px] shrink-0">
       <svg
         viewBox={`0 0 ${size} 210`}
         className="absolute left-0 top-0 h-[210px] w-full"
@@ -985,7 +985,7 @@ function ResumoConsumo() {
           />
 
           {/* Consumption panel overlay - centered/right like reference */}
-          <div className="relative -mt-24 md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[580px] md:-translate-y-1/2">
+          <div className="relative -mt-24 md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[592px] md:-translate-y-1/2">
           <div
             className="overflow-hidden rounded-md p-4 md:w-full md:p-5"
             style={{
@@ -1011,7 +1011,7 @@ function ResumoConsumo() {
             <div className="flex flex-col items-stretch gap-3 md:flex-row md:items-start md:justify-center md:gap-2">
               <div className="self-center md:self-auto"><ConsumoRing line={line} /></div>
 
-              <div className="w-full pr-3 md:w-[320px] md:pr-4">
+              <div className="w-full pr-3 md:w-auto md:flex-1 md:pr-0">
 
                 <div className="flex items-center gap-2.5 whitespace-nowrap">
                   <h2
