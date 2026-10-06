@@ -183,9 +183,24 @@ function ConsumptionPieIcon({ percentage }: { percentage: number }) {
         alt=""
         loading="eager"
         decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain"
-        style={{ filter: "saturate(1.55) contrast(1.08)" }}
+        className="absolute inset-0 h-full w-full object-contain opacity-40"
+        style={{ filter: "saturate(0.6) brightness(1.25)" }}
       />
+      <img
+        src={icon3dPie}
+        alt=""
+        loading="eager"
+        decoding="sync"
+        className="absolute inset-0 h-full w-full object-contain"
+        style={{
+          clipPath: `inset(${100 - pct}% 0 0 0)`,
+          filter: "saturate(1.7) brightness(1.12)",
+          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
+      />
+      <span className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none text-primary-foreground [text-shadow:0_1px_3px_var(--data-purple)]">
+        {Math.round(pct)}%
+      </span>
     </div>
   );
 }
@@ -199,7 +214,8 @@ function DataBatteryIcon({ percentage }: { percentage: number }) {
         alt=""
         loading="eager"
         decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain opacity-20 grayscale"
+        className="absolute inset-0 h-full w-full object-contain opacity-40"
+        style={{ filter: "saturate(0.6) brightness(1.25)" }}
       />
       <img
         src={icon3dDisk}
@@ -953,7 +969,7 @@ function ResumoConsumo() {
                       <DataBatteryIcon percentage={bisRemainPct} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
+                          <span className="font-semibold text-[#1a1a1a]">Disponível Smart Mais Bis</span>
                           <span className="text-[13px]">
                             <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
                           </span>
