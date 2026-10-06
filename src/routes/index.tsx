@@ -26,6 +26,7 @@ import {
   CreditCard,
   ArrowUpDown,
   Database,
+  BarChart3,
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
@@ -742,25 +743,25 @@ function ResumoConsumo() {
                 strokeWidth={2.75}
               />
             </button>
-            <div className="flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-5">
+            {/* Título no topo do card, como na arte */}
+            <div className="flex items-center gap-2 whitespace-nowrap">
+              <h2 className="text-[22px] font-bold tracking-tight">
+                <span className="text-[#111827]">{baseLine.plan.split(" ")[0]}</span>{" "}
+                <span className="text-[#2563eb]">{baseLine.plan.split(" ").slice(1).join(" ")}</span>
+              </h2>
+              {bonusDebito > 0 && (
+                <span className="inline-flex shrink-0 items-center gap-1 text-[13px] font-semibold text-[#6d28d9]">
+                  <Gift className="h-4 w-4" strokeWidth={2.25} />
+                  +{bonusDebito}GB liberado
+                </span>
+              )}
+            </div>
+
+            <div className="mt-3 flex flex-col items-stretch gap-4 md:flex-row md:items-center md:justify-center md:gap-5">
               <div className="self-center md:self-auto"><ConsumoRing line={line} /></div>
 
               <div className="w-full pr-3 md:w-auto md:flex-1 md:pr-0">
-                {/* Título — nome escuro + franquia azul, bônus roxo com presente (arte) */}
-                <div className="flex items-center gap-2 whitespace-nowrap">
-                  <h2 className="text-[22px] font-bold tracking-tight">
-                    <span className="text-[#111827]">{baseLine.plan.split(" ")[0]}</span>{" "}
-                    <span className="text-[#2563eb]">{baseLine.plan.split(" ").slice(1).join(" ")}</span>
-                  </h2>
-                  {bonusDebito > 0 && (
-                    <span className="inline-flex shrink-0 items-center gap-1 text-[13px] font-semibold text-[#6d28d9]">
-                      <Gift className="h-4 w-4" strokeWidth={2.25} />
-                      +{bonusDebito}GB liberado
-                    </span>
-                  )}
-                </div>
-
-                <div className="mt-2.5 space-y-2">
+                <div className="space-y-2">
                   {[
                     { label: "Meu Consumo", pct: pct, pctColor: pctTextColor(pct), gb: line.used, variant: "consumption" as const },
                     { label: "Disponíveis", pct: 100 - pct, pctColor: pctTextColor(100 - pct), gb: available, variant: "available" as const },
