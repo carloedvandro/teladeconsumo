@@ -263,15 +263,7 @@ function BrightDataBar({
         : tipColor(100 - pct);
 
   return (
-    <div
-      className="relative mt-2.5 h-3.5 w-full rounded-full bg-[var(--data-track)]"
-      style={{
-        // Inner "trilho" (rail) groove — subtle inset depth so the fill and
-        // the white tip knob run inside a recessed track.
-        boxShadow:
-          "inset 0 2px 3px rgba(20, 20, 45, 0.22), inset 0 -1px 2px rgba(255, 255, 255, 0.9), inset 0 0 0 1px rgba(255, 255, 255, 0.45)",
-      }}
-    >
+    <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-consumption-track shadow-inner">
       <div
         className="absolute inset-y-0 left-0 overflow-hidden rounded-full"
         style={{
@@ -295,19 +287,39 @@ function BrightDataBar({
           }}
         />
       </div>
-      {/* White glossy knob riding at the tip of the fill, like the reference */}
-      <div
-        className="absolute top-1/2 h-[18px] w-[18px] rounded-full"
-        style={{
-          left: `${Math.max(4, Math.min(96, pct))}%`,
-          transform: "translate(-50%, -50%)",
-          background: "linear-gradient(180deg,#ffffff 20%,#efeff5 100%)",
-          boxShadow:
-            "0 1px 4px rgba(20, 20, 45, 0.35), inset 0 1px 0 rgba(255,255,255,0.95), 0 0 0 1px rgba(20,20,45,0.06)",
-          transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
-      />
     </div>
+  );
+}
+
+function ConsumptionMetric({
+  icon,
+  label,
+  percentage,
+  amount,
+  variant,
+}: {
+  icon: "usage" | "available" | "bonus";
+  label: string;
+  percentage: number;
+  amount: number;
+  variant: "consumption" | "available" | "bonusAvailable";
+}) {
+  const pct = Math.max(0, Math.min(100, percentage));
+  const percentageColor = pct === 100 ? "var(--destructive)" : "var(--consumption-violet)";
+  return (
+    <li className="flex items-center gap-3 rounded-lg border border-primary-foreground/50 bg-consumption-row px-2.5 py-2 shadow-[inset_0_1px_0_color-mix(in_oklab,var(--color-primary-foreground)_70%,transparent)] backdrop-blur-sm">
+      <ConsumptionMetricIcon type={icon} />
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
+          <span className="truncate text-[13px] font-bold text-foreground">{label}</span>
+          <span className="text-[13px] font-extrabold" style={{ color: percentageColor }}>{pct.toFixed(2)}%</span>
+        </div>
+        <div className="mt-2 flex items-center gap-2">
+          <BrightDataBar percentage={pct} variant={variant} />
+          <span className="shrink-0 text-[14px] font-extrabold text-foreground">{amount.toFixed(2)} <span className="font-semibold text-muted-foreground">GB</span></span>
+        </div>
+      </div>
+    </li>
   );
 }
 
