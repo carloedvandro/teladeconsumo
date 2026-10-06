@@ -244,11 +244,10 @@ function BrightDataBar({
   variant: "consumption" | "available";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  const markerColor = variant === "consumption" ? tipColor(pct) : "var(--data-purple)";
-  const fill =
-    variant === "consumption"
-      ? "linear-gradient(90deg,var(--data-green),var(--data-yellow) 45%,var(--data-orange) 72%,var(--data-red))"
-      : "linear-gradient(90deg,var(--data-purple),var(--data-magenta))";
+  // Solid color reflecting the state: consumption goes green→red as it fills;
+  // available is green when full and turns red as it empties.
+  const markerColor = variant === "consumption" ? tipColor(pct) : tipColor(100 - pct);
+  const fill = markerColor;
 
   return (
     <div className="relative mt-2.5 h-2 w-full rounded-full bg-[var(--data-track)] shadow-inner">
@@ -258,7 +257,7 @@ function BrightDataBar({
           width: `${pct}%`,
           background: fill,
           boxShadow: `0 0 8px color-mix(in oklab, ${markerColor} 48%, transparent)`,
-          transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+          transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
         }}
       />
       <span
@@ -921,7 +920,7 @@ function ResumoConsumo() {
                 <ul className="mt-3 -ml-2 space-y-2 text-sm">
                   <li>
                     <div className="flex items-center gap-2">
-                      <ConsumptionPieIcon percentage={usedPct} />
+                      <DataBatteryIcon percentage={usedPct} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
@@ -951,7 +950,7 @@ function ResumoConsumo() {
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <ConsumptionPieIcon percentage={bisRemainPct} />
+                      <DataBatteryIcon percentage={100 - bisRemainPct} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
@@ -960,7 +959,7 @@ function ResumoConsumo() {
                           </span>
                         </div>
 
-                        <BrightDataBar percentage={bisRemainPct} variant="consumption" />
+                        <BrightDataBar percentage={100 - bisRemainPct} variant="consumption" />
                       </div>
                     </div>
                   </li>
