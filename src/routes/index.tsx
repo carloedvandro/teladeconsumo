@@ -676,7 +676,6 @@ function ResumoConsumo() {
     sobrouAnterior > 0
       ? Math.max(0, Math.min(100, (bisUsed / sobrouAnterior) * 100))
       : 0;
-  const bisUsedPctExact = (Math.round(bisUsedPct * 100) / 100).toFixed(2);
   // Sobra do Smart Mais Bis: quanto resta do saldo acumulado trazido do ciclo anterior.
   const bisRemainPct = Math.max(0, Math.min(100, 100 - bisUsedPct));
   const bisRemainPctExact = (Math.round(bisRemainPct * 100) / 100).toFixed(2);
