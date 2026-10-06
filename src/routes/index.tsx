@@ -22,6 +22,10 @@ import {
   Copy,
   QrCode,
   Clock,
+  Gift,
+  CreditCard,
+  ArrowUpDown,
+  Database,
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
@@ -43,8 +47,6 @@ import icon3dSms from "@/assets/icon-3d-sms.png";
 import icon3dAutorenew from "@/assets/icon-3d-autorenew.png";
 import icon3dBonus from "@/assets/icon-3d-bonus.png";
 import icon3dAlert from "@/assets/icon-3d-alert.png";
-import icon3dDisk from "@/assets/icon-3d-disk.png";
-import icon3dDetails from "@/assets/icon-3d-details.png";
 const familyImg = familyImgAsset.url;
 
 const PRELOAD_ICONS = [
@@ -54,7 +56,6 @@ const PRELOAD_ICONS = [
   icon3dAutorenew,
   icon3dBonus,
   icon3dAlert,
-  icon3dDetails,
 ];
 
 
@@ -158,194 +159,60 @@ function formatGB(gb: number) {
   return `${gb.toFixed(1)} GB`;
 }
 
-function hexToRgb(hex: string) {
-  const h = hex.replace("#", "");
-  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)] as const;
-}
-function lerpColor(a: string, b: string, t: number) {
-  const [ar, ag, ab] = hexToRgb(a);
-  const [br, bg, bb] = hexToRgb(b);
-  const r = Math.round(ar + (br - ar) * t);
-  const g = Math.round(ag + (bg - ag) * t);
-  const bl = Math.round(ab + (bb - ab) * t);
-  return `rgb(${r}, ${g}, ${bl})`;
-}
-// Tip color interpolated across the full 0-100% spectrum so the arc tip
-// shifts smoothly green → yellow → orange → red as consumption grows.
-// Multi-stop spectrum shared by the gauge and the bars: green → lime →
-// yellow → amber → orange → red-orange → red.
-const SPECTRUM: [number, string][] = [
-  [0, "#16a34a"],
-  [18, "#4ade80"],
-  [34, "#a3e635"],
-  [50, "#facc15"],
-  [64, "#f59e0b"],
-  [78, "#f97316"],
-  [90, "#ef4444"],
-  [100, "#dc2626"],
-];
-const spectrumGradient = (reverse = false) =>
-  `linear-gradient(90deg,${SPECTRUM.map(([p, c]) => `${c} ${reverse ? 100 - p : p}%`)
-    .sort((a, b) => parseFloat(a.split(" ")[1]) - parseFloat(b.split(" ")[1]))
-    .join(",")})`;
-function tipColor(pct: number) {
-  const p = Math.min(100, Math.max(0, pct));
-  for (let i = 1; i < SPECTRUM.length; i++) {
-    const [p1, c1] = SPECTRUM[i];
-    const [p0, c0] = SPECTRUM[i - 1];
-    if (p <= p1) return lerpColor(c0, c1, (p - p0) / (p1 - p0));
-  }
-  return SPECTRUM[SPECTRUM.length - 1][1];
-}
+// Paleta viva da arte aprovada: roxo em todas as barras; o consumo puxa para
+// rosa/laranja/vermelho conforme a franquia enche. A porcentagem fica índigo
+// e vira vermelha nos extremos (100% consumido ou zerado).
+const INDIGO_TEXT = "#4f46e5";
+const RED_TEXT = "#dc2626";
+const BAR_PURPLE = "linear-gradient(90deg,#4f46e5 0%,#6d28d9 55%,#7c3aed 100%)";
+const BAR_CONSUMPTION =
+  "linear-gradient(90deg,#4c1d95 0%,#6d28d9 28%,#a855f7 52%,#d946ef 70%,#f97316 86%,#ef4444 100%)";
+const BAR_BONUS =
+  "linear-gradient(90deg,#4c1d95 0%,#7c3aed 30%,#c026d3 60%,#ef4444 100%)";
+const pctTextColor = (p: number) => (p >= 99.5 || p <= 0.05 ? RED_TEXT : INDIGO_TEXT);
 
-// Purple scale for the "Disponíveis" line — matches the approved reference
-// prints: deep purple → bright magenta bar, purple % text, purple 3D icon.
-const PURPLE_BAR = "linear-gradient(90deg,#4c0d7a 0%,#7a10b4 40%,#a61fd6 75%,#c33df0 100%)";
-const PURPLE_TEXT = "#9d20d6";
-const PURPLE_ICON = "#7a10b4";
 
-// Hue of the source purple icon (#660099 ≈ 277°); the filled battery layer is
-// hue-rotated to match the bar/capsule color so icon and bar always combine.
-function hexToHue(color: string) {
-  let r = 0;
-  let g = 0;
-  let b = 0;
-  const rgbMatch = color.match(/rgb\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/);
-  if (rgbMatch) {
-    r = parseInt(rgbMatch[1], 10) / 255;
-    g = parseInt(rgbMatch[2], 10) / 255;
-    b = parseInt(rgbMatch[3], 10) / 255;
-  } else {
-    r = parseInt(color.slice(1, 3), 16) / 255;
-    g = parseInt(color.slice(3, 5), 16) / 255;
-    b = parseInt(color.slice(5, 7), 16) / 255;
-  }
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  const d = max - min;
-  if (d === 0) return 0;
-  let h = 0;
-  if (max === r) h = ((g - b) / d) % 6;
-  else if (max === g) h = (b - r) / d + 2;
-  else h = (r - g) / d + 4;
-  return (h * 60 + 360) % 360;
-}
-const ICON_BASE_HUE = 277;
-
-function DataBatteryIcon({
-  percentage,
-  variant,
-  color: colorOverride,
-}: {
-  percentage: number;
-  variant: "consumption" | "available" | "availableFixed";
-  color?: string;
-}) {
-  const pct = Math.max(0, Math.min(100, percentage));
-  const color =
-    colorOverride ??
-    (variant === "consumption"
-      ? tipColor(pct)
-      : variant === "availableFixed"
-        ? "#16a34a"
-        : tipColor(100 - pct));
-  const hueShift = Math.round(hexToHue(color) - ICON_BASE_HUE);
+// Ícone 3D da arte: squircle roxo com brilho e glifo branco.
+function IconTile({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative h-9 w-9 shrink-0" aria-hidden="true">
-      <img
-        src={icon3dDisk}
-        alt=""
-        loading="eager"
-        decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain"
-        style={{ filter: "grayscale(1) opacity(0.28) brightness(1.35)" }}
-      />
-      <div
-        className="absolute inset-0"
-        style={{
-          clipPath: `inset(${100 - pct}% 0 0 0)`,
-          backgroundImage:
-            variant === "consumption"
-              ? "linear-gradient(to top, #16a34a 0%, #4ade80 18%, #a3e635 34%, #facc15 50%, #f59e0b 64%, #f97316 78%, #ef4444 90%, #dc2626 100%)"
-              : color,
-          backgroundColor: variant === "consumption" ? undefined : color,
-          maskImage: `url(${icon3dDisk})`,
-          WebkitMaskImage: `url(${icon3dDisk})`,
-          maskSize: "contain",
-          WebkitMaskSize: "contain",
-          maskPosition: "center",
-          WebkitMaskPosition: "center",
-          maskRepeat: "no-repeat",
-          WebkitMaskRepeat: "no-repeat",
-          filter: "saturate(1.6) brightness(1.12)",
-          transition:
-            "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
-        }}
-      />
-      {/* Gloss layer — adds the shiny "lustro" finish on top of the fill */}
-      <div
-        className="absolute inset-0"
-        style={{
-          clipPath: `inset(${100 - pct}% 0 0 0)`,
-          backgroundImage:
-            "linear-gradient(180deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.18) 30%, rgba(255,255,255,0) 55%, rgba(255,255,255,0.22) 92%, rgba(255,255,255,0.45) 100%)",
-          maskImage: `url(${icon3dDisk})`,
-          WebkitMaskImage: `url(${icon3dDisk})`,
-          maskSize: "contain",
-          WebkitMaskSize: "contain",
-          maskPosition: "center",
-          WebkitMaskPosition: "center",
-          maskRepeat: "no-repeat",
-          WebkitMaskRepeat: "no-repeat",
-          mixBlendMode: "screen",
-          opacity: 0.55,
-          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
-      />
-      <img
-        src={icon3dDisk}
-        alt=""
-        loading="eager"
-        decoding="sync"
-        className="absolute inset-0 h-full w-full object-contain opacity-20 mix-blend-multiply"
-        style={{
-          clipPath: `inset(${100 - pct}% 0 0 0)`,
-          filter: `hue-rotate(${hueShift}deg) saturate(1.3) brightness(1.2)`,
-          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
-      />
+    <span
+      aria-hidden="true"
+      className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] text-white"
+      style={{
+        background: "linear-gradient(145deg,#a78bfa 0%,#7c3aed 48%,#5b21b6 100%)",
+        boxShadow:
+          "0 5px 12px -3px rgba(91,33,182,0.5), inset 0 1px 1.5px rgba(255,255,255,0.55), inset 0 -2px 4px rgba(30,0,60,0.35)",
+      }}
+    >
+      {children}
       <span
-        className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none text-primary-foreground"
-        style={{
-          color: pct === 0 ? "var(--muted-foreground)" : undefined,
-          textShadow: pct === 0 ? "none" : `0 1px 3px ${color}`,
-          transition: "color 900ms ease, text-shadow 900ms ease",
-        }}
-      >
-        {Math.round(pct)}%
-      </span>
-    </div>
+        className="pointer-events-none absolute inset-x-1.5 top-1 h-2.5 rounded-full"
+        style={{ background: "linear-gradient(180deg,rgba(255,255,255,0.7),rgba(255,255,255,0))" }}
+      />
+    </span>
   );
 }
 
 function BrightDataBar({
   percentage,
   variant,
+  className = "mt-2.5",
 }: {
   percentage: number;
   variant: "consumption" | "available" | "bonusAvailable";
+  className?: string;
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
   const fill =
     variant === "consumption"
-      ? spectrumGradient(false)
+      ? BAR_CONSUMPTION
       : variant === "available"
-        ? PURPLE_BAR
-        : tipColor(100 - pct);
+        ? BAR_PURPLE
+        : BAR_BONUS;
 
   return (
     <div
-      className="relative mt-2.5 h-3.5 w-full rounded-full bg-[var(--data-track)]"
+      className={"relative " + className + " h-3.5 w-full rounded-full bg-[var(--data-track)]"}
       style={{
         // Inner "trilho" (rail) groove — subtle inset depth so the fill and
         // the white tip knob run inside a recessed track.
