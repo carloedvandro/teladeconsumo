@@ -227,17 +227,16 @@ function BrightDataBar({
   variant: "consumption" | "available";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  const markerColor = "var(--data-purple)";
+  const markerColor = tipColor(pct);
 
   return (
-    <div className="relative mt-2.5 h-4 w-full rounded-full bg-white shadow-inner">
+    <div className="relative mt-2.5 h-4 w-full overflow-hidden rounded-full bg-white shadow-inner">
       <div
-        className="h-full rounded-full"
+        className="h-full w-full"
         style={{
-          width: `${pct}%`,
           background: "linear-gradient(90deg,var(--data-magenta),var(--data-purple))",
-          boxShadow: "0 0 8px color-mix(in oklab, var(--data-purple) 48%, transparent)",
-          transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+          clipPath: `inset(0 ${100 - pct}% 0 0 round 999px)`,
+          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       />
       <span
@@ -973,10 +972,16 @@ function ResumoConsumo() {
             </div>
 
             {/* Débito automático — linha de ponta a ponta do painel */}
-            <div className="mt-3 flex items-center justify-between gap-4">
+            <div
+              className="mt-3 flex items-center justify-between gap-4 rounded-xl px-4 py-2.5"
+              style={{
+                background: "rgba(255,255,255,0.55)",
+                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.45)",
+              }}
+            >
               <div className="min-w-0">
                 <span className="text-sm font-bold text-[#1a1a1a]">Débito automático</span>
-                <div className="mt-0.5 whitespace-nowrap text-[11px] font-medium leading-tight text-[#5f5f7d]">
+                <div className="mt-0.5 whitespace-nowrap text-[11px] font-medium leading-tight text-[#2e2e3a]">
                   Sua mensalidade será descontada automaticamente do saldo da conta na data da renovação.
                 </div>
               </div>
