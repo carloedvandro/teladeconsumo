@@ -1224,13 +1224,14 @@ function ResumoConsumo() {
               );
             })()}
 
-          {/* Nota em tempo real — dentro do painel, abaixo do status */}
-          <div className="mt-1 flex w-full items-center justify-center gap-1.5 px-3 pt-1 text-[11px] text-[#4a4a4a]">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0">
-              <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#660099" opacity="0.85" />
-              <path d="m9 12 2 2 4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Nota em tempo real — faixa compacta conforme a referência */}
+          <div className="mt-2 flex min-h-8 w-full items-center border-l border-border/70 bg-muted/35 px-5 text-[10px] font-medium text-muted-foreground backdrop-blur-sm">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden className="mr-2 shrink-0">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
+              <path d="M12 10.8v5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              <circle cx="12" cy="7.6" r="1" fill="currentColor" />
             </svg>
-            Os dados são atualizados em tempo real.
+            <span className="whitespace-nowrap">Os dados são atualizados em tempo real.</span>
           </div>
           </div>
           </div>
