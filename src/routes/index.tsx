@@ -166,10 +166,10 @@ function lerpColor(a: string, b: string, t: number) {
   return `rgb(${r}, ${g}, ${bl})`;
 }
 // Tip color interpolated across the full 0-100% spectrum so the arc tip
-// shifts smoothly purple → magenta, matching the data bars below.
+// starts light and builds to a strong dark purple at 100%, matching the bars.
 function tipColor(pct: number) {
   const p = Math.min(100, Math.max(0, pct));
-  return lerpColor("#660099", "#7a00b3", p / 100);
+  return lerpColor("#7a00b3", "#660099", p / 100);
 }
 
 function ConsumptionPieIcon({ percentage }: { percentage: number }) {
