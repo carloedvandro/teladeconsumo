@@ -999,7 +999,7 @@ function ResumoConsumo() {
             <button
               aria-label="Ver histórico de consumo"
               onClick={() => openAfterIconsReady(() => setExpandOpen(true))}
-              className="group absolute bottom-0 right-0 h-10 w-10 text-[#660099] md:h-12 md:w-12"
+              className="group absolute bottom-0 right-0 z-10 h-10 w-10 text-[#660099] md:h-12 md:w-12"
               style={{ clipPath: "polygon(100% 0, 100% 100%, 0 100%)" }}
             >
               <span className="absolute inset-0 bg-[#d9d9d9] transition-colors duration-200 group-hover:bg-[#e8e8e8]" />
@@ -1224,14 +1224,14 @@ function ResumoConsumo() {
               );
             })()}
 
-          {/* Nota em tempo real — faixa compacta conforme a referência */}
-          <div className="mt-2 flex min-h-8 w-full items-center border-l border-border/70 bg-muted/35 px-5 text-[10px] font-medium text-muted-foreground backdrop-blur-sm">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden className="mr-2 shrink-0">
+          {/* Nota em tempo real — faixa colada no rodapé do card, de ponta a ponta (referência) */}
+          <div className="-mx-4 -mb-4 mt-3 flex h-9 items-center border-t border-border/60 bg-muted/50 pl-4 pr-12 text-[11px] font-medium text-muted-foreground backdrop-blur-sm md:-mx-5 md:-mb-5 md:pl-5 md:pr-14">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden className="mr-2 shrink-0 text-foreground/70">
               <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.8" />
               <path d="M12 10.8v5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
               <circle cx="12" cy="7.6" r="1" fill="currentColor" />
             </svg>
-            <span className="whitespace-nowrap">Os dados são atualizados em tempo real.</span>
+            <span className="truncate">Os dados são atualizados em tempo real.</span>
           </div>
           </div>
           </div>
