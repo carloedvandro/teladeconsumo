@@ -242,7 +242,7 @@ function BrightDataBar({
       <div
         className="h-full w-full"
         style={{
-          background: "linear-gradient(90deg,#d18cf5,#660099)",
+          background: BAR_GRADIENT,
           clipPath: `inset(0 ${100 - pct}% 0 0 round 999px)`,
           transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
