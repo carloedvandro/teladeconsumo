@@ -940,7 +940,7 @@ function ResumoConsumo() {
                 <ul className="mt-3 -ml-2 space-y-2 text-sm">
                   <li>
                     <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={usedPct} />
+                      <DataBatteryIcon percentage={usedPct} color={tipColor(pct)} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
@@ -955,7 +955,7 @@ function ResumoConsumo() {
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={availPct} />
+                      <DataBatteryIcon percentage={availPct} color={tipColor(100 - availPct)} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
@@ -970,7 +970,7 @@ function ResumoConsumo() {
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={bisRemainPct} />
+                      <DataBatteryIcon percentage={bisRemainPct} color={tipColor(100 - bisRemainPct)} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Disponível Smart Mais Bis</span>
@@ -985,7 +985,7 @@ function ResumoConsumo() {
                   </li>
                   <li>
                     <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={100 - bisRemainPct} />
+                      <DataBatteryIcon percentage={100 - bisRemainPct} color={tipColor(100 - bisRemainPct)} />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-2 whitespace-nowrap">
                           <span className="font-semibold text-[#1a1a1a]">Smart Mais Bis</span>
