@@ -417,7 +417,7 @@ function ConsumoRing({
             stroke={s.color}
             strokeWidth={strokeW}
             strokeLinecap={i === 0 || i === filledSegments.length - 1 ? "round" : "butt"}
-            style={{ filter: `drop-shadow(0 0 5px ${s.color})` }}
+            style={{ filter: "saturate(1.55) brightness(1.15)" }}
           />
         ))}
 
@@ -481,7 +481,7 @@ function ConsumoRing({
           {/* Consumed tip cap (small dot at needle position on arc) */}
           {pct > 0 && (
             <>
-              <circle cx={tipX} cy={tipY} r={strokeW / 2 + 1} fill={tipCol} filter={`url(#gaugeShadow-${gid})`} />
+              <circle cx={tipX} cy={tipY} r={strokeW / 2 + 1} fill={tipCol} />
               <circle cx={tipX} cy={tipY} r={2} fill="#fff" />
             </>
           )}
