@@ -184,16 +184,7 @@ function ConsumptionPieIcon({ percentage }: { percentage: number }) {
         loading="eager"
         decoding="sync"
         className="absolute inset-0 h-full w-full object-contain"
-        style={{
-          filter: "saturate(1.55) contrast(1.08) drop-shadow(0 0 5px color-mix(in oklab, var(--data-purple) 58%, transparent))",
-        }}
-      />
-      <span
-        className="absolute inset-0 rounded-full opacity-50"
-        style={{
-          boxShadow: `0 0 ${4 + pct / 14}px color-mix(in oklab, var(--data-purple) 48%, transparent)`,
-          transition: "box-shadow 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
+        style={{ filter: "saturate(1.55) contrast(1.08)" }}
       />
     </div>
   );
@@ -218,7 +209,7 @@ function DataBatteryIcon({ percentage }: { percentage: number }) {
         className="absolute inset-0 h-full w-full object-contain"
         style={{
           clipPath: `inset(${100 - pct}% 0 0 0)`,
-          filter: "saturate(1.7) brightness(1.12) drop-shadow(0 0 5px color-mix(in oklab, var(--data-magenta) 58%, transparent))",
+          filter: "saturate(1.7) brightness(1.12)",
           transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       />
