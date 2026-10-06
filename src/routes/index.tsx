@@ -169,7 +169,7 @@ function lerpColor(a: string, b: string, t: number) {
 // starts light and builds to a strong dark purple at 100%, matching the bars.
 function tipColor(pct: number) {
   const p = Math.min(100, Math.max(0, pct));
-  return lerpColor("#7a00b3", "#660099", p / 100);
+  return lerpColor("#d18cf5", "#660099", p / 100);
 }
 
 function ConsumptionPieIcon({ percentage }: { percentage: number }) {
@@ -234,7 +234,7 @@ function BrightDataBar({
       <div
         className="h-full w-full"
         style={{
-          background: "linear-gradient(90deg,var(--data-magenta),var(--data-purple))",
+          background: "linear-gradient(90deg,#d18cf5,#660099)",
           clipPath: `inset(0 ${100 - pct}% 0 0 round 999px)`,
           transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
