@@ -166,11 +166,19 @@ function lerpColor(a: string, b: string, t: number) {
   return `rgb(${r}, ${g}, ${bl})`;
 }
 // Tip color interpolated across the full 0-100% spectrum so the arc tip
-// starts light and builds to a strong dark purple at 100%, matching the bars.
+// starts in a medium purple and darkens progressively to a strong dark
+// purple at 100%. The easing curve makes it darker sooner (~15%).
 function tipColor(pct: number) {
   const p = Math.min(100, Math.max(0, pct));
-  return lerpColor("#d18cf5", "#660099", p / 100);
+  const t = Math.pow(p / 100, 0.72);
+  return lerpColor("#b26bf0", "#660099", t);
 }
+
+// Gradient for the bar fills — stops follow tipColor so the capsule always
+// sits exactly on the tip color of the visible portion.
+const BAR_GRADIENT = `linear-gradient(90deg, ${[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+  .map((i) => `${tipColor(i)} ${i}%`)
+  .join(", ")})`;
 
 function ConsumptionPieIcon({ percentage }: { percentage: number }) {
   const pct = Math.max(0, Math.min(100, percentage));
@@ -234,7 +242,7 @@ function BrightDataBar({
       <div
         className="h-full w-full"
         style={{
-          background: "linear-gradient(90deg,#d18cf5,#660099)",
+          background: BAR_GRADIENT,
           clipPath: `inset(0 ${100 - pct}% 0 0 round 999px)`,
           transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
