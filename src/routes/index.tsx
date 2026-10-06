@@ -237,8 +237,8 @@ function BrightDataBar({
   // every color up to the current percentage (like the gauge arc).
   const fill = spectrumGradient(variant === "available");
 
-  return (
-    <div className="relative mt-2.5 h-2 w-full rounded-full bg-[var(--data-track)] shadow-inner">
+    return (
+    <div className="relative mt-2.5 h-5 w-full rounded-full bg-[var(--data-track)] shadow-inner">
       <div
         className="absolute inset-y-0 left-0 rounded-full"
         style={{
@@ -246,12 +246,12 @@ function BrightDataBar({
           backgroundImage: fill,
           backgroundSize: `${pct > 0 ? (100 / pct) * 100 : 100}% 100%`,
           backgroundRepeat: "no-repeat",
-          boxShadow: `0 0 8px color-mix(in oklab, ${markerColor} 48%, transparent)`,
+          boxShadow: `0 0 10px color-mix(in oklab, ${markerColor} 48%, transparent)`,
           transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
         }}
       />
       <span
-        className="absolute top-1/2 min-w-11 -translate-x-1/2 -translate-y-1/2 rounded-full px-2 py-0.5 text-center text-[10px] font-black leading-none text-primary-foreground"
+        className="absolute top-0 bottom-0 flex min-w-11 -translate-x-1/2 items-center justify-center rounded-full px-2 text-center text-[10px] font-black leading-none text-primary-foreground"
         style={{
           left: `${Math.max(9, Math.min(91, pct))}%`,
           background: markerColor,
