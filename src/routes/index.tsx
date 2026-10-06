@@ -1038,15 +1038,34 @@ function ResumoConsumo() {
                     onClick={() => {
                       openAfterIconsReady(() => setConfirmAutoDebit(true));
                     }}
-                    className={`relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
-                      autoDebit ? "bg-[#16a34a]" : "bg-[#bfbfbf]"
+                    className={`relative mt-0.5 inline-flex h-4 w-8 shrink-0 cursor-pointer items-center rounded-full border transition-all duration-300 group ${
+                      autoDebit ? "border-[#16a34a] bg-[#16a34a]" : "border-[#a8a8a8] bg-[#c9c9c9]"
                     }`}
                   >
                     <span
-                      className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-300 ${
-                        autoDebit ? "translate-x-[22px]" : "translate-x-[2px]"
+                      className={`inline-block h-3 w-3 transform rounded-full transition-transform duration-300 ${
+                        autoDebit ? "translate-x-[17px]" : "translate-x-[2px]"
                       }`}
+                      style={{
+                        background: "linear-gradient(180deg,#ffffff,#f1f1f1)",
+                        boxShadow:
+                          "0 1px 2px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.95), 0 0 0 1px rgba(0,0,0,0.06)",
+                      }}
                     />
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 rounded-full transition-opacity duration-300"
+                      style={{
+                        boxShadow: "0 0 0 3px rgba(255,255,255,0.55), 0 2px 6px -1px rgba(0,0,0,0.18)",
+                        opacity: autoDebit ? 1 : 0,
+                      }}
+                    />
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                      style={{ boxShadow: "0 0 0 3px rgba(255,255,255,0.7)" }}
+                    />
+                  </button>
                   </button>
                 </div>
 
