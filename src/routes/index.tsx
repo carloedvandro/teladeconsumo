@@ -294,6 +294,15 @@ function ConsumoRing({
   const needleRightPath = `M ${cx} ${cy} L ${cx} ${needleTipY} L ${cx + nBaseHalf} ${cy} Z`;
   const needleGlossPath = `M ${cx - 1.2} ${cy - 4} L ${cx} ${needleTipY + 6} L ${cx + 1.2} ${cy - 4} Z`;
 
+  // Fill wedge — the colored arc is clipped to everything between 0% and the
+  // needle position, so the gauge stays white and the pointer "carries" the
+  // green→red scale with it until the full 100% (red).
+  const fillEndDeg = angleAt(animPct);
+  const fillR = r + strokeW / 2 + 2;
+  const fillFrom = polar(START, fillR);
+  const fillTo = polar(fillEndDeg, fillR);
+  const fillWedge = `M ${cx} ${cy} L ${fillFrom.x} ${fillFrom.y} A ${fillR} ${fillR} 0 ${fillEndDeg - START > 180 ? 1 : 0} 1 ${fillTo.x} ${fillTo.y} Z`;
+
   // Consumed tip dot at the end of the actual consumption (also rotated)
   const tipX = cx;
   const tipY = cy - r;
@@ -335,6 +344,9 @@ function ConsumoRing({
           <filter id={`gaugeShadow-${gid}`} x="-50%" y="-50%" width="200%" height="200%">
             <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" floodColor="#000" floodOpacity="0.35" />
           </filter>
+          <clipPath id={`gaugeFill-${gid}`}>
+            <path d={fillWedge} />
+          </clipPath>
           <linearGradient id={`bezelOuter-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#b8b8bf" />
             <stop offset="100%" stopColor="#f4f4f7" />
@@ -354,11 +366,11 @@ function ConsumoRing({
           strokeLinecap="round"
         />
 
-        {/* Background track (recessed) */}
+        {/* Background track (recessed) — white base, the pointer carries the color */}
         <path
           d={arcPath(START, START + SWEEP, r)}
           fill="none"
-          stroke="#d8d8de"
+          stroke="#ffffff"
           strokeWidth={strokeW}
           strokeLinecap="round"
         />
@@ -372,27 +384,29 @@ function ConsumoRing({
           opacity={0.55}
         />
 
-        {/* Colored arc (full) */}
-        {segments.map((s, i) => (
-          <path
-            key={i}
-            d={s.d}
-            fill="none"
-            stroke={s.color}
-            strokeWidth={strokeW}
-            strokeLinecap={i === 0 || i === segments.length - 1 ? "round" : "butt"}
-          />
-        ))}
+        {/* Colored fill — grows with the needle, same green→red scale as the bars */}
+        <g clipPath={`url(#gaugeFill-${gid})`}>
+          {segments.map((s, i) => (
+            <path
+              key={i}
+              d={s.d}
+              fill="none"
+              stroke={s.color}
+              strokeWidth={strokeW}
+              strokeLinecap="butt"
+            />
+          ))}
 
-        {/* Top gloss highlight over colored arc */}
-        <path
-          d={arcPath(START, START + SWEEP, r + strokeW / 2 - 2)}
-          fill="none"
-          stroke="#ffffff"
-          strokeWidth={1.5}
-          strokeLinecap="round"
-          opacity={0.35}
-        />
+          {/* Top gloss highlight over the colored fill */}
+          <path
+            d={arcPath(START, START + SWEEP, r + strokeW / 2 - 2)}
+            fill="none"
+            stroke="#ffffff"
+            strokeWidth={1.5}
+            strokeLinecap="round"
+            opacity={0.35}
+          />
+        </g>
 
         {/* Ticks */}
         {Array.from({ length: minorTicks }).map((_, i) => {
@@ -1084,13 +1098,13 @@ function ResumoConsumo() {
                     onClick={() => {
                       openAfterIconsReady(() => setConfirmAutoDebit(true));
                     }}
-                    className={`relative mt-0.5 inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
+                    className={`relative mt-0.5 inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
                       autoDebit ? "bg-[#16a34a]" : "bg-[#bfbfbf]"
                     }`}
                   >
                     <span
-                      className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-300 ${
-                        autoDebit ? "translate-x-[22px]" : "translate-x-[2px]"
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-300 ${
+                        autoDebit ? "translate-x-[18px]" : "translate-x-[2px]"
                       }`}
                     />
                   </button>
@@ -1162,21 +1176,17 @@ function ResumoConsumo() {
               );
             })()}
 
+            {/* Nota em tempo real — de volta dentro do card, só o textinho com o ícone */}
+            <div className="mt-2.5 flex items-center justify-center gap-1.5 pb-1 text-[12px] font-medium text-[#2b2b2b]">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0">
+                <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#660099" opacity="0.9" />
+                <path d="m9 12 2 2 4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              Os dados são atualizados em tempo real.
+            </div>
+
           </div>
-
-          {/* Nota em tempo real — barra de ponta a ponta, alinhada ao painel */}
-          <div className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-md bg-white/70 px-3 py-1.5 text-[11px] text-[#4a4a4a] backdrop-blur-sm">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden className="shrink-0">
-              <path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3z" fill="#660099" opacity="0.85" />
-              <path d="m9 12 2 2 4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            Os dados são atualizados em tempo real.
           </div>
-          </div>
-
-
-
-
         </section>
 
 
