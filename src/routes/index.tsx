@@ -986,7 +986,7 @@ function ResumoConsumo() {
                       openAfterIconsReady(() => setConfirmAutoDebit(true));
                     }}
                     className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
-                      autoDebit ? "bg-[#7c3aed]" : "bg-[#bfbfbf]"
+                      autoDebit ? "bg-[#16A34A]" : "bg-[#bfbfbf]"
                     }`}
                   >
                     <span
