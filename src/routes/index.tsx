@@ -18,7 +18,6 @@ import {
   AlertTriangle,
   Mail,
   Unlock,
-  Gift,
   Gauge,
   Copy,
   QrCode,
