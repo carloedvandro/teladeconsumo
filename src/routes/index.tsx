@@ -862,7 +862,7 @@ function ResumoConsumo() {
           />
 
           {/* Consumption panel overlay - centered/right like reference */}
-          <div className="relative -mt-24 md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[600px] md:-translate-y-1/2 md:[zoom:0.8]">
+          <div className="relative -mt-24 md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[650px] md:-translate-y-1/2 md:[zoom:0.8]">
           <div
             className="overflow-hidden rounded-md p-4 md:w-full md:p-6"
             style={{
@@ -888,7 +888,7 @@ function ResumoConsumo() {
             <div className="flex flex-col items-stretch gap-3 md:flex-row md:items-start md:justify-center md:gap-2">
               <div className="self-center md:self-auto"><ConsumoRing line={line} /></div>
 
-              <div className="w-full pr-3 md:w-[320px] md:pr-4">
+              <div className="w-full pr-3 md:w-[356px] md:pr-2">
 
                 <div className="flex items-center gap-1 whitespace-nowrap">
                   <h2
@@ -904,8 +904,8 @@ function ResumoConsumo() {
                     {baseLine.plan}
                   </h2>
                   {bonusDebito > 0 && (
-                    <span className="inline-flex shrink-0 items-center gap-1 text-[20px] font-bold leading-none text-[#16A34A] animate-fade-in">
-                      <Gift className="h-7 w-7 shrink-0" strokeWidth={2.4} />
+                    <span className="inline-flex shrink-0 items-center gap-0.5 text-[20px] font-bold leading-none tracking-tight text-[#16A34A] animate-fade-in">
+                      <Gift className="h-6 w-6 shrink-0" strokeWidth={2.4} />
                       +{bonusDebito}GB liberado
                     </span>
                   )}
