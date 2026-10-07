@@ -904,8 +904,8 @@ function ResumoConsumo() {
                     {baseLine.plan}
                   </h2>
                   {bonusDebito > 0 && (
-                    <span className="mt-[1px] inline-flex shrink-0 items-center gap-1 text-[13px] font-bold text-[#16A34A] animate-fade-in">
-                      <Gift className="h-6 w-6 shrink-0" strokeWidth={2.4} />
+                    <span className="inline-flex shrink-0 items-center gap-1 text-[20px] font-bold leading-none text-[#16A34A] animate-fade-in">
+                      <Gift className="h-7 w-7 shrink-0" strokeWidth={2.4} />
                       +{bonusDebito}GB liberado
                     </span>
                   )}
