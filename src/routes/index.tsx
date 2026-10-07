@@ -904,7 +904,10 @@ function ResumoConsumo() {
                     {baseLine.plan}
                   </h2>
                   {bonusDebito > 0 && (
-                    <span className="inline-flex shrink-0 items-center gap-0.5 text-[20px] font-bold leading-none tracking-tight text-[#16A34A] animate-fade-in">
+                    <span
+                      className="inline-flex shrink-0 items-center gap-0.5 text-[20px] font-bold leading-none tracking-tight text-[#1fd35f] animate-fade-in"
+                      style={{ textShadow: "0 0 14px rgba(31,211,95,0.35)" }}
+                    >
                       <Gift className="h-6 w-6 shrink-0" strokeWidth={2.4} />
                       +{bonusDebito}GB liberado
                     </span>
@@ -997,8 +1000,10 @@ function ResumoConsumo() {
                   onClick={() => {
                     openAfterIconsReady(() => setConfirmAutoDebit(true));
                   }}
-                  className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 ${
-                    autoDebit ? "bg-[#16A34A]" : "bg-[#bfbfbf]"
+                  className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-all duration-300 ${
+                    autoDebit
+                      ? "bg-[#1fd35f]/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.5),0_0_10px_rgba(31,211,95,0.5)]"
+                      : "bg-[#bfbfbf]"
                   }`}
                 >
                   <span
