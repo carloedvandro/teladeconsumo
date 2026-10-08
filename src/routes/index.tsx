@@ -300,7 +300,31 @@ function BrightDataBar({
               "linear-gradient(180deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.12) 46%, rgba(255,255,255,0) 62%, rgba(0,0,0,0.14) 100%)",
           }}
         />
-        <span className="relative">{pct.toFixed(2)}%</span>
+        {/* Digits sit on a soft dark patch that only covers the number itself,
+            so the red at the critical extremes stays readable over the purple. */}
+        <span className="relative inline-flex h-full items-center justify-center px-1">
+          {extreme && (
+            <span
+              aria-hidden="true"
+              className="absolute inset-y-0 -inset-x-2 rounded-full"
+              style={{
+                background:
+                  "radial-gradient(closest-side, rgba(8,6,12,0.94) 58%, rgba(8,6,12,0) 100%)",
+                filter: "blur(1.4px)",
+              }}
+            />
+          )}
+          <span
+            className="relative"
+            style={{
+              textShadow: extreme
+                ? "0 0 2px rgba(0,0,0,0.95), 0 1px 2px rgba(0,0,0,0.9)"
+                : "0 1px 2px rgba(0,0,0,0.85), 0 0 5px rgba(0,0,0,0.6)",
+            }}
+          >
+            {pct.toFixed(2)}%
+          </span>
+        </span>
       </span>
     </div>
   );
