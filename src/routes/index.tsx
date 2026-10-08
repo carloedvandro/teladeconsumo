@@ -343,10 +343,10 @@ function BrightDataBar({
               };
             })()}
           >
-            {formatConsumption(amount)} GB
+            {formatConsumption(amount)}GB
           </span>
         </div>
-        <div className="management-percentage mt-1 text-center text-[14px] font-bold leading-none">{formatConsumption(pct)}%</div>
+        <div className="management-percentage mt-1 text-center text-[13px] font-bold leading-none tabular-nums">{formatConsumption(pct)}%</div>
       </div>
     </div>
   );

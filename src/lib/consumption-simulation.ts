@@ -1,5 +1,8 @@
 export function formatConsumption(value: number) {
-  return String(Number(value.toFixed(2)));
+  // Regra do usuário: número inteiro quando não há fração (0, 50, 100);
+  // quando há diferença, sempre um decimal com ponto (5.1, 0.3, 10.8).
+  const rounded = Math.round(value * 10) / 10;
+  return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
 }
 
 export function simulatedUsage(percent: number, allowance: number, carried: number) {
