@@ -15,3 +15,4 @@
 - [x] Pontinho branco na ponta da agulha no mesmo padrão: branco por padrão, vermelho com efeito escuro atrás no 100%.
 
 
+- [x] Transição dinâmica da numeração: branquinho no normal e escurecendo para o vermelho Ferrari #ff2800 ao aproximar dos extremos (consumo ≥90%, disponível ≤10%), subindo e descendo, com sombra preta colada nas letras quando acende — vale para barras, baterias e pontinho da agulha.
