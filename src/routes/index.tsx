@@ -1,5 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { formatConsumption, simulatedUsage } from "@/lib/consumption-simulation";
 import {
   ChevronDown,
   User,
@@ -23,6 +26,9 @@ import {
   Copy,
   QrCode,
   Clock,
+  Play,
+  Pause,
+  RotateCcw,
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
@@ -272,32 +278,34 @@ function BrightDataBar({
   percentage,
   amount,
   total,
+  live = false,
 }: {
   percentage: number;
   amount: number;
   total: number;
+  live?: boolean;
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
 
   return (
-    <div className="management-meter mt-1.5 grid min-w-0 grid-cols-[minmax(0,1fr)_5rem] items-start gap-x-3">
+    <div className={`management-meter mt-1.5 grid min-w-0 grid-cols-[minmax(0,1fr)_5rem] items-start gap-x-3 ${live ? "management-live" : ""}`}>
       <div className="min-w-0">
         <div className="management-track relative h-[23px] w-full overflow-hidden rounded-full md:h-[27px]">
           <div
             className="management-fill absolute inset-0 rounded-full"
             style={{
               clipPath: `inset(0 ${100 - pct}% 0 0 round 999px)`,
-              transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+              transition: live ? "none" : "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
             }}
           />
           <span
             className="management-amount absolute inset-y-0 flex h-full w-max items-center whitespace-nowrap text-[13px] font-bold leading-none"
             style={{ left: `${pct / 2}%`, transform: `translateX(-${pct / 2}%)`, marginLeft: `${6 * (1 - pct / 100)}px` }}
           >
-            {Number(amount.toFixed(2))} GB
+            {formatConsumption(amount)} GB
           </span>
         </div>
-        <div className="management-percentage mt-1 text-center text-[14px] font-bold leading-none">{pct.toFixed(2)}%</div>
+        <div className="management-percentage mt-1 text-center text-[14px] font-bold leading-none">{formatConsumption(pct)}%</div>
       </div>
       <span className="management-total flex min-w-0 flex-col items-start pt-[3px] leading-none">
         <span className="whitespace-nowrap text-[21px] font-bold">{Number(total.toFixed(2))}GB</span>
@@ -308,8 +316,10 @@ function BrightDataBar({
 
 function ConsumoRing({
   line,
+  live = false,
 }: {
   line: Line;
+  live?: boolean;
 }) {
   const pct = Math.min(100, (line.used / line.total) * 100);
 
@@ -354,8 +364,14 @@ function ConsumoRing({
   // Needle — starts at 0% and animates up to the real value on mount so the
   // gauge feels like it's "spinning up" every time the user lands on the page.
   const [animPct, setAnimPct] = useState(0);
+  const animPctRef = useRef(0);
   useEffect(() => {
-    setAnimPct(0);
+    if (live) {
+      animPctRef.current = pct;
+      setAnimPct(pct);
+      return;
+    }
+    const initial = animPctRef.current;
     const duration = 700;
     const start = performance.now();
     let raf = 0;
@@ -363,12 +379,14 @@ function ConsumoRing({
       const t = Math.min(1, (now - start) / duration);
       // easeOutCubic for a smooth spin-up
       const eased = 1 - Math.pow(1 - t, 3);
-      setAnimPct(pct * eased);
+      const next = initial + (pct - initial) * eased;
+      animPctRef.current = next;
+      setAnimPct(next);
       if (t < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [pct]);
+  }, [pct, live]);
   // The colored arc only fills up to the needle position; the rest of the
   // track stays a translucent white rail.
   const filledSegments = segments.filter((_, i) => ((i + 1) / STEPS) * 100 <= animPct + 0.5);
@@ -708,6 +726,26 @@ function ResumoConsumo() {
   const [pixOpen, setPixOpen] = useState(false);
   const [simStatus, setSimStatus] = useState<LineStatus | null>(null);
   const [simOpen, setSimOpen] = useState(false);
+  const [simConsumption, setSimConsumption] = useState<number | null>(null);
+  const [simPlaying, setSimPlaying] = useState(false);
+
+  useEffect(() => {
+    if (!simPlaying) return;
+    let raf = 0;
+    let previous = performance.now();
+    const tick = (now: number) => {
+      const increment = Math.min(now - previous, 100) / 600;
+      previous = now;
+      setSimConsumption((current) => Math.min(100, (current ?? 0) + increment));
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [simPlaying]);
+
+  useEffect(() => {
+    if (simConsumption === 100) setSimPlaying(false);
+  }, [simConsumption]);
   const pixCode = "00020126580014BR.GOV.BCB.PIX0136vivo-fatura-8f2a-4c11-9e0b520400005303986540589.905802BR5915VIVO TELEFONICA6008SAO PAULO62070503***6304A1B2";
 
   // Fatura: dia de vencimento. A partir da meia-noite do dia seguinte ao
@@ -797,7 +835,9 @@ function ResumoConsumo() {
       : 0;
 
 
-  const rawUsed = +(baseLine.used + simExtra).toFixed(2);
+  const rawUsed = simConsumption === null
+    ? +(baseLine.used + simExtra).toFixed(2)
+    : simulatedUsage(simConsumption, franquiaTotal, sobrouAnterior);
   const liveUsed = Math.min(rawUsed, franquiaTotal + sobrouAnterior);
   const bisUsed = +Math.max(0, liveUsed - franquiaTotal).toFixed(2);
   const bisAvailable = +Math.max(0, sobrouAnterior - bisUsed).toFixed(2);
@@ -979,13 +1019,13 @@ function ResumoConsumo() {
                   <li>
                       <div className="min-w-0">
                         <div className="management-total text-[15px] font-bold">Meu consumo total da conta</div>
-                        <BrightDataBar percentage={pct} amount={line.used} total={line.total} />
+                        <BrightDataBar percentage={pct} amount={line.used} total={line.total} live={simConsumption !== null} />
                       </div>
                   </li>
                   <li>
                       <div className="min-w-0">
                         <div className="management-total text-[15px] font-bold">Consumo Smart Bis</div>
-                        <BrightDataBar percentage={bisUsedPct} amount={bisUsed} total={sobrouAnterior} />
+                        <BrightDataBar percentage={bisUsedPct} amount={bisUsed} total={sobrouAnterior} live={simConsumption !== null} />
                       </div>
                   </li>
                 </ul>
@@ -2255,6 +2295,20 @@ function ResumoConsumo() {
                 ×
               </button>
             </div>
+            <div className="mb-3 space-y-3 border-b border-border pb-3">
+              <div className="flex items-center justify-between text-xs font-bold text-consumption-purple">
+                <label htmlFor="consumption-simulator">Consumo</label>
+                <output>{formatConsumption(simConsumption ?? 0)}%</output>
+              </div>
+              <Slider id="consumption-simulator" aria-label="Consumo simulado" min={0} max={100} step={0.1} value={[simConsumption ?? 0]} onValueChange={([value]) => { if (value === undefined) return; setSimPlaying(false); setSimConsumption(value); setSimStatus(null); }} />
+              <div className="flex items-center gap-2">
+                <Button variant="outline" size="icon" aria-label={simPlaying ? "Pausar consumo" : "Reproduzir consumo"} title={simPlaying ? "Pausar consumo" : "Reproduzir consumo"} onClick={() => { if (!simPlaying) { setSimConsumption((value) => value === null || value >= 100 ? 0 : value); setSimStatus(null); } setSimPlaying((playing) => !playing); }}>
+                  {simPlaying ? <Pause /> : <Play />}
+                </Button>
+                <Button variant="outline" size="icon" aria-label="Zerar consumo" title="Zerar consumo" onClick={() => { setSimConsumption(0); setSimPlaying(false); setSimStatus(null); }}><RotateCcw /></Button>
+                <Button variant="ghost" size="sm" onClick={() => { setSimConsumption(null); setSimPlaying(false); }}>Consumo real</Button>
+              </div>
+            </div>
             <div className="grid grid-cols-1 gap-1.5">
               {[
                 { key: null, label: "Automático (real)", tone: "#660099", icon: null },
@@ -2268,7 +2322,7 @@ function ResumoConsumo() {
                 return (
                   <button
                     key={String(opt.key)}
-                    onClick={() => setSimStatus(opt.key)}
+                    onClick={() => { setSimStatus(opt.key); setSimConsumption(null); setSimPlaying(false); }}
                     className="flex items-center gap-2 rounded-lg border px-2.5 py-2 text-left text-xs font-semibold transition"
                     style={{
                       borderColor: active ? opt.tone : "#eee",
