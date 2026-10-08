@@ -324,7 +324,7 @@ function BrightDataBar({
   return (
     <div className={`management-meter mt-1.5 min-w-0 ${live ? "management-live" : ""}`}>
       <div className="min-w-0">
-        <div className="management-track relative h-[23px] w-full overflow-hidden rounded-full md:h-[20px]">
+        <div className="management-track relative h-[23px] w-full overflow-hidden rounded-full md:h-[28.75px]">
           <div
             className="management-fill absolute inset-0 rounded-full"
             style={{
