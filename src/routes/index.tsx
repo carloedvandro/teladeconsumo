@@ -159,9 +159,16 @@ function formatGB(gb: number) {
   return `${gb.toFixed(1)} GB`;
 }
 
-function hexToRgb(hex: string) {
-  const h = hex.replace("#", "");
-  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)] as const;
+function hexToRgb(color: string) {
+  const hex = color.replace("#", "");
+  if (hex.length === 6) {
+    return [parseInt(hex.slice(0, 2), 16), parseInt(hex.slice(2, 4), 16), parseInt(hex.slice(4, 6), 16)] as const;
+  }
+  // Also accept rgb()/rgba() strings so gradients can chain through colors
+  // that were themselves produced by lerpColor.
+  const m = color.match(/rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/);
+  if (m) return [Number(m[1]), Number(m[2]), Number(m[3])] as const;
+  return [0, 0, 0] as const;
 }
 function lerpColor(a: string, b: string, t: number) {
   const [ar, ag, ab] = hexToRgb(a);
@@ -271,10 +278,11 @@ function BrightDataBar({
   variant: "consumption" | "available";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  // Only the digits change colour, and they shift gradually toward Ferrari red
-  // as they approach a critical extreme — consumption nearing 100%, available
-  // nearing 0% — so the colour follows the percentage as it rises or falls.
-  // The capsule itself keeps the purple tone of the track.
+  // Near the critical extremes the capsule itself gives way to Ferrari red —
+  // consumption nearing 100%, available nearing 0% — so no purple is left
+  // under the number: the red covers the whole capsule (to the very end at
+  // 100% / 0.00%) and the percentage sits on top in white. Normal values keep
+  // the purple tone of the track.
   const blend = criticalBlend(variant, pct);
 
 
@@ -295,12 +303,12 @@ function BrightDataBar({
         style={{
           left: `${Math.max(9, Math.min(91, pct))}%`,
           // The capsule keeps the purple tone of the track and carries a
-          // glossy highlight on top so it reads as a 3D pill. The dark effect
-          // sits behind the digits only — a soft shadow that lifts them off
-          // the purple. Digits shift toward Ferrari red near the extremes.
-          backgroundColor: tipColor(pct),
-          color: criticalColor(blend),
-          textShadow: "0 1px 2px rgba(0,0,0,0.85), 0 0 5px rgba(0,0,0,0.6)",
+          // glossy highlight on top so it reads as a 3D pill. Near the
+          // critical extremes the purple gives way to Ferrari red, which
+          // covers the whole capsule at 100% / 0.00%.
+          backgroundColor:
+            blend > 0 ? lerpColor(tipColor(pct), CRITICAL_RED, blend) : tipColor(pct),
+          color: "#ffffff",
           boxShadow:
             "inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -2px 3px rgba(0,0,0,0.28), 0 2px 5px rgba(0,0,0,0.25)",
           transition:
@@ -318,16 +326,13 @@ function BrightDataBar({
               "linear-gradient(180deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.12) 46%, rgba(255,255,255,0) 62%, rgba(0,0,0,0.14) 100%)",
           }}
         />
-        {/* At the critical extremes the digits sit in a dark inset window, so
-            the red stays readable while the capsule keeps its purple tone and
-            its 3D shine. */}
+        {/* The percentage sits on top in white; at the extremes the capsule
+            under it is fully red, with no purple left behind. */}
         <span className="relative inline-flex h-full items-center justify-center px-1">
           <span
             className="relative"
             style={{
-              textShadow: blend > 0
-                ? "0 0 2px rgba(0,0,0,0.95), 0 0 4px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9)"
-                : "0 1px 2px rgba(0,0,0,0.85), 0 0 5px rgba(0,0,0,0.6)",
+              textShadow: "0 1px 2px rgba(0,0,0,0.85), 0 0 5px rgba(0,0,0,0.6)",
             }}
           >
             {pct.toFixed(2)}%
