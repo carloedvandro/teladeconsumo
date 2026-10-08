@@ -226,7 +226,10 @@ function DataBatteryIcon({ percentage }: { percentage: number }) {
           transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       />
-      <span className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none text-primary-foreground [text-shadow:0_1px_3px_var(--data-purple)]">
+      <span
+        className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none [text-shadow:0_1px_3px_var(--data-purple)]"
+        style={pct <= 0 ? { color: "#dc2626", textShadow: "0 1px 3px rgba(153, 0, 0, 0.55)" } : { color: "var(--primary-foreground)" }}
+      >
         {Math.round(pct)}%
       </span>
     </div>
@@ -241,7 +244,11 @@ function BrightDataBar({
   variant: "consumption" | "available";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  const markerColor = tipColor(pct);
+  // Purple gradient normally; red only at the extremes — consumption at
+  // 100% (ran out) and available at 0% (nothing left).
+  const extreme =
+    (variant === "consumption" && pct >= 100) || (variant === "available" && pct <= 0);
+  const markerColor = extreme ? "#dc2626" : tipColor(pct);
 
   return (
     <div className="relative mt-2.5 h-4 w-full overflow-hidden rounded-full bg-white shadow-inner">
