@@ -291,14 +291,17 @@ function BrightDataBar({
             }}
           />
           <span
-            className="management-amount absolute inset-0 flex h-full items-center justify-center whitespace-nowrap text-[12px] font-bold leading-none"
+            className="management-amount absolute inset-0 flex h-full items-center justify-center whitespace-nowrap text-[13px] font-bold leading-none"
           >
             {amount.toFixed(2)}GB
           </span>
         </div>
-        <div className="management-percentage mt-1 text-center text-[13px] font-semibold leading-none">{pct.toFixed(2)}%</div>
+        <div className="management-percentage mt-1 text-center text-[14px] font-bold leading-none">{pct.toFixed(2)}%</div>
       </div>
-      <span className="management-total flex h-[27px] shrink-0 items-center whitespace-nowrap text-[17px] font-bold leading-none">{Number(total.toFixed(2))}GB</span>
+      <span className="management-total flex shrink-0 flex-col items-end pt-[3px] leading-none">
+        <span className="whitespace-nowrap text-[21px] font-bold">{Number(total.toFixed(2))}GB</span>
+        <span className="management-recurring mt-1.5 text-[11px] font-medium">recorrente</span>
+      </span>
     </div>
   );
 }
@@ -975,7 +978,7 @@ function ResumoConsumo() {
                 <ul className="mt-3 space-y-3 text-sm">
                   <li>
                       <div className="min-w-0">
-                        <div className="management-total font-semibold">Meu consumo total</div>
+                        <div className="management-total text-[15px] font-semibold">Meu consumo total da conta</div>
                         <BrightDataBar percentage={pct} amount={line.used} total={line.total} />
                       </div>
                   </li>
