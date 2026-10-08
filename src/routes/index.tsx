@@ -21,7 +21,6 @@ import {
   AlertTriangle,
   Mail,
   Unlock,
-  Gift,
   Gauge,
   Copy,
   QrCode,
@@ -1048,10 +1047,14 @@ function ResumoConsumo() {
                   </h2>
                   {bonusDebito > 0 && (
                     <span
-                       className="inline-flex shrink-0 items-center gap-1 text-[20px] font-bold leading-none text-bonus-active animate-fade-in md:text-[18px]"
+                      className="bonus-tag inline-flex shrink-0 items-baseline gap-1.5 whitespace-nowrap text-bonus-active animate-fade-in"
                     >
-                      <Gift className="h-6 w-6 shrink-0" strokeWidth={2.4} />
-                      +{bonusDebito}GB liberado
+                      <span className="text-[20px] font-bold leading-none md:text-[18px]">
+                        +{bonusDebito}GB
+                      </span>
+                      <span className="text-[20px] font-medium leading-none opacity-80 md:text-[18px]">
+                        liberado
+                      </span>
                     </span>
                   )}
                 </div>

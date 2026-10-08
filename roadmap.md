@@ -31,3 +31,4 @@
 - [x] Remover a cápsula roxa atrás das porcentagens: só o número direto sobre a barra (branco dentro do roxo, roxo escuro sobre o trilho branco, vermelho Ferrari nos extremos); barras e o 100% como estavam.
 - [x] Trocar a sombra preta por uma aura cinza clarinha difusa atrás de todos os números (barrinhas, bateria) e do pontinho da agulha.
 - [x] Arco do velocímetro com o mesmo efeito das barras: roxo escuro no início clareando até o roxo vivo no 100%, no mesmo ritmo de 900ms; conferido no simulador em 10%, 35% e 100%.
+- [x] Remover o ícone de presente do selo de bônus: "+20GB" em negrito e "liberado" mais suave, no mesmo corpo e alinhados pela base; conferido no computador e celular.

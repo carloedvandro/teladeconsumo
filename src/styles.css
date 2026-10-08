@@ -211,6 +211,12 @@ body::-webkit-scrollbar { width: 0; height: 0; display: none; }
   color: transparent;
 }
 
+/* Selo de bônus: número e "liberado" no mesmo corpo, alinhados pela base */
+.bonus-tag {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
 @keyframes slide-up-modal {
   from { opacity: 0; transform: translateY(12px) scale(0.98); }
   to { opacity: 1; transform: translateY(0) scale(1); }
