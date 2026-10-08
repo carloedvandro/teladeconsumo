@@ -1066,7 +1066,7 @@ function ResumoConsumo() {
                   </h2>
                   {bonusDebito > 0 && (
                     <span
-                      className="bonus-tag inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full border border-bonus-tag-border bg-bonus-tag-bg px-2.5 py-1 animate-fade-in"
+                      className="bonus-tag inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full border border-bonus-tag-border bg-bonus-tag-bg px-2.5 py-1.5 md:py-1 animate-fade-in"
                     >
                       <span className="text-[12px] font-extrabold leading-none tracking-tight text-bonus-active md:text-[11px]">
                         Mais {bonusDebito}GB
@@ -1084,7 +1084,7 @@ function ResumoConsumo() {
                     className="relative ml-auto inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[#660099] transition-colors hover:bg-[#660099]/10"
                   >
                     <Bell className="h-4 w-4" strokeWidth={2.25} />
-                    {alertThresholds.length > 0 && (
+                    {pct >= 100 && (
                       <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-[#16A34A]" />
                     )}
                   </button>
@@ -1150,13 +1150,13 @@ function ResumoConsumo() {
                   />
                 </button>
               </div>
-              <div className="min-w-0 pt-2.5 pr-11 md:pr-0">
-                <div className="text-[11px] font-medium leading-snug text-[#2e2e3a] md:text-[13px] md:whitespace-nowrap md:leading-tight">
-                  {autoDebit
-                    ? "Em débito automático, desconto automático do saldo da conta."
-                    : "Ative o débito automático pra ganhar 20GB de bônus."}
+              {!autoDebit && (
+                <div className="min-w-0 pt-2.5 pr-11 md:pr-0">
+                  <div className="text-[11px] font-medium leading-snug text-[#2e2e3a] md:text-[13px] md:whitespace-nowrap md:leading-tight">
+                    Ative o débito automático pra ganhar 20GB de bônus.
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {(() => {
