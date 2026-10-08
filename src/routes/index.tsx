@@ -2400,8 +2400,6 @@ function ResumoConsumo() {
           </div>
         </div>
       )}
-        </div>
-      )}
 
       {/* Acesso à página de login */}
       <Link
