@@ -28,6 +28,7 @@ import {
   Play,
   Pause,
   RotateCcw,
+  Bell,
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
