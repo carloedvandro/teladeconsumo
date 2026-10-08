@@ -278,31 +278,11 @@ function BrightDataBar({
   total: number;
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  const trackRef = useRef<HTMLDivElement>(null);
-  const numRef = useRef<HTMLSpanElement>(null);
-  const [trackW, setTrackW] = useState(0);
-  const [numW, setNumW] = useState(54);
-
-  useEffect(() => {
-    const el = trackRef.current;
-    if (!el) return;
-    const measure = () => {
-      setTrackW(el.clientWidth);
-      setNumW(numRef.current?.offsetWidth ?? 54);
-    };
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [amount]);
-
-  const fillPx = trackW * pct / 100;
-  const labelCenter = Math.max(numW / 2 + 8, Math.min(fillPx / 2, trackW - numW / 2 - 8));
 
   return (
     <div className="management-meter mt-1.5 grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3">
       <div className="min-w-0">
-        <div ref={trackRef} className="management-track relative h-[27px] w-full overflow-hidden rounded-full">
+        <div className="management-track relative h-[27px] w-full overflow-hidden rounded-full">
           <div
             className="management-fill absolute inset-0 rounded-full"
             style={{
@@ -311,9 +291,7 @@ function BrightDataBar({
             }}
           />
           <span
-            ref={numRef}
-            className="management-amount absolute top-0 flex h-full items-center whitespace-nowrap text-[12px] font-bold leading-none"
-            style={{ left: `${labelCenter}px`, transform: "translateX(-50%)", transition: "left 900ms ease" }}
+            className="management-amount absolute inset-0 flex h-full items-center justify-center whitespace-nowrap text-[12px] font-bold leading-none"
           >
             {amount.toFixed(2)}GB
           </span>
@@ -994,33 +972,18 @@ function ResumoConsumo() {
                   )}
                 </div>
 
-                <ul className="mt-3 -ml-2 space-y-2 text-sm">
+                <ul className="mt-3 space-y-3 text-sm">
                   <li>
-                    <div className="flex items-center gap-2">
-                      <ConsumptionPieIcon percentage={usedPct} />
-                      <div className="min-w-0 flex-1">
-                        <div className="font-semibold text-foreground">Meu Consumo</div>
+                      <div className="min-w-0">
+                        <div className="management-total font-semibold">Meu consumo total</div>
                         <BrightDataBar percentage={pct} amount={line.used} total={line.total} />
                       </div>
-                    </div>
                   </li>
                   <li>
-                    <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={availPct} />
-                      <div className="min-w-0 flex-1">
-                        <div className="font-semibold text-foreground">Disponíveis</div>
-                        <BrightDataBar percentage={100 - pct} amount={available} total={line.total} />
+                      <div className="min-w-0">
+                        <div className="management-total font-semibold">Meu consumo Smart Biz</div>
+                        <BrightDataBar percentage={bisUsedPct} amount={bisUsed} total={sobrouAnterior} />
                       </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="flex items-center gap-2">
-                      <DataBatteryIcon percentage={bisRemainPct} />
-                      <div className="min-w-0 flex-1">
-                        <div className="font-semibold text-foreground">Disponível Smart+Bis</div>
-                        <BrightDataBar percentage={bisRemainPct} amount={bisAvailable} total={sobrouAnterior} />
-                      </div>
-                    </div>
                   </li>
                 </ul>
 

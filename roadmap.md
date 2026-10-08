@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Simplificar para duas barras sem ícones: Meu consumo total e Meu consumo Smart Biz; centralizar GB e porcentagem no mesmo eixo, mantendo trilho cinza e roxo escuro clareando até 100%; verificar computador e celular.
+
 - [x] Aplicar às três barras o modelo Vivo Gestão das referências: trilho cinza, GB brancos dentro, porcentagem centralizada abaixo e franquia à direita; verificado no computador e celular, incluindo zero e 100%.
 
 - [x] Padronizar os quatro indicadores conforme a referência: ícones 3D roxos, barras brilhantes e porcentagens sobre as barras.
