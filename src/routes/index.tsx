@@ -588,7 +588,9 @@ function ConsumoRing({
             transform: `rotate(${needleAngle}deg)`,
             transformOrigin: `${cx}px ${cy}px`,
             transformBox: "view-box",
-            transition: "transform 1800ms cubic-bezier(0.22, 1, 0.36, 1)",
+            // The needle keeps the same 900ms rhythm as the bar fill, and drops
+            // the transition while the simulator runs — just like the bars do.
+            transition: live ? "none" : `transform ${METER_MS}ms cubic-bezier(0.22, 1, 0.36, 1)`,
             willChange: "transform",
           }}
         >
