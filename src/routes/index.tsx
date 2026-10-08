@@ -258,9 +258,7 @@ function DataBatteryIcon({ percentage }: { percentage: number }) {
         style={{
           color: criticalColor(criticalBlend("available", pct)),
           textShadow:
-            criticalBlend("available", pct) > 0
-              ? "0 0 2px rgba(0,0,0,0.95), 0 0 4px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9)"
-              : "0 0 3px rgba(0,0,0,0.8), 0 1px 1px rgba(0,0,0,0.65)",
+            "0 0 2px var(--digit-halo), 0 0 5px var(--digit-halo-soft), 0 0 9px var(--digit-halo-faint)",
           transition: "color 900ms ease",
         }}
       >
@@ -333,7 +331,7 @@ function BrightDataBar({
           transform: inside ? "translateX(-100%)" : "none",
           color: digitColor,
           textShadow:
-            "0 0 1px rgba(0,0,0,0.9), 0 0 3px rgba(0,0,0,0.7), 0 1px 2px rgba(0,0,0,0.8)",
+            "0 0 2px var(--digit-halo), 0 0 6px var(--digit-halo-soft), 0 0 12px var(--digit-halo-faint)",
           transition:
             "left 900ms cubic-bezier(0.22, 1, 0.36, 1), color 900ms ease, transform 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
@@ -461,10 +459,16 @@ function ConsumoRing({
           <filter id={`gaugeShadow-${gid}`} x="-50%" y="-50%" width="200%" height="200%">
             <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" floodColor="#000" floodOpacity="0.35" />
           </filter>
-          {/* Tight black glow that sits right behind the tip dot when it goes
-              red — same pattern as the critical percentage digits. */}
+          {/* Soft light-gray aura that sits right behind the tip dot — the
+              same "sombrinha" the percentage digits carry. */}
           <filter id={`tipDotGlow-${gid}`} x="-200%" y="-200%" width="500%" height="500%">
-            <feDropShadow dx="0" dy="0" stdDeviation="1.1" floodColor="#000" floodOpacity="1" />
+            <feDropShadow
+              dx="0"
+              dy="0"
+              stdDeviation="1.4"
+              floodOpacity="1"
+              style={{ floodColor: "var(--digit-halo)" }}
+            />
           </filter>
 
 
@@ -588,7 +592,7 @@ function ConsumoRing({
                 cy={tipY}
                 r={2}
                 fill={criticalColor(tipBlend)}
-                filter={tipBlend > 0 ? `url(#tipDotGlow-${gid})` : undefined}
+                filter={`url(#tipDotGlow-${gid})`}
               />
             </>
           )}
