@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Padronizar números sem zeros decimais desnecessários e centralização vertical dos GB; adicionar simulação progressiva com controle de arrastar, verificar zero, frações e 100%.
+- [x] Padronizar números sem zeros decimais desnecessários e centralização vertical dos GB; adicionar simulação progressiva com controle de arrastar, reprodução e pausa; verificados zero, frações e 100% no computador e celular.
 
 - [x] Ajustar início e movimento dos GB, preservar ponto decimal e porcentagem, afinar somente barras no celular e corrigir título para Consumo Smart Bis em negrito; conferido no computador e celular, em zero e 100%.
 
