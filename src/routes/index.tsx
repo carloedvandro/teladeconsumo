@@ -1038,7 +1038,7 @@ function ResumoConsumo() {
             <div className="flex flex-col items-stretch gap-3 md:flex-row md:items-start md:justify-center md:gap-2">
               <div className="self-center md:self-auto"><ConsumoRing line={line} live={simConsumption !== null} /></div>
 
-              <div className="w-full pr-3 md:w-[356px] md:pr-2">
+              <div className="w-full md:w-[356px]">
 
                 <div className="flex min-w-0 w-full flex-nowrap items-center justify-between gap-2 whitespace-nowrap">
                   <h2
