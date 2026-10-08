@@ -1128,7 +1128,18 @@ function ResumoConsumo() {
             {/* Débito automático — linha de ponta a ponta do painel, sem card de fundo */}
             <div className="-mx-4 mt-3 px-4 md:mx-0 md:px-0">
               <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
-                <span className="text-[15px] font-bold leading-none text-[#1a1a1a] md:text-[16px]">Débito automático</span>
+                <span className="flex min-w-0 items-center gap-2 text-[15px] font-bold leading-none text-[#1a1a1a] md:text-[16px]">
+                  Débito automático
+                  {autoDebit && (
+                    <span className="flex shrink-0 items-center gap-1 text-[#16A34A]">
+                      <span
+                        aria-hidden
+                        className="inline-block h-[7px] w-[7px] rounded-full bg-[#16A34A] md:h-[8px] md:w-[8px]"
+                      />
+                      Ativo
+                    </span>
+                  )}
+                </span>
                 <button
                   type="button"
                   role="switch"
