@@ -460,13 +460,6 @@ function ConsumoRing({
           <filter id={`tipDotGlow-${gid}`} x="-200%" y="-200%" width="500%" height="500%">
             <feDropShadow dx="0" dy="0" stdDeviation="1.1" floodColor="#000" floodOpacity="1" />
           </filter>
-          {/* Soft dark backing behind the red tip dot, so the red pops the same
-              way the critical digits do. */}
-          <radialGradient id={`tipHalo-${gid}`} cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#000000" stopOpacity="0.95" />
-            <stop offset="55%" stopColor="#000000" stopOpacity="0.75" />
-            <stop offset="100%" stopColor="#000000" stopOpacity="0" />
-          </radialGradient>
 
 
           <linearGradient id={`bezelOuter-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
