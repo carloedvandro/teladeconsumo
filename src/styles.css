@@ -108,6 +108,9 @@
   --data-red: oklch(0.62 0.26 29);
   --data-track: oklch(0.91 0.02 285);
   --management-track: oklch(0.865 0 0);
+  /* Bar fill: dark purple at the start, brightening to the end tone at 100%.
+     The gauge arc mirrors these two colours (ARC_START / ARC_END in
+     src/routes/index.tsx) so the ponteiro and the bars read as one style. */
   --management-purple-start: oklch(0.3 0.15 310);
   --management-purple-end: oklch(0.63 0.29 308);
   --management-total: oklch(0.43 0.23 307);
