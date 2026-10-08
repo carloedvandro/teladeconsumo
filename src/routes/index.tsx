@@ -902,6 +902,21 @@ function ResumoConsumo() {
   const usedPct = Math.round(pct);
   const usedPctExact = (Math.round(pct * 100) / 100).toFixed(2);
   const availPctExact = (Math.round((100 - pct) * 100) / 100).toFixed(2);
+
+  // Alertas de consumo: avisa quando o consumo atinge cada percentual
+  // configurado da franquia. Rearma automaticamente quando o consumo
+  // volta a ficar abaixo do percentual.
+  useEffect(() => {
+    for (const threshold of alertThresholds) {
+      if (pct >= threshold && !firedAlertsRef.current.has(threshold)) {
+        firedAlertsRef.current.add(threshold);
+        setToast(`Atenção: você atingiu ${threshold}% da franquia de dados`);
+        setTimeout(() => setToast(null), 3200);
+      } else if (pct < threshold) {
+        firedAlertsRef.current.delete(threshold);
+      }
+    }
+  }, [pct, alertThresholds]);
   const color = ringColor(pct);
 
   const [now, setNow] = useState(() => new Date());
