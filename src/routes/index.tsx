@@ -270,74 +270,57 @@ function DataBatteryIcon({ percentage }: { percentage: number }) {
 
 function BrightDataBar({
   percentage,
-  variant,
+  amount,
+  total,
 }: {
   percentage: number;
-  variant: "consumption" | "available";
+  amount: number;
+  total: number;
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  // How close the digits are to a critical extreme (consumption nearing 100%,
-  // available nearing 0%).
-  const blend = criticalBlend(variant, pct);
-
-  // There is no pill behind the percentage any more — only the number. It is
-  // tucked inside the purple fill when the fill is wide enough to hold it, and
-  // sits just past the fill on the white track when it is not, so the digits
-  // never straddle both backgrounds.
   const trackRef = useRef<HTMLDivElement>(null);
   const numRef = useRef<HTMLSpanElement>(null);
   const [trackW, setTrackW] = useState(0);
-  const [numW, setNumW] = useState(38);
+  const [numW, setNumW] = useState(54);
 
   useEffect(() => {
     const el = trackRef.current;
     if (!el) return;
-    const measure = () => setTrackW(el.clientWidth);
+    const measure = () => {
+      setTrackW(el.clientWidth);
+      setNumW(numRef.current?.offsetWidth ?? 54);
+    };
     measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [amount]);
 
-  useEffect(() => {
-    setNumW(numRef.current?.offsetWidth ?? 38);
-  }, [pct]);
-
-  const fillPx = trackW > 0 ? (pct / 100) * trackW : 0;
-  const inside = trackW > 0 && fillPx >= numW + 12;
-  const left = inside ? fillPx - 6 : Math.min(fillPx + 6, Math.max(0, trackW - numW - 4));
-  // White over the purple fill, deep purple over the white track, and Ferrari
-  // red at the critical extremes either way.
-  const digitColor = lerpColor(inside ? "#ffffff" : "#3a0066", CRITICAL_RED, blend);
+  const fillPx = trackW * pct / 100;
+  const labelCenter = Math.max(numW / 2 + 8, Math.min(fillPx / 2, trackW - numW / 2 - 8));
 
   return (
-    <div
-      ref={trackRef}
-      className="relative mt-2.5 h-5 w-full overflow-hidden rounded-full bg-white shadow-inner"
-    >
-      <div
-        className="h-full w-full"
-        style={{
-          background: BAR_GRADIENT,
-          clipPath: `inset(0 ${100 - pct}% 0 0 round 999px)`,
-          transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
-      />
-      <span
-        ref={numRef}
-        className="absolute top-0 flex h-full items-center whitespace-nowrap text-center text-[10px] font-bold leading-none"
-        style={{
-          left: `${left}px`,
-          transform: inside ? "translateX(-100%)" : "none",
-          color: digitColor,
-          textShadow:
-            "0 0 2px var(--digit-halo), 0 0 5px var(--digit-halo-strong), 0 0 10px var(--digit-halo-soft), 0 0 16px var(--digit-halo-faint)",
-          transition:
-            "left 900ms cubic-bezier(0.22, 1, 0.36, 1), color 900ms ease, transform 900ms cubic-bezier(0.22, 1, 0.36, 1)",
-        }}
-      >
-        {pct.toFixed(2)}%
-      </span>
+    <div className="management-meter mt-1.5 grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3">
+      <div className="min-w-0">
+        <div ref={trackRef} className="management-track relative h-[27px] w-full overflow-hidden rounded-full">
+          <div
+            className="management-fill absolute inset-0 rounded-full"
+            style={{
+              clipPath: `inset(0 ${100 - pct}% 0 0 round 999px)`,
+              transition: "clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1)",
+            }}
+          />
+          <span
+            ref={numRef}
+            className="management-amount absolute top-0 flex h-full items-center whitespace-nowrap text-[12px] font-bold leading-none"
+            style={{ left: `${labelCenter}px`, transform: "translateX(-50%)", transition: "left 900ms ease" }}
+          >
+            {amount.toFixed(2)}GB
+          </span>
+        </div>
+        <div className="management-percentage mt-1 text-center text-[13px] font-semibold leading-none">{pct.toFixed(2)}%</div>
+      </div>
+      <span className="management-total flex h-[27px] shrink-0 items-center whitespace-nowrap text-[17px] font-bold leading-none">{Number(total.toFixed(2))}GB</span>
     </div>
   );
 }
@@ -1016,14 +999,8 @@ function ResumoConsumo() {
                     <div className="flex items-center gap-2">
                       <ConsumptionPieIcon percentage={usedPct} />
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Meu Consumo</span>
-                          <span className="text-[13px]">
-                            <span className="font-bold text-[#1a1a1a]">{line.used.toFixed(2)} GB</span>
-                          </span>
-                        </div>
-
-                        <BrightDataBar percentage={pct} variant="consumption" />
+                        <div className="font-semibold text-foreground">Meu Consumo</div>
+                        <BrightDataBar percentage={pct} amount={line.used} total={line.total} />
                       </div>
                     </div>
                   </li>
@@ -1031,14 +1008,8 @@ function ResumoConsumo() {
                     <div className="flex items-center gap-2">
                       <DataBatteryIcon percentage={availPct} />
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Disponíveis</span>
-                          <span className="text-[13px]">
-                            <span className="font-bold text-[#1a1a1a]">{available.toFixed(2)} GB</span>
-                          </span>
-                        </div>
-
-                        <BrightDataBar percentage={100 - pct} variant="available" />
+                        <div className="font-semibold text-foreground">Disponíveis</div>
+                        <BrightDataBar percentage={100 - pct} amount={available} total={line.total} />
                       </div>
                     </div>
                   </li>
@@ -1046,14 +1017,8 @@ function ResumoConsumo() {
                     <div className="flex items-center gap-2">
                       <DataBatteryIcon percentage={bisRemainPct} />
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between gap-2 whitespace-nowrap">
-                          <span className="font-semibold text-[#1a1a1a]">Disponível Smart+Bis</span>
-                          <span className="text-[13px]">
-                            <span className="font-bold text-[#1a1a1a]">{bisAvailable.toFixed(2)} GB</span>
-                          </span>
-                        </div>
-
-                        <BrightDataBar percentage={bisRemainPct} variant="available" />
+                        <div className="font-semibold text-foreground">Disponível Smart+Bis</div>
+                        <BrightDataBar percentage={bisRemainPct} amount={bisAvailable} total={sobrouAnterior} />
                       </div>
                     </div>
                   </li>
