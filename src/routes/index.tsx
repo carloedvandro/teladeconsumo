@@ -2333,6 +2333,51 @@ function ResumoConsumo() {
 
 
 
+      {/* Alertas de consumo configuráveis */}
+      <Modal
+        open={alertsOpen}
+        onClose={() => setAlertsOpen(false)}
+        title="Alertas de consumo"
+      >
+        <div className="space-y-4 px-6 py-5">
+          <p className="text-sm text-[#555]">
+            Escolha os percentuais da franquia em que você quer ser avisado.
+            O alerta aparece na tela assim que o consumo atingir cada marca.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {[50, 70, 80, 90, 100].map((t) => {
+              const active = alertThresholds.includes(t);
+              return (
+                <button
+                  key={t}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() =>
+                    setAlertThresholds((current) =>
+                      active
+                        ? current.filter((v) => v !== t)
+                        : [...current, t].sort((a, b) => a - b),
+                    )
+                  }
+                  className={`rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
+                    active
+                      ? "border-[#660099] bg-[#660099] text-white"
+                      : "border-[#ddd] bg-white text-[#660099] hover:border-[#660099]/50"
+                  }`}
+                >
+                  {t}%
+                </button>
+              );
+            })}
+          </div>
+          <p className="text-xs text-[#777]">
+            {alertThresholds.length === 0
+              ? "Nenhum alerta ativo no momento."
+              : `Alertas ativos em: ${alertThresholds.map((t) => `${t}%`).join(", ")}.`}
+          </p>
+        </div>
+      </Modal>
+
       {toast && (
         <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-md bg-[#333] px-5 py-3 text-sm text-white shadow-lg">
           {toast}
