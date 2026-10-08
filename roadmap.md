@@ -8,3 +8,4 @@
 - [x] Verde do botão do débito automático e do selo "+20GB liberado" mais vivo, brilhante e translúcido.
 - [x] Restaurar o tamanho anterior do painel no computador (zoom 0.8), título roxo uniforme e bônus verde sólido da referência.
 - [x] Aplicar roxo até preto somente no título do plano e unificar o verde do presente, bônus e botão com o status Ativa; manter barras e arco.
+- [x] Manter plano e bônus em uma linha no computador sem aumentar o card; alinhar débito automático ao título e ícones no celular.
