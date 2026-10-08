@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Ajustar início e movimento dos GB, preservar ponto decimal e porcentagem, afinar somente barras no celular e corrigir título para Consumo Smart Bis em negrito; conferir tela e extremos.
+- [x] Ajustar início e movimento dos GB, preservar ponto decimal e porcentagem, afinar somente barras no celular e corrigir título para Consumo Smart Bis em negrito; conferido no computador e celular, em zero e 100%.
 
 - [x] Igualar a largura das duas barras, ajustar os títulos, retirar recorrente e fazer os GB acompanharem o preenchimento até o centro em 100%; fonte e movimento conferidos no computador e celular, incluindo zero e 100%.
 
