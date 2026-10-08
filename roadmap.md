@@ -35,3 +35,4 @@
 - [x] Destacar o débito automático: título um pouco maior, encostado na ponta esquerda, botão verde movido para a ponta direita (alinhado ao fim das barras) e mais respiro entre o botão e o texto; conferido no computador e celular.
 - [x] Bônus "Mais 20GB de bônus" colado ao nome do plano (sem vão no meio) e destacado como pílula de contorno verde fino com fundo quase transparente; conferido no computador e celular, cabendo inteiro em uma linha.
 - [x] Débito automático ativo: indicador verde "Ativo" (pontinho + palavra) colado ao título na mesma linha, sem texto embaixo; conferido no computador e celular.
+- [x] Barras mais finas no computador (27px → 20px); débito automático movido para a coluna das barras (depois do ponteiro), título na ponta esquerda e botão verde na ponta direita, com altura igual à do texto; conferido no computador e celular.
