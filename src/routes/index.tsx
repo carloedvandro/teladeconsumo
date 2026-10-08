@@ -258,7 +258,7 @@ function DataBatteryIcon({ percentage }: { percentage: number }) {
         style={{
           color: criticalColor(criticalBlend("available", pct)),
           textShadow:
-            "0 0 2px var(--digit-halo), 0 0 5px var(--digit-halo-soft), 0 0 9px var(--digit-halo-faint)",
+            "0 0 2px var(--digit-halo), 0 0 4px var(--digit-halo-strong), 0 0 8px var(--digit-halo-soft), 0 0 12px var(--digit-halo-faint)",
           transition: "color 900ms ease",
         }}
       >
@@ -331,7 +331,7 @@ function BrightDataBar({
           transform: inside ? "translateX(-100%)" : "none",
           color: digitColor,
           textShadow:
-            "0 0 2px var(--digit-halo), 0 0 6px var(--digit-halo-soft), 0 0 12px var(--digit-halo-faint)",
+            "0 0 2px var(--digit-halo), 0 0 5px var(--digit-halo-strong), 0 0 10px var(--digit-halo-soft), 0 0 16px var(--digit-halo-faint)",
           transition:
             "left 900ms cubic-bezier(0.22, 1, 0.36, 1), color 900ms ease, transform 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
@@ -465,7 +465,7 @@ function ConsumoRing({
             <feDropShadow
               dx="0"
               dy="0"
-              stdDeviation="1.4"
+              stdDeviation="2.2"
               floodOpacity="1"
               style={{ floodColor: "var(--digit-halo)" }}
             />
