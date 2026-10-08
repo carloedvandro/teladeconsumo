@@ -161,8 +161,9 @@ function ringColor(pct: number) {
 }
 
 function formatGB(gb: number) {
-  if (gb < 1) return `${(gb * 1024).toFixed(0)} MB`;
-  return `${gb.toFixed(1)} GB`;
+  // Number and unit always tight, no space (e.g. "50.3GB") — same standard everywhere.
+  if (gb < 1) return `${(gb * 1024).toFixed(0)}MB`;
+  return `${gb.toFixed(1)}GB`;
 }
 
 function hexToRgb(color: string) {
@@ -653,7 +654,7 @@ function ConsumoRing({
       <div className="pointer-events-none absolute inset-x-0 bottom-2 flex flex-col items-center">
         <div className="flex items-baseline text-[30px] font-bold leading-none tabular-nums text-[#1a1a1a]">
           {formatConsumption((animPct / 100) * line.total)}
-          <span className="ml-0.5 text-[18px] font-bold text-[#1a1a1a]">GB</span>
+          <span className="text-[18px] font-bold text-[#1a1a1a]">GB</span>
         </div>
         <div className="mt-1.5 text-[13px] font-semibold tabular-nums text-[#4a4a4a] antialiased">
           consumidos de{" "}
@@ -1210,7 +1211,7 @@ function ResumoConsumo() {
 
           <div className="grid grid-cols-3 gap-3">
             {[
-              { key: "dados" as const, icon: icon3dData, label: "Dados", value: `${line.total} GB` },
+              { key: "dados" as const, icon: icon3dData, label: "Dados", value: `${line.total}GB` },
               { key: "minutos" as const, icon: icon3dPhone, label: "Minutos", value: "Ilimitado" },
               { key: "sms" as const, icon: icon3dSms, label: "SMS", value: "Ilimitado" },
             ].map((card) => {
