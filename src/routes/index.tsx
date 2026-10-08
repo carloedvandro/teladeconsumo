@@ -235,11 +235,20 @@ function DataBatteryIcon({ percentage }: { percentage: number }) {
       />
       <span
         className="absolute inset-0 flex items-center justify-center text-[8px] font-bold leading-none"
-        style={{ color: pct <= 0 ? CRITICAL_RED : "var(--capsule-fg)", textShadow: "0 0 3px rgba(0,0,0,0.8), 0 1px 1px rgba(0,0,0,0.65)" }}
+        style={{ color: pct <= 0 ? CRITICAL_RED : "var(--capsule-fg)", textShadow: pct <= 0 ? "none" : "0 0 3px rgba(0,0,0,0.8), 0 1px 1px rgba(0,0,0,0.65)" }}
 
 
       >
-        {Math.round(pct)}%
+        {pct <= 0 ? (
+          <span
+            className="inline-flex items-center justify-center rounded-full px-1"
+            style={{ background: "linear-gradient(180deg, rgba(16,13,22,0.97) 0%, rgba(4,3,7,0.99) 100%)" }}
+          >
+            {Math.round(pct)}%
+          </span>
+        ) : (
+          `${Math.round(pct)}%`
+        )}
       </span>
     </div>
   );
@@ -307,12 +316,10 @@ function BrightDataBar({
           {extreme && (
             <span
               aria-hidden="true"
-              className="absolute inset-y-[2px] inset-x-[2px] rounded-full"
+              className="absolute inset-0 rounded-full"
               style={{
                 background:
                   "linear-gradient(180deg, rgba(16,13,22,0.97) 0%, rgba(4,3,7,0.99) 100%)",
-                boxShadow:
-                  "inset 0 1px 2px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.14)",
               }}
             />
           )}
