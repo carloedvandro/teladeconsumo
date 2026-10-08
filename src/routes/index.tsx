@@ -1152,7 +1152,9 @@ function ResumoConsumo() {
               </div>
               <div className="min-w-0 pt-2.5 pr-11 md:pr-0">
                 <div className="text-[11px] font-medium leading-snug text-[#2e2e3a] md:text-[13px] md:whitespace-nowrap md:leading-tight">
-                  Sua mensalidade será descontada automaticamente do saldo da conta na data da renovação.
+                  {autoDebit
+                    ? "Em débito automático, desconto automático do saldo da conta."
+                    : "Ative o débito automático pra ganhar 20GB de bônus."}
                 </div>
               </div>
             </div>
