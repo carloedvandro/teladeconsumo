@@ -284,6 +284,7 @@ function BrightDataBar({
   // 0%), always with a dark shadow glued to the letters so it reads over both
   // the purple fill and the white track.
   const blend = criticalBlend(variant, pct);
+  const digitColor = blend > 0 ? criticalColor(blend) : "#3a0066";
 
   return (
     <div className="relative mt-2.5 h-5 w-full overflow-hidden rounded-full bg-white shadow-inner">
@@ -299,11 +300,11 @@ function BrightDataBar({
         className="absolute top-0 flex h-full -translate-x-1/2 items-center justify-center whitespace-nowrap text-center text-[10px] font-bold leading-none"
         style={{
           left: `${Math.max(8, Math.min(92, pct))}%`,
-          color: criticalColor(blend),
+          color: digitColor,
           textShadow:
             blend > 0
               ? "0 0 2px rgba(255,255,255,0.95), 0 0 5px rgba(255,255,255,0.8), 0 0 1px rgba(0,0,0,0.9), 0 1px 2px rgba(0,0,0,0.85)"
-              : "0 0 1px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,0.9), 0 0 5px rgba(0,0,0,0.8), 1px 0 1px rgba(0,0,0,0.8), -1px 0 1px rgba(0,0,0,0.8), 0 1px 1px rgba(0,0,0,0.85)",
+              : "0 0 1px rgba(255,255,255,1), 0 0 3px rgba(255,255,255,0.95), 0 0 6px rgba(255,255,255,0.85)",
           transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1), color 900ms ease",
         }}
       >
