@@ -898,7 +898,7 @@ function ResumoConsumo() {
 
                 <div className="flex items-center gap-1 whitespace-nowrap">
                   <h2
-                    className="text-[20px] font-bold text-consumption-purple"
+                    className="plan-title text-[20px] font-bold"
                   >
                     {baseLine.plan}
                   </h2>
@@ -1000,7 +1000,7 @@ function ResumoConsumo() {
                   }}
                   className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-all duration-300 ${
                     autoDebit
-                      ? "bg-[#1fd35f]/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.5),0_0_10px_rgba(31,211,95,0.5)]"
+                      ? "bg-bonus-active"
                       : "bg-[#bfbfbf]"
                   }`}
                 >
@@ -1027,7 +1027,7 @@ function ResumoConsumo() {
                     ? "reduzida"
                     : "ativa");
               const map = {
-                ativa: { icon: statusAtivaIcon, label: "Ativa", short: "Ativa", tone: "#16A34A" },
+                ativa: { icon: statusAtivaIcon, label: "Ativa", short: "Ativa", tone: "var(--bonus-active)" },
                 reduzida: { icon: statusReduzidaIcon, label: "Velocidade reduzida", short: "Reduzida", tone: "#F97316" },
                 reduzida_pagamento: {
                   Icon: Clock,

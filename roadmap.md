@@ -7,4 +7,4 @@
 - [x] Sem dourado no arco e nas barras: manter tudo como está.
 - [x] Verde do botão do débito automático e do selo "+20GB liberado" mais vivo, brilhante e translúcido.
 - [x] Restaurar o tamanho anterior do painel no computador (zoom 0.8), título roxo uniforme e bônus verde sólido da referência.
-- [ ] Aplicar roxo até preto somente no título do plano e unificar o verde do presente, bônus e botão com o status Ativa; manter barras e arco.
+- [x] Aplicar roxo até preto somente no título do plano e unificar o verde do presente, bônus e botão com o status Ativa; manter barras e arco.
