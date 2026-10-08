@@ -180,10 +180,23 @@ function tipColor(pct: number) {
   return lerpColor("#b26bf0", "#660099", t);
 }
 
-// Single red used for the critical percentage numbers (consumption at 100%,
-// available at 0%) — the color only ever lands on the digits, never on the
-// capsule background.
-const CRITICAL_RED = "#ff2a2a";
+// Bright Ferrari red used for the critical percentage digits (consumption
+// near/at 100%, available near/at 0%) — the color only ever lands on the
+// digits, never on the capsule background.
+const CRITICAL_RED = "#ff2800";
+
+// How close the digits are to a critical extreme: 0 = normal white, 1 = full
+// Ferrari red. Consumption blends in as it approaches 100%, available as it
+// approaches 0% — so the digits keep changing colour while the percentage
+// rises or falls, in every component.
+function criticalBlend(variant: "consumption" | "available", pct: number) {
+  const p = Math.max(0, Math.min(100, pct));
+  const t = variant === "consumption" ? (p - 90) / 10 : (10 - p) / 10;
+  return Math.max(0, Math.min(1, t));
+}
+function criticalColor(blend: number) {
+  return lerpColor("#ffffff", CRITICAL_RED, blend);
+}
 
 
 
@@ -235,7 +248,14 @@ function DataBatteryIcon({ percentage }: { percentage: number }) {
       />
       <span
         className="absolute inset-0 flex items-center justify-center text-[8px] font-bold leading-none"
-        style={{ color: pct <= 0 ? CRITICAL_RED : "var(--capsule-fg)", textShadow: pct <= 0 ? "0 0 2px rgba(0,0,0,0.95), 0 0 4px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9)" : "0 0 3px rgba(0,0,0,0.8), 0 1px 1px rgba(0,0,0,0.65)" }}
+        style={{
+          color: criticalColor(criticalBlend("available", pct)),
+          textShadow:
+            criticalBlend("available", pct) > 0
+              ? "0 0 2px rgba(0,0,0,0.95), 0 0 4px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9)"
+              : "0 0 3px rgba(0,0,0,0.8), 0 1px 1px rgba(0,0,0,0.65)",
+          transition: "color 900ms ease",
+        }}
       >
         {`${Math.round(pct)}%`}
       </span>
@@ -251,11 +271,11 @@ function BrightDataBar({
   variant: "consumption" | "available";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  // Only the digits change colour, and only at the critical extremes —
-  // consumption at 100% (franchise used up) and available at 0% (nothing
-  // left). The capsule itself keeps the purple tone of the track.
-  const extreme =
-    (variant === "consumption" && pct >= 100) || (variant === "available" && pct <= 0);
+  // Only the digits change colour, and they shift gradually toward Ferrari red
+  // as they approach a critical extreme — consumption nearing 100%, available
+  // nearing 0% — so the colour follows the percentage as it rises or falls.
+  // The capsule itself keeps the purple tone of the track.
+  const blend = criticalBlend(variant, pct);
 
 
 
@@ -277,9 +297,9 @@ function BrightDataBar({
           // The capsule keeps the purple tone of the track and carries a
           // glossy highlight on top so it reads as a 3D pill. The dark effect
           // sits behind the digits only — a soft shadow that lifts them off
-          // the purple. Digits go red at the critical extremes.
+          // the purple. Digits shift toward Ferrari red near the extremes.
           backgroundColor: tipColor(pct),
-          color: extreme ? CRITICAL_RED : "var(--capsule-fg)",
+          color: criticalColor(blend),
           textShadow: "0 1px 2px rgba(0,0,0,0.85), 0 0 5px rgba(0,0,0,0.6)",
           boxShadow:
             "inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -2px 3px rgba(0,0,0,0.28), 0 2px 5px rgba(0,0,0,0.25)",
@@ -305,7 +325,7 @@ function BrightDataBar({
           <span
             className="relative"
             style={{
-              textShadow: extreme
+              textShadow: blend > 0
                 ? "0 0 2px rgba(0,0,0,0.95), 0 0 4px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9)"
                 : "0 1px 2px rgba(0,0,0,0.85), 0 0 5px rgba(0,0,0,0.6)",
             }}
@@ -397,6 +417,7 @@ function ConsumoRing({
   const tipX = cx;
   const tipY = cy - r;
   const tipCol = tipColor(pct);
+  const tipBlend = criticalBlend("consumption", pct);
 
   const gid = line.number.replace(/\D/g, "");
 
@@ -561,17 +582,23 @@ function ConsumoRing({
             <>
               <circle cx={tipX} cy={tipY} r={strokeW / 2 + 1} fill={tipCol} />
               {/* The dot follows the same rule as the percentage digits: white
-                  normally, live red with a dark effect right behind it once the
-                  franchise hits 100%. */}
-              {pct >= 100 && (
-                <circle cx={tipX} cy={tipY} r={strokeW / 2 + 3} fill={`url(#tipHalo-${gid})`} />
+                  normally, shifting toward Ferrari red with a dark effect right
+                  behind it as the franchise approaches 100%. */}
+              {tipBlend > 0 && (
+                <circle
+                  cx={tipX}
+                  cy={tipY}
+                  r={strokeW / 2 + 3}
+                  fill={`url(#tipHalo-${gid})`}
+                  opacity={tipBlend}
+                />
               )}
               <circle
                 cx={tipX}
                 cy={tipY}
                 r={2}
-                fill={pct >= 100 ? CRITICAL_RED : "#fff"}
-                filter={pct >= 100 ? `url(#tipDotGlow-${gid})` : undefined}
+                fill={criticalColor(tipBlend)}
+                filter={tipBlend > 0 ? `url(#tipDotGlow-${gid})` : undefined}
               />
             </>
           )}
