@@ -325,7 +325,7 @@ function BrightDataBar({
           <span
             className="relative"
             style={{
-              textShadow: extreme
+              textShadow: blend > 0
                 ? "0 0 2px rgba(0,0,0,0.95), 0 0 4px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9)"
                 : "0 1px 2px rgba(0,0,0,0.85), 0 0 5px rgba(0,0,0,0.6)",
             }}
