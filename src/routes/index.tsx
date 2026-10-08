@@ -402,13 +402,13 @@ function ConsumoRing({
       return;
     }
     const initial = animPctRef.current;
-    const duration = 700;
+    const duration = METER_MS;
     const start = performance.now();
     let raf = 0;
     const tick = (now: number) => {
       const t = Math.min(1, (now - start) / duration);
-      // easeOutCubic for a smooth spin-up
-      const eased = 1 - Math.pow(1 - t, 3);
+      // same easing the bar fill uses, so gauge and bars move together
+      const eased = managementEase(t);
       const next = initial + (pct - initial) * eased;
       animPctRef.current = next;
       setAnimPct(next);
