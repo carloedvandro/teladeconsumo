@@ -1039,7 +1039,7 @@ function ResumoConsumo() {
 
               <div className="w-full md:w-[356px]">
 
-                <div className="flex min-w-0 w-full flex-nowrap items-center justify-between gap-2 whitespace-nowrap">
+                <div className="flex min-w-0 w-full flex-nowrap items-center gap-2.5 whitespace-nowrap">
                   <h2
                     className="plan-title shrink-0 text-[20px] font-bold md:text-[18px]"
                   >
@@ -1049,11 +1049,11 @@ function ResumoConsumo() {
                     <span
                       className="bonus-tag inline-flex shrink-0 items-baseline gap-1.5 whitespace-nowrap text-bonus-active animate-fade-in"
                     >
-                      <span className="text-[20px] font-bold leading-none md:text-[18px]">
-                        +{bonusDebito}GB
+                      <span className="text-[17px] font-bold leading-none md:text-[18px]">
+                        Mais {bonusDebito}GB
                       </span>
-                      <span className="text-[20px] font-medium leading-none opacity-80 md:text-[18px]">
-                        liberado
+                      <span className="text-[17px] font-medium leading-none opacity-80 md:text-[18px]">
+                        de bônus
                       </span>
                     </span>
                   )}
