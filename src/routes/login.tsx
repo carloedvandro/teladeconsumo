@@ -23,6 +23,8 @@ export const Route = createFileRoute("/login")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:image", content: familyImg },
+      { name: "twitter:image", content: familyImg },
     ],
   }),
   component: LoginPage,
