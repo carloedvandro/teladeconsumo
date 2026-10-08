@@ -184,14 +184,49 @@ function lerpColor(a: string, b: string, t: number) {
   const bl = Math.round(ab + (bb - ab) * t);
   return `rgb(${r}, ${g}, ${bl})`;
 }
-// Tip color interpolated across the full 0-100% spectrum so the arc tip
-// starts in a medium purple and darkens progressively to a strong dark
-// purple at 100%. The easing curve makes it darker sooner (~15%).
+// The gauge arc uses the exact same colour curve as the bars: it starts in the
+// dark purple of --management-purple-start and brightens all the way to
+// --management-purple-end at 100%. The two numbers below mirror those tokens in
+// src/styles.css, and the interpolation position matches the bar's fill (which
+// is a full-width gradient clipped to the consumed portion), so a segment at 40%
+// and a bar tip at 40% always show the same purple.
+const ARC_START = { l: 0.3, c: 0.15, h: 310 };
+const ARC_END = { l: 0.63, c: 0.29, h: 308 };
+
 function tipColor(pct: number) {
-  const p = Math.min(100, Math.max(0, pct));
-  const t = Math.pow(p / 100, 0.72);
-  return lerpColor("#b26bf0", "#660099", t);
+  const t = Math.min(1, Math.max(0, pct / 100));
+  const l = ARC_START.l + (ARC_END.l - ARC_START.l) * t;
+  const c = ARC_START.c + (ARC_END.c - ARC_START.c) * t;
+  const h = ARC_START.h + (ARC_END.h - ARC_START.h) * t;
+  return `oklch(${l.toFixed(4)} ${c.toFixed(4)} ${h.toFixed(2)})`;
 }
+
+// Solver for cubic-bezier(0.22, 1, 0.36, 1) — the easing the bars use for their
+// fill — so the needle spins up on the same rhythm as the bar grows.
+function makeBezierEase(x1: number, y1: number, x2: number, y2: number) {
+  const cx = 3 * x1;
+  const bx = 3 * (x2 - x1) - cx;
+  const ax = 1 - cx - bx;
+  const cy = 3 * y1;
+  const by = 3 * (y2 - y1) - cy;
+  const ay = 1 - cy - by;
+  const sampleX = (t: number) => ((ax * t + bx) * t + cx) * t;
+  const sampleY = (t: number) => ((ay * t + by) * t + cy) * t;
+  const slopeX = (t: number) => (3 * ax * t + 2 * bx) * t + cx;
+  return (x: number) => {
+    let t = Math.min(1, Math.max(0, x));
+    for (let i = 0; i < 6; i++) {
+      const dx = sampleX(t) - x;
+      const slope = slopeX(t);
+      if (Math.abs(dx) < 1e-4 || slope === 0) break;
+      t = Math.min(1, Math.max(0, t - dx / slope));
+    }
+    return sampleY(t);
+  };
+}
+const managementEase = makeBezierEase(0.22, 1, 0.36, 1);
+// Same 900ms the bar fill uses.
+const METER_MS = 900;
 
 // Bright Ferrari red used for the critical percentage digits (consumption
 // near/at 100%, available near/at 0%) — the color only ever lands on the
