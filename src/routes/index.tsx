@@ -255,7 +255,7 @@ function BrightDataBar({
   const pct = Math.max(0, Math.min(100, percentage));
   // Only the digits change colour, and only at the critical extremes —
   // consumption at 100% (franchise used up) and available at 0% (nothing
-  // left). The capsule itself always stays the same dark pill.
+  // left). The capsule itself keeps the purple tone of the track.
   const extreme =
     (variant === "consumption" && pct >= 100) || (variant === "available" && pct <= 0);
 
@@ -276,20 +276,57 @@ function BrightDataBar({
         className="absolute top-0 flex h-full min-w-11 -translate-x-1/2 items-center justify-center rounded-full px-2 text-center text-[10px] font-bold leading-none"
         style={{
           left: `${Math.max(9, Math.min(91, pct))}%`,
-          // Dark capsule with the digits in white on top: stays crisp over the
-          // purple fill and over the empty white track. Only the digits change
-          // to red at the critical extremes (consumption 100%, available 0%).
-          background: "var(--capsule-bg)",
+          // The capsule keeps the purple tone of the track and carries a
+          // glossy highlight on top so it reads as a 3D pill. The dark effect
+          // sits behind the digits only — a soft shadow that lifts them off
+          // the purple. Digits go red at the critical extremes.
+          backgroundColor: tipColor(pct),
           color: extreme ? CRITICAL_RED : "var(--capsule-fg)",
-          textShadow: "none",
-          boxShadow: "0 1px 4px rgba(0,0,0,0.26)",
-          transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1), color 900ms ease",
+          textShadow: "0 1px 2px rgba(0,0,0,0.85), 0 0 5px rgba(0,0,0,0.6)",
+          boxShadow:
+            "inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -2px 3px rgba(0,0,0,0.28), 0 2px 5px rgba(0,0,0,0.25)",
+          transition:
+            "left 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease, color 900ms ease",
         }}
 
 
 
       >
-        {pct.toFixed(2)}%
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 rounded-full"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.12) 46%, rgba(255,255,255,0) 62%, rgba(0,0,0,0.14) 100%)",
+          }}
+        />
+        {/* At the critical extremes the digits sit in a dark inset window, so
+            the red stays readable while the capsule keeps its purple tone and
+            its 3D shine. */}
+        <span className="relative inline-flex h-full items-center justify-center px-1">
+          {extreme && (
+            <span
+              aria-hidden="true"
+              className="absolute inset-y-[2px] inset-x-[2px] rounded-full"
+              style={{
+                background:
+                  "linear-gradient(180deg, rgba(16,13,22,0.97) 0%, rgba(4,3,7,0.99) 100%)",
+                boxShadow:
+                  "inset 0 1px 2px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.14)",
+              }}
+            />
+          )}
+          <span
+            className="relative"
+            style={{
+              textShadow: extreme
+                ? "0 0 3px rgba(255,80,80,0.7), 0 0 1px rgba(255,140,140,0.55), 0 1px 2px rgba(0,0,0,0.9)"
+                : "0 1px 2px rgba(0,0,0,0.85), 0 0 5px rgba(0,0,0,0.6)",
+            }}
+          >
+            {pct.toFixed(2)}%
+          </span>
+        </span>
       </span>
     </div>
   );
