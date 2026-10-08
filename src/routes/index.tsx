@@ -28,6 +28,7 @@ import {
   Play,
   Pause,
   RotateCcw,
+  Bell,
 } from "lucide-react";
 
 import familyImgAsset from "@/assets/woman-phone.png.asset.json";
@@ -768,6 +769,9 @@ function ResumoConsumo() {
   const [simOpen, setSimOpen] = useState(false);
   const [simConsumption, setSimConsumption] = useState<number | null>(null);
   const [simPlaying, setSimPlaying] = useState(false);
+  const [alertsOpen, setAlertsOpen] = useState(false);
+  const [alertThresholds, setAlertThresholds] = useState<number[]>([80, 100]);
+  const firedAlertsRef = useRef<Set<number>>(new Set());
 
   useEffect(() => {
     if (!simPlaying) return;
@@ -898,6 +902,21 @@ function ResumoConsumo() {
   const usedPct = Math.round(pct);
   const usedPctExact = (Math.round(pct * 100) / 100).toFixed(2);
   const availPctExact = (Math.round((100 - pct) * 100) / 100).toFixed(2);
+
+  // Alertas de consumo: avisa quando o consumo atinge cada percentual
+  // configurado da franquia. Rearma automaticamente quando o consumo
+  // volta a ficar abaixo do percentual.
+  useEffect(() => {
+    for (const threshold of alertThresholds) {
+      if (pct >= threshold && !firedAlertsRef.current.has(threshold)) {
+        firedAlertsRef.current.add(threshold);
+        setToast(`Atenção: você atingiu ${threshold}% da franquia de dados`);
+        setTimeout(() => setToast(null), 3200);
+      } else if (pct < threshold) {
+        firedAlertsRef.current.delete(threshold);
+      }
+    }
+  }, [pct, alertThresholds]);
   const color = ringColor(pct);
 
   const [now, setNow] = useState(() => new Date());
@@ -1057,7 +1076,19 @@ function ResumoConsumo() {
                       </span>
                     </span>
                   )}
-                </div>
+                  <button
+                    type="button"
+                    aria-label="Configurar alertas de consumo"
+                    title="Alertas de consumo"
+                    onClick={() => setAlertsOpen(true)}
+                    className="relative ml-auto inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[#660099] transition-colors hover:bg-[#660099]/10"
+                  >
+                    <Bell className="h-4 w-4" strokeWidth={2.25} />
+                    {alertThresholds.length > 0 && (
+                      <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-[#16A34A]" />
+                    )}
+                  </button>
+                 </div>
 
                 <ul className="management-meters mt-3 space-y-3 text-sm">
                   <li>
@@ -2301,6 +2332,51 @@ function ResumoConsumo() {
 
 
 
+
+      {/* Alertas de consumo configuráveis */}
+      <Modal
+        open={alertsOpen}
+        onClose={() => setAlertsOpen(false)}
+        title="Alertas de consumo"
+      >
+        <div className="space-y-4 px-6 py-5">
+          <p className="text-sm text-[#555]">
+            Escolha os percentuais da franquia em que você quer ser avisado.
+            O alerta aparece na tela assim que o consumo atingir cada marca.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {[50, 70, 80, 90, 100].map((t) => {
+              const active = alertThresholds.includes(t);
+              return (
+                <button
+                  key={t}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() =>
+                    setAlertThresholds((current) =>
+                      active
+                        ? current.filter((v) => v !== t)
+                        : [...current, t].sort((a, b) => a - b),
+                    )
+                  }
+                  className={`rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
+                    active
+                      ? "border-[#660099] bg-[#660099] text-white"
+                      : "border-[#ddd] bg-white text-[#660099] hover:border-[#660099]/50"
+                  }`}
+                >
+                  {t}%
+                </button>
+              );
+            })}
+          </div>
+          <p className="text-xs text-[#777]">
+            {alertThresholds.length === 0
+              ? "Nenhum alerta ativo no momento."
+              : `Alertas ativos em: ${alertThresholds.map((t) => `${t}%`).join(", ")}.`}
+          </p>
+        </div>
+      </Modal>
 
       {toast && (
         <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-md bg-[#333] px-5 py-3 text-sm text-white shadow-lg">
