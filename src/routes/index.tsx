@@ -324,7 +324,7 @@ function BrightDataBar({
   return (
     <div className={`management-meter mt-1.5 min-w-0 ${live ? "management-live" : ""}`}>
       <div className="min-w-0">
-        <div className="management-track relative h-[23px] w-full overflow-hidden rounded-full md:h-[27px]">
+        <div className="management-track relative h-[23px] w-full overflow-hidden rounded-full md:h-[20px]">
           <div
             className="management-fill absolute inset-0 rounded-full"
             style={{
@@ -1110,7 +1110,6 @@ function ResumoConsumo() {
                 </ul>
 
 
-                {/* Débito automático — movido para a largura total do painel */}
 
 
                 <button
@@ -1126,47 +1125,48 @@ function ResumoConsumo() {
                   />
                   Ver detalhes do seu consumo &gt;
                 </button>
+
+                {/* Débito automático — alinhado às barras, sem card de fundo */}
+                <div className="mt-3">
+                  <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
+                    <span className="flex min-w-0 items-center gap-2 text-[15px] font-bold leading-none text-[#1a1a1a] md:text-[16px]">
+                      Débito automático
+                      {autoDebit && (
+                        <span className="shrink-0 text-[#16A34A]">ativo</span>
+                      )}
+                    </span>
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={autoDebit}
+                      aria-label="Débito automático"
+                      onClick={() => {
+                        openAfterIconsReady(() => setConfirmAutoDebit(true));
+                      }}
+                      className={`relative inline-flex h-4 w-8 shrink-0 cursor-pointer items-center rounded-full transition-all duration-300 ${
+                        autoDebit
+                          ? "bg-bonus-active"
+                          : "bg-[#bfbfbf]"
+                      }`}
+                    >
+                      <span
+                        className={`inline-block h-3 w-3 transform rounded-full bg-white shadow transition-transform duration-300 ${
+                          autoDebit ? "translate-x-[18px]" : "translate-x-[2px]"
+                        }`}
+                      />
+                    </button>
+                  </div>
+                  {!autoDebit && (
+                    <div className="min-w-0 pt-2.5 pr-11 md:pr-0">
+                      <div className="text-[11px] font-medium leading-snug text-[#2e2e3a] md:text-[13px] md:leading-tight">
+                        Ative o débito automático pra ganhar 20GB de bônus.
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
-            {/* Débito automático — linha de ponta a ponta do painel, sem card de fundo */}
-            <div className="-mx-4 mt-3 px-4 md:mx-0 md:px-0">
-              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
-                <span className="flex min-w-0 items-center gap-2 text-[15px] font-bold leading-none text-[#1a1a1a] md:text-[16px]">
-                  Débito automático
-                  {autoDebit && (
-                    <span className="shrink-0 text-[#16A34A]">ativo</span>
-                  )}
-                </span>
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked={autoDebit}
-                  aria-label="Débito automático"
-                  onClick={() => {
-                    openAfterIconsReady(() => setConfirmAutoDebit(true));
-                  }}
-                  className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-all duration-300 ${
-                    autoDebit
-                      ? "bg-bonus-active"
-                      : "bg-[#bfbfbf]"
-                  }`}
-                >
-                  <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform duration-300 ${
-                      autoDebit ? "translate-x-[18px]" : "translate-x-[2px]"
-                    }`}
-                  />
-                </button>
-              </div>
-              {!autoDebit && (
-                <div className="min-w-0 pt-2.5 pr-11 md:pr-0">
-                  <div className="text-[11px] font-medium leading-snug text-[#2e2e3a] md:text-[13px] md:whitespace-nowrap md:leading-tight">
-                    Ative o débito automático pra ganhar 20GB de bônus.
-                  </div>
-                </div>
-              )}
-            </div>
 
             {(() => {
               const effective: LineStatus =
