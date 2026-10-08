@@ -15,19 +15,20 @@ describe("consumption simulator", () => {
 });
 
 describe("consumption formatting", () => {
-  it("shows integers without decimals", () => {
+  it("shows exact extremes without decimals", () => {
     assert.equal(formatConsumption(0), "0");
     assert.equal(formatConsumption(50), "50");
     assert.equal(formatConsumption(100), "100");
   });
-  it("always keeps one decimal point when there is a fraction", () => {
-    assert.equal(formatConsumption(5.1), "5.1");
-    assert.equal(formatConsumption(10.8), "10.8");
-    assert.equal(formatConsumption(0.3), "0.3");
-    assert.equal(formatConsumption(53.78), "53.8");
+  it("always keeps two decimal places when there is a fraction", () => {
+    assert.equal(formatConsumption(5.1), "5.10");
+    assert.equal(formatConsumption(18.96), "18.96");
+    assert.equal(formatConsumption(0.3), "0.30");
+    assert.equal(formatConsumption(745.61), "745.61");
+    assert.equal(formatConsumption(53.78), "53.78");
   });
-  it("rounds tiny fractions to the nearest tenth", () => {
-    assert.equal(formatConsumption(0.04), "0");
-    assert.equal(formatConsumption(99.96), "100");
+  it("rounds tiny fractions to the nearest hundredth", () => {
+    assert.equal(formatConsumption(0.004), "0");
+    assert.equal(formatConsumption(99.996), "100");
   });
 });
