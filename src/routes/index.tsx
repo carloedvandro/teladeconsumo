@@ -244,11 +244,14 @@ function BrightDataBar({
   variant: "consumption" | "available";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  // Purple gradient normally; red only at the extremes — consumption at
-  // 100% (ran out) and available at 0% (nothing left).
+  // The capsule keeps its purple tip color; only the number itself turns red
+  // at the critical extremes — consumption at 100% (franchise used up) and
+  // available at 0% (nothing left).
   const extreme =
     (variant === "consumption" && pct >= 100) || (variant === "available" && pct <= 0);
-  const markerColor = extreme ? "#dc2626" : tipColor(pct);
+  const markerColor = tipColor(pct);
+
+
 
   return (
     <div className="relative mt-2.5 h-4 w-full overflow-hidden rounded-full bg-white shadow-inner">
