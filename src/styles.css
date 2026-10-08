@@ -184,6 +184,7 @@
 .management-fill { background: linear-gradient(90deg, var(--management-purple-start), var(--management-purple-end)); }
 .management-amount { color: var(--management-amount); text-shadow: 0 1px 2px var(--management-text-effect); }
 .management-percentage { color: var(--management-percentage); }
+.management-recurring { color: var(--management-percentage); }
 .management-total { color: var(--management-total); }
 
 /* Hide scrollbars but keep scroll functionality */
