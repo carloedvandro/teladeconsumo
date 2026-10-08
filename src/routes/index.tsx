@@ -235,7 +235,8 @@ function DataBatteryIcon({ percentage }: { percentage: number }) {
       />
       <span
         className="absolute inset-0 flex items-center justify-center text-[8px] font-bold leading-none"
-        style={{ color: pct <= 0 ? CRITICAL_RED : "var(--capsule-fg)", textShadow: "0 1px 2px rgba(0,0,0,0.4)" }}
+        style={{ color: pct <= 0 ? CRITICAL_RED : "var(--capsule-fg)", textShadow: "0 0 3px rgba(0,0,0,0.8), 0 1px 1px rgba(0,0,0,0.65)" }}
+
 
       >
         {Math.round(pct)}%
