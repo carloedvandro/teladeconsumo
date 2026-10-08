@@ -248,7 +248,14 @@ function DataBatteryIcon({ percentage }: { percentage: number }) {
       />
       <span
         className="absolute inset-0 flex items-center justify-center text-[8px] font-bold leading-none"
-        style={{ color: pct <= 0 ? CRITICAL_RED : "var(--capsule-fg)", textShadow: pct <= 0 ? "0 0 2px rgba(0,0,0,0.95), 0 0 4px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9)" : "0 0 3px rgba(0,0,0,0.8), 0 1px 1px rgba(0,0,0,0.65)" }}
+        style={{
+          color: criticalColor(criticalBlend("available", pct)),
+          textShadow:
+            criticalBlend("available", pct) > 0
+              ? "0 0 2px rgba(0,0,0,0.95), 0 0 4px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9)"
+              : "0 0 3px rgba(0,0,0,0.8), 0 1px 1px rgba(0,0,0,0.65)",
+          transition: "color 900ms ease",
+        }}
       >
         {`${Math.round(pct)}%`}
       </span>
