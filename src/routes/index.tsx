@@ -422,10 +422,10 @@ function ConsumoRing({
   const gid = line.number.replace(/\D/g, "");
 
   return (
-    <div className="relative h-[240px] w-[260px] shrink-0">
+    <div className="relative h-[246px] w-[260px] shrink-0">
       <svg
-        viewBox={`0 0 ${size} 210`}
-        className="absolute left-0 top-0 h-[210px] w-full"
+        viewBox={`0 0 ${size} 216`}
+        className="absolute left-0 top-0 h-[216px] w-full"
         style={{ shapeRendering: "geometricPrecision" }}
       >
         <defs>
@@ -1100,8 +1100,8 @@ function ResumoConsumo() {
                   />
                 </button>
               </div>
-              <div className="min-w-0 pr-11 md:pr-0">
-                <div className="text-[11px] font-medium leading-snug text-[#2e2e3a] md:whitespace-nowrap md:leading-tight">
+              <div className="min-w-0 pr-11 md:pl-10 md:pr-0">
+                <div className="text-[11px] font-medium leading-snug text-[#2e2e3a] md:text-[12px] md:whitespace-nowrap md:leading-tight">
                   Sua mensalidade será descontada automaticamente do saldo da conta na data da renovação.
                 </div>
               </div>
