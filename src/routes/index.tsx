@@ -1099,8 +1099,8 @@ function ResumoConsumo() {
                   />
                 </button>
               </div>
-              <div className="min-w-0 pr-11 md:pl-10 md:pr-0">
-                <div className="text-[11px] font-medium leading-snug text-[#2e2e3a] md:text-[12px] md:whitespace-nowrap md:leading-tight">
+              <div className="min-w-0 pt-1 pr-11 md:pr-14">
+                <div className="text-[12px] font-medium leading-snug text-[#2e2e3a] md:text-[13px] md:whitespace-nowrap md:leading-tight">
                   Sua mensalidade será descontada automaticamente do saldo da conta na data da renovação.
                 </div>
               </div>
