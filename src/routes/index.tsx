@@ -300,17 +300,19 @@ function BrightDataBar({
               "linear-gradient(180deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.12) 46%, rgba(255,255,255,0) 62%, rgba(0,0,0,0.14) 100%)",
           }}
         />
-        {/* Digits sit on a soft dark patch that only covers the number itself,
-            so the red at the critical extremes stays readable over the purple. */}
+        {/* At the critical extremes the digits sit in a dark inset window, so
+            the red stays readable while the capsule keeps its purple tone and
+            its 3D shine. */}
         <span className="relative inline-flex h-full items-center justify-center px-1">
           {extreme && (
             <span
               aria-hidden="true"
-              className="absolute inset-y-0 -inset-x-2 rounded-full"
+              className="absolute inset-y-[2px] inset-x-[2px] rounded-full"
               style={{
                 background:
-                  "radial-gradient(closest-side, rgba(8,6,12,0.94) 58%, rgba(8,6,12,0) 100%)",
-                filter: "blur(1.4px)",
+                  "linear-gradient(180deg, rgba(16,13,22,0.97) 0%, rgba(4,3,7,0.99) 100%)",
+                boxShadow:
+                  "inset 0 1px 2px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.14)",
               }}
             />
           )}
