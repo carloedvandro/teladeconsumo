@@ -319,16 +319,13 @@ function BrightDataBar({
               "linear-gradient(180deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.12) 46%, rgba(255,255,255,0) 62%, rgba(0,0,0,0.14) 100%)",
           }}
         />
-        {/* At the critical extremes the digits sit in a dark inset window, so
-            the red stays readable while the capsule keeps its purple tone and
-            its 3D shine. */}
+        {/* The percentage sits on top in white; at the extremes the capsule
+            under it is fully red, with no purple left behind. */}
         <span className="relative inline-flex h-full items-center justify-center px-1">
           <span
             className="relative"
             style={{
-              textShadow: blend > 0
-                ? "0 0 2px rgba(0,0,0,0.95), 0 0 4px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9)"
-                : "0 1px 2px rgba(0,0,0,0.85), 0 0 5px rgba(0,0,0,0.6)",
+              textShadow: "0 1px 2px rgba(0,0,0,0.85), 0 0 5px rgba(0,0,0,0.6)",
             }}
           >
             {pct.toFixed(2)}%
