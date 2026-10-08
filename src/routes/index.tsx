@@ -906,20 +906,21 @@ function ResumoConsumo() {
   const usedPctExact = (Math.round(pct * 100) / 100).toFixed(2);
   const availPctExact = (Math.round((100 - pct) * 100) / 100).toFixed(2);
 
-  // Alertas de consumo: avisa quando o consumo atinge cada percentual
-  // configurado da franquia. Rearma automaticamente quando o consumo
-  // volta a ficar abaixo do percentual.
+  // Avisos de consumo estilo SMS: a cada marca de 5% atingida, mostra
+  // "Você já atingiu X% da franquia contratada". Rearma quando o consumo
+  // volta a ficar abaixo da marca.
   useEffect(() => {
-    for (const threshold of alertThresholds) {
-      if (pct >= threshold && !firedAlertsRef.current.has(threshold)) {
-        firedAlertsRef.current.add(threshold);
-        setToast(`Atenção: você atingiu ${threshold}% da franquia de dados`);
-        setTimeout(() => setToast(null), 3200);
-      } else if (pct < threshold) {
-        firedAlertsRef.current.delete(threshold);
-      }
+    if (!alertsEnabled) return;
+    const reached = Math.floor(pct / 5) * 5;
+    if (reached > 0 && !firedAlertsRef.current.has(reached)) {
+      firedAlertsRef.current.add(reached);
+      setToast(`Você já atingiu ${reached}% da franquia contratada.`);
+      setTimeout(() => setToast(null), 3600);
     }
-  }, [pct, alertThresholds]);
+    for (const step of ALERT_STEPS) {
+      if (pct < step) firedAlertsRef.current.delete(step);
+    }
+  }, [pct, alertsEnabled]);
   const color = ringColor(pct);
 
   const [now, setNow] = useState(() => new Date());
