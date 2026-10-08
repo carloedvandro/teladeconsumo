@@ -235,20 +235,9 @@ function DataBatteryIcon({ percentage }: { percentage: number }) {
       />
       <span
         className="absolute inset-0 flex items-center justify-center text-[8px] font-bold leading-none"
-        style={{ color: pct <= 0 ? CRITICAL_RED : "var(--capsule-fg)", textShadow: pct <= 0 ? "none" : "0 0 3px rgba(0,0,0,0.8), 0 1px 1px rgba(0,0,0,0.65)" }}
-
-
+        style={{ color: pct <= 0 ? CRITICAL_RED : "var(--capsule-fg)", textShadow: pct <= 0 ? "0 0 2px rgba(0,0,0,0.95), 0 0 4px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9)" : "0 0 3px rgba(0,0,0,0.8), 0 1px 1px rgba(0,0,0,0.65)" }}
       >
-        {pct <= 0 ? (
-          <span
-            className="inline-flex items-center justify-center rounded-full px-1"
-            style={{ background: "linear-gradient(180deg, rgba(16,13,22,0.97) 0%, rgba(4,3,7,0.99) 100%)" }}
-          >
-            {Math.round(pct)}%
-          </span>
-        ) : (
-          `${Math.round(pct)}%`
-        )}
+        {`${Math.round(pct)}%`}
       </span>
     </div>
   );
@@ -313,21 +302,11 @@ function BrightDataBar({
             the red stays readable while the capsule keeps its purple tone and
             its 3D shine. */}
         <span className="relative inline-flex h-full items-center justify-center px-1">
-          {extreme && (
-            <span
-              aria-hidden="true"
-              className="absolute inset-0 rounded-full"
-              style={{
-                background:
-                  "linear-gradient(180deg, rgba(16,13,22,0.97) 0%, rgba(4,3,7,0.99) 100%)",
-              }}
-            />
-          )}
           <span
             className="relative"
             style={{
               textShadow: extreme
-                ? "0 0 3px rgba(255,80,80,0.7), 0 0 1px rgba(255,140,140,0.55), 0 1px 2px rgba(0,0,0,0.9)"
+                ? "0 0 2px rgba(0,0,0,0.95), 0 0 4px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9)"
                 : "0 1px 2px rgba(0,0,0,0.85), 0 0 5px rgba(0,0,0,0.6)",
             }}
           >
