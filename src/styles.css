@@ -99,6 +99,8 @@
   --sidebar-ring: oklch(0.704 0.04 256.788);
   --data-purple: #660099;
   --bonus-active: #16a34a;
+  --plan-end: #171717;
+  --plan-gradient: linear-gradient(90deg, var(--data-purple) 0%, var(--data-purple) 25%, var(--plan-end) 100%);
   --data-magenta: #7a00b3;
   --data-green: oklch(0.79 0.25 141);
   --data-yellow: oklch(0.91 0.2 99);
@@ -167,6 +169,13 @@ body::-webkit-scrollbar { width: 0; height: 0; display: none; }
 
 .no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
 .no-scrollbar::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+.plan-title {
+  background-image: var(--plan-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
 
 @keyframes slide-up-modal {
   from { opacity: 0; transform: translateY(12px) scale(0.98); }
