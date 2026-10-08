@@ -159,9 +159,16 @@ function formatGB(gb: number) {
   return `${gb.toFixed(1)} GB`;
 }
 
-function hexToRgb(hex: string) {
-  const h = hex.replace("#", "");
-  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)] as const;
+function hexToRgb(color: string) {
+  const hex = color.replace("#", "");
+  if (hex.length === 6) {
+    return [parseInt(hex.slice(0, 2), 16), parseInt(hex.slice(2, 4), 16), parseInt(hex.slice(4, 6), 16)] as const;
+  }
+  // Also accept rgb()/rgba() strings so gradients can chain through colors
+  // that were themselves produced by lerpColor.
+  const m = color.match(/rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/);
+  if (m) return [Number(m[1]), Number(m[2]), Number(m[3])] as const;
+  return [0, 0, 0] as const;
 }
 function lerpColor(a: string, b: string, t: number) {
   const [ar, ag, ab] = hexToRgb(a);
