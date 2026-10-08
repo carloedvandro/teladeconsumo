@@ -1049,10 +1049,10 @@ function ResumoConsumo() {
                     <span
                       className="bonus-tag inline-flex shrink-0 items-baseline gap-1.5 whitespace-nowrap text-bonus-active animate-fade-in"
                     >
-                      <span className="text-[20px] font-bold leading-none md:text-[18px]">
+                      <span className="text-[17px] font-bold leading-none md:text-[18px]">
                         Mais {bonusDebito}GB
                       </span>
-                      <span className="text-[20px] font-medium leading-none opacity-80 md:text-[18px]">
+                      <span className="text-[17px] font-medium leading-none opacity-80 md:text-[18px]">
                         de bônus
                       </span>
                     </span>
