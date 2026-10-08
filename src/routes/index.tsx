@@ -180,6 +180,13 @@ function tipColor(pct: number) {
   return lerpColor("#b26bf0", "#660099", t);
 }
 
+// Single red used for the critical percentage numbers (consumption at 100%,
+// available at 0%) — the color only ever lands on the digits, never on the
+// capsule background.
+const CRITICAL_RED = "#ff2a2a";
+
+
+
 // Gradient for the bar fills — stops follow tipColor so the capsule always
 // sits exactly on the tip color of the visible portion.
 const BAR_GRADIENT = `linear-gradient(90deg, ${[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
@@ -228,7 +235,7 @@ function DataBatteryIcon({ percentage }: { percentage: number }) {
       />
       <span
         className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none [text-shadow:0_1px_3px_var(--data-purple)]"
-        style={pct <= 0 ? { color: "#dc2626", textShadow: "0 1px 3px rgba(153, 0, 0, 0.55)" } : { color: "var(--primary-foreground)" }}
+        style={pct <= 0 ? { color: CRITICAL_RED, textShadow: "0 1px 3px rgba(153, 0, 0, 0.55)" } : { color: "var(--primary-foreground)" }}
       >
         {Math.round(pct)}%
       </span>
@@ -244,11 +251,14 @@ function BrightDataBar({
   variant: "consumption" | "available";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  // Purple gradient normally; red only at the extremes — consumption at
-  // 100% (ran out) and available at 0% (nothing left).
+  // The capsule keeps its purple tip color; only the number itself turns red
+  // at the critical extremes — consumption at 100% (franchise used up) and
+  // available at 0% (nothing left).
   const extreme =
     (variant === "consumption" && pct >= 100) || (variant === "available" && pct <= 0);
-  const markerColor = extreme ? "#dc2626" : tipColor(pct);
+  const markerColor = tipColor(pct);
+
+
 
   return (
     <div className="relative mt-2.5 h-4 w-full overflow-hidden rounded-full bg-white shadow-inner">
@@ -265,9 +275,16 @@ function BrightDataBar({
         style={{
           left: `${Math.max(9, Math.min(91, pct))}%`,
           background: markerColor,
+          color: extreme ? CRITICAL_RED : "var(--primary-foreground)",
+          textShadow: extreme
+            ? "0 0 5px rgba(255,255,255,0.95), 0 0 2px rgba(255,255,255,0.9), 0 1px 1px rgba(0,0,0,0.35)"
+            : "none",
+
+
           boxShadow: `0 2px 8px color-mix(in oklab, ${markerColor} 55%, transparent), inset 0 1px 0 color-mix(in oklab, var(--primary-foreground) 50%, transparent)`,
           transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
         }}
+
       >
         {pct.toFixed(2)}%
       </span>
