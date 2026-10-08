@@ -180,6 +180,13 @@ function tipColor(pct: number) {
   return lerpColor("#b26bf0", "#660099", t);
 }
 
+// Single red used for the critical percentage numbers (consumption at 100%,
+// available at 0%) — the color only ever lands on the digits, never on the
+// capsule background.
+const CRITICAL_RED = "#ff2a2a";
+
+
+
 // Gradient for the bar fills — stops follow tipColor so the capsule always
 // sits exactly on the tip color of the visible portion.
 const BAR_GRADIENT = `linear-gradient(90deg, ${[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
