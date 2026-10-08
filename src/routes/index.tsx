@@ -770,7 +770,10 @@ function ResumoConsumo() {
   const [simConsumption, setSimConsumption] = useState<number | null>(null);
   const [simPlaying, setSimPlaying] = useState(false);
   const [alertsOpen, setAlertsOpen] = useState(false);
-  const [alertThresholds, setAlertThresholds] = useState<number[]>([80, 100]);
+  const [alertsEnabled, setAlertsEnabled] = useState(true);
+  // Avisos estilo SMS: disparam de tempo em tempo (a cada 5%) conforme
+  // o consumo avança. Rearma quando o consumo volta a ficar abaixo.
+  const ALERT_STEPS = Array.from({ length: 20 }, (_, i) => (i + 1) * 5);
   const firedAlertsRef = useRef<Set<number>>(new Set());
 
   useEffect(() => {
