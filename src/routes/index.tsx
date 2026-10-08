@@ -769,6 +769,9 @@ function ResumoConsumo() {
   const [simOpen, setSimOpen] = useState(false);
   const [simConsumption, setSimConsumption] = useState<number | null>(null);
   const [simPlaying, setSimPlaying] = useState(false);
+  const [alertsOpen, setAlertsOpen] = useState(false);
+  const [alertThresholds, setAlertThresholds] = useState<number[]>([80, 100]);
+  const firedAlertsRef = useRef<Set<number>>(new Set());
 
   useEffect(() => {
     if (!simPlaying) return;
