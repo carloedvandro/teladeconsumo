@@ -1074,14 +1074,8 @@ function ResumoConsumo() {
               </div>
             </div>
 
-            {/* Débito automático — linha de ponta a ponta do painel */}
-            <div
-              className="-mx-4 mt-3 rounded-xl py-2.5 pr-7 pl-4 md:mx-0 md:px-4"
-              style={{
-                background: "rgba(255,255,255,0.55)",
-                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.45)",
-              }}
-            >
+            {/* Débito automático — linha de ponta a ponta do painel, sem card de fundo */}
+            <div className="-mx-4 mt-3 pr-7 pl-4 md:mx-0 md:pl-10 md:pr-4">
               <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
                 <span className="text-sm font-bold text-[#1a1a1a]">Débito automático</span>
                 <button
@@ -1105,8 +1099,8 @@ function ResumoConsumo() {
                   />
                 </button>
               </div>
-              <div className="min-w-0 pr-11 md:pl-10 md:pr-0">
-                <div className="text-[11px] font-medium leading-snug text-[#2e2e3a] md:text-[12px] md:whitespace-nowrap md:leading-tight">
+              <div className="min-w-0 pt-1 pr-11 md:pr-14">
+                <div className="text-[11px] font-medium leading-snug text-[#2e2e3a] md:text-[13px] md:whitespace-nowrap md:leading-tight">
                   Sua mensalidade será descontada automaticamente do saldo da conta na data da renovação.
                 </div>
               </div>
