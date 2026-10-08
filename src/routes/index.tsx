@@ -896,15 +896,15 @@ function ResumoConsumo() {
 
               <div className="w-full pr-3 md:w-[356px] md:pr-2">
 
-                <div className="flex items-center gap-1 whitespace-nowrap">
+                <div className="flex min-w-0 flex-nowrap items-center gap-1 whitespace-nowrap">
                   <h2
-                    className="plan-title text-[20px] font-bold"
+                    className="plan-title shrink-0 text-[20px] font-bold md:text-[18px]"
                   >
                     {baseLine.plan}
                   </h2>
                   {bonusDebito > 0 && (
                     <span
-                      className="inline-flex shrink-0 items-center gap-0.5 text-[20px] font-bold leading-none text-bonus-active animate-fade-in"
+                      className="inline-flex shrink-0 items-center gap-0.5 text-[20px] font-bold leading-none text-bonus-active animate-fade-in md:text-[18px]"
                     >
                       <Gift className="h-6 w-6 shrink-0" strokeWidth={2.4} />
                       +{bonusDebito}GB liberado
@@ -982,13 +982,13 @@ function ResumoConsumo() {
 
             {/* Débito automático — linha de ponta a ponta do painel */}
             <div
-              className="-mx-4 mt-3 rounded-xl py-2.5 pr-7 pl-2 md:mx-0 md:px-4"
+              className="-mx-4 mt-3 rounded-xl py-2.5 pr-7 pl-4 md:mx-0 md:px-4"
               style={{
                 background: "rgba(255,255,255,0.55)",
                 boxShadow: "inset 0 1px 0 rgba(255,255,255,0.45)",
               }}
             >
-              <div className="flex items-center justify-between gap-4">
+              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
                 <span className="text-sm font-bold text-[#1a1a1a]">Débito automático</span>
                 <button
                   type="button"
