@@ -296,12 +296,12 @@ function BrightDataBar({
         style={{
           left: `${Math.max(9, Math.min(91, pct))}%`,
           // The capsule keeps the purple tone of the track and carries a
-          // glossy highlight on top so it reads as a 3D pill. The dark effect
-          // sits behind the digits only — a soft shadow that lifts them off
-          // the purple. Digits shift toward Ferrari red near the extremes.
-          backgroundColor: tipColor(pct),
-          color: criticalColor(blend),
-          textShadow: "0 1px 2px rgba(0,0,0,0.85), 0 0 5px rgba(0,0,0,0.6)",
+          // glossy highlight on top so it reads as a 3D pill. Near the
+          // critical extremes the purple gives way to Ferrari red, which
+          // covers the whole capsule at 100% / 0.00%.
+          backgroundColor:
+            blend > 0 ? lerpColor(tipColor(pct), CRITICAL_RED, blend) : tipColor(pct),
+          color: "#ffffff",
           boxShadow:
             "inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -2px 3px rgba(0,0,0,0.28), 0 2px 5px rgba(0,0,0,0.25)",
           transition:
