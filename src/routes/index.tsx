@@ -333,7 +333,15 @@ function BrightDataBar({
           />
           <span
             className="management-amount absolute inset-y-0 flex h-full w-max items-center whitespace-nowrap text-[13px] font-bold leading-none"
-            style={{ left: `${pct / 2}%`, transform: `translateX(-${pct / 2}%)`, marginLeft: `${6 * (1 - pct / 100)}px` }}
+            style={(() => {
+              const t = pct / 100;
+              const drift = t * t; // fica colado na ponta esquerda no início e só centraliza em 100%
+              return {
+                left: `${drift * 50}%`,
+                transform: `translateX(-${drift * 50}%)`,
+                marginLeft: `${6 * (1 - drift)}px`,
+              };
+            })()}
           >
             {formatConsumption(amount)} GB
           </span>
