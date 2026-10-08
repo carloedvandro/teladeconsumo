@@ -281,7 +281,7 @@ function BrightDataBar({
 
 
   return (
-    <div className="relative mt-2.5 h-4 w-full overflow-hidden rounded-full bg-white shadow-inner">
+    <div className="relative mt-2.5 h-5 w-full overflow-hidden rounded-full bg-white shadow-inner">
       <div
         className="h-full w-full"
         style={{
@@ -350,7 +350,7 @@ function ConsumoRing({
   const cx = size / 2;
   const cy = 150;
   const r = 105;
-  const strokeW = 14;
+  const strokeW = 18;
   // Sweep from -120° (left-bottom) through 0° (top) to +120° (right-bottom)
   const SWEEP = 240;
   const START = -120; // degrees
@@ -460,13 +460,6 @@ function ConsumoRing({
           <filter id={`tipDotGlow-${gid}`} x="-200%" y="-200%" width="500%" height="500%">
             <feDropShadow dx="0" dy="0" stdDeviation="1.1" floodColor="#000" floodOpacity="1" />
           </filter>
-          {/* Soft dark backing behind the red tip dot, so the red pops the same
-              way the critical digits do. */}
-          <radialGradient id={`tipHalo-${gid}`} cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#000000" stopOpacity="0.95" />
-            <stop offset="55%" stopColor="#000000" stopOpacity="0.75" />
-            <stop offset="100%" stopColor="#000000" stopOpacity="0" />
-          </radialGradient>
 
 
           <linearGradient id={`bezelOuter-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
@@ -584,15 +577,6 @@ function ConsumoRing({
               {/* The dot follows the same rule as the percentage digits: white
                   normally, shifting toward Ferrari red with a dark effect right
                   behind it as the franchise approaches 100%. */}
-              {tipBlend > 0 && (
-                <circle
-                  cx={tipX}
-                  cy={tipY}
-                  r={strokeW / 2 + 3}
-                  fill={`url(#tipHalo-${gid})`}
-                  opacity={tipBlend}
-                />
-              )}
               <circle
                 cx={tipX}
                 cy={tipY}
