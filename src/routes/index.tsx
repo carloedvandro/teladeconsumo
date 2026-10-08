@@ -1076,7 +1076,19 @@ function ResumoConsumo() {
                       </span>
                     </span>
                   )}
-                </div>
+                  <button
+                    type="button"
+                    aria-label="Configurar alertas de consumo"
+                    title="Alertas de consumo"
+                    onClick={() => setAlertsOpen(true)}
+                    className="relative ml-auto inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[#660099] transition-colors hover:bg-[#660099]/10"
+                  >
+                    <Bell className="h-4 w-4" strokeWidth={2.25} />
+                    {alertThresholds.length > 0 && (
+                      <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-[#16A34A]" />
+                    )}
+                  </button>
+                 </div>
 
                 <ul className="management-meters mt-3 space-y-3 text-sm">
                   <li>
