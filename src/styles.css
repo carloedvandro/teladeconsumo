@@ -61,6 +61,8 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --color-consumption-purple: var(--data-purple);
   --color-bonus-active: var(--bonus-active);
+  --color-bonus-tag-border: var(--bonus-tag-border);
+  --color-bonus-tag-bg: var(--bonus-tag-bg);
 }
 
 :root {
@@ -99,6 +101,8 @@
   --sidebar-ring: oklch(0.704 0.04 256.788);
   --data-purple: #660099;
   --bonus-active: #16a34a;
+  --bonus-tag-border: color-mix(in oklab, var(--bonus-active) 30%, transparent);
+  --bonus-tag-bg: color-mix(in oklab, var(--bonus-active) 3%, transparent);
   --plan-end: #171717;
   --plan-gradient: linear-gradient(90deg, var(--data-purple) 0%, var(--data-purple) 25%, var(--plan-end) 100%);
   --data-magenta: #7a00b3;

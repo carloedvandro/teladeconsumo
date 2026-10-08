@@ -1047,12 +1047,12 @@ function ResumoConsumo() {
                   </h2>
                   {bonusDebito > 0 && (
                     <span
-                      className="bonus-tag inline-flex shrink-0 items-baseline gap-1.5 whitespace-nowrap text-bonus-active animate-fade-in"
+                      className="bonus-tag inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full border border-bonus-tag-border bg-bonus-tag-bg px-2.5 py-1 animate-fade-in"
                     >
-                      <span className="text-[17px] font-bold leading-none md:text-[18px]">
+                      <span className="text-[12px] font-extrabold leading-none tracking-tight text-bonus-active md:text-[11px]">
                         Mais {bonusDebito}GB
                       </span>
-                      <span className="text-[17px] font-medium leading-none opacity-80 md:text-[18px]">
+                      <span className="text-[12px] font-medium leading-none text-bonus-active opacity-80 md:text-[11px]">
                         de bônus
                       </span>
                     </span>
