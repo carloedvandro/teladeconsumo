@@ -434,6 +434,20 @@ function ConsumoRing({
           <filter id={`gaugeShadow-${gid}`} x="-50%" y="-50%" width="200%" height="200%">
             <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" floodColor="#000" floodOpacity="0.35" />
           </filter>
+          {/* Tight black glow that sits right behind the tip dot when it goes
+              red — same pattern as the critical percentage digits. */}
+          <filter id={`tipDotGlow-${gid}`} x="-200%" y="-200%" width="500%" height="500%">
+            <feDropShadow dx="0" dy="0" stdDeviation="1.1" floodColor="#000" floodOpacity="1" />
+          </filter>
+          {/* Soft dark backing behind the red tip dot, so the red pops the same
+              way the critical digits do. */}
+          <radialGradient id={`tipHalo-${gid}`} cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#000000" stopOpacity="0.95" />
+            <stop offset="55%" stopColor="#000000" stopOpacity="0.75" />
+            <stop offset="100%" stopColor="#000000" stopOpacity="0" />
+          </radialGradient>
+
+
           <linearGradient id={`bezelOuter-${gid}`} x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#b8b8bf" />
             <stop offset="100%" stopColor="#f4f4f7" />
@@ -546,9 +560,23 @@ function ConsumoRing({
           {pct > 0 && (
             <>
               <circle cx={tipX} cy={tipY} r={strokeW / 2 + 1} fill={tipCol} />
-              <circle cx={tipX} cy={tipY} r={2} fill="#fff" />
+              {/* The dot follows the same rule as the percentage digits: white
+                  normally, live red with a dark effect right behind it once the
+                  franchise hits 100%. */}
+              {pct >= 100 && (
+                <circle cx={tipX} cy={tipY} r={strokeW / 2 + 3} fill={`url(#tipHalo-${gid})`} />
+              )}
+              <circle
+                cx={tipX}
+                cy={tipY}
+                r={2}
+                fill={pct >= 100 ? CRITICAL_RED : "#fff"}
+                filter={pct >= 100 ? `url(#tipDotGlow-${gid})` : undefined}
+              />
             </>
           )}
+
+
 
           {/* 3D Needle — two shaded faces + glossy specular strip */}
           <g filter={`url(#gaugeShadow-${gid})`}>
