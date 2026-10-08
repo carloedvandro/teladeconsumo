@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Igualar a largura das duas barras, ajustar os títulos, retirar recorrente e fazer os GB acompanharem o preenchimento até o centro em 100%; conferir fonte e movimento no computador e celular.
+- [x] Igualar a largura das duas barras, ajustar os títulos, retirar recorrente e fazer os GB acompanharem o preenchimento até o centro em 100%; fonte e movimento conferidos no computador e celular, incluindo zero e 100%.
 
 - [x] Simplificar para duas barras sem ícones: Meu consumo total e Meu consumo Smart Biz; centralizar GB e porcentagem no mesmo eixo, mantendo trilho cinza e roxo escuro clareando até 100%; verificado no computador e celular, em zero e 100%.
 
