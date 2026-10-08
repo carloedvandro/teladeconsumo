@@ -98,7 +98,7 @@ type LineStatus =
 const LINES: Line[] = [
   {
     number: "(31) 97115-7584",
-    used: 50,
+    used: 70, // TEMP-TEST
     total: 50,
     plan: "SmartVoz 50GB",
     cycleDays: 3,
