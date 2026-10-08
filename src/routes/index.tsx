@@ -180,10 +180,23 @@ function tipColor(pct: number) {
   return lerpColor("#b26bf0", "#660099", t);
 }
 
-// Single red used for the critical percentage numbers (consumption at 100%,
-// available at 0%) — the color only ever lands on the digits, never on the
-// capsule background.
-const CRITICAL_RED = "#ff2a2a";
+// Bright Ferrari red used for the critical percentage digits (consumption
+// near/at 100%, available near/at 0%) — the color only ever lands on the
+// digits, never on the capsule background.
+const CRITICAL_RED = "#ff2800";
+
+// How close the digits are to a critical extreme: 0 = normal white, 1 = full
+// Ferrari red. Consumption blends in as it approaches 100%, available as it
+// approaches 0% — so the digits keep changing colour while the percentage
+// rises or falls, in every component.
+function criticalBlend(variant: "consumption" | "available", pct: number) {
+  const p = Math.max(0, Math.min(100, pct));
+  const t = variant === "consumption" ? (p - 90) / 10 : (10 - p) / 10;
+  return Math.max(0, Math.min(1, t));
+}
+function criticalColor(blend: number) {
+  return lerpColor("#ffffff", CRITICAL_RED, blend);
+}
 
 
 
