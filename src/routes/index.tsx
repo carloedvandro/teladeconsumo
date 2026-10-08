@@ -276,7 +276,10 @@ function BrightDataBar({
           left: `${Math.max(9, Math.min(91, pct))}%`,
           background: markerColor,
           color: extreme ? CRITICAL_RED : "var(--primary-foreground)",
-          textShadow: extreme ? "0 1px 2px rgba(0, 0, 0, 0.45)" : "none",
+          textShadow: extreme
+            ? "0 0 5px rgba(255,255,255,0.95), 0 0 2px rgba(255,255,255,0.9), 0 1px 1px rgba(0,0,0,0.35)"
+            : "none",
+
 
           boxShadow: `0 2px 8px color-mix(in oklab, ${markerColor} 55%, transparent), inset 0 1px 0 color-mix(in oklab, var(--primary-foreground) 50%, transparent)`,
           transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
