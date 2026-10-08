@@ -34,3 +34,4 @@
 - [x] Remover o ícone de presente do selo de bônus: "+20GB" em negrito e "liberado" mais suave, no mesmo corpo e alinhados pela base; conferido no computador e celular.
 - [x] Destacar o débito automático: título um pouco maior, encostado na ponta esquerda, botão verde movido para a ponta direita (alinhado ao fim das barras) e mais respiro entre o botão e o texto; conferido no computador e celular.
 - [x] Bônus "Mais 20GB de bônus" colado ao nome do plano (sem vão no meio) e destacado como pílula de contorno verde fino com fundo quase transparente; conferido no computador e celular, cabendo inteiro em uma linha.
+- [x] Débito automático ativo: indicador verde "Ativo" (pontinho + palavra) colado ao título na mesma linha, sem texto embaixo; conferido no computador e celular.
