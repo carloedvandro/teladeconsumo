@@ -271,10 +271,11 @@ function BrightDataBar({
   variant: "consumption" | "available";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  // Only the digits change colour, and they shift gradually toward Ferrari red
-  // as they approach a critical extreme — consumption nearing 100%, available
-  // nearing 0% — so the colour follows the percentage as it rises or falls.
-  // The capsule itself keeps the purple tone of the track.
+  // Near the critical extremes the capsule itself gives way to Ferrari red —
+  // consumption nearing 100%, available nearing 0% — so no purple is left
+  // under the number: the red covers the whole capsule (to the very end at
+  // 100% / 0.00%) and the percentage sits on top in white. Normal values keep
+  // the purple tone of the track.
   const blend = criticalBlend(variant, pct);
 
 
