@@ -278,15 +278,12 @@ function BrightDataBar({
   variant: "consumption" | "available";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  // Near the critical extremes the capsule itself gives way to Ferrari red —
-  // consumption nearing 100%, available nearing 0% — so no purple is left
-  // under the number: the red covers the whole capsule (to the very end at
-  // 100% / 0.00%) and the percentage sits on top in white. Normal values keep
-  // the purple tone of the track.
+  // No pill behind the number any more — just the percentage running along
+  // the track. It stays white in the normal range and warms to Ferrari red
+  // near the critical extremes (consumption nearing 100%, available nearing
+  // 0%), always with a dark shadow glued to the letters so it reads over both
+  // the purple fill and the white track.
   const blend = criticalBlend(variant, pct);
-
-
-
 
   return (
     <div className="relative mt-2.5 h-5 w-full overflow-hidden rounded-full bg-white shadow-inner">
@@ -299,45 +296,18 @@ function BrightDataBar({
         }}
       />
       <span
-        className="absolute top-0 flex h-full min-w-11 -translate-x-1/2 items-center justify-center rounded-full px-2 text-center text-[10px] font-bold leading-none"
+        className="absolute top-0 flex h-full -translate-x-1/2 items-center justify-center whitespace-nowrap text-center text-[10px] font-bold leading-none"
         style={{
-          left: `${Math.max(9, Math.min(91, pct))}%`,
-          // The capsule keeps the purple tone of the track and carries a
-          // glossy highlight on top so it reads as a 3D pill. Near the
-          // critical extremes the purple gives way to Ferrari red, which
-          // covers the whole capsule at 100% / 0.00%.
-          backgroundColor:
-            blend > 0 ? lerpColor(tipColor(pct), CRITICAL_RED, blend) : tipColor(pct),
-          color: "#ffffff",
-          boxShadow:
-            "inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -2px 3px rgba(0,0,0,0.28), 0 2px 5px rgba(0,0,0,0.25)",
-          transition:
-            "left 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease, color 900ms ease",
+          left: `${Math.max(8, Math.min(92, pct))}%`,
+          color: criticalColor(blend),
+          textShadow:
+            blend > 0
+              ? "0 0 2px rgba(0,0,0,0.95), 0 0 4px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9)"
+              : "0 0 3px rgba(0,0,0,0.9), 0 0 6px rgba(0,0,0,0.7), 0 1px 2px rgba(0,0,0,0.8)",
+          transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1), color 900ms ease",
         }}
-
-
-
       >
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-full"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.12) 46%, rgba(255,255,255,0) 62%, rgba(0,0,0,0.14) 100%)",
-          }}
-        />
-        {/* The percentage sits on top in white; at the extremes the capsule
-            under it is fully red, with no purple left behind. */}
-        <span className="relative inline-flex h-full items-center justify-center px-1">
-          <span
-            className="relative"
-            style={{
-              textShadow: "0 1px 2px rgba(0,0,0,0.85), 0 0 5px rgba(0,0,0,0.6)",
-            }}
-          >
-            {pct.toFixed(2)}%
-          </span>
-        </span>
+        {pct.toFixed(2)}%
       </span>
     </div>
   );
