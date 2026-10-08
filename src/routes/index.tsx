@@ -417,6 +417,7 @@ function ConsumoRing({
   const tipX = cx;
   const tipY = cy - r;
   const tipCol = tipColor(pct);
+  const tipBlend = criticalBlend("consumption", pct);
 
   const gid = line.number.replace(/\D/g, "");
 
