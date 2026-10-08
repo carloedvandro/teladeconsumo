@@ -2358,46 +2358,48 @@ function ResumoConsumo() {
       >
         <div className="space-y-4 px-6 py-5">
           <p className="text-sm text-[#555]">
-            Escolha os percentuais da franquia em que você quer ser avisado.
-            O alerta aparece na tela assim que o consumo atingir cada marca.
+            Você recebe avisos de tempo em tempo, como se fossem SMS,
+            conforme o consumo avança: "Você já atingiu 10% da franquia
+            contratada", depois 15%, 20% e assim por diante, até 100%.
           </p>
-          <div className="flex flex-wrap gap-2">
-            {[50, 70, 80, 90, 100].map((t) => {
-              const active = alertThresholds.includes(t);
-              return (
-                <button
-                  key={t}
-                  type="button"
-                  aria-pressed={active}
-                  onClick={() =>
-                    setAlertThresholds((current) =>
-                      active
-                        ? current.filter((v) => v !== t)
-                        : [...current, t].sort((a, b) => a - b),
-                    )
-                  }
-                  className={`rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
-                    active
-                      ? "border-[#660099] bg-[#660099] text-white"
-                      : "border-[#ddd] bg-white text-[#660099] hover:border-[#660099]/50"
-                  }`}
-                >
-                  {t}%
-                </button>
-              );
-            })}
+          <div className="flex items-center justify-between rounded-xl border border-[#eee] bg-[#fafafa] px-4 py-3">
+            <span className="text-sm font-semibold text-[#333]">
+              Avisos de consumo
+            </span>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={alertsEnabled}
+              onClick={() => setAlertsEnabled((v) => !v)}
+              className={`relative h-6 w-11 rounded-full transition-colors ${
+                alertsEnabled ? "bg-[#16A34A]" : "bg-[#d4d4d4]"
+              }`}
+            >
+              <span
+                className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${
+                  alertsEnabled ? "left-[22px]" : "left-0.5"
+                }`}
+              />
+            </button>
           </div>
           <p className="text-xs text-[#777]">
-            {alertThresholds.length === 0
-              ? "Nenhum alerta ativo no momento."
-              : `Alertas ativos em: ${alertThresholds.map((t) => `${t}%`).join(", ")}.`}
+            {alertsEnabled
+              ? "Avisos ativos: você será avisado a cada 5% de consumo."
+              : "Avisos desativados no momento."}
           </p>
         </div>
       </Modal>
 
       {toast && (
-        <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-md bg-[#333] px-5 py-3 text-sm text-white shadow-lg">
-          {toast}
+        <div className="fixed bottom-6 left-1/2 z-50 w-[calc(100%-32px)] max-w-sm -translate-x-1/2">
+          <div className="rounded-2xl rounded-bl-sm border border-[#e5e5e5] bg-white px-4 py-3 shadow-lg">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-[#660099]">
+              Vivo • SMS
+            </p>
+            <p className="mt-0.5 text-sm text-[#333]">{toast}</p>
+          </div>
+        </div>
+      )}
         </div>
       )}
 
