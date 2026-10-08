@@ -651,13 +651,13 @@ function ConsumoRing({
 
       {/* Big value + subtitle — pushed up a bit so it sits above the arc tips. */}
       <div className="pointer-events-none absolute inset-x-0 bottom-2 flex flex-col items-center">
-        <div className="text-[30px] font-bold leading-none text-[#1a1a1a]">
+        <div className="flex items-baseline text-[30px] font-bold leading-none tabular-nums text-[#1a1a1a]">
           {formatConsumption((animPct / 100) * line.total)}
-          <span className="ml-1 text-base font-semibold text-[#1a1a1a]">GB</span>
+          <span className="ml-0.5 text-[18px] font-bold text-[#1a1a1a]">GB</span>
         </div>
-        <div className="mt-1 text-[11px] text-[#6b6b6b]">
+        <div className="mt-1.5 text-[13px] font-semibold tabular-nums text-[#4a4a4a] antialiased">
           consumidos de{" "}
-          <span className="font-bold text-[#660099]">{line.total} GB</span>
+          <span className="font-bold text-[#660099]">{line.total}GB</span>
         </div>
       </div>
     </div>
