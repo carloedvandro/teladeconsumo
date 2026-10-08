@@ -234,8 +234,9 @@ function DataBatteryIcon({ percentage }: { percentage: number }) {
         }}
       />
       <span
-        className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none [text-shadow:0_1px_3px_var(--data-purple)]"
-        style={pct <= 0 ? { color: CRITICAL_RED, textShadow: "0 1px 3px rgba(153, 0, 0, 0.55)" } : { color: "var(--primary-foreground)" }}
+        className="absolute inset-0 flex items-center justify-center text-[8px] font-bold leading-none"
+        style={{ color: pct <= 0 ? CRITICAL_RED : "var(--capsule-fg)", textShadow: "0 1px 2px rgba(0,0,0,0.4)" }}
+
       >
         {Math.round(pct)}%
       </span>
@@ -251,12 +252,12 @@ function BrightDataBar({
   variant: "consumption" | "available";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  // The capsule keeps its purple tip color; only the number itself turns red
-  // at the critical extremes — consumption at 100% (franchise used up) and
-  // available at 0% (nothing left).
+  // Only the digits change colour, and only at the critical extremes —
+  // consumption at 100% (franchise used up) and available at 0% (nothing
+  // left). The capsule itself always stays the same dark pill.
   const extreme =
     (variant === "consumption" && pct >= 100) || (variant === "available" && pct <= 0);
-  const markerColor = tipColor(pct);
+
 
 
 
@@ -271,18 +272,19 @@ function BrightDataBar({
         }}
       />
       <span
-        className="absolute top-0 flex h-full min-w-11 -translate-x-1/2 items-center justify-center rounded-full px-2 text-center text-[10px] font-black leading-none"
+        className="absolute top-0 flex h-full min-w-11 -translate-x-1/2 items-center justify-center rounded-full px-2 text-center text-[10px] font-bold leading-none"
         style={{
           left: `${Math.max(9, Math.min(91, pct))}%`,
-          // Light capsule so the digits can carry the bar's own tone: soft
-          // purple at the start, strong purple at the tip, red only at the
-          // critical extremes (consumption 100%, available 0%).
-          background: "rgba(255,255,255,0.92)",
-          color: extreme ? CRITICAL_RED : markerColor,
+          // Dark capsule with the digits in white on top: stays crisp over the
+          // purple fill and over the empty white track. Only the digits change
+          // to red at the critical extremes (consumption 100%, available 0%).
+          background: "var(--capsule-bg)",
+          color: extreme ? CRITICAL_RED : "var(--capsule-fg)",
           textShadow: "none",
-          boxShadow: `0 2px 8px color-mix(in oklab, ${markerColor} 40%, transparent), inset 0 0 0 1px color-mix(in oklab, ${markerColor} 28%, transparent)`,
+          boxShadow: "0 1px 4px rgba(0,0,0,0.26)",
           transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1), color 900ms ease",
         }}
+
 
 
       >
