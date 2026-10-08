@@ -581,17 +581,23 @@ function ConsumoRing({
             <>
               <circle cx={tipX} cy={tipY} r={strokeW / 2 + 1} fill={tipCol} />
               {/* The dot follows the same rule as the percentage digits: white
-                  normally, live red with a dark effect right behind it once the
-                  franchise hits 100%. */}
-              {pct >= 100 && (
-                <circle cx={tipX} cy={tipY} r={strokeW / 2 + 3} fill={`url(#tipHalo-${gid})`} />
+                  normally, shifting toward Ferrari red with a dark effect right
+                  behind it as the franchise approaches 100%. */}
+              {tipBlend > 0 && (
+                <circle
+                  cx={tipX}
+                  cy={tipY}
+                  r={strokeW / 2 + 3}
+                  fill={`url(#tipHalo-${gid})`}
+                  opacity={tipBlend}
+                />
               )}
               <circle
                 cx={tipX}
                 cy={tipY}
                 r={2}
-                fill={pct >= 100 ? CRITICAL_RED : "#fff"}
-                filter={pct >= 100 ? `url(#tipDotGlow-${gid})` : undefined}
+                fill={criticalColor(tipBlend)}
+                filter={tipBlend > 0 ? `url(#tipDotGlow-${gid})` : undefined}
               />
             </>
           )}
