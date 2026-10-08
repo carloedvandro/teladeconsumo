@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ChevronDown,
   User,
@@ -278,16 +278,45 @@ function BrightDataBar({
   variant: "consumption" | "available";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  // No pill behind the number any more — just the percentage running along
-  // the track. It stays white in the normal range and warms to Ferrari red
-  // near the critical extremes (consumption nearing 100%, available nearing
-  // 0%), always with a dark shadow glued to the letters so it reads over both
-  // the purple fill and the white track.
+  // How close the digits are to a critical extreme (consumption nearing 100%,
+  // available nearing 0%).
   const blend = criticalBlend(variant, pct);
-  const digitColor = blend > 0 ? criticalColor(blend) : "#3a0066";
+
+  // There is no pill behind the percentage any more — only the number. It is
+  // tucked inside the purple fill when the fill is wide enough to hold it, and
+  // sits just past the fill on the white track when it is not, so the digits
+  // never straddle both backgrounds.
+  const trackRef = useRef<HTMLDivElement>(null);
+  const numRef = useRef<HTMLSpanElement>(null);
+  const [trackW, setTrackW] = useState(0);
+  const [numW, setNumW] = useState(38);
+
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const measure = () => setTrackW(el.clientWidth);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  useEffect(() => {
+    setNumW(numRef.current?.offsetWidth ?? 38);
+  }, [pct]);
+
+  const fillPx = trackW > 0 ? (pct / 100) * trackW : 0;
+  const inside = trackW > 0 && fillPx >= numW + 12;
+  const left = inside ? fillPx - 6 : Math.min(fillPx + 6, Math.max(0, trackW - numW - 4));
+  // White over the purple fill, deep purple over the white track, and Ferrari
+  // red at the critical extremes either way.
+  const digitColor = lerpColor(inside ? "#ffffff" : "#3a0066", CRITICAL_RED, blend);
 
   return (
-    <div className="relative mt-2.5 h-5 w-full overflow-hidden rounded-full bg-white shadow-inner">
+    <div
+      ref={trackRef}
+      className="relative mt-2.5 h-5 w-full overflow-hidden rounded-full bg-white shadow-inner"
+    >
       <div
         className="h-full w-full"
         style={{
@@ -297,15 +326,16 @@ function BrightDataBar({
         }}
       />
       <span
-        className="absolute top-0 flex h-full -translate-x-1/2 items-center justify-center whitespace-nowrap text-center text-[10px] font-bold leading-none"
+        ref={numRef}
+        className="absolute top-0 flex h-full items-center whitespace-nowrap text-center text-[10px] font-bold leading-none"
         style={{
-          left: `${Math.max(8, Math.min(92, pct))}%`,
+          left: `${left}px`,
+          transform: inside ? "translateX(-100%)" : "none",
           color: digitColor,
           textShadow:
-            blend > 0
-              ? "0 0 2px rgba(255,255,255,0.95), 0 0 5px rgba(255,255,255,0.8), 0 0 1px rgba(0,0,0,0.9), 0 1px 2px rgba(0,0,0,0.85)"
-              : "0 0 1px rgba(255,255,255,1), 0 0 3px rgba(255,255,255,0.95), 0 0 6px rgba(255,255,255,0.85)",
-          transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1), color 900ms ease",
+            "0 0 1px rgba(0,0,0,0.9), 0 0 3px rgba(0,0,0,0.7), 0 1px 2px rgba(0,0,0,0.8)",
+          transition:
+            "left 900ms cubic-bezier(0.22, 1, 0.36, 1), color 900ms ease, transform 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       >
         {pct.toFixed(2)}%
