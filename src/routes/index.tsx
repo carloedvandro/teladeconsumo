@@ -277,18 +277,16 @@ function DataBatteryIcon({ percentage }: { percentage: number }) {
 function BrightDataBar({
   percentage,
   amount,
-  total,
   live = false,
 }: {
   percentage: number;
   amount: number;
-  total: number;
   live?: boolean;
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
 
   return (
-    <div className={`management-meter mt-1.5 grid min-w-0 grid-cols-[minmax(0,1fr)_5rem] items-start gap-x-3 ${live ? "management-live" : ""}`}>
+    <div className={`management-meter mt-1.5 min-w-0 ${live ? "management-live" : ""}`}>
       <div className="min-w-0">
         <div className="management-track relative h-[23px] w-full overflow-hidden rounded-full md:h-[27px]">
           <div
@@ -307,9 +305,6 @@ function BrightDataBar({
         </div>
         <div className="management-percentage mt-1 text-center text-[14px] font-bold leading-none">{formatConsumption(pct)}%</div>
       </div>
-      <span className="management-total flex min-w-0 flex-col items-start pt-[3px] leading-none">
-        <span className="whitespace-nowrap text-[21px] font-bold">{Number(total.toFixed(2))}GB</span>
-      </span>
     </div>
   );
 }
@@ -1019,13 +1014,13 @@ function ResumoConsumo() {
                   <li>
                       <div className="min-w-0">
                         <div className="management-total text-[15px] font-bold">Meu consumo total da conta</div>
-                        <BrightDataBar percentage={pct} amount={line.used} total={line.total} live={simConsumption !== null} />
+                        <BrightDataBar percentage={pct} amount={line.used} live={simConsumption !== null} />
                       </div>
                   </li>
                   <li>
                       <div className="min-w-0">
                         <div className="management-total text-[15px] font-bold">Consumo Smart Bis</div>
-                        <BrightDataBar percentage={bisUsedPct} amount={bisUsed} total={sobrouAnterior} live={simConsumption !== null} />
+                        <BrightDataBar percentage={bisUsedPct} amount={bisUsed} live={simConsumption !== null} />
                       </div>
                   </li>
                 </ul>
