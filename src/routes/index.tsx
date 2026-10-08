@@ -307,12 +307,10 @@ function BrightDataBar({
           {extreme && (
             <span
               aria-hidden="true"
-              className="absolute inset-y-[2px] inset-x-[2px] rounded-full"
+              className="absolute inset-0 rounded-full"
               style={{
                 background:
                   "linear-gradient(180deg, rgba(16,13,22,0.97) 0%, rgba(4,3,7,0.99) 100%)",
-                boxShadow:
-                  "inset 0 1px 2px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.14)",
               }}
             />
           )}
