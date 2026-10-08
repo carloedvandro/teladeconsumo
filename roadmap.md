@@ -12,4 +12,6 @@
 - [x] Vermelho só na numeração da porcentagem nos extremos (consumo 100%, disponível 0,00% e bateria zerada); cápsula e barras continuam roxas.
 - [x] Cápsula da porcentagem com fundinho escuro e número branco em cima, sem sombra branca nem halo roxo, sem negrito pesado; vermelho só no 100% e no 0,00%.
 - [x] Cápsula de volta ao roxo do trilho com efeito 3D em cima; o escuro vira só um recorte atrás do número vermelho nos extremos (100% e 0,00%).
+- [x] Pontinho branco na ponta da agulha no mesmo padrão: branco por padrão, vermelho com efeito escuro atrás no 100%.
+
 
