@@ -107,6 +107,11 @@
   --data-orange: oklch(0.72 0.22 50);
   --data-red: oklch(0.62 0.26 29);
   --data-track: oklch(0.91 0.02 285);
+  /* "Sombrinha" cinza clarinha: aura difusa atras dos numeros e do pontinho */
+  --digit-halo: rgba(206, 206, 220, 1);
+  --digit-halo-strong: rgba(206, 206, 220, 0.92);
+  --digit-halo-soft: rgba(206, 206, 220, 0.7);
+  --digit-halo-faint: rgba(206, 206, 220, 0.45);
   /* Capsula da porcentagem: roxa (tom do trilho) com o numero claro em cima */
   --capsule-fg: #ffffff;
 

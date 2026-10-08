@@ -17,3 +17,4 @@
 
 - [x] Transição dinâmica da numeração: branquinho no normal e escurecendo para o vermelho Ferrari #ff2800 ao aproximar dos extremos (consumo ≥90%, disponível ≤10%), subindo e descendo, com sombra preta colada nas letras quando acende — vale para barras, baterias e pontinho da agulha.
 - [x] Remover a cápsula roxa atrás das porcentagens: só o número direto sobre a barra (branco dentro do roxo, roxo escuro sobre o trilho branco, vermelho Ferrari nos extremos); barras e o 100% como estavam.
+- [x] Trocar a sombra preta por uma aura cinza clarinha difusa atrás de todos os números (barrinhas, bateria) e do pontinho da agulha.
