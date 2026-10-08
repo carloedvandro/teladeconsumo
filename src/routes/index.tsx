@@ -271,19 +271,19 @@ function BrightDataBar({
         }}
       />
       <span
-        className="absolute top-0 flex h-full min-w-11 -translate-x-1/2 items-center justify-center rounded-full px-2 text-center text-[10px] font-black leading-none text-primary-foreground"
+        className="absolute top-0 flex h-full min-w-11 -translate-x-1/2 items-center justify-center rounded-full px-2 text-center text-[10px] font-black leading-none"
         style={{
           left: `${Math.max(9, Math.min(91, pct))}%`,
-          background: markerColor,
-          color: extreme ? CRITICAL_RED : "var(--primary-foreground)",
-          textShadow: extreme
-            ? "0 0 5px rgba(255,255,255,0.95), 0 0 2px rgba(255,255,255,0.9), 0 1px 1px rgba(0,0,0,0.35)"
-            : "none",
-
-
-          boxShadow: `0 2px 8px color-mix(in oklab, ${markerColor} 55%, transparent), inset 0 1px 0 color-mix(in oklab, var(--primary-foreground) 50%, transparent)`,
-          transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
+          // Light capsule so the digits can carry the bar's own tone: soft
+          // purple at the start, strong purple at the tip, red only at the
+          // critical extremes (consumption 100%, available 0%).
+          background: "rgba(255,255,255,0.92)",
+          color: extreme ? CRITICAL_RED : markerColor,
+          textShadow: "none",
+          boxShadow: `0 2px 8px color-mix(in oklab, ${markerColor} 40%, transparent), inset 0 0 0 1px color-mix(in oklab, ${markerColor} 28%, transparent)`,
+          transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1), color 900ms ease",
         }}
+
 
       >
         {pct.toFixed(2)}%
