@@ -68,6 +68,12 @@ export const Route = createFileRoute("/")({
         name: "description",
         content: "Acompanhe seu consumo de dados Vivo Móvel em tempo real.",
       },
+      { property: "og:title", content: "Resumo de Consumo | Vivo" },
+      { property: "og:description", content: "Acompanhe seu consumo de dados Vivo Móvel em tempo real." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:image", content: familyImg },
+      { name: "twitter:image", content: familyImg },
     ],
     links: PRELOAD_ICONS.map((href) => ({ rel: "preload", as: "image", href })),
   }),
@@ -862,7 +868,7 @@ function ResumoConsumo() {
           />
 
           {/* Consumption panel overlay - centered/right like reference */}
-          <div className="relative -mt-24 md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[650px] md:-translate-y-1/2 md:[zoom:0.7]">
+          <div className="relative -mt-24 md:absolute md:right-8 md:top-1/2 md:mx-0 md:mt-0 md:w-[650px] md:-translate-y-1/2 md:[zoom:0.8]">
           <div
             className="overflow-hidden rounded-md p-4 md:w-full md:p-6"
             style={{
@@ -892,21 +898,13 @@ function ResumoConsumo() {
 
                 <div className="flex items-center gap-1 whitespace-nowrap">
                   <h2
-                    className="text-[20px] font-bold tracking-tight"
-                    style={{
-                      backgroundImage: "linear-gradient(90deg, #8b5cf6 0%, #660099 30%, #b45309 70%, #171717 100%)",
-                      WebkitBackgroundClip: "text",
-                      backgroundClip: "text",
-                      color: "transparent",
-                      textShadow: "0 0 22px rgba(102,0,153,0.30)",
-                    }}
+                    className="text-[20px] font-bold text-consumption-purple"
                   >
                     {baseLine.plan}
                   </h2>
                   {bonusDebito > 0 && (
                     <span
-                      className="inline-flex shrink-0 items-center gap-0.5 text-[20px] font-bold leading-none tracking-tight text-[#1fd35f] animate-fade-in"
-                      style={{ textShadow: "0 0 14px rgba(31,211,95,0.35)" }}
+                      className="inline-flex shrink-0 items-center gap-0.5 text-[20px] font-bold leading-none text-bonus-active animate-fade-in"
                     >
                       <Gift className="h-6 w-6 shrink-0" strokeWidth={2.4} />
                       +{bonusDebito}GB liberado
