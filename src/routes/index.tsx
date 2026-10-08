@@ -320,7 +320,7 @@ function BrightDataBar({
             className="relative"
             style={{
               textShadow: extreme
-                ? "0 0 2px rgba(0,0,0,0.95), 0 1px 2px rgba(0,0,0,0.9)"
+                ? "0 0 3px rgba(255,80,80,0.7), 0 0 1px rgba(255,140,140,0.55), 0 1px 2px rgba(0,0,0,0.9)"
                 : "0 1px 2px rgba(0,0,0,0.85), 0 0 5px rgba(0,0,0,0.6)",
             }}
           >
