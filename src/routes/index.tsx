@@ -995,7 +995,7 @@ function ResumoConsumo() {
               />
             </button>
             <div className="flex flex-col items-stretch gap-3 md:flex-row md:items-start md:justify-center md:gap-2">
-              <div className="self-center md:self-auto"><ConsumoRing line={line} /></div>
+              <div className="self-center md:self-auto"><ConsumoRing line={line} live={simConsumption !== null} /></div>
 
               <div className="w-full pr-3 md:w-[356px] md:pr-2">
 
@@ -1781,7 +1781,7 @@ function ResumoConsumo() {
         title="Consumo detalhado"
       >
         <div className="flex flex-col items-center gap-4">
-          <ConsumoRing line={line} />
+          <ConsumoRing line={line} live={simConsumption !== null} />
           <div className="w-full space-y-2 text-sm">
             <div className="flex justify-between border-b border-[#eee] pb-2">
               <span className="text-[#666]">Plano</span>
