@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ChevronDown,
   User,
@@ -278,18 +278,45 @@ function BrightDataBar({
   variant: "consumption" | "available";
 }) {
   const pct = Math.max(0, Math.min(100, percentage));
-  // Near the critical extremes the capsule itself gives way to Ferrari red —
-  // consumption nearing 100%, available nearing 0% — so no purple is left
-  // under the number: the red covers the whole capsule (to the very end at
-  // 100% / 0.00%) and the percentage sits on top in white. Normal values keep
-  // the purple tone of the track.
+  // How close the digits are to a critical extreme (consumption nearing 100%,
+  // available nearing 0%).
   const blend = criticalBlend(variant, pct);
 
+  // There is no pill behind the percentage any more — only the number. It is
+  // tucked inside the purple fill when the fill is wide enough to hold it, and
+  // sits just past the fill on the white track when it is not, so the digits
+  // never straddle both backgrounds.
+  const trackRef = useRef<HTMLDivElement>(null);
+  const numRef = useRef<HTMLSpanElement>(null);
+  const [trackW, setTrackW] = useState(0);
+  const [numW, setNumW] = useState(38);
 
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const measure = () => setTrackW(el.clientWidth);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
+  useEffect(() => {
+    setNumW(numRef.current?.offsetWidth ?? 38);
+  }, [pct]);
+
+  const fillPx = trackW > 0 ? (pct / 100) * trackW : 0;
+  const inside = trackW > 0 && fillPx >= numW + 12;
+  const left = inside ? fillPx - 6 : Math.min(fillPx + 6, Math.max(0, trackW - numW - 4));
+  // White over the purple fill, deep purple over the white track, and Ferrari
+  // red at the critical extremes either way.
+  const digitColor = lerpColor(inside ? "#ffffff" : "#3a0066", CRITICAL_RED, blend);
 
   return (
-    <div className="relative mt-2.5 h-5 w-full overflow-hidden rounded-full bg-white shadow-inner">
+    <div
+      ref={trackRef}
+      className="relative mt-2.5 h-5 w-full overflow-hidden rounded-full bg-white shadow-inner"
+    >
       <div
         className="h-full w-full"
         style={{
@@ -299,45 +326,19 @@ function BrightDataBar({
         }}
       />
       <span
-        className="absolute top-0 flex h-full min-w-11 -translate-x-1/2 items-center justify-center rounded-full px-2 text-center text-[10px] font-bold leading-none"
+        ref={numRef}
+        className="absolute top-0 flex h-full items-center whitespace-nowrap text-center text-[10px] font-bold leading-none"
         style={{
-          left: `${Math.max(9, Math.min(91, pct))}%`,
-          // The capsule keeps the purple tone of the track and carries a
-          // glossy highlight on top so it reads as a 3D pill. Near the
-          // critical extremes the purple gives way to Ferrari red, which
-          // covers the whole capsule at 100% / 0.00%.
-          backgroundColor:
-            blend > 0 ? lerpColor(tipColor(pct), CRITICAL_RED, blend) : tipColor(pct),
-          color: "#ffffff",
-          boxShadow:
-            "inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -2px 3px rgba(0,0,0,0.28), 0 2px 5px rgba(0,0,0,0.25)",
+          left: `${left}px`,
+          transform: inside ? "translateX(-100%)" : "none",
+          color: digitColor,
+          textShadow:
+            "0 0 1px rgba(0,0,0,0.9), 0 0 3px rgba(0,0,0,0.7), 0 1px 2px rgba(0,0,0,0.8)",
           transition:
-            "left 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease, color 900ms ease",
+            "left 900ms cubic-bezier(0.22, 1, 0.36, 1), color 900ms ease, transform 900ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
-
-
-
       >
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-full"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.12) 46%, rgba(255,255,255,0) 62%, rgba(0,0,0,0.14) 100%)",
-          }}
-        />
-        {/* The percentage sits on top in white; at the extremes the capsule
-            under it is fully red, with no purple left behind. */}
-        <span className="relative inline-flex h-full items-center justify-center px-1">
-          <span
-            className="relative"
-            style={{
-              textShadow: "0 1px 2px rgba(0,0,0,0.85), 0 0 5px rgba(0,0,0,0.6)",
-            }}
-          >
-            {pct.toFixed(2)}%
-          </span>
-        </span>
+        {pct.toFixed(2)}%
       </span>
     </div>
   );
