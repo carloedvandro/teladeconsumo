@@ -183,7 +183,7 @@
 .management-meters { font-family: Arial, Helvetica, sans-serif; }
 .management-track { background: var(--management-track); }
 .management-fill { background: linear-gradient(90deg, var(--management-purple-start), var(--management-purple-end)); }
-.management-amount { color: var(--management-amount); text-shadow: 0 1px 2px var(--management-text-effect); transition: width 900ms cubic-bezier(0.22, 1, 0.36, 1); }
+.management-amount { color: var(--management-amount); text-shadow: 0 1px 2px var(--management-text-effect); transition: left 900ms cubic-bezier(0.22, 1, 0.36, 1), transform 900ms cubic-bezier(0.22, 1, 0.36, 1), margin-left 900ms cubic-bezier(0.22, 1, 0.36, 1); }
 .management-percentage { color: var(--management-percentage); }
 .management-total { color: var(--management-total); }
 

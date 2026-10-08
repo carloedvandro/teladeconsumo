@@ -282,7 +282,7 @@ function BrightDataBar({
   return (
     <div className="management-meter mt-1.5 grid min-w-0 grid-cols-[minmax(0,1fr)_5rem] items-start gap-x-3">
       <div className="min-w-0">
-        <div className="management-track relative h-[27px] w-full overflow-hidden rounded-full">
+        <div className="management-track relative h-[23px] w-full overflow-hidden rounded-full md:h-[27px]">
           <div
             className="management-fill absolute inset-0 rounded-full"
             style={{
@@ -291,10 +291,10 @@ function BrightDataBar({
             }}
           />
           <span
-            className="management-amount absolute inset-y-0 left-0 flex h-full items-center justify-center whitespace-nowrap text-[13px] font-bold leading-none"
-            style={{ width: `min(100%, max(8ch, ${pct}%))` }}
+            className="management-amount absolute inset-y-0 flex h-full w-max items-center whitespace-nowrap text-[13px] font-bold leading-none"
+            style={{ left: `${pct / 2}%`, transform: `translateX(-${pct / 2}%)`, marginLeft: `${6 * (1 - pct / 100)}px` }}
           >
-            {Number(amount.toFixed(2))}GB
+            {Number(amount.toFixed(2))} GB
           </span>
         </div>
         <div className="management-percentage mt-1 text-center text-[14px] font-bold leading-none">{pct.toFixed(2)}%</div>
@@ -978,13 +978,13 @@ function ResumoConsumo() {
                 <ul className="management-meters mt-3 space-y-3 text-sm">
                   <li>
                       <div className="min-w-0">
-                        <div className="management-total text-[15px] font-normal">Meu consumo total da conta</div>
+                        <div className="management-total text-[15px] font-bold">Meu consumo total da conta</div>
                         <BrightDataBar percentage={pct} amount={line.used} total={line.total} />
                       </div>
                   </li>
                   <li>
                       <div className="min-w-0">
-                        <div className="management-total text-[15px] font-normal">Consumo Smart Biz</div>
+                        <div className="management-total text-[15px] font-bold">Consumo Smart Bis</div>
                         <BrightDataBar percentage={bisUsedPct} amount={bisUsed} total={sobrouAnterior} />
                       </div>
                   </li>
