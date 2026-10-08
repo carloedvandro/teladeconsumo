@@ -10,5 +10,5 @@
 - [x] Aplicar roxo até preto somente no título do plano e unificar o verde do presente, bônus e botão com o status Ativa; manter barras e arco.
 - [x] Manter plano e bônus em uma linha no computador sem aumentar o card; alinhar débito automático ao título e ícones no celular.
 - [x] Vermelho só na numeração da porcentagem nos extremos (consumo 100%, disponível 0,00% e bateria zerada); cápsula e barras continuam roxas.
-- [x] Cápsula clarinha (branco translúcido) com o número assumindo o tom da barra conforme corre no trilho; vermelho só no 100% e no 0,00%.
+- [x] Cápsula da porcentagem com fundinho escuro e número branco em cima, sem sombra branca nem halo roxo, sem negrito pesado; vermelho só no 100% e no 0,00%.
 
