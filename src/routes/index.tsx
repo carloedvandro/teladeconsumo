@@ -235,7 +235,7 @@ function DataBatteryIcon({ percentage }: { percentage: number }) {
       />
       <span
         className="absolute inset-0 flex items-center justify-center text-[8px] font-black leading-none [text-shadow:0_1px_3px_var(--data-purple)]"
-        style={pct <= 0 ? { color: "#dc2626", textShadow: "0 1px 3px rgba(153, 0, 0, 0.55)" } : { color: "var(--primary-foreground)" }}
+        style={pct <= 0 ? { color: CRITICAL_RED, textShadow: "0 1px 3px rgba(153, 0, 0, 0.55)" } : { color: "var(--primary-foreground)" }}
       >
         {Math.round(pct)}%
       </span>
@@ -275,8 +275,9 @@ function BrightDataBar({
         style={{
           left: `${Math.max(9, Math.min(91, pct))}%`,
           background: markerColor,
-          color: extreme ? "#ff2a2a" : "var(--primary-foreground)",
+          color: extreme ? CRITICAL_RED : "var(--primary-foreground)",
           textShadow: extreme ? "0 1px 2px rgba(0, 0, 0, 0.45)" : "none",
+
           boxShadow: `0 2px 8px color-mix(in oklab, ${markerColor} 55%, transparent), inset 0 1px 0 color-mix(in oklab, var(--primary-foreground) 50%, transparent)`,
           transition: "left 900ms cubic-bezier(0.22, 1, 0.36, 1), background-color 900ms ease",
         }}
