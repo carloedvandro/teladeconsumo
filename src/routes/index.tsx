@@ -239,7 +239,16 @@ function DataBatteryIcon({ percentage }: { percentage: number }) {
 
 
       >
-        {Math.round(pct)}%
+        {pct <= 0 ? (
+          <span
+            className="inline-flex items-center justify-center rounded-full px-1"
+            style={{ background: "linear-gradient(180deg, rgba(16,13,22,0.97) 0%, rgba(4,3,7,0.99) 100%)" }}
+          >
+            {Math.round(pct)}%
+          </span>
+        ) : (
+          `${Math.round(pct)}%`
+        )}
       </span>
     </div>
   );
