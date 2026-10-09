@@ -907,18 +907,22 @@ function ResumoConsumo() {
   const usedPctExact = (Math.round(pct * 100) / 100).toFixed(2);
   const availPctExact = (Math.round((100 - pct) * 100) / 100).toFixed(2);
 
-  // Avisos de consumo estilo SMS: a cada marca de 5% atingida, mostra
-  // "Você já atingiu X% da franquia contratada". Rearma quando o consumo
-  // volta a ficar abaixo da marca.
+  // Avisos de consumo estilo SMS: a cada 1% atingido (ímpares e pares),
+  // mostra "Você já atingiu X% da franquia contratada". Rearma quando o
+  // consumo volta a ficar abaixo da marca.
   useEffect(() => {
     if (!alertsEnabled) return;
-    const reached = Math.floor(pct / 5) * 5;
+    const reached = Math.floor(pct);
     if (reached > 0 && !firedAlertsRef.current.has(reached)) {
       firedAlertsRef.current.add(reached);
+      if (alertTimerRef.current !== null) window.clearTimeout(alertTimerRef.current);
       setToast(`Você já atingiu ${reached}% da franquia contratada.`);
-      setTimeout(() => setToast(null), 3600);
+      alertTimerRef.current = window.setTimeout(() => {
+        setToast(null);
+        alertTimerRef.current = null;
+      }, 3600);
     }
-    for (const step of ALERT_STEPS) {
+    for (let step = 1; step <= 100; step++) {
       if (pct < step) firedAlertsRef.current.delete(step);
     }
   }, [pct, alertsEnabled]);
