@@ -37,3 +37,4 @@
 - [x] Débito automático ativo: indicador verde "Ativo" (pontinho + palavra) colado ao título na mesma linha, sem texto embaixo; conferido no computador e celular.
 - [x] Barras mais finas no computador (27px → 20px); débito automático movido para a coluna das barras (depois do ponteiro), título na ponta esquerda e botão verde na ponta direita, com altura igual à do texto; conferido no computador e celular.
 - [x] Altura da barra no computador aumentada para aparecer igual à do celular (23px nas duas telas); alinhamento do débito e do botão verde conferidos.
+- [x] Altura da barra no computador voltou a baixar (28.75px → 25px no código, ~20px visual), porque ficou alta demais depois do aumento; celular mantém 23px; conferido no computador e celular.
