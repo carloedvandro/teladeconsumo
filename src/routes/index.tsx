@@ -1094,7 +1094,10 @@ function ResumoConsumo() {
                   >
                     <Bell className="h-4 w-4" strokeWidth={2.25} />
                     {pct >= 100 && (
-                      <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-[#16A34A]" />
+                      <span
+                        className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full"
+                        style={{ backgroundColor: CRITICAL_RED }}
+                      />
                     )}
                   </button>
                  </div>
