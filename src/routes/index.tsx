@@ -771,10 +771,11 @@ function ResumoConsumo() {
   const [simPlaying, setSimPlaying] = useState(false);
   const [alertsOpen, setAlertsOpen] = useState(false);
   const [alertsEnabled, setAlertsEnabled] = useState(true);
-  // Avisos estilo SMS: disparam de tempo em tempo (a cada 5%) conforme
-  // o consumo avança. Rearma quando o consumo volta a ficar abaixo.
-  const ALERT_STEPS = Array.from({ length: 20 }, (_, i) => (i + 1) * 5);
+  // Avisos estilo SMS: disparam de tempo em tempo (a cada 1% — ímpares e
+  // pares) conforme o consumo avança. Rearma quando o consumo volta a ficar
+  // abaixo da marca.
   const firedAlertsRef = useRef<Set<number>>(new Set());
+  const alertTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!simPlaying) return;
@@ -906,18 +907,22 @@ function ResumoConsumo() {
   const usedPctExact = (Math.round(pct * 100) / 100).toFixed(2);
   const availPctExact = (Math.round((100 - pct) * 100) / 100).toFixed(2);
 
-  // Avisos de consumo estilo SMS: a cada marca de 5% atingida, mostra
-  // "Você já atingiu X% da franquia contratada". Rearma quando o consumo
-  // volta a ficar abaixo da marca.
+  // Avisos de consumo estilo SMS: a cada 1% atingido (ímpares e pares),
+  // mostra "Você já atingiu X% da franquia contratada". Rearma quando o
+  // consumo volta a ficar abaixo da marca.
   useEffect(() => {
     if (!alertsEnabled) return;
-    const reached = Math.floor(pct / 5) * 5;
+    const reached = Math.floor(pct);
     if (reached > 0 && !firedAlertsRef.current.has(reached)) {
       firedAlertsRef.current.add(reached);
+      if (alertTimerRef.current !== null) window.clearTimeout(alertTimerRef.current);
       setToast(`Você já atingiu ${reached}% da franquia contratada.`);
-      setTimeout(() => setToast(null), 3600);
+      alertTimerRef.current = window.setTimeout(() => {
+        setToast(null);
+        alertTimerRef.current = null;
+      }, 3600);
     }
-    for (const step of ALERT_STEPS) {
+    for (let step = 1; step <= 100; step++) {
       if (pct < step) firedAlertsRef.current.delete(step);
     }
   }, [pct, alertsEnabled]);
@@ -2353,8 +2358,9 @@ function ResumoConsumo() {
         <div className="space-y-4 px-6 py-5">
           <p className="text-sm text-[#555]">
             Você recebe avisos de tempo em tempo, como se fossem SMS,
-            conforme o consumo avança: "Você já atingiu 10% da franquia
-            contratada", depois 15%, 20% e assim por diante, até 100%.
+            conforme o consumo avança — em percentuais pares e ímpares:
+            "Você já atingiu 17% da franquia contratada", depois 21%, 29%,
+            33% e assim por diante, até 100%.
           </p>
           <div className="flex items-center justify-between rounded-xl border border-[#eee] bg-[#fafafa] px-4 py-3">
             <span className="text-sm font-semibold text-[#333]">
@@ -2378,7 +2384,7 @@ function ResumoConsumo() {
           </div>
           <p className="text-xs text-[#777]">
             {alertsEnabled
-              ? "Avisos ativos: você será avisado a cada 5% de consumo."
+              ? "Avisos ativos: você será avisado a cada 1% de consumo — ímpares e pares."
               : "Avisos desativados no momento."}
           </p>
         </div>
