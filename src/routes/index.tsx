@@ -2358,8 +2358,9 @@ function ResumoConsumo() {
         <div className="space-y-4 px-6 py-5">
           <p className="text-sm text-[#555]">
             Você recebe avisos de tempo em tempo, como se fossem SMS,
-            conforme o consumo avança: "Você já atingiu 10% da franquia
-            contratada", depois 15%, 20% e assim por diante, até 100%.
+            conforme o consumo avança — em percentuais pares e ímpares:
+            "Você já atingiu 17% da franquia contratada", depois 21%, 29%,
+            33% e assim por diante, até 100%.
           </p>
           <div className="flex items-center justify-between rounded-xl border border-[#eee] bg-[#fafafa] px-4 py-3">
             <span className="text-sm font-semibold text-[#333]">
@@ -2383,7 +2384,7 @@ function ResumoConsumo() {
           </div>
           <p className="text-xs text-[#777]">
             {alertsEnabled
-              ? "Avisos ativos: você será avisado a cada 5% de consumo."
+              ? "Avisos ativos: você será avisado a cada 1% de consumo — ímpares e pares."
               : "Avisos desativados no momento."}
           </p>
         </div>
