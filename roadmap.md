@@ -39,3 +39,4 @@
 - [x] Altura da barra no computador aumentada para aparecer igual à do celular (23px nas duas telas); alinhamento do débito e do botão verde conferidos.
 - [x] Altura da barra no computador voltou a baixar (28.75px → 25px no código, ~20px visual), porque ficou alta demais depois do aumento; celular mantém 23px; conferido no computador e celular.
 - [x] Avisos de consumo agora disparam a cada 1% — pares e ímpares (17%, 29%, 33%...) — em vez de só múltiplos de 5%; textos do modal atualizados; conferido no simulador até 37%.
+- [x] Pontinho do sino em vermelho de aviso (#ff2800) quando o consumo bate 100%, no lugar do verde; conferido no simulador.
