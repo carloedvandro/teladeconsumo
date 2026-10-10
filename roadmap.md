@@ -40,3 +40,4 @@
 - [x] Altura da barra no computador voltou a baixar (28.75px → 25px no código, ~20px visual), porque ficou alta demais depois do aumento; celular mantém 23px; conferido no computador e celular.
 - [x] Avisos de consumo agora disparam a cada 1% — pares e ímpares (17%, 29%, 33%...) — em vez de só múltiplos de 5%; textos do modal atualizados; conferido no simulador até 37%.
 - [x] Pontinho do sino em vermelho de aviso (#ff2800) quando o consumo bate 100%, no lugar do verde; conferido no simulador.
+- [x] Aumentar o conjunto do painel mais 10% no computador (escala 0.8 → 0.88, 520px → 572px de largura); celular inalterado; conferido em 1280x900, 1061x646 e no celular, sem cortes.
