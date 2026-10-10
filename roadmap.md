@@ -41,3 +41,4 @@
 - [x] Avisos de consumo agora disparam a cada 1% — pares e ímpares (17%, 29%, 33%...) — em vez de só múltiplos de 5%; textos do modal atualizados; conferido no simulador até 37%.
 - [x] Pontinho do sino em vermelho de aviso (#ff2800) quando o consumo bate 100%, no lugar do verde; conferido no simulador.
 - [x] Aumentar o conjunto do painel mais 10% no computador (escala 0.8 → 0.88, 520px → 572px de largura); celular inalterado; conferido em 1280x900, 1061x646 e no celular, sem cortes.
+- [x] Preenchimento das barras e do arco: chega no roxo clarinho em ~14% da franquia e segue clarinho até 100% (antes ficava escuro com a barra quase vazia); conferido no simulador em 14%, 50% e 100%.
