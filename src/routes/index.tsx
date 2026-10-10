@@ -338,7 +338,7 @@ function BrightDataBar({
             }}
           />
           <span
-            className="management-amount absolute inset-y-0 flex h-full w-max items-center whitespace-nowrap text-[13px] font-bold leading-none"
+            className="management-amount absolute inset-y-0 flex h-full w-max items-center whitespace-nowrap text-[14px] font-bold leading-none"
             style={(() => {
               const t = pct / 100;
               const drift = t * t; // fica colado na ponta esquerda no início e só centraliza em 100%

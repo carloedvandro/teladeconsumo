@@ -123,7 +123,7 @@
   --management-light-at: 86%;
   --management-total: oklch(0.43 0.23 307);
   --management-percentage: oklch(0.55 0 0);
-  --management-amount: oklch(1 0 0);
+  --management-amount: #ffffff;
   --management-text-effect: oklch(0 0 0 / 45%);
   /* "Sombrinha" cinza clarinha: aura difusa atras dos numeros e do pontinho */
   --digit-halo: rgba(206, 206, 220, 1);
