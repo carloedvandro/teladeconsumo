@@ -193,9 +193,14 @@ function lerpColor(a: string, b: string, t: number) {
 // and a bar tip at 40% always show the same purple.
 const ARC_START = { l: 0.3, c: 0.15, h: 310 };
 const ARC_END = { l: 0.63, c: 0.29, h: 308 };
+// The dark→bright ramp reaches the light purple tone this early (in % of the
+// franchise) and then holds it all the way to 100%. --management-light-at in
+// src/styles.css carries the same number to the bars, so the gauge and the
+// bars always read as one style.
+const ARC_LIGHT_AT = 14;
 
 function tipColor(pct: number) {
-  const t = Math.min(1, Math.max(0, pct / 100));
+  const t = Math.min(1, Math.max(0, pct / ARC_LIGHT_AT));
   const l = ARC_START.l + (ARC_END.l - ARC_START.l) * t;
   const c = ARC_START.c + (ARC_END.c - ARC_START.c) * t;
   const h = ARC_START.h + (ARC_END.h - ARC_START.h) * t;
