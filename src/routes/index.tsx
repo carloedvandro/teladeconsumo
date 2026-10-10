@@ -1082,29 +1082,14 @@ function ResumoConsumo() {
                     <span
                       className="bonus-tag inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full border border-bonus-tag-border bg-bonus-tag-bg px-2.5 py-1.5 md:py-1 animate-fade-in"
                     >
-                      <span className="text-[12px] font-extrabold leading-none tracking-tight text-bonus-active md:text-[11px]">
+                      <span className="text-[13px] font-extrabold leading-none tracking-tight text-bonus-active md:text-[12px]">
                         Mais {bonusDebito}GB
                       </span>
-                      <span className="text-[12px] font-medium leading-none text-bonus-active opacity-80 md:text-[11px]">
+                      <span className="text-[13px] font-bold leading-none text-bonus-active md:text-[12px]">
                         de bônus
                       </span>
                     </span>
                   )}
-                  <button
-                    type="button"
-                    aria-label="Configurar alertas de consumo"
-                    title="Alertas de consumo"
-                    onClick={() => setAlertsOpen(true)}
-                    className="relative ml-auto inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[#660099] transition-colors hover:bg-[#660099]/10"
-                  >
-                    <Bell className="h-4 w-4" strokeWidth={2.25} />
-                    {pct >= 100 && (
-                      <span
-                        className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full"
-                        style={{ backgroundColor: CRITICAL_RED }}
-                      />
-                    )}
-                  </button>
                  </div>
 
                 <ul className="management-meters mt-3 space-y-3 text-sm">
